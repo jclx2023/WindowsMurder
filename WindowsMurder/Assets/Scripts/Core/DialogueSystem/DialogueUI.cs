@@ -11,7 +11,6 @@ public class DialogueUI : MonoBehaviour
     public Image characterPortrait;                // 角色立绘
     public TMP_InputField playerInputField;        // 玩家输入框
     public Button sendButton;                      // 发送按钮
-    public GameObject inputPanel;                  // 输入面板（LLM模式时显示）
 
     [Header("效果设置")]
     public float textSpeed = 0.05f;               // 打字机效果速度
@@ -21,11 +20,16 @@ public class DialogueUI : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip typingSound;                 // 打字机音效
 
+    [Header("LLM交互提示")]
+    public string waitingForInputHint = "Please enter your question...";
+    public string waitingForAIHint = "Thinking...";
+
     // 私有变量
     private DialogueData currentDialogue;
     private int currentLineIndex = 0;
     private bool isTyping = false;
     private bool inLLMMode = false;
+    private bool waitingForPlayerInput = false;  // 是否等待玩家输入
     private string currentLLMCharacter;
     private Coroutine typingCoroutine;
 
@@ -39,14 +43,105 @@ public class DialogueUI : MonoBehaviour
         if (playerInputField != null)
             playerInputField.onSubmit.AddListener(delegate { OnSendMessage(); });
 
-        // 初始隐藏输入面板
-        SetInputPanelActive(false);
+        // 绑定对话框点击事件（用于LLM模式下重新激活输入）
+        if (dialogueText != null)
+        {
+            // 添加一个按钮组件来检测点击
+            Button dialogueClickButton = dialogueText.gameObject.GetComponent<Button>();
+            if (dialogueClickButton == null)
+            {
+                dialogueClickButton = dialogueText.gameObject.AddComponent<Button>();
+                dialogueClickButton.transition = Selectable.Transition.None; // 不显示视觉反馈
+            }
+            dialogueClickButton.onClick.AddListener(OnDialogueTextClicked);
+        }
+
+        // 初始状态：显示文本，隐藏输入
+        SetUIState(UIState.ShowingText);
+    }
+
+    /// <summary>
+    /// UI状态枚举
+    /// </summary>
+    private enum UIState
+    {
+        ShowingText,    // 显示文本（预设对话或AI回复）
+        WaitingInput,   // 等待玩家输入
+        ProcessingAI    // 处理AI请求中
+    }
+
+    /// <summary>
+    /// 设置UI状态
+    /// </summary>
+    private void SetUIState(UIState state)
+    {
+        switch (state)
+        {
+            case UIState.ShowingText:
+                // 显示文本，隐藏输入
+                SetTextActive(true);
+                SetInputActive(false);
+                waitingForPlayerInput = false;
+                break;
+
+            case UIState.WaitingInput:
+                // 隐藏文本，显示输入
+                SetTextActive(false);
+                SetInputActive(true);
+                waitingForPlayerInput = true;
+
+                // 聚焦输入框
+                if (playerInputField != null)
+                {
+                    playerInputField.text = "";
+                    playerInputField.placeholder.GetComponent<TextMeshProUGUI>().text = waitingForInputHint;
+                    playerInputField.Select();
+                }
+                break;
+
+            case UIState.ProcessingAI:
+                // 显示处理提示，禁用输入
+                SetTextActive(true);
+                SetInputActive(false);
+                waitingForPlayerInput = false;
+
+                if (dialogueText != null)
+                {
+                    dialogueText.text = waitingForAIHint;
+                }
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 设置文本显示组件状态
+    /// </summary>
+    private void SetTextActive(bool active)
+    {
+        if (dialogueText != null)
+        {
+            dialogueText.gameObject.SetActive(active);
+        }
+    }
+
+    /// <summary>
+    /// 设置输入组件状态
+    /// </summary>
+    private void SetInputActive(bool active)
+    {
+        if (playerInputField != null)
+        {
+            playerInputField.gameObject.SetActive(active);
+        }
+        if (sendButton != null)
+        {
+            sendButton.gameObject.SetActive(active);
+        }
     }
 
     /// <summary>
     /// 开始播放对话
     /// </summary>
-    /// <param name="dialogueData">对话数据</param>
     public void StartDialogue(DialogueData dialogueData)
     {
         if (dialogueData == null)
@@ -96,7 +191,7 @@ public class DialogueUI : MonoBehaviour
     private void ShowPresetLine(DialogueLine line)
     {
         inLLMMode = false;
-        SetInputPanelActive(false);
+        SetUIState(UIState.ShowingText);
 
         // 设置角色信息
         SetCharacterInfo(line.characterId, line.portraitId);
@@ -117,11 +212,16 @@ public class DialogueUI : MonoBehaviour
         // 自动推进到下一句
         currentLineIndex++;
 
-        // 如果下一句不是LLM模式，延迟一点时间后继续
+        // 如果下一句还是预设模式，延迟后继续
         if (currentLineIndex < currentDialogue.lines.Count &&
             currentDialogue.lines[currentLineIndex].mode)
         {
             StartCoroutine(DelayedNextLine());
+        }
+        else if (currentLineIndex < currentDialogue.lines.Count)
+        {
+            // 下一句是LLM模式，等待当前文本显示完成后继续
+            StartCoroutine(WaitForTypingThenContinue());
         }
     }
 
@@ -136,18 +236,22 @@ public class DialogueUI : MonoBehaviour
         // 设置角色信息
         SetCharacterInfo(line.characterId, line.portraitId);
 
-        // 显示提示信息
-        dialogueText.text += $"\n<color=yellow>--- 开始与 {GetCharacterDisplayName(line.characterId)} 的对话 ---</color>\n";
-        dialogueText.text += "<color=gray>请输入你的问题...</color>\n";
+        // 切换到等待输入状态
+        SetUIState(UIState.WaitingInput);
 
-        // 显示输入面板
-        SetInputPanelActive(true);
+        Debug.Log($"进入LLM模式，与 {GetCharacterDisplayName(line.characterId)} 对话");
+    }
 
-        // 聚焦输入框
-        if (playerInputField != null)
+    /// <summary>
+    /// 对话文本被点击（用于LLM模式下重新激活输入）
+    /// </summary>
+    private void OnDialogueTextClicked()
+    {
+        if (inLLMMode && !waitingForPlayerInput && !isProcessingLLM)
         {
-            playerInputField.text = "";
-            playerInputField.Select();
+            // 重新激活输入状态
+            SetUIState(UIState.WaitingInput);
+            Debug.Log("重新激活输入模式");
         }
     }
 
@@ -226,33 +330,50 @@ public class DialogueUI : MonoBehaviour
     }
 
     /// <summary>
+    /// 等待打字效果完成后继续
+    /// </summary>
+    private IEnumerator WaitForTypingThenContinue()
+    {
+        while (isTyping)
+        {
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(1f); // 额外等待1秒
+        ShowNextLine();
+    }
+
+    /// <summary>
     /// 延迟显示下一句
     /// </summary>
     private IEnumerator DelayedNextLine()
     {
-        yield return new WaitForSeconds(2f); // 等待2秒
-
-        if (!inLLMMode) // 确保还没进入LLM模式
+        while (isTyping)
         {
-            ShowNextLine();
+            yield return null;
         }
+
+        yield return new WaitForSeconds(2f); // 等待2秒
+        ShowNextLine();
     }
+
+    private bool isProcessingLLM = false; // 添加这个标志
 
     /// <summary>
     /// 玩家发送消息
     /// </summary>
     public void OnSendMessage()
     {
-        if (!inLLMMode || playerInputField == null) return;
+        if (!inLLMMode || !waitingForPlayerInput || playerInputField == null) return;
 
         string message = playerInputField.text.Trim();
         if (string.IsNullOrEmpty(message)) return;
 
-        // 显示玩家消息
-        AddPlayerMessage(message);
+        Debug.Log($"玩家发送消息: {message}");
 
-        // 清空输入框
-        playerInputField.text = "";
+        // 切换到处理AI状态
+        SetUIState(UIState.ProcessingAI);
+        isProcessingLLM = true;
 
         // 检查是否结束LLM对话
         DialogueLine currentLine = DialogueLoader.GetLineAt(currentDialogue, currentLineIndex);
@@ -273,39 +394,41 @@ public class DialogueUI : MonoBehaviour
             // 没有DialogueManager的话，显示默认回复
             OnLLMResponse("系统错误：找不到对话管理器");
         }
-
-        // 重新聚焦输入框
-        playerInputField.Select();
     }
 
     /// <summary>
     /// LLM回复回调
     /// </summary>
-    /// <param name="response">AI回复内容</param>
     public void OnLLMResponse(string response)
     {
         if (!inLLMMode) return;
 
-        AddCharacterMessage(currentLLMCharacter, response);
+        isProcessingLLM = false;
+
+        // 显示AI回复
+        SetUIState(UIState.ShowingText);
+
+        if (useTypingEffect)
+        {
+            if (typingCoroutine != null)
+                StopCoroutine(typingCoroutine);
+            typingCoroutine = StartCoroutine(TypeTextThenWaitForClick(response));
+        }
+        else
+        {
+            dialogueText.text = response;
+        }
+
+        Debug.Log($"AI回复: {response}");
     }
 
     /// <summary>
-    /// 添加玩家消息到对话框
+    /// 显示文本后等待点击
     /// </summary>
-    private void AddPlayerMessage(string message)
+    private IEnumerator TypeTextThenWaitForClick(string text)
     {
-        dialogueText.text += $"<color=cyan>玩家:</color> {message}\n";
-        ScrollToBottom();
-    }
-
-    /// <summary>
-    /// 添加角色消息到对话框
-    /// </summary>
-    private void AddCharacterMessage(string characterId, string message)
-    {
-        string characterName = GetCharacterDisplayName(characterId);
-        dialogueText.text += $"<color=orange>{characterName}:</color> {message}\n";
-        ScrollToBottom();
+        yield return StartCoroutine(TypeText(text));
+        // 打字完成后，等待玩家点击对话框来重新激活输入
     }
 
     /// <summary>
@@ -314,9 +437,10 @@ public class DialogueUI : MonoBehaviour
     private void EndLLMMode()
     {
         inLLMMode = false;
-        SetInputPanelActive(false);
+        isProcessingLLM = false;
 
-        dialogueText.text += $"<color=yellow>--- 与 {GetCharacterDisplayName(currentLLMCharacter)} 的对话结束 ---</color>\n";
+        SetUIState(UIState.ShowingText);
+        dialogueText.text = $"--- 与 {GetCharacterDisplayName(currentLLMCharacter)} 的对话结束 ---";
 
         // 推进到下一句
         currentLineIndex++;
@@ -329,9 +453,10 @@ public class DialogueUI : MonoBehaviour
     private void OnDialogueEnd()
     {
         inLLMMode = false;
-        SetInputPanelActive(false);
+        isProcessingLLM = false;
+        SetUIState(UIState.ShowingText);
 
-        dialogueText.text += "\n<color=green>--- 对话结束 ---</color>";
+        dialogueText.text += "\n--- 对话结束 ---";
 
         Debug.Log("DialogueUI: 对话播放完毕");
 
@@ -340,17 +465,6 @@ public class DialogueUI : MonoBehaviour
         if (dialogueManager != null)
         {
             dialogueManager.OnDialogueComplete(currentDialogue.conversationId);
-        }
-    }
-
-    /// <summary>
-    /// 设置输入面板显示状态
-    /// </summary>
-    private void SetInputPanelActive(bool active)
-    {
-        if (inputPanel != null)
-        {
-            inputPanel.SetActive(active);
         }
     }
 
@@ -367,20 +481,9 @@ public class DialogueUI : MonoBehaviour
 
         if (characterPortrait != null)
             characterPortrait.gameObject.SetActive(false);
-    }
 
-    /// <summary>
-    /// 滚动到底部
-    /// </summary>
-    private void ScrollToBottom()
-    {
-        // 如果有ScrollRect组件，滚动到底部
-        ScrollRect scrollRect = GetComponentInChildren<ScrollRect>();
-        if (scrollRect != null)
-        {
-            Canvas.ForceUpdateCanvases();
-            scrollRect.verticalNormalizedPosition = 0f;
-        }
+        if (playerInputField != null)
+            playerInputField.text = "";
     }
 
     /// <summary>
@@ -414,23 +517,9 @@ public class DialogueUI : MonoBehaviour
         currentDialogue = null;
         currentLineIndex = 0;
         inLLMMode = false;
+        isProcessingLLM = false;
 
-        SetInputPanelActive(false);
+        SetUIState(UIState.ShowingText);
         ClearDialogue();
     }
-
-#if UNITY_EDITOR
-    /// <summary>
-    /// 编辑器测试功能
-    /// </summary>
-    [ContextMenu("测试对话")]
-    private void TestDialogue()
-    {
-        DialogueData testData = DialogueLoader.Load("test_dialogue");
-        if (testData != null)
-        {
-            StartDialogue(testData);
-        }
-    }
-#endif
 }
