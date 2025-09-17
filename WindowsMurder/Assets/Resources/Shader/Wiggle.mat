@@ -31,9 +31,9 @@ Material:
     m_Ints: []
     m_Floats:
     - _EnableJitter: 1
-    - _JitterSpeedX: 10
-    - _JitterSpeedY: 10
-    - _JitterStrength: 0.8
+    - _JitterSpeedX: 20
+    - _JitterSpeedY: 20
+    - _JitterStrength: 0.9
     - _PixelResolution: 48
     - _SpatialFreqX: 100
     - _SpatialFreqY: 100
