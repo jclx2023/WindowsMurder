@@ -9,7 +9,7 @@ using UnityEngine.EventSystems;
 public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerDownHandler
 {
     [Header("窗口设置")]
-    [SerializeField] private string windowTitle = "新建窗口";
+    [SerializeField] private string windowTitle = "NewWindow";
     [SerializeField] private Sprite windowIcon;
     [SerializeField] private bool canClose = true;
 

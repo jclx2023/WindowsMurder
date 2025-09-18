@@ -144,8 +144,6 @@ public class GameInitializer : MonoBehaviour
     /// </summary>
     IEnumerator TransitionToMainMenu()
     {
-        Debug.Log("准备跳转到主菜单...");
-
         // 短暂延迟，模拟真实的系统响应时间
         yield return new WaitForSeconds(0.5f);
 

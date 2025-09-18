@@ -30,9 +30,6 @@ public class WinXPLoadingBar : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 开始读条动画
-    /// </summary>
     public void StartLoading()
     {
         if (isLoading) return;
@@ -47,25 +44,6 @@ public class WinXPLoadingBar : MonoBehaviour
         loadingCoroutine = StartCoroutine(LoadingAnimation());
     }
 
-    /// <summary>
-    /// 停止读条动画
-    /// </summary>
-    public void StopLoading()
-    {
-        isLoading = false;
-
-        if (loadingCoroutine != null)
-        {
-            StopCoroutine(loadingCoroutine);
-            loadingCoroutine = null;
-        }
-
-        ClearAllUnits();
-    }
-
-    /// <summary>
-    /// 读条动画协程
-    /// </summary>
     private IEnumerator LoadingAnimation()
     {
         while (isLoading)
@@ -87,9 +65,6 @@ public class WinXPLoadingBar : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 生成单个Unit
-    /// </summary>
     private void SpawnUnit()
     {
         if (unitPrefab == null || unitContainer == null) return;
@@ -98,9 +73,6 @@ public class WinXPLoadingBar : MonoBehaviour
         currentUnits.Add(newUnit);
     }
 
-    /// <summary>
-    /// 清空所有Unit
-    /// </summary>
     private void ClearAllUnits()
     {
         foreach (GameObject unit in currentUnits)
