@@ -163,17 +163,6 @@ public class IconContextMenu : MonoBehaviour, IPointerExitHandler
             text.color = itemData.isEnabled ? Color.black : Color.gray;
         }
 
-        // 设置图标
-        if (icon != null && itemData.itemIcon != null)
-        {
-            icon.sprite = itemData.itemIcon;
-            icon.gameObject.SetActive(true);
-        }
-        else if (icon != null)
-        {
-            icon.gameObject.SetActive(false);
-        }
-
         // 设置按钮交互
         if (button != null)
         {

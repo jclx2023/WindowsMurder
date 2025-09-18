@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 /// <summary>
 /// 右键菜单项数据
@@ -11,23 +12,18 @@ using UnityEngine.EventSystems;
 [Serializable]
 public class ContextMenuItem
 {
-    public string itemName;     // 菜单项名称，如"打开"、"属性"、"删除"
-    public string itemId;       // 菜单项ID，用于识别点击的是哪个选项
-    public Sprite itemIcon;     // 菜单项图标（可选）
+    public string itemName;         // 菜单项名称，如"打开"、"属性"、"删除"
+    public string itemId;           // 菜单项ID，用于识别点击的是哪个选项
     public bool isEnabled = true;   // 是否可用
-    public bool showSeparator;  // 在此项后显示分隔线
-}
+    public bool showSeparator;      // 在此项后显示分隔线
 
-/// <summary>
-/// 图标类型枚举
-/// </summary>
-public enum IconType
-{
-    File,           // 文件
-    Folder,         // 文件夹
-    Program,        // 程序
-    SystemTool,     // 系统工具（如回收站、控制面板）
-    Character       // 拟人化角色
+    public ContextMenuItem(string id, string name, bool enabled = true, bool separator = false)
+    {
+        itemId = id;
+        itemName = name;
+        isEnabled = enabled;
+        showSeparator = separator;
+    }
 }
 
 /// <summary>
@@ -36,20 +32,10 @@ public enum IconType
 /// </summary>
 public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    [Header("图标基础设置")]
-    public string iconName = "未命名";
-    public IconType iconType = IconType.File;
-    public Sprite iconSprite;
-    public string iconId;           // 唯一标识符
-
     [Header("UI组件引用")]
     public Image iconImage;         // 图标图片组件
-    public Text nameText;           // 名称文本组件
+    public TextMeshProUGUI nameText;           // 名称文本组件
     public GameObject selectionHighlight;  // 选中高亮效果
-
-    [Header("交互设置")]
-    public float doubleClickThreshold = 0.5f;  // 双击时间阈值
-    public bool showTooltip = true;            // 是否显示悬停提示
 
     [Header("右键菜单")]
     public List<ContextMenuItem> contextMenuItems = new List<ContextMenuItem>();
@@ -59,6 +45,10 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
     public bool isLocked = false;              // 是否锁定（无法交互）
     public bool isCorrupted = false;           // 是否损坏状态
     public bool isHidden = false;              // 是否隐藏状态
+
+    // 交互设置 - 硬编码常量
+    private const float DOUBLE_CLICK_THRESHOLD = 0.5f;
+    private const bool SHOW_TOOLTIP = true;
 
     // 事件委托
     public static event Action<InteractableIcon> OnIconSelected;
@@ -80,7 +70,8 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
     void Start()
     {
-        Initialize();
+        // 应用初始状态效果
+        ApplyVisualState();
     }
 
     void OnEnable()
@@ -101,27 +92,6 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
         AllIcons.Remove(this);
         if (CurrentSelectedIcon == this)
             CurrentSelectedIcon = null;
-    }
-
-    #endregion
-
-    #region 初始化
-
-    void Initialize()
-    {
-        // 设置图标和文本
-        if (iconImage != null && iconSprite != null)
-        {
-            iconImage.sprite = iconSprite;
-        }
-
-        if (nameText != null)
-        {
-            nameText.text = iconName;
-        }
-
-        // 应用状态效果
-        ApplyVisualState();
     }
 
     #endregion
@@ -156,7 +126,7 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
         }
 
         // 显示工具提示
-        if (showTooltip)
+        if (SHOW_TOOLTIP)
         {
             if (tooltipCoroutine != null)
                 StopCoroutine(tooltipCoroutine);
@@ -188,7 +158,7 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
     void HandleLeftClick()
     {
         float currentTime = Time.time;
-        bool isDoubleClick = (currentTime - lastClickTime) < doubleClickThreshold;
+        bool isDoubleClick = (currentTime - lastClickTime) < DOUBLE_CLICK_THRESHOLD;
 
         if (isDoubleClick)
         {
@@ -215,7 +185,6 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
     void HandleDoubleClick()
     {
-        Debug.Log($"双击了图标: {iconName} (类型: {iconType})");
         OnIconDoubleClicked?.Invoke(this);
     }
 
@@ -241,7 +210,7 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
         }
 
         OnIconSelected?.Invoke(this);
-        Debug.Log($"选中了图标: {iconName}");
+        Debug.Log($"选中了图标");
     }
 
     public void DeselectIcon()
@@ -289,10 +258,6 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
                 activeContextMenu.Show(screenPosition, contextMenuItems, OnContextMenuItemSelected);
             }
         }
-        else
-        {
-            Debug.LogWarning($"InteractableIcon {iconName}: 缺少contextMenuPrefab引用");
-        }
     }
 
     void HideContextMenu()
@@ -300,14 +265,11 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
         if (activeContextMenu != null)
         {
             activeContextMenu.Hide();
-            // 由于Hide()会销毁GameObject，所以不需要设置为null
-            // GameObject销毁后引用会自动变成null
         }
     }
 
     void OnContextMenuItemSelected(string itemId)
     {
-        Debug.Log($"右键菜单选择: {iconName} -> {itemId}");
         OnContextMenuItemClicked?.Invoke(this, itemId);
     }
 
@@ -320,7 +282,7 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
         yield return new WaitForSeconds(1f); // 悬停1秒后显示提示
 
         // 这里可以显示工具提示
-        Debug.Log($"显示提示: {iconName} ({iconType})");
+        Debug.Log($"显示提示: ");
         // 实际项目中可以调用UI管理器显示提示框
     }
 
@@ -372,87 +334,6 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
     {
         isHidden = hidden;
         ApplyVisualState();
-    }
-
-    #endregion
-
-    #region 公共接口
-
-    /// <summary>
-    /// 更新图标显示
-    /// </summary>
-    public void UpdateIcon(Sprite newSprite, string newName = null)
-    {
-        if (newSprite != null && iconImage != null)
-        {
-            iconSprite = newSprite;
-            iconImage.sprite = newSprite;
-        }
-
-        if (!string.IsNullOrEmpty(newName))
-        {
-            iconName = newName;
-            if (nameText != null)
-            {
-                nameText.text = newName;
-            }
-        }
-    }
-
-    /// <summary>
-    /// 添加右键菜单项
-    /// </summary>
-    public void AddContextMenuItem(ContextMenuItem item)
-    {
-        contextMenuItems.Add(item);
-    }
-
-    /// <summary>
-    /// 移除右键菜单项
-    /// </summary>
-    public void RemoveContextMenuItem(string itemId)
-    {
-        contextMenuItems.RemoveAll(item => item.itemId == itemId);
-    }
-
-    /// <summary>
-    /// 清空右键菜单
-    /// </summary>
-    public void ClearContextMenu()
-    {
-        contextMenuItems.Clear();
-    }
-
-    /// <summary>
-    /// 设置整个右键菜单
-    /// </summary>
-    public void SetContextMenu(List<ContextMenuItem> newItems)
-    {
-        contextMenuItems.Clear();
-        if (newItems != null)
-        {
-            contextMenuItems.AddRange(newItems);
-        }
-    }
-
-    /// <summary>
-    /// 启用/禁用菜单项
-    /// </summary>
-    public void SetMenuItemEnabled(string itemId, bool enabled)
-    {
-        var item = contextMenuItems.Find(i => i.itemId == itemId);
-        if (item != null)
-        {
-            item.isEnabled = enabled;
-        }
-    }
-
-    /// <summary>
-    /// 检查是否选中
-    /// </summary>
-    public bool IsSelected()
-    {
-        return isSelected;
     }
 
     #endregion
