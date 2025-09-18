@@ -4,18 +4,12 @@ using System.Collections;
 
 /// <summary>
 /// 游戏初始化器 - 游戏启动的第一个场景
-/// 负责WinXP开机动画、创建全局系统、跳转主菜单
+/// 负责创建全局系统、跳转主菜单
 /// </summary>
 public class GameInitializer : MonoBehaviour
 {
     [Header("场景设置")]
     public string mainMenuSceneName = "MainMenu";
-
-    [Header("开机动画")]
-    public GameObject bootAnimationPanel;
-    public UnityEngine.UI.Slider progressBar;
-    public TMPro.TextMeshProUGUI loadingText;
-    public float bootAnimationDuration = 3f;
 
     [Header("系统加载")]
     public float systemLoadingDelay = 1f; // 等待全局系统加载完成的延迟
@@ -50,20 +44,13 @@ public class GameInitializer : MonoBehaviour
         // 1. 播放开机音效
         PlayStartupSound();
 
-        // 2. 显示开机动画面板
-        if (bootAnimationPanel != null)
-            bootAnimationPanel.SetActive(true);
-
-        // 3. 播放WinXP开机动画
-        yield return StartCoroutine(PlayBootAnimation());
-
-        // 4. 创建全局系统
+        // 2. 创建全局系统
         CreateGlobalSystem();
 
-        // 5. 等待全局系统完全加载
+        // 3. 等待全局系统完全加载
         yield return StartCoroutine(WaitForSystemReady());
 
-        // 6. 跳转到主菜单
+        // 4. 跳转到主菜单
         yield return StartCoroutine(TransitionToMainMenu());
     }
 
@@ -77,54 +64,6 @@ public class GameInitializer : MonoBehaviour
             audioSource.PlayOneShot(startupSound);
             Debug.Log("播放Windows启动音效");
         }
-    }
-
-    /// <summary>
-    /// 播放WinXP开机动画
-    /// </summary>
-    IEnumerator PlayBootAnimation()
-    {
-        float elapsedTime = 0f;
-
-        // 开机动画的加载文本
-        string[] loadingTexts = {
-            "正在启动 Windows XP...",
-            "正在加载系统组件...",
-            "正在初始化设备...",
-            "正在准备桌面...",
-            "启动完成"
-        };
-
-        Debug.Log("开始播放开机动画");
-
-        while (elapsedTime < bootAnimationDuration)
-        {
-            elapsedTime += Time.deltaTime;
-            float progress = elapsedTime / bootAnimationDuration;
-
-            // 更新进度条
-            if (progressBar != null)
-                progressBar.value = progress;
-
-            // 更新加载文本
-            if (loadingText != null)
-            {
-                int textIndex = Mathf.Min(
-                    Mathf.FloorToInt(progress * loadingTexts.Length),
-                    loadingTexts.Length - 1
-                );
-                loadingText.text = loadingTexts[textIndex];
-            }
-
-            yield return null;
-        }
-
-        // 确保动画完成
-        if (progressBar != null) progressBar.value = 1f;
-        if (loadingText != null) loadingText.text = loadingTexts[loadingTexts.Length - 1];
-
-        Debug.Log("开机动画播放完成");
-        yield return new WaitForSeconds(0.5f);
     }
 
     /// <summary>
@@ -190,10 +129,6 @@ public class GameInitializer : MonoBehaviour
         if (globalManager != null && GlobalSystemManager.Instance != null)
         {
             Debug.Log("全局系统初始化完成");
-
-            // 可以在这里更新加载文本
-            if (loadingText != null)
-                loadingText.text = "系统准备就绪";
         }
         else
         {
@@ -210,14 +145,6 @@ public class GameInitializer : MonoBehaviour
     IEnumerator TransitionToMainMenu()
     {
         Debug.Log("准备跳转到主菜单...");
-
-        // 更新UI反馈
-        if (loadingText != null)
-            loadingText.text = "正在进入桌面...";
-
-        // 隐藏开机动画（可选，也可以淡出）
-        if (bootAnimationPanel != null)
-            bootAnimationPanel.SetActive(false);
 
         // 短暂延迟，模拟真实的系统响应时间
         yield return new WaitForSeconds(0.5f);
