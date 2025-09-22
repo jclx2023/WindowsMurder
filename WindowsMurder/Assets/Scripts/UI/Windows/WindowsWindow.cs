@@ -67,16 +67,6 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     #region 公共方法
 
     /// <summary>
-    /// 设置窗口标题
-    /// </summary>
-    public void SetTitle(string title)
-    {
-        windowTitle = title;
-        if (titleText != null)
-            titleText.text = title;
-    }
-
-    /// <summary>
     /// 设置窗口图标
     /// </summary>
     public void SetIcon(Sprite icon)
@@ -89,13 +79,19 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         }
     }
 
+    //public void CloseWindow()
+    //{
+    //    OnWindowClosed?.Invoke(this);
+    //    gameObject.SetActive(false);
+    //}
+
     /// <summary>
-    /// 关闭窗口
+    /// 关闭窗口（销毁对象）
     /// </summary>
     public void CloseWindow()
     {
         OnWindowClosed?.Invoke(this);
-        gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 
     /// <summary>
