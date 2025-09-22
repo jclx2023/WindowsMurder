@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 /// <summary>
 /// Windows风格基础窗口组件
@@ -16,7 +17,7 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     [Header("UI组件引用")]
     [SerializeField] private RectTransform windowRect;
     [SerializeField] private RectTransform titleBarRect;
-    [SerializeField] private Text titleText;
+    [SerializeField] private TMP_Text titleText;
     [SerializeField] private Image iconImage;
     [SerializeField] private Button closeButton;
 
@@ -160,9 +161,6 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     /// </summary>
     private void UpdateDisplay()
     {
-        if (titleText != null)
-            titleText.text = windowTitle;
-
         if (iconImage != null)
         {
             iconImage.sprite = windowIcon;

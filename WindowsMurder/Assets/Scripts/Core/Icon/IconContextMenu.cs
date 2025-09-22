@@ -385,47 +385,4 @@ public class IconContextMenu : MonoBehaviour, IPointerExitHandler
     }
 
     #endregion
-
-    #region 公共工具方法
-
-    /// <summary>
-    /// 检查菜单是否可见
-    /// </summary>
-    public bool IsVisible()
-    {
-        return isVisible && menuPanel != null && menuPanel.gameObject.activeInHierarchy;
-    }
-
-    /// <summary>
-    /// 刷新菜单项文本（语言切换时调用）
-    /// </summary>
-    public void RefreshMenuTexts()
-    {
-        if (!isVisible || currentItems == null) return;
-
-        for (int i = 0; i < currentItems.Count && i < instantiatedItems.Count; i++)
-        {
-            GameObject itemObj = instantiatedItems[i];
-            if (itemObj == null) continue;
-
-            ContextMenuItem itemData = currentItems[i];
-
-            // 重新设置文本
-            TextMeshProUGUI tmpText = itemObj.GetComponentInChildren<TextMeshProUGUI>();
-            Text uiText = itemObj.GetComponentInChildren<Text>();
-
-            string displayText = itemData.GetDisplayText();
-
-            if (tmpText != null)
-            {
-                tmpText.text = displayText;
-            }
-            else if (uiText != null)
-            {
-                uiText.text = displayText;
-            }
-        }
-    }
-
-    #endregion
 }

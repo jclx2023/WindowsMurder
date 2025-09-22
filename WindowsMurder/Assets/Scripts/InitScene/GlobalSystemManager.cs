@@ -1,8 +1,8 @@
 using UnityEngine;
 
 /// <summary>
-/// 全局系统管理器 - 整合多语言系统
-/// 整合所有需要跨场景的功能到一个脚本中
+/// 全局系统管理器 - 专注于底层系统服务
+/// 提供音频、显示、语言、存档等基础服务，不管理UI交互
 /// </summary>
 public class GlobalSystemManager : MonoBehaviour
 {
@@ -29,8 +29,9 @@ public class GlobalSystemManager : MonoBehaviour
     // 私有变量
     private AudioSource audioSource;
 
-    // 语言系统就绪事件
+    // 系统就绪事件
     public static System.Action OnLanguageSystemReady;
+    public static System.Action OnSystemInitialized;
 
     void Awake()
     {
@@ -49,7 +50,7 @@ public class GlobalSystemManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 初始化所有系统
+    /// 初始化所有底层系统
     /// </summary>
     void InitializeAllSystems()
     {
@@ -65,7 +66,10 @@ public class GlobalSystemManager : MonoBehaviour
         // 4. 初始化音频组件
         InitializeAudioSystem();
 
-        Debug.Log("全局系统初始化完成");
+        // 5. 通知其他系统初始化完成
+        OnSystemInitialized?.Invoke();
+
+        Debug.Log("底层系统初始化完成");
     }
 
     /// <summary>
@@ -169,8 +173,10 @@ public class GlobalSystemManager : MonoBehaviour
         // 立即写入磁盘
         PlayerPrefs.Save();
 
-        Debug.Log("设置已保存");
+        Debug.Log("系统设置已保存");
     }
+
+    // ==================== 音频服务 ====================
 
     /// <summary>
     /// 设置音量
@@ -189,6 +195,19 @@ public class GlobalSystemManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 播放音效
+    /// </summary>
+    public void PlaySFX(AudioClip clip)
+    {
+        if (audioSource != null && clip != null)
+        {
+            audioSource.PlayOneShot(clip, sfxVolume * masterVolume);
+        }
+    }
+
+    // ==================== 显示服务 ====================
+
+    /// <summary>
     /// 设置显示模式
     /// </summary>
     public void SetDisplay(bool fullscreen, Vector2Int res)
@@ -202,6 +221,8 @@ public class GlobalSystemManager : MonoBehaviour
         SaveSettings();
         Debug.Log($"显示设置：{resolution.x}x{resolution.y}, 全屏:{isFullscreen}");
     }
+
+    // ==================== 语言服务 ====================
 
     /// <summary>
     /// 设置语言 - 通过LanguageManager
@@ -217,6 +238,18 @@ public class GlobalSystemManager : MonoBehaviour
         {
             Debug.LogWarning("LanguageManager未初始化，无法切换语言");
         }
+    }
+
+    /// <summary>
+    /// 获取翻译文本
+    /// </summary>
+    public string GetText(string key)
+    {
+        if (LanguageManager.Instance != null)
+        {
+            return LanguageManager.Instance.GetText(key);
+        }
+        return key; // 降级返回Key本身
     }
 
     /// <summary>
@@ -240,21 +273,9 @@ public class GlobalSystemManager : MonoBehaviour
 
         // 自动保存语言设置
         SaveSettings();
-
-        // 这里可以触发其他需要响应语言切换的系统
-        // 例如：更新UI、重新加载本地化资源等
     }
 
-    /// <summary>
-    /// 播放音效
-    /// </summary>
-    public void PlaySFX(AudioClip clip)
-    {
-        if (audioSource != null && clip != null)
-        {
-            audioSource.PlayOneShot(clip, sfxVolume * masterVolume);
-        }
-    }
+    // ==================== 存档服务 ====================
 
     /// <summary>
     /// 保存游戏进度
@@ -293,14 +314,24 @@ public class GlobalSystemManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 检查是否有游戏存档
+    /// </summary>
+    public bool HasGameSave()
+    {
+        return hasGameSave;
+    }
+
+    // ==================== 应用程序服务 ====================
+
+    /// <summary>
     /// 退出游戏
     /// </summary>
-    public void QuitGame()
+    public void QuitApplication()
     {
         // 确保退出前保存设置
         SaveSettings();
 
-        Debug.Log("游戏即将退出");
+        Debug.Log("应用程序即将退出");
 
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
@@ -309,51 +340,20 @@ public class GlobalSystemManager : MonoBehaviour
 #endif
     }
 
-    /// <summary>
-    /// 获取当前设置的摘要信息（用于调试）
-    /// </summary>
-    public string GetSettingsSummary()
-    {
-        string currentLang = LanguageManager.Instance != null ?
-            LanguageManager.Instance.currentLanguage.ToString() :
-            "未初始化";
-
-        return $"音量: {masterVolume:F2}/{sfxVolume:F2}/{musicVolume:F2} | " +
-               $"显示: {resolution.x}x{resolution.y} {(isFullscreen ? "全屏" : "窗口")} | " +
-               $"语言: {currentLang} | " +
-               $"存档: {(hasGameSave ? "有" : "无")}";
-    }
-
-    /// <summary>
-    /// 获取翻译文本的便捷方法
-    /// </summary>
-    public string GetText(string key)
-    {
-        if (LanguageManager.Instance != null)
-        {
-            return LanguageManager.Instance.GetText(key);
-        }
-        return key; // 降级返回Key本身
-    }
+    // ==================== 调试和状态查询 ====================
 
     void OnDestroy()
     {
+        // 取消事件监听
+        if (LanguageManager.Instance != null)
+        {
+            LanguageManager.OnLanguageChanged -= OnLanguageChanged;
+        }
     }
 
     #region 编辑器调试方法
 
 #if UNITY_EDITOR
-    [ContextMenu("打印设置摘要")]
-    void PrintSettingsSummary()
-    {
-        Debug.Log("=== 当前设置摘要 ===");
-        Debug.Log(GetSettingsSummary());
-
-        if (LanguageManager.Instance != null)
-        {
-            LanguageManager.Instance.PrintTranslationStats();
-        }
-    }
 
     [ContextMenu("重新加载语言表")]
     void EditorReloadLanguageTable()

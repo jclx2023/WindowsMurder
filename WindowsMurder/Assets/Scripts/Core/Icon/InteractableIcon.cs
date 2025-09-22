@@ -7,6 +7,62 @@ using UnityEngine.EventSystems;
 using TMPro;
 
 /// <summary>
+/// Icon交互行为基类
+/// 所有具体的icon交互都继承自这个类
+/// </summary>
+public abstract class IconAction : MonoBehaviour
+{
+    [Header("基础设置")]
+    public string actionName;           // 交互行为名称（用于调试）
+    public bool isEnabled = true;       // 是否启用交互
+
+    /// <summary>
+    /// 执行交互行为 - 子类必须实现
+    /// </summary>
+    public abstract void Execute();
+
+    /// <summary>
+    /// 检查是否可以执行交互（可选重写）
+    /// </summary>
+    public virtual bool CanExecute()
+    {
+        return isEnabled;
+    }
+
+    /// <summary>
+    /// 交互执行前的回调（可选重写）
+    /// </summary>
+    protected virtual void OnBeforeExecute()
+    {
+        // 可以在这里播放通用音效、显示反馈等
+    }
+
+    /// <summary>
+    /// 交互执行后的回调（可选重写）
+    /// </summary>
+    protected virtual void OnAfterExecute()
+    {
+        // 可以在这里记录日志、更新状态等
+    }
+
+    /// <summary>
+    /// 执行交互的完整流程
+    /// </summary>
+    public void TryExecute()
+    {
+        if (!CanExecute())
+        {
+            Debug.Log($"IconAction: {actionName} 无法执行");
+            return;
+        }
+
+        OnBeforeExecute();
+        Execute();
+        OnAfterExecute();
+    }
+}
+
+/// <summary>
 /// 右键菜单项数据 - 支持多语言Key模式
 /// </summary>
 [Serializable]
@@ -109,11 +165,11 @@ public class ContextMenuItem
     }
 }
 
-    /// <summary>
-    /// 可交互桌面图标基础组件
-    /// 支持双击交互和右键菜单
-    /// </summary>
-    public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+/// <summary>
+/// 可交互桌面图标基础组件
+/// 支持双击交互和右键菜单，集成了交互行为管理
+/// </summary>
+public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("UI组件引用")]
     public Image iconImage;         // 图标图片组件
@@ -268,7 +324,27 @@ public class ContextMenuItem
 
     void HandleDoubleClick()
     {
-        OnIconDoubleClicked?.Invoke(this);
+        // 新的交互行为处理
+        HandleIconInteraction();
+    }
+
+    /// <summary>
+    /// 处理icon的双击交互 - 集成的交互管理逻辑
+    /// </summary>
+    private void HandleIconInteraction()
+    {
+        // 查找icon上的交互行为组件
+        IconAction iconAction = GetComponent<IconAction>();
+
+        if (iconAction != null)
+        {
+            Debug.Log($"InteractableIcon: 执行 {name} 的交互行为");
+            iconAction.TryExecute();
+        }
+        else
+        {
+            Debug.LogWarning($"InteractableIcon: {name} 没有配置交互行为");
+        }
     }
 
     #endregion
@@ -353,6 +429,7 @@ public class ContextMenuItem
 
     void OnContextMenuItemSelected(string itemId)
     {
+        // 只触发静态事件，让其他系统处理右键菜单逻辑
         OnContextMenuItemClicked?.Invoke(this, itemId);
     }
 

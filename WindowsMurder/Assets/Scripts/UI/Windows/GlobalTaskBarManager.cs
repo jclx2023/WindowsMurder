@@ -4,7 +4,8 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 
 /// <summary>
-/// 全局任务栏管理器 - 管理开始菜单和任务栏功能
+/// 全局任务栏管理器 - 管理UI交互和ActionManager
+/// 负责TaskBar UI显示和用户交互，管理GlobalActionManager处理业务逻辑
 /// </summary>
 public class GlobalTaskBarManager : MonoBehaviour
 {
@@ -28,10 +29,14 @@ public class GlobalTaskBarManager : MonoBehaviour
     public AudioClip menuOpenSound;
     public AudioClip menuCloseSound;
 
+    [Header("ActionManager设置")]
+    public GameObject globalActionManagerPrefab; // GlobalActionManager预设体
+    public bool createActionManagerAtStart = true; // 是否在启动时自动创建
+
     // 私有变量
     private bool isStartMenuOpen = false;
-    private AudioSource audioSource;
     private string currentSceneName;
+    private GlobalActionManager actionManager;
 
     void Awake()
     {
@@ -51,18 +56,42 @@ public class GlobalTaskBarManager : MonoBehaviour
 
     void Start()
     {
+        // 等待GlobalSystemManager初始化完成
+        if (GlobalSystemManager.Instance != null)
+        {
+            // 如果系统已初始化，直接开始
+            OnSystemReady();
+        }
+        else
+        {
+            // 等待系统初始化完成
+            GlobalSystemManager.OnSystemInitialized += OnSystemReady;
+        }
+    }
+
+    void OnDestroy()
+    {
+        // 取消场景监听和系统事件
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        if (GlobalSystemManager.OnSystemInitialized != null)
+        {
+            GlobalSystemManager.OnSystemInitialized -= OnSystemReady;
+        }
+    }
+
+    /// <summary>
+    /// 系统就绪后的初始化
+    /// </summary>
+    void OnSystemReady()
+    {
         // 监听场景变化
         SceneManager.sceneLoaded += OnSceneLoaded;
 
         // 初始化当前场景
         currentSceneName = SceneManager.GetActiveScene().name;
         UpdateMenuButtonsForScene();
-    }
 
-    void OnDestroy()
-    {
-        // 取消场景监听
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        Debug.Log("TaskBar系统初始化完成");
     }
 
     /// <summary>
@@ -70,11 +99,6 @@ public class GlobalTaskBarManager : MonoBehaviour
     /// </summary>
     void InitializeTaskBar()
     {
-        // 获取音频组件
-        audioSource = GetComponent<AudioSource>();
-        if (audioSource == null)
-            audioSource = gameObject.AddComponent<AudioSource>();
-
         // 初始状态下关闭开始菜单
         if (startPanel != null)
             startPanel.SetActive(false);
@@ -89,54 +113,164 @@ public class GlobalTaskBarManager : MonoBehaviour
         // 绑定菜单按钮事件
         BindMenuButtons();
 
+        // 初始化ActionManager
+        if (createActionManagerAtStart)
+        {
+            InitializeActionManager();
+        }
+
         Debug.Log("全局任务栏初始化完成");
     }
 
     /// <summary>
-    /// 绑定开始菜单按钮事件
+    /// 初始化ActionManager
+    /// </summary>
+    void InitializeActionManager()
+    {
+        if (actionManager != null)
+        {
+            Debug.LogWarning("GlobalActionManager已经存在，跳过初始化");
+            return;
+        }
+
+        // 方式1：通过预设体创建
+        if (globalActionManagerPrefab != null)
+        {
+            GameObject actionManagerObj = Instantiate(globalActionManagerPrefab, transform);
+            actionManager = actionManagerObj.GetComponent<GlobalActionManager>();
+
+            if (actionManager == null)
+            {
+                Debug.LogError("预设体中没有找到GlobalActionManager组件");
+                Destroy(actionManagerObj);
+                return;
+            }
+        }
+        // 方式2：动态创建
+        else
+        {
+            GameObject actionManagerObj = new GameObject("GlobalActionManager");
+            actionManagerObj.transform.SetParent(transform);
+            actionManager = actionManagerObj.AddComponent<GlobalActionManager>();
+        }
+
+        // 确保ActionManager初始化
+        if (actionManager != null)
+        {
+            actionManager.InitializeManager();
+            Debug.Log("GlobalActionManager 由TaskBar创建并初始化完成");
+        }
+    }
+
+    /// <summary>
+    /// 获取ActionManager实例（懒加载）
+    /// </summary>
+    public GlobalActionManager GetActionManager()
+    {
+        if (actionManager == null && !createActionManagerAtStart)
+        {
+            InitializeActionManager();
+        }
+        return actionManager;
+    }
+
+    /// <summary>
+    /// 绑定开始菜单按钮事件 - 通过ActionManager处理业务逻辑
     /// </summary>
     void BindMenuButtons()
     {
         if (mainMenuButton != null)
         {
             mainMenuButton.onClick.RemoveAllListeners();
-            mainMenuButton.onClick.AddListener(() => OnMainMenuClicked());
+            mainMenuButton.onClick.AddListener(() => ExecuteAction("BackToMainMenu"));
         }
 
         if (newGameButton != null)
         {
             newGameButton.onClick.RemoveAllListeners();
-            newGameButton.onClick.AddListener(() => OnNewGameClicked());
+            newGameButton.onClick.AddListener(() => ExecuteAction("NewGame"));
         }
 
         if (continueButton != null)
         {
             continueButton.onClick.RemoveAllListeners();
-            continueButton.onClick.AddListener(() => OnContinueClicked());
+            continueButton.onClick.AddListener(() => ExecuteAction("Continue"));
         }
 
         if (languageButton != null)
         {
             languageButton.onClick.RemoveAllListeners();
-            languageButton.onClick.AddListener(() => OnLanguageClicked());
+            languageButton.onClick.AddListener(() => ExecuteAction("OpenLanguageSettings"));
         }
 
         if (displayButton != null)
         {
             displayButton.onClick.RemoveAllListeners();
-            displayButton.onClick.AddListener(() => OnDisplayClicked());
+            displayButton.onClick.AddListener(() => ExecuteAction("OpenDisplaySettings"));
         }
 
         if (creditsButton != null)
         {
             creditsButton.onClick.RemoveAllListeners();
-            creditsButton.onClick.AddListener(() => OnCreditsClicked());
+            creditsButton.onClick.AddListener(() => ExecuteAction("OpenCredits"));
         }
 
         if (shutdownButton != null)
         {
             shutdownButton.onClick.RemoveAllListeners();
-            shutdownButton.onClick.AddListener(() => OnShutdownClicked());
+            shutdownButton.onClick.AddListener(() => ExecuteAction("Shutdown"));
+        }
+    }
+
+    /// <summary>
+    /// 执行操作的统一入口 - 处理音效和菜单关闭，然后调用ActionManager
+    /// </summary>
+    void ExecuteAction(string actionName)
+    {
+        PlayButtonClick();
+        CloseStartMenu();
+
+        // 确保ActionManager存在
+        if (actionManager == null)
+        {
+            InitializeActionManager();
+        }
+
+        // 检查ActionManager和GlobalActionManager.Instance
+        if (actionManager != null && GlobalActionManager.Instance != null)
+        {
+            // 根据操作名称调用相应的ActionManager方法
+            switch (actionName)
+            {
+                case "BackToMainMenu":
+                    GlobalActionManager.Instance.BackToMainMenu();
+                    break;
+                case "NewGame":
+                    GlobalActionManager.Instance.NewGame();
+                    break;
+                case "Continue":
+                    GlobalActionManager.Instance.Continue();
+                    break;
+                case "OpenLanguageSettings":
+                    GlobalActionManager.Instance.OpenLanguageSettings();
+                    break;
+                case "OpenDisplaySettings":
+                    GlobalActionManager.Instance.OpenDisplaySettings();
+                    break;
+                case "OpenCredits":
+                    GlobalActionManager.Instance.OpenCredits();
+                    break;
+                case "Shutdown":
+                    GlobalActionManager.Instance.Shutdown();
+                    break;
+                default:
+                    Debug.LogWarning($"TaskBar: 未知的操作 {actionName}");
+                    break;
+            }
+        }
+        else
+        {
+            Debug.LogError("TaskBar: GlobalActionManager 未正确初始化，无法执行操作");
         }
     }
 
@@ -178,12 +312,12 @@ public class GlobalTaskBarManager : MonoBehaviour
         if (continueButton != null)
         {
             bool hasGameSave = GlobalSystemManager.Instance != null &&
-                              GlobalSystemManager.Instance.hasGameSave;
+                              GlobalSystemManager.Instance.HasGameSave();
             continueButton.gameObject.SetActive(isMainMenuScene);
             continueButton.interactable = hasGameSave;
         }
 
-        Debug.Log($"按钮状态更新 - MainMenu: {isMainMenuScene}, Game: {isGameScene}");
+        Debug.Log($"TaskBar按钮状态更新 - MainMenu: {isMainMenuScene}, Game: {isGameScene}");
     }
 
     /// <summary>
@@ -235,13 +369,13 @@ public class GlobalTaskBarManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 播放音效
+    /// 播放音效 - 通过GlobalSystemManager
     /// </summary>
     void PlaySound(AudioClip clip)
     {
-        if (audioSource != null && clip != null)
+        if (GlobalSystemManager.Instance != null)
         {
-            audioSource.PlayOneShot(clip);
+            GlobalSystemManager.Instance.PlaySFX(clip);
         }
     }
 
@@ -251,139 +385,6 @@ public class GlobalTaskBarManager : MonoBehaviour
     void PlayButtonClick()
     {
         PlaySound(buttonClickSound);
-    }
-
-    // ==================== 按钮事件处理 ====================
-
-    /// <summary>
-    /// 返回主菜单
-    /// </summary>
-    void OnMainMenuClicked()
-    {
-        PlayButtonClick();
-        CloseStartMenu();
-
-        Debug.Log("返回主菜单");
-        StartCoroutine(LoadSceneAsync("MainMenu"));
-    }
-
-    /// <summary>
-    /// 开始新游戏
-    /// </summary>
-    void OnNewGameClicked()
-    {
-        PlayButtonClick();
-        CloseStartMenu();
-
-        // 清除之前的存档
-        if (GlobalSystemManager.Instance != null)
-        {
-            GlobalSystemManager.Instance.DeleteSave();
-        }
-
-        Debug.Log("开始新游戏");
-        StartCoroutine(LoadSceneAsync("GameScene"));
-    }
-
-    /// <summary>
-    /// 继续游戏
-    /// </summary>
-    void OnContinueClicked()
-    {
-        PlayButtonClick();
-        CloseStartMenu();
-
-        // 检查是否有存档
-        if (GlobalSystemManager.Instance != null && GlobalSystemManager.Instance.hasGameSave)
-        {
-            Debug.Log("继续游戏");
-            StartCoroutine(LoadSceneAsync("GameScene"));
-        }
-        else
-        {
-            Debug.LogWarning("没有找到存档文件");
-            // 可以显示提示信息
-        }
-    }
-
-    /// <summary>
-    /// 语言设置
-    /// </summary>
-    void OnLanguageClicked()
-    {
-        PlayButtonClick();
-        CloseStartMenu();
-
-        Debug.Log("打开语言设置");
-        // TODO: 实现语言设置窗口
-        // LanguageSettingsWindow.Show();
-    }
-
-    /// <summary>
-    /// 显示设置
-    /// </summary>
-    void OnDisplayClicked()
-    {
-        PlayButtonClick();
-        CloseStartMenu();
-
-        Debug.Log("打开显示设置");
-        // TODO: 实现显示设置窗口
-        // DisplaySettingsWindow.Show();
-    }
-
-    /// <summary>
-    /// 制作人员
-    /// </summary>
-    void OnCreditsClicked()
-    {
-        PlayButtonClick();
-        CloseStartMenu();
-
-        Debug.Log("显示制作人员信息");
-        // TODO: 实现制作人员窗口
-        // CreditsWindow.Show();
-    }
-
-    /// <summary>
-    /// 关机/退出游戏
-    /// </summary>
-    void OnShutdownClicked()
-    {
-        PlayButtonClick();
-        CloseStartMenu();
-
-        Debug.Log("退出游戏");
-
-        // 调用全局系统的退出方法
-        if (GlobalSystemManager.Instance != null)
-        {
-            GlobalSystemManager.Instance.QuitGame();
-        }
-        else
-        {
-            // 备用退出方法
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#else
-            Application.Quit();
-#endif
-        }
-    }
-
-    /// <summary>
-    /// 异步加载场景
-    /// </summary>
-    IEnumerator LoadSceneAsync(string sceneName)
-    {
-        // 可以在这里添加加载画面
-        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName);
-
-        while (!asyncOperation.isDone)
-        {
-            // 可以更新加载进度
-            yield return null;
-        }
     }
 
     // ==================== 外部调用接口 ====================
@@ -412,6 +413,14 @@ public class GlobalTaskBarManager : MonoBehaviour
         UpdateMenuButtonsForScene();
     }
 
+    /// <summary>
+    /// 检查ActionManager是否就绪
+    /// </summary>
+    public bool IsActionManagerReady()
+    {
+        return actionManager != null && GlobalActionManager.Instance != null;
+    }
+
     // ==================== Unity事件 ====================
 
     void Update()
@@ -429,4 +438,32 @@ public class GlobalTaskBarManager : MonoBehaviour
             // 这里需要根据实际UI布局来判断
         }
     }
+
+    #region 编辑器调试方法
+
+#if UNITY_EDITOR
+    [ContextMenu("测试ActionManager初始化")]
+    void TestActionManagerInit()
+    {
+        if (actionManager == null)
+        {
+            InitializeActionManager();
+        }
+        else
+        {
+            Debug.Log($"ActionManager已存在: {actionManager.name}，状态: {IsActionManagerReady()}");
+        }
+    }
+
+    [ContextMenu("打印TaskBar状态")]
+    void PrintTaskBarStatus()
+    {
+        Debug.Log("=== TaskBar状态摘要 ===");
+        Debug.Log($"开始菜单: {(isStartMenuOpen ? "打开" : "关闭")}");
+        Debug.Log($"当前场景: {currentSceneName}");
+        Debug.Log($"ActionManager: {(IsActionManagerReady() ? "就绪" : "未就绪")}");
+    }
+#endif
+
+    #endregion
 }
