@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 全局系统管理器 - 简化版
+/// 全局系统管理器 - 整合多语言系统
 /// 整合所有需要跨场景的功能到一个脚本中
 /// </summary>
 public class GlobalSystemManager : MonoBehaviour
@@ -17,8 +17,10 @@ public class GlobalSystemManager : MonoBehaviour
     public bool isFullscreen = true;
     public Vector2Int resolution = new Vector2Int(1920, 1080);
 
-    [Header("语言设置")]
-    public SystemLanguage currentLanguage = SystemLanguage.ChineseSimplified;
+    [Header("多语言设置")]
+    public string csvFilePath = "Assets/Localization/LocalizationTable.csv";
+    public SupportedLanguage defaultLanguage = SupportedLanguage.Chinese;
+    public bool enableLanguageDebug = true;
 
     [Header("游戏状态")]
     public bool hasGameSave = false;
@@ -26,6 +28,10 @@ public class GlobalSystemManager : MonoBehaviour
 
     // 私有变量
     private AudioSource audioSource;
+    private bool isLanguageSystemReady = false;
+
+    // 语言系统就绪事件
+    public static System.Action OnLanguageSystemReady;
 
     void Awake()
     {
@@ -48,18 +54,54 @@ public class GlobalSystemManager : MonoBehaviour
     /// </summary>
     void InitializeAllSystems()
     {
-        // 加载保存的设置
+        // 1. 首先初始化语言系统
+        InitializeLanguageSystem();
+
+        // 2. 加载保存的设置
         LoadSettings();
 
-        // 应用设置
+        // 3. 应用设置
         ApplySettings();
 
-        // 初始化音频组件
+        // 4. 初始化音频组件
+        InitializeAudioSystem();
+
+        Debug.Log("全局系统初始化完成");
+    }
+
+    /// <summary>
+    /// 初始化语言系统
+    /// </summary>
+    void InitializeLanguageSystem()
+    {
+        if (LanguageManager.Instance == null)
+        {
+            GameObject langManagerObj = new GameObject("LanguageManager");
+            langManagerObj.transform.SetParent(transform);
+
+            var langManager = langManagerObj.AddComponent<LanguageManager>();
+            langManager.csvFilePath = csvFilePath;
+            langManager.currentLanguage = defaultLanguage;
+            langManager.enableDebugLog = enableLanguageDebug;
+        }
+
+        // 监听语言切换事件
+        LanguageManager.OnLanguageChanged += OnLanguageChanged;
+
+        isLanguageSystemReady = true;
+        OnLanguageSystemReady?.Invoke();
+
+        Debug.Log("语言系统初始化完成");
+    }
+
+    /// <summary>
+    /// 初始化音频系统
+    /// </summary>
+    void InitializeAudioSystem()
+    {
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
             audioSource = gameObject.AddComponent<AudioSource>();
-
-        Debug.Log("全局系统初始化完成");
     }
 
     /// <summary>
@@ -77,8 +119,17 @@ public class GlobalSystemManager : MonoBehaviour
         resolution.x = PlayerPrefs.GetInt("ResolutionX", 1920);
         resolution.y = PlayerPrefs.GetInt("ResolutionY", 1080);
 
-        // 语言设置
-        currentLanguage = (SystemLanguage)PlayerPrefs.GetInt("GameLanguage", (int)SystemLanguage.ChineseSimplified);
+        // 语言设置 - 从PlayerPrefs加载用户偏好
+        string savedLanguage = PlayerPrefs.GetString("UserLanguage", defaultLanguage.ToString());
+        if (System.Enum.TryParse<SupportedLanguage>(savedLanguage, out SupportedLanguage userLang))
+        {
+            defaultLanguage = userLang;
+            // 如果LanguageManager已经初始化，立即设置语言
+            if (LanguageManager.Instance != null)
+            {
+                LanguageManager.Instance.SetLanguage(userLang);
+            }
+        }
 
         // 游戏进度
         hasGameSave = PlayerPrefs.HasKey("GameProgress");
@@ -113,7 +164,10 @@ public class GlobalSystemManager : MonoBehaviour
         PlayerPrefs.SetInt("ResolutionY", resolution.y);
 
         // 保存语言设置
-        PlayerPrefs.SetInt("GameLanguage", (int)currentLanguage);
+        if (LanguageManager.Instance != null)
+        {
+            PlayerPrefs.SetString("UserLanguage", LanguageManager.Instance.currentLanguage.ToString());
+        }
 
         // 立即写入磁盘
         PlayerPrefs.Save();
@@ -153,19 +207,45 @@ public class GlobalSystemManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 设置语言
+    /// 设置语言 - 通过LanguageManager
     /// </summary>
-    public void SetLanguage(SystemLanguage language)
+    public void SetLanguage(SupportedLanguage language)
     {
-        if (currentLanguage != language)
+        if (LanguageManager.Instance != null)
         {
-            currentLanguage = language;
-            SaveSettings();
-
-            // 这里可以触发语言变更事件
-            // 通知其他系统更新UI文本
-            Debug.Log($"语言已设置为：{currentLanguage}");
+            LanguageManager.Instance.SetLanguage(language);
+            // 保存设置在OnLanguageChanged中处理
         }
+        else
+        {
+            Debug.LogWarning("LanguageManager未初始化，无法切换语言");
+        }
+    }
+
+    /// <summary>
+    /// 重新加载语言表
+    /// </summary>
+    public void ReloadLanguageTable()
+    {
+        if (LanguageManager.Instance != null)
+        {
+            LanguageManager.Instance.ReloadTranslations();
+            Debug.Log("语言表已重新加载");
+        }
+    }
+
+    /// <summary>
+    /// 语言切换事件处理
+    /// </summary>
+    void OnLanguageChanged(SupportedLanguage newLanguage)
+    {
+        Debug.Log($"GlobalSystemManager: 语言切换到 {newLanguage}");
+
+        // 自动保存语言设置
+        SaveSettings();
+
+        // 这里可以触发其他需要响应语言切换的系统
+        // 例如：更新UI、重新加载本地化资源等
     }
 
     /// <summary>
@@ -216,26 +296,6 @@ public class GlobalSystemManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 重置所有设置为默认值
-    /// </summary>
-    public void ResetToDefaults()
-    {
-        masterVolume = 1f;
-        sfxVolume = 1f;
-        musicVolume = 1f;
-
-        isFullscreen = true;
-        resolution = new Vector2Int(1920, 1080);
-
-        currentLanguage = SystemLanguage.ChineseSimplified;
-
-        ApplySettings();
-        SaveSettings();
-
-        Debug.Log("设置已重置为默认值");
-    }
-
-    /// <summary>
     /// 退出游戏
     /// </summary>
     public void QuitGame()
@@ -257,9 +317,67 @@ public class GlobalSystemManager : MonoBehaviour
     /// </summary>
     public string GetSettingsSummary()
     {
+        string currentLang = LanguageManager.Instance != null ?
+            LanguageManager.Instance.currentLanguage.ToString() :
+            "未初始化";
+
         return $"音量: {masterVolume:F2}/{sfxVolume:F2}/{musicVolume:F2} | " +
                $"显示: {resolution.x}x{resolution.y} {(isFullscreen ? "全屏" : "窗口")} | " +
-               $"语言: {currentLanguage} | " +
+               $"语言: {currentLang} | " +
                $"存档: {(hasGameSave ? "有" : "无")}";
     }
+
+    /// <summary>
+    /// 获取翻译文本的便捷方法
+    /// </summary>
+    public string GetText(string key)
+    {
+        if (LanguageManager.Instance != null)
+        {
+            return LanguageManager.Instance.GetText(key);
+        }
+        return key; // 降级返回Key本身
+    }
+
+    void OnDestroy()
+    {
+    }
+
+    #region 编辑器调试方法
+
+#if UNITY_EDITOR
+    [ContextMenu("打印设置摘要")]
+    void PrintSettingsSummary()
+    {
+        Debug.Log("=== 当前设置摘要 ===");
+        Debug.Log(GetSettingsSummary());
+
+        if (LanguageManager.Instance != null)
+        {
+            LanguageManager.Instance.PrintTranslationStats();
+        }
+    }
+
+    [ContextMenu("重新加载语言表")]
+    void EditorReloadLanguageTable()
+    {
+        ReloadLanguageTable();
+    }
+
+    [ContextMenu("测试语言切换")]
+    void TestLanguageSwitching()
+    {
+        if (LanguageManager.Instance != null)
+        {
+            var currentLang = LanguageManager.Instance.currentLanguage;
+            var nextLang = currentLang == SupportedLanguage.Chinese ?
+                SupportedLanguage.English : SupportedLanguage.Chinese;
+
+            Debug.Log($"切换语言：{currentLang} → {nextLang}");
+            SetLanguage(nextLang);
+        }
+    }
+#endif
+
+    #endregion
 }

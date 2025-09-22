@@ -15,6 +15,84 @@ public class LocalizationID : MonoBehaviour
 
     [SerializeField]
     public string description; // 用于识别这个文本的用途
+
+    // 缓存组件引用
+    private TextMeshProUGUI tmpText;
+    private Text uiText;
+    private bool componentsFound = false;
+
+    void Start()
+    {
+        // 查找并缓存UI组件
+        FindUIComponents();
+
+        // 更新初始文本
+        UpdateText();
+
+        LanguageManager.OnLanguageChanged += OnLanguageChanged;
+    }
+
+    void FindUIComponents()
+    {
+        if (componentsFound) return;
+
+        tmpText = GetComponent<TextMeshProUGUI>();
+        if (tmpText == null)
+        {
+            uiText = GetComponent<Text>();
+        }
+
+        componentsFound = true;
+    }
+
+    void OnLanguageChanged(SupportedLanguage newLanguage)
+    {
+        UpdateText();
+    }
+
+    void UpdateText()
+    {
+        if (!componentsFound)
+        {
+            FindUIComponents();
+        }
+
+        // 获取翻译文本
+        string translatedText = "";
+        if (LanguageManager.Instance != null)
+        {
+            translatedText = LanguageManager.Instance.GetText(localizationKey.ToString());
+        }
+
+        // 如果翻译失败，保持原文本不变
+        if (string.IsNullOrEmpty(translatedText))
+        {
+            return;
+        }
+
+        // 更新UI组件
+        if (tmpText != null)
+        {
+            tmpText.text = translatedText;
+        }
+        else if (uiText != null)
+        {
+            uiText.text = translatedText;
+        }
+    }
+
+    void OnDestroy()
+    {
+        // 取消事件监听
+        LanguageManager.OnLanguageChanged -= OnLanguageChanged;
+    }
+
+    // 手动刷新文本（用于调试）
+    [ContextMenu("刷新文本")]
+    public void RefreshText()
+    {
+        UpdateText();
+    }
 }
 
 #if UNITY_EDITOR

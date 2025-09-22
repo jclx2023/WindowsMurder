@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 /// <summary>
-/// 图标右键菜单UI组件
+/// 图标右键菜单UI组件 - 支持多语言
 /// 用于显示和管理图标的上下文菜单
 /// </summary>
 public class IconContextMenu : MonoBehaviour, IPointerExitHandler
@@ -137,7 +138,7 @@ public class IconContextMenu : MonoBehaviour, IPointerExitHandler
             GameObject itemObj = Instantiate(menuItemPrefab, menuItemContainer);
             instantiatedItems.Add(itemObj);
 
-            // 配置菜单项
+            // 配置菜单项（带多语言支持）
             ConfigureMenuItem(itemObj, item);
 
             // 创建分隔线
@@ -151,16 +152,33 @@ public class IconContextMenu : MonoBehaviour, IPointerExitHandler
 
     void ConfigureMenuItem(GameObject itemObj, ContextMenuItem itemData)
     {
-        // 获取组件
+        // 获取组件 - 优先使用TextMeshPro
         Button button = itemObj.GetComponent<Button>();
-        Text text = itemObj.GetComponentInChildren<Text>();
-        Image icon = itemObj.transform.Find("Icon")?.GetComponent<Image>();
+        TextMeshProUGUI tmpText = itemObj.GetComponentInChildren<TextMeshProUGUI>();
+        Text uiText = null;
 
-        // 设置文本
-        if (text != null)
+        // 如果没有TMP组件，尝试获取传统Text组件
+        if (tmpText == null)
         {
-            text.text = itemData.itemName;
-            text.color = itemData.isEnabled ? Color.black : Color.gray;
+            uiText = itemObj.GetComponentInChildren<Text>();
+        }
+
+        // 设置文本 - 支持多语言翻译
+        string displayText = itemData.GetDisplayText();
+
+        if (tmpText != null)
+        {
+            tmpText.text = displayText;
+            tmpText.color = itemData.isEnabled ? Color.black : Color.gray;
+        }
+        else if (uiText != null)
+        {
+            uiText.text = displayText;
+            uiText.color = itemData.isEnabled ? Color.black : Color.gray;
+        }
+        else
+        {
+            Debug.LogWarning($"IconContextMenu: 菜单项 {itemObj.name} 没有找到文本组件");
         }
 
         // 设置按钮交互
@@ -176,6 +194,12 @@ public class IconContextMenu : MonoBehaviour, IPointerExitHandler
 
         // 设置悬停效果
         SetupHoverEffect(itemObj, itemData.isEnabled);
+
+        // 调试日志
+        if (itemData.useLocalizationKey)
+        {
+            Debug.Log($"菜单项本地化: Key={itemData.itemName} → Text={displayText}");
+        }
     }
 
     void SetupHoverEffect(GameObject itemObj, bool isEnabled)
@@ -291,11 +315,6 @@ public class IconContextMenu : MonoBehaviour, IPointerExitHandler
 
         // 设置最终位置
         menuPanel.anchoredPosition = targetPosition;
-
-        Debug.Log($"鼠标Canvas位置: {canvasPosition}");
-        Debug.Log($"菜单大小: {menuSize} (rect: {menuPanel.rect.size}, sizeDelta: {menuPanel.sizeDelta})");
-        Debug.Log($"偏移: {offset}, 最终位置: {targetPosition}");
-        Debug.Log($"菜单项数量: {currentItems.Count}, 计算高度: {(currentItems.Count * itemHeight) + (menuPadding.y * 2)}");
     }
 
     #endregion
@@ -375,6 +394,37 @@ public class IconContextMenu : MonoBehaviour, IPointerExitHandler
     public bool IsVisible()
     {
         return isVisible && menuPanel != null && menuPanel.gameObject.activeInHierarchy;
+    }
+
+    /// <summary>
+    /// 刷新菜单项文本（语言切换时调用）
+    /// </summary>
+    public void RefreshMenuTexts()
+    {
+        if (!isVisible || currentItems == null) return;
+
+        for (int i = 0; i < currentItems.Count && i < instantiatedItems.Count; i++)
+        {
+            GameObject itemObj = instantiatedItems[i];
+            if (itemObj == null) continue;
+
+            ContextMenuItem itemData = currentItems[i];
+
+            // 重新设置文本
+            TextMeshProUGUI tmpText = itemObj.GetComponentInChildren<TextMeshProUGUI>();
+            Text uiText = itemObj.GetComponentInChildren<Text>();
+
+            string displayText = itemData.GetDisplayText();
+
+            if (tmpText != null)
+            {
+                tmpText.text = displayText;
+            }
+            else if (uiText != null)
+            {
+                uiText.text = displayText;
+            }
+        }
     }
 
     #endregion

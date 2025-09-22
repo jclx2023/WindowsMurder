@@ -7,30 +7,113 @@ using UnityEngine.EventSystems;
 using TMPro;
 
 /// <summary>
-/// 右键菜单项数据
+/// 右键菜单项数据 - 支持多语言Key模式
 /// </summary>
 [Serializable]
 public class ContextMenuItem
 {
-    public string itemName;         // 菜单项名称，如"打开"、"属性"、"删除"
+    [Header("基础设置")]
     public string itemId;           // 菜单项ID，用于识别点击的是哪个选项
     public bool isEnabled = true;   // 是否可用
     public bool showSeparator;      // 在此项后显示分隔线
 
-    public ContextMenuItem(string id, string name, bool enabled = true, bool separator = false)
+    [Header("多语言设置")]
+    public bool useLocalizationKey = true;  // 是否使用本地化Key
+    public string itemName;         // 显示名称：Key模式时存储本地化Key，直接模式时存储显示文本
+
+    [Header("调试信息")]
+    [SerializeField] private string previewText; // Inspector中显示的预览文本（运行时忽略）
+
+    /// <summary>
+    /// 构造函数 - 本地化Key模式（推荐）
+    /// </summary>
+    public ContextMenuItem(string id, string localizationKey, bool enabled = true, bool separator = false)
     {
         itemId = id;
-        itemName = name;
+        itemName = localizationKey;
+        useLocalizationKey = true;
         isEnabled = enabled;
         showSeparator = separator;
     }
+
+    /// <summary>
+    /// 构造函数 - 直接文本模式（兼容旧代码）
+    /// </summary>
+    public static ContextMenuItem CreateDirectText(string id, string displayText, bool enabled = true, bool separator = false)
+    {
+        var item = new ContextMenuItem();
+        item.itemId = id;
+        item.itemName = displayText;
+        item.useLocalizationKey = false;
+        item.isEnabled = enabled;
+        item.showSeparator = separator;
+        return item;
+    }
+
+    /// <summary>
+    /// 默认构造函数（用于Inspector）
+    /// </summary>
+    public ContextMenuItem()
+    {
+        useLocalizationKey = true;
+        isEnabled = true;
+        showSeparator = false;
+    }
+
+    /// <summary>
+    /// 获取显示文本 - 支持运行时翻译
+    /// </summary>
+    public string GetDisplayText()
+    {
+        if (!useLocalizationKey)
+        {
+            return itemName; // 直接返回文本
+        }
+
+        // 尝试通过LanguageManager翻译
+        if (LanguageManager.Instance != null)
+        {
+            string translatedText = LanguageManager.Instance.GetText(itemName);
+            if (!string.IsNullOrEmpty(translatedText))
+            {
+                return translatedText;
+            }
+        }
+
+        // 翻译失败时的降级处理
+        return GetFallbackText();
+    }
+
+    /// <summary>
+    /// 获取降级文本（翻译失败时使用）
+    /// </summary>
+    private string GetFallbackText()
+    {
+        // 可以根据Key返回默认的英文文本
+        switch (itemName)
+        {
+            case MenuKeys.OPEN: return "Open";
+            case MenuKeys.COPY: return "Copy";
+            case MenuKeys.DELETE: return "Delete";
+            case MenuKeys.PROPERTIES: return "Properties";
+            case MenuKeys.RENAME: return "Rename";
+            case MenuKeys.REFRESH: return "Refresh";
+            case MenuKeys.EDIT: return "Edit";
+            case MenuKeys.VIEW: return "View";
+            case MenuKeys.CUT: return "Cut";
+            case MenuKeys.PASTE: return "Paste";
+            case MenuKeys.RUN: return "Run";
+            case MenuKeys.TALK: return "Talk";
+            default: return itemName; // 返回Key本身
+        }
+    }
 }
 
-/// <summary>
-/// 可交互桌面图标基础组件
-/// 支持双击交互和右键菜单
-/// </summary>
-public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+    /// <summary>
+    /// 可交互桌面图标基础组件
+    /// 支持双击交互和右键菜单
+    /// </summary>
+    public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("UI组件引用")]
     public Image iconImage;         // 图标图片组件
