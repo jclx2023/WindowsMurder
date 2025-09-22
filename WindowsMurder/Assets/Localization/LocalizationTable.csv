@@ -1,3 +1,7 @@
 ﻿ID,Description,Chinese,English,Japanese
 1003,StartButtonText_Text,开始,start,
-1004,NameText_TMP,,,
+1004,NameText_TMP,新游戏,NewGame,初めてから
+1005,ContinueNameText_TMP,继续游戏,Continue,
+1006,LanguageIconText_TMP,语言设置,Language,
+1007,DisplayIconText_TMP,显示设置,Display,
+1008,CreditsIconText_TMP,制作人员,Credits,

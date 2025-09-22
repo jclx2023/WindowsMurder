@@ -28,7 +28,6 @@ public class GlobalSystemManager : MonoBehaviour
 
     // 私有变量
     private AudioSource audioSource;
-    private bool isLanguageSystemReady = false;
 
     // 语言系统就绪事件
     public static System.Action OnLanguageSystemReady;
@@ -87,8 +86,6 @@ public class GlobalSystemManager : MonoBehaviour
 
         // 监听语言切换事件
         LanguageManager.OnLanguageChanged += OnLanguageChanged;
-
-        isLanguageSystemReady = true;
         OnLanguageSystemReady?.Invoke();
 
         Debug.Log("语言系统初始化完成");

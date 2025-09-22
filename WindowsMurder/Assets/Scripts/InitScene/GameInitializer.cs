@@ -74,38 +74,18 @@ public class GameInitializer : MonoBehaviour
         Debug.Log("开始创建全局系统...");
 
         GameObject globalSystem = null;
-
-        // 尝试从预制体创建
         if (globalSystemPrefab != null)
         {
             globalSystem = Instantiate(globalSystemPrefab);
             globalSystem.name = "GlobalSystemManager"; // 去掉(Clone)后缀
             Debug.Log("从预制体创建全局系统");
         }
-        else
-        {
-            // 尝试从Resources加载
-            GameObject prefab = Resources.Load<GameObject>("Prefabs/GlobalSystemManager");
-            if (prefab != null)
-            {
-                globalSystem = Instantiate(prefab);
-                globalSystem.name = "GlobalSystemManager";
-                Debug.Log("从Resources加载全局系统");
-            }
-            else
-            {
-                // 直接创建GameObject并添加组件
-                globalSystem = new GameObject("GlobalSystemManager");
-                globalSystem.AddComponent<GlobalSystemManager>();
-                Debug.Log("直接创建全局系统对象");
-            }
-        }
 
         // 设置为跨场景不销毁
         if (globalSystem != null)
         {
             DontDestroyOnLoad(globalSystem);
-            Debug.Log("全局系统创建成功，已设置为DontDestroyOnLoad");
+            //Debug.Log("全局系统创建成功，已设置为DontDestroyOnLoad");
         }
         else
         {
@@ -118,7 +98,7 @@ public class GameInitializer : MonoBehaviour
     /// </summary>
     IEnumerator WaitForSystemReady()
     {
-        Debug.Log("等待全局系统初始化完成...");
+        //Debug.Log("等待全局系统初始化完成...");
 
         // 等待固定时间，确保GlobalSystemManager的Awake和Start完成
         yield return new WaitForSeconds(systemLoadingDelay);
@@ -128,7 +108,7 @@ public class GameInitializer : MonoBehaviour
 
         if (globalManager != null && GlobalSystemManager.Instance != null)
         {
-            Debug.Log("全局系统初始化完成");
+            //Debug.Log("全局系统初始化完成");
         }
         else
         {
