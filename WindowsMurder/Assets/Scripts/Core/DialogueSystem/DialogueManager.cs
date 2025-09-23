@@ -310,20 +310,6 @@ public class DialogueManager : MonoBehaviour
             Debug.Log($"[DialogueManager] {message}");
         }
     }
-
-#if UNITY_EDITOR
-    [ContextMenu("测试回收站对话")]
-    private void TestRecycleBin()
-    {
-        StartDialogue("recyclebin_test");
-    }
-
-    [ContextMenu("测试任务管理器对话")]
-    private void TestTaskManager()
-    {
-        StartDialogue("taskmanager_test");
-    }
-#endif
 }
 
 /// <summary>

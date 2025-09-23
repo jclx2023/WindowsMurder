@@ -66,11 +66,30 @@ public class GlobalSystemManager : MonoBehaviour
         // 4. 初始化音频组件
         InitializeAudioSystem();
 
-        // 5. 通知其他系统初始化完成
+        // 5. 初始化存档系统
+        InitializeSaveSystem();
+
+        // 6. 通知其他系统初始化完成
         OnSystemInitialized?.Invoke();
 
         Debug.Log("底层系统初始化完成");
     }
+
+    /// <summary>
+    /// 初始化存档系统
+    /// </summary>
+    void InitializeSaveSystem()
+    {
+        if (SaveManager.Instance != null)
+        {
+            Debug.Log("存档系统初始化完成");
+        }
+        else
+        {
+            Debug.LogError("存档系统初始化失败：未找到 SaveManager");
+        }
+    }
+
 
     /// <summary>
     /// 初始化语言系统

@@ -35,6 +35,10 @@ public class GlobalActionManager : MonoBehaviour
     private bool postSceneReady;
     private Material postSceneMat; // 新场景找到的材质
 
+    // 标记是否是新游戏还是继续游戏
+    private bool isNewGame = false;
+    private bool isContinueGame = false;
+
     void Awake()
     {
         // 检查是否被TaskBar管理
@@ -63,6 +67,14 @@ public class GlobalActionManager : MonoBehaviour
     public void InitializeManager()
     {
         Debug.Log("GlobalActionManager 初始化完成，等待处理用户交互");
+
+        // 确保SaveManager存在
+        if (SaveManager.Instance == null)
+        {
+            Debug.LogWarning("GlobalActionManager: SaveManager未初始化，尝试创建");
+            GameObject saveManagerObj = new GameObject("SaveManager");
+            saveManagerObj.AddComponent<SaveManager>();
+        }
     }
 
     /// <summary>
@@ -105,6 +117,21 @@ public class GlobalActionManager : MonoBehaviour
     public void BackToMainMenu()
     {
         Debug.Log("GlobalActionManager: 返回主菜单");
+
+        // 如果在游戏场景，先保存进度
+        if (SceneManager.GetActiveScene().name == "GameScene")
+        {
+            if (SaveManager.Instance != null)
+            {
+                SaveManager.Instance.SaveGame();
+                Debug.Log("GlobalActionManager: 已保存当前游戏进度");
+            }
+        }
+
+        // 重置标记
+        isNewGame = false;
+        isContinueGame = false;
+
         PlaySound(sceneTransitionSound);
         SwitchSceneWithEffect("MainMenu");
     }
@@ -116,11 +143,22 @@ public class GlobalActionManager : MonoBehaviour
     {
         Debug.Log("GlobalActionManager: 开始新游戏");
 
-        // 通过GlobalSystemManager删除旧存档
+        // 删除旧存档
+        if (SaveManager.Instance != null)
+        {
+            SaveManager.Instance.DeleteSave();
+            Debug.Log("GlobalActionManager: 已删除旧存档");
+        }
+
+        // 同时通过GlobalSystemManager删除（保持兼容）
         if (GlobalSystemManager.Instance != null)
         {
             GlobalSystemManager.Instance.DeleteSave();
         }
+
+        // 设置标记
+        isNewGame = true;
+        isContinueGame = false;
 
         PlaySound(sceneTransitionSound);
         SwitchSceneWithEffect("GameScene");
@@ -131,14 +169,47 @@ public class GlobalActionManager : MonoBehaviour
     /// </summary>
     public void Continue()
     {
-        if (!HasGameSave())
+        // 检查是否有存档
+        bool hasSave = false;
+
+        // 优先使用SaveManager检查
+        if (SaveManager.Instance != null)
+        {
+            hasSave = SaveManager.Instance.HasSaveData();
+        }
+        // 备用：通过GlobalSystemManager检查
+        else if (GlobalSystemManager.Instance != null)
+        {
+            hasSave = GlobalSystemManager.Instance.HasGameSave();
+        }
+
+        if (!hasSave)
         {
             Debug.LogWarning("GlobalActionManager: 无法继续游戏，没有找到存档");
-            // 可以在这里显示提示窗口
+            // TODO: 可以在这里显示提示窗口
             return;
         }
 
         Debug.Log("GlobalActionManager: 继续游戏");
+
+        // 加载存档数据
+        if (SaveManager.Instance != null)
+        {
+            if (SaveManager.Instance.LoadGame())
+            {
+                Debug.Log("GlobalActionManager: 存档数据已加载到内存");
+            }
+            else
+            {
+                Debug.LogError("GlobalActionManager: 加载存档失败");
+                return;
+            }
+        }
+
+        // 设置标记
+        isNewGame = false;
+        isContinueGame = true;
+
         PlaySound(sceneTransitionSound);
         SwitchSceneWithEffect("GameScene");
     }
@@ -177,6 +248,16 @@ public class GlobalActionManager : MonoBehaviour
     {
         Debug.Log("GlobalActionManager: 退出游戏");
 
+        // 退出前保存游戏（如果在游戏场景）
+        if (SceneManager.GetActiveScene().name == "GameScene")
+        {
+            if (SaveManager.Instance != null)
+            {
+                SaveManager.Instance.SaveGame();
+                Debug.Log("GlobalActionManager: 退出前已保存游戏");
+            }
+        }
+
         // 通过GlobalSystemManager退出
         if (GlobalSystemManager.Instance != null)
         {
@@ -193,19 +274,31 @@ public class GlobalActionManager : MonoBehaviour
         }
     }
 
-    // ==================== 状态查询接口（委托给GlobalSystemManager） ====================
+    // ==================== 状态查询接口 ====================
 
     /// <summary>
     /// 检查是否有游戏存档
     /// </summary>
     public bool HasGameSave()
     {
-        if (GlobalSystemManager.Instance != null)
+        // 优先使用SaveManager
+        if (SaveManager.Instance != null)
+        {
+            return SaveManager.Instance.HasSaveData();
+        }
+        // 备用：使用GlobalSystemManager
+        else if (GlobalSystemManager.Instance != null)
         {
             return GlobalSystemManager.Instance.HasGameSave();
         }
         return false;
     }
+
+    /// <summary>
+    /// 获取当前游戏模式（新游戏/继续游戏）
+    /// </summary>
+    public bool IsNewGame() { return isNewGame; }
+    public bool IsContinueGame() { return isContinueGame; }
 
     // ==================== 转场效果系统 ====================
 
@@ -272,6 +365,21 @@ public class GlobalActionManager : MonoBehaviour
             postSceneMat.SetFloat("_JitterStrength", jitterClear);
             Debug.Log($"转场完成，最终状态: PixelResolution={clearPixel}, JitterStrength={jitterClear}");
         }
+
+        // 4) 场景切换完成后的额外处理
+        if (sceneName == "GameScene")
+        {
+            // 通知SaveManager场景已加载完成
+            // SaveManager会在OnSceneLoaded中自动处理恢复逻辑
+            Debug.Log($"GlobalActionManager: GameScene加载完成，模式: 新游戏={isNewGame}, 继续={isContinueGame}");
+        }
+
+        // 场景切换完成后重置标记
+        if (sceneName == "MainMenu")
+        {
+            isNewGame = false;
+            isContinueGame = false;
+        }
     }
 
     // 在新场景激活时调用：先找到 MainMenuBack 并把材质直接设为"模糊起点"，避免一帧闪清晰
@@ -334,7 +442,6 @@ public class GlobalActionManager : MonoBehaviour
 
     private void SetFloatSafe(Material m, string name, float v)
     {
-        if (m.HasProperty(name)) m.SetFloat(name, v);
+        if (m != null && m.HasProperty(name)) m.SetFloat(name, v);
     }
-
 }
