@@ -1,9 +1,10 @@
-using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 /// <summary>
-/// 全局功能管理器 - 专注于业务逻辑处理
+/// 全局功能管理器 - 整合转场效果和业务逻辑处理
 /// 由GlobalTaskBarManager管理，处理用户操作的具体业务流程
 /// </summary>
 public class GlobalActionManager : MonoBehaviour
@@ -18,6 +19,21 @@ public class GlobalActionManager : MonoBehaviour
     [Header("音效")]
     public AudioClip windowOpenSound;
     public AudioClip sceneTransitionSound;
+
+    [Header("转场效果设置")]
+    public float clearPixel = 500f;     // 清晰态
+    public float blurPixel = 6f;        // 模糊态（像素化程度，数值越小越糊）
+    public float preDuration = 0.5f;   // 离场前变糊时长
+    public float postDuration = 0.55f;  // 入场后变清晰时长
+    public float jitterDuring = 0.9f;   // 过渡中抖动强度
+    public float jitterClear = 0.9f;    // 稳定后抖动强度
+    public AnimationCurve ease = AnimationCurve.EaseInOut(0, 0, 1, 1);
+
+    // 运行时携带到新场景的初始值（保证无缝）
+    private float carryPixel;
+    private float carryJitter;
+    private bool postSceneReady;
+    private Material postSceneMat; // 新场景找到的材质
 
     void Awake()
     {
@@ -90,7 +106,7 @@ public class GlobalActionManager : MonoBehaviour
     {
         Debug.Log("GlobalActionManager: 返回主菜单");
         PlaySound(sceneTransitionSound);
-        StartCoroutine(LoadSceneAsync("MainMenu"));
+        SwitchSceneWithEffect("MainMenu");
     }
 
     /// <summary>
@@ -107,7 +123,7 @@ public class GlobalActionManager : MonoBehaviour
         }
 
         PlaySound(sceneTransitionSound);
-        StartCoroutine(LoadSceneAsync("GameScene"));
+        SwitchSceneWithEffect("GameScene");
     }
 
     /// <summary>
@@ -124,7 +140,7 @@ public class GlobalActionManager : MonoBehaviour
 
         Debug.Log("GlobalActionManager: 继续游戏");
         PlaySound(sceneTransitionSound);
-        StartCoroutine(LoadSceneAsync("GameScene"));
+        SwitchSceneWithEffect("GameScene");
     }
 
     /// <summary>
@@ -191,94 +207,134 @@ public class GlobalActionManager : MonoBehaviour
         return false;
     }
 
+    // ==================== 转场效果系统 ====================
+
     /// <summary>
-    /// 获取当前场景名称
+    /// 带转场效果的场景切换
     /// </summary>
-    public string GetCurrentSceneName()
+    public void SwitchSceneWithEffect(string sceneName)
     {
-        return SceneManager.GetActiveScene().name;
+        StartCoroutine(SceneTransitionCoroutine(sceneName));
     }
 
-    /// <summary>
-    /// 检查是否在主菜单场景
-    /// </summary>
-    public bool IsInMainMenuScene()
+    private IEnumerator SceneTransitionCoroutine(string sceneName)
     {
-        return GetCurrentSceneName() == "MainMenu";
-    }
+        Debug.Log($"GlobalActionManager: 开始转场切换到 {sceneName}");
 
-    /// <summary>
-    /// 检查是否在游戏场景
-    /// </summary>
-    public bool IsInGameScene()
-    {
-        string sceneName = GetCurrentSceneName();
-        return sceneName.Contains("Game") || sceneName == "GameScene";
-    }
+        // 1) 离开场景前：找到当前场景的 MainMenuBack 并把它从清晰→模糊
+        Material curMat = FindMainMenuBackMaterial();
 
-    // ==================== 场景管理 ====================
+        float startPixel = GetFloatSafe(curMat, "_PixelResolution", clearPixel);
+        float startJitter = GetFloatSafe(curMat, "_JitterStrength", jitterClear);
 
-    /// <summary>
-    /// 异步加载场景
-    /// </summary>
-    IEnumerator LoadSceneAsync(string sceneName)
-    {
-        Debug.Log($"GlobalActionManager: 开始加载场景 {sceneName}");
+        // 预过渡：清晰 → 模糊
+        yield return AnimateTwoFloats(
+            curMat,
+            "_PixelResolution", startPixel, blurPixel,
+            "_JitterStrength", startJitter, Mathf.Max(jitterDuring, startJitter),
+            preDuration, ease
+        );
 
-        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName);
+        // 2) 异步加载新场景，准备把新场景的 MainMenuBack 初始化为"模糊态"
+        carryPixel = blurPixel;
+        carryJitter = jitterDuring;
+        postSceneReady = false;
+        postSceneMat = null;
 
-        while (!asyncOperation.isDone)
+        SceneManager.sceneLoaded += OnSceneLoadedSetInitial;
+
+        var async = SceneManager.LoadSceneAsync(sceneName);
+        async.allowSceneActivation = false;
+        while (async.progress < 0.9f) // 等待加载完全（Unity 的 0.9 表示已完成，待激活）
+            yield return null;
+
+        // 允许场景激活，激活后会立刻触发 sceneLoaded 回调
+        async.allowSceneActivation = true;
+
+        // 等待我们在回调里把新场景的 MainMenuBack 初始化好
+        while (!postSceneReady)
+            yield return null;
+
+        SceneManager.sceneLoaded -= OnSceneLoadedSetInitial;
+
+        // 3) 入场后：把新场景的 MainMenuBack 从模糊→清晰
+        if (postSceneMat != null)
         {
+            yield return AnimateTwoFloats(
+                postSceneMat,
+                "_PixelResolution", carryPixel, clearPixel,
+                "_JitterStrength", carryJitter, jitterClear,
+                postDuration, ease
+            );
+
+            // 确保最终状态正确设置
+            postSceneMat.SetFloat("_PixelResolution", clearPixel);
+            postSceneMat.SetFloat("_JitterStrength", jitterClear);
+            Debug.Log($"转场完成，最终状态: PixelResolution={clearPixel}, JitterStrength={jitterClear}");
+        }
+    }
+
+    // 在新场景激活时调用：先找到 MainMenuBack 并把材质直接设为"模糊起点"，避免一帧闪清晰
+    private void OnSceneLoadedSetInitial(Scene scene, LoadSceneMode mode)
+    {
+        var mat = FindMainMenuBackMaterial();
+        if (mat != null)
+        {
+            SetFloatSafe(mat, "_PixelResolution", carryPixel);
+            SetFloatSafe(mat, "_JitterStrength", carryJitter);
+            postSceneMat = mat;
+        }
+        postSceneReady = true;
+    }
+
+    // ==================== 转场效果工具方法 ====================
+
+    private Material FindMainMenuBackMaterial()
+    {
+        // 先用 GameObject.Find（只找激活对象）
+        GameObject go = GameObject.Find("MainMenuBack");
+        Image img = null;
+
+        if (go != null) img = go.GetComponent<Image>();
+
+        // 确保为当前对象创建独立实例，避免改到 sharedMaterial
+        //（只在需要控制动画的对象上这样做）
+        img.material = new Material(img.material);
+        return img.material;
+    }
+
+    private IEnumerator AnimateTwoFloats(
+        Material mat,
+        string propA, float fromA, float toA,
+        string propB, float fromB, float toB,
+        float duration, AnimationCurve curve)
+    {
+        float t = 0f;
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            float k = duration > 0f ? Mathf.Clamp01(t / duration) : 1f;
+            float e = curve != null ? curve.Evaluate(k) : k;
+
+            mat.SetFloat(propA, Mathf.Lerp(fromA, toA, e));
+            mat.SetFloat(propB, Mathf.Lerp(fromB, toB, e));
+
             yield return null;
         }
 
-        Debug.Log($"GlobalActionManager: 场景 {sceneName} 加载完成");
+        // 确保最终值精确设置
+        mat.SetFloat(propA, toA);
+        mat.SetFloat(propB, toB);
     }
 
-    // ==================== 便捷方法（委托给GlobalSystemManager） ====================
-
-    /// <summary>
-    /// 获取翻译文本
-    /// </summary>
-    public string GetText(string key)
+    private float GetFloatSafe(Material m, string name, float fallback)
     {
-        if (GlobalSystemManager.Instance != null)
-        {
-            return GlobalSystemManager.Instance.GetText(key);
-        }
-        return key;
+        return m.HasProperty(name) ? m.GetFloat(name) : fallback;
     }
 
-    /// <summary>
-    /// 设置语言
-    /// </summary>
-    public void SetLanguage(SupportedLanguage language)
+    private void SetFloatSafe(Material m, string name, float v)
     {
-        if (GlobalSystemManager.Instance != null)
-        {
-            GlobalSystemManager.Instance.SetLanguage(language);
-        }
+        if (m.HasProperty(name)) m.SetFloat(name, v);
     }
 
-    /// <summary>
-    /// 设置音量
-    /// </summary>
-    public void SetVolume(float master, float sfx, float music)
-    {
-        if (GlobalSystemManager.Instance != null)
-        {
-            GlobalSystemManager.Instance.SetVolume(master, sfx, music);
-        }
-    }
-
-    /// <summary>
-    /// 设置显示模式
-    /// </summary>
-    public void SetDisplay(bool fullscreen, Vector2Int resolution)
-    {
-        if (GlobalSystemManager.Instance != null)
-        {
-            GlobalSystemManager.Instance.SetDisplay(fullscreen, resolution);
-        }
-    }
 }

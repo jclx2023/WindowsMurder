@@ -63,35 +63,6 @@ public class WindowManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 获取当前活动窗口
-    /// </summary>
-    public WindowsWindow GetActiveWindow()
-    {
-        return activeWindow;
-    }
-
-    /// <summary>
-    /// 获取所有窗口
-    /// </summary>
-    public List<WindowsWindow> GetAllWindows()
-    {
-        return new List<WindowsWindow>(activeWindows);
-    }
-
-    /// <summary>
-    /// 关闭所有窗口
-    /// </summary>
-    public void CloseAllWindows()
-    {
-        var windowsToClose = new List<WindowsWindow>(activeWindows);
-        foreach (var window in windowsToClose)
-        {
-            if (window != null)
-                window.CloseWindow();
-        }
-    }
-
-    /// <summary>
     /// 层叠排列窗口
     /// </summary>
     public void CascadeWindows()

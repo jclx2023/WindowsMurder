@@ -386,41 +386,6 @@ public class GlobalTaskBarManager : MonoBehaviour
     {
         PlaySound(buttonClickSound);
     }
-
-    // ==================== 外部调用接口 ====================
-
-    /// <summary>
-    /// 外部调用：强制关闭开始菜单
-    /// </summary>
-    public void ForceCloseStartMenu()
-    {
-        CloseStartMenu();
-    }
-
-    /// <summary>
-    /// 外部调用：检查开始菜单是否打开
-    /// </summary>
-    public bool IsStartMenuOpen()
-    {
-        return isStartMenuOpen;
-    }
-
-    /// <summary>
-    /// 外部调用：刷新按钮状态
-    /// </summary>
-    public void RefreshButtonStates()
-    {
-        UpdateMenuButtonsForScene();
-    }
-
-    /// <summary>
-    /// 检查ActionManager是否就绪
-    /// </summary>
-    public bool IsActionManagerReady()
-    {
-        return actionManager != null && GlobalActionManager.Instance != null;
-    }
-
     // ==================== Unity事件 ====================
 
     void Update()
@@ -438,32 +403,4 @@ public class GlobalTaskBarManager : MonoBehaviour
             // 这里需要根据实际UI布局来判断
         }
     }
-
-    #region 编辑器调试方法
-
-#if UNITY_EDITOR
-    [ContextMenu("测试ActionManager初始化")]
-    void TestActionManagerInit()
-    {
-        if (actionManager == null)
-        {
-            InitializeActionManager();
-        }
-        else
-        {
-            Debug.Log($"ActionManager已存在: {actionManager.name}，状态: {IsActionManagerReady()}");
-        }
-    }
-
-    [ContextMenu("打印TaskBar状态")]
-    void PrintTaskBarStatus()
-    {
-        Debug.Log("=== TaskBar状态摘要 ===");
-        Debug.Log($"开始菜单: {(isStartMenuOpen ? "打开" : "关闭")}");
-        Debug.Log($"当前场景: {currentSceneName}");
-        Debug.Log($"ActionManager: {(IsActionManagerReady() ? "就绪" : "未就绪")}");
-    }
-#endif
-
-    #endregion
 }
