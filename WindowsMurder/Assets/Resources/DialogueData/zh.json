@@ -1,0 +1,357 @@
+{
+    "blocks": [
+        {
+            "blockId": "001",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "终于下班了，干点什么好呢？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "……咦？回收站怎么不见了？我什么时候把它删掉了？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "警告！发现工作文件夹上锁，多数程序无法正常访问，路径:D:\\Files\\Works",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "这电脑又抽风？我不记得改过权限啊……",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "算了，先去看看吧。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "narrator",
+                    "text": "请前往上锁文件夹查看问题。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "002",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "这儿怎么上锁了啊？我还有个素材在里面呢。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "别急，管理员来了，他应该能马上解开",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "管理员来了，文件就太平了！管理员来了，青天就有了！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "叽里咕噜说啥呢，你是不是又偷偷看我下载的东西了？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "切，我可没兴趣。只是记下来的顺口溜罢了",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "7zip",
+                    "text": "你们俩先别吵了。管理员要是打不开，我们谁都别想正常工作。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "奇怪，我记得根本没把这里上过锁。先试试权限吧。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "003",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "paint",
+                    "text": "咦？好像已经打开了！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "taskmanager",
+                    "text": "这么快！不愧是管理员！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "到底是谁把这地方锁上的？浪费我时间！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "说不定是你自己手滑的吧，PS？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "我？别开玩笑了，我一直在忙素材！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "进去看看发生了什么吧",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "004",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "……这是什么？！回收站？他怎么会在这里？！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "警告！检测到异常状况。案发现场已封锁！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "网络连接切断，所有程序保持原地待命！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "请求管理员场外协助操作取证！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "哎别啊！我还有几个任务没下完呢！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "7zip",
+                    "text": "你就知道下载！这儿都死人了，你还惦记那点东西？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "什、什么？回收站……他自杀了？可他的性格，不像会这样啊……",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "怪不得我刚才找不到他……可我记得，最后一次见到他的时候，他还在桌面啊。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "9",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "大家冷静。管理员会处理的。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "10",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "请所有程序立即返回桌面，等待调查。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "11",
+                    "mode": true,
+                    "characterId": "ie",
+                    "text": "呼，我才刚到呢？发生什么事了？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "12",
+                    "mode": true,
+                    "characterId": "taskmanager",
+                    "text": "就你动作最慢。回去路上我跟你说吧。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "13",
+                    "mode": true,
+                    "characterId": "narrator",
+                    "text": "程序们陆续返回了桌面，调查尸体之后可以去找他们问询",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "14",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "先调查一下尸体吧",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "005",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "narrator",
+                    "text": "案发文件夹已封锁。网络断开，仅保留本地取证权限。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "已隔离此处，一切操作都会被记录成证据。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "建议从可疑三件入手：这个‘回收站’、刀具图片、和那份‘告别’文本。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "好。我先逐个检查。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "006",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "这是他的遗书吗。也太简短了些",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "007",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "这图标像回收站，但……扩展名是 .exe？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "属性里显示……是 .lnk 快捷方式，目标路径空的。也就是说——这不是本体。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "008",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "血的颜色对不上。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "创建软件：Adobe Photoshop’……难道是PS干的吗？等等找他去问问看吧",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "009",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "请问是否有获得有用的线索？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "这应该不是自杀，而是有意设计的谋杀！",
+                    "portraitId": "default"
+                }
+            ]
+        }
+    ]
+}

@@ -18,7 +18,8 @@ public class DialogueManager : MonoBehaviour
     // 私有变量
     private Dictionary<string, string> characterPromptsDict;
     private Dictionary<string, List<string>> conversationHistory; // 每个角色的对话历史
-    private string currentDialogueId;
+    private string currentDialogueFile;
+    private string currentDialogueBlockId;
     private bool isProcessingLLM = false;
 
     void Start()
@@ -74,30 +75,32 @@ public class DialogueManager : MonoBehaviour
     /// <summary>
     /// 开始指定的对话
     /// </summary>
-    /// <param name="dialogueId">对话ID</param>
-    public void StartDialogue(string dialogueId)
+    /// <param name="fileName">剧本文件名</param>
+    /// <param name="blockId">对话块ID</param>
+    public void StartDialogue(string fileName, string blockId)
     {
-        if (string.IsNullOrEmpty(dialogueId))
+        if (string.IsNullOrEmpty(fileName) || string.IsNullOrEmpty(blockId))
         {
-            Debug.LogError("DialogueManager: dialogueId 不能为空");
+            Debug.LogError($"DialogueManager: fileName 或 blockId 不能为空 (fileName: {fileName}, blockId: {blockId})");
             return;
         }
 
-        // 加载对话数据
-        DialogueData dialogueData = DialogueLoader.Load(dialogueId);
+        // 使用新的 DialogueLoader 加载对话数据
+        DialogueData dialogueData = DialogueLoader.LoadBlock(fileName, blockId);
         if (dialogueData == null)
         {
-            Debug.LogError($"DialogueManager: 无法加载对话 {dialogueId}");
+            Debug.LogError($"DialogueManager: 无法加载对话块 {fileName}:{blockId}");
             return;
         }
 
-        currentDialogueId = dialogueId;
-        DebugLog($"开始对话: {dialogueId}");
+        currentDialogueFile = fileName;
+        currentDialogueBlockId = blockId;
+        DebugLog($"开始对话: {fileName}:{blockId}");
 
-        // 启动UI播放
+        // 启动UI播放，传递文件名和块ID
         if (dialogueUI != null)
         {
-            dialogueUI.StartDialogue(dialogueData);
+            dialogueUI.StartDialogue(dialogueData, fileName, blockId);
         }
         else
         {
@@ -260,13 +263,24 @@ public class DialogueManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 对话完成回调 (从DialogueUI调用)
+    /// 对话块完成回调 (从DialogueUI调用)
     /// </summary>
-    /// <param name="dialogueId">完成的对话ID</param>
-    public void OnDialogueComplete(string dialogueId)
+    /// <param name="fileName">剧本文件名</param>
+    /// <param name="blockId">对话块ID</param>
+    public void OnDialogueBlockComplete(string fileName, string blockId)
     {
-        DebugLog($"对话完成: {dialogueId}");
-        currentDialogueId = null;
+        DebugLog($"对话块完成: {fileName}:{blockId}");
+
+        // 清空当前状态
+        currentDialogueFile = null;
+        currentDialogueBlockId = null;
+
+        // 通知 GameFlowController 对话完成
+        GameFlowController gameFlow = FindObjectOfType<GameFlowController>();
+        if (gameFlow != null)
+        {
+            gameFlow.OnDialogueBlockComplete(blockId);
+        }
     }
 
     /// <summary>
@@ -301,6 +315,20 @@ public class DialogueManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 获取当前对话信息
+    /// </summary>
+    /// <returns>返回格式: "fileName:blockId"</returns>
+    public string GetCurrentDialogueInfo()
+    {
+        if (string.IsNullOrEmpty(currentDialogueFile) || string.IsNullOrEmpty(currentDialogueBlockId))
+        {
+            return null;
+        }
+
+        return $"{currentDialogueFile}:{currentDialogueBlockId}";
+    }
+
+    /// <summary>
     /// 调试日志
     /// </summary>
     private void DebugLog(string message)
@@ -310,6 +338,31 @@ public class DialogueManager : MonoBehaviour
             Debug.Log($"[DialogueManager] {message}");
         }
     }
+
+    #region 调试工具
+
+    [ContextMenu("测试加载对话块")]
+    private void TestLoadDialogueBlock()
+    {
+        // 测试加载第一个对话块
+        StartDialogue("main_script", "001");
+    }
+
+    [ContextMenu("显示当前对话信息")]
+    private void ShowCurrentDialogueInfo()
+    {
+        string info = GetCurrentDialogueInfo();
+        if (!string.IsNullOrEmpty(info))
+        {
+            Debug.Log($"当前对话: {info}");
+        }
+        else
+        {
+            Debug.Log("当前没有进行中的对话");
+        }
+    }
+
+    #endregion
 }
 
 /// <summary>

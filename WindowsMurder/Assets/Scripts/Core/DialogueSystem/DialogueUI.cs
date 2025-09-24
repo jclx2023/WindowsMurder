@@ -26,10 +26,13 @@ public class DialogueUI : MonoBehaviour
 
     // 私有变量
     private DialogueData currentDialogue;
+    private string currentDialogueFileName;        // 当前对话的文件名
+    private string currentDialogueBlockId;         // 当前对话的块ID
     private int currentLineIndex = 0;
     private bool isTyping = false;
     private bool inLLMMode = false;
     private bool waitingForPlayerInput = false;  // 是否等待玩家输入
+    private bool isProcessingLLM = false;
     private string currentLLMCharacter;
     private Coroutine typingCoroutine;
 
@@ -140,9 +143,9 @@ public class DialogueUI : MonoBehaviour
     }
 
     /// <summary>
-    /// 开始播放对话
+    /// 开始播放对话（新版本 - 接收文件名和块ID）
     /// </summary>
-    public void StartDialogue(DialogueData dialogueData)
+    public void StartDialogue(DialogueData dialogueData, string fileName, string blockId)
     {
         if (dialogueData == null)
         {
@@ -150,15 +153,33 @@ public class DialogueUI : MonoBehaviour
             return;
         }
 
+        if (string.IsNullOrEmpty(fileName) || string.IsNullOrEmpty(blockId))
+        {
+            Debug.LogError($"DialogueUI: 文件名或块ID为空 (fileName: {fileName}, blockId: {blockId})");
+            return;
+        }
+
         currentDialogue = dialogueData;
+        currentDialogueFileName = fileName;
+        currentDialogueBlockId = blockId;
         currentLineIndex = 0;
         inLLMMode = false;
 
         // 清空显示
         ClearDialogue();
 
-        Debug.Log($"DialogueUI: 开始播放对话 {dialogueData.conversationId}");
+        Debug.Log($"DialogueUI: 开始播放对话 {fileName}:{blockId}");
         ShowNextLine();
+    }
+
+    /// <summary>
+    /// 开始播放对话（兼容旧版本的重载方法）
+    /// </summary>
+    public void StartDialogue(DialogueData dialogueData)
+    {
+        // 如果没有提供文件名和块ID，使用默认值
+        StartDialogue(dialogueData, "unknown", dialogueData?.conversationId ?? "unknown");
+        Debug.LogWarning("DialogueUI: 使用了旧版本的StartDialogue方法，建议传递fileName和blockId参数");
     }
 
     /// <summary>
@@ -294,6 +315,8 @@ public class DialogueUI : MonoBehaviour
             case "TaskManager": return "任务管理器";
             case "ControlPanel": return "控制面板";
             case "MyComputer": return "我的电脑";
+            case "me": return "我";
+            case "guardian": return "系统守护";
             default: return characterId;
         }
     }
@@ -356,8 +379,6 @@ public class DialogueUI : MonoBehaviour
         yield return new WaitForSeconds(2f); // 等待2秒
         ShowNextLine();
     }
-
-    private bool isProcessingLLM = false; // 添加这个标志
 
     /// <summary>
     /// 玩家发送消息
@@ -439,12 +460,9 @@ public class DialogueUI : MonoBehaviour
         inLLMMode = false;
         isProcessingLLM = false;
 
-        SetUIState(UIState.ShowingText);
-        dialogueText.text = $"--- 与 {GetCharacterDisplayName(currentLLMCharacter)} 的对话结束 ---";
-
         // 推进到下一句
         currentLineIndex++;
-        StartCoroutine(DelayedNextLine());
+        ShowNextLine();
     }
 
     /// <summary>
@@ -456,16 +474,18 @@ public class DialogueUI : MonoBehaviour
         isProcessingLLM = false;
         SetUIState(UIState.ShowingText);
 
-        dialogueText.text += "\n--- 对话结束 ---";
-
         Debug.Log("DialogueUI: 对话播放完毕");
 
         // 通知DialogueManager对话结束
         DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
         if (dialogueManager != null)
         {
-            dialogueManager.OnDialogueComplete(currentDialogue.conversationId);
+            dialogueManager.OnDialogueBlockComplete(currentDialogueFileName, currentDialogueBlockId);
         }
+
+        // 清理状态
+        currentDialogueFileName = null;
+        currentDialogueBlockId = null;
     }
 
     /// <summary>
@@ -515,6 +535,8 @@ public class DialogueUI : MonoBehaviour
         }
 
         currentDialogue = null;
+        currentDialogueFileName = null;
+        currentDialogueBlockId = null;
         currentLineIndex = 0;
         inLLMMode = false;
         isProcessingLLM = false;

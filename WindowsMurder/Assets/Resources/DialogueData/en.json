@@ -1,0 +1,357 @@
+{
+    "blocks": [
+        {
+            "blockId": "001",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Finally off work, what should I do now?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "...Huh? Where’s the Recycle Bin?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "Warning! The working folder is locked, most programs cannot access it normally, Path: D:FilesWorks",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "This PC is acting up again ,",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Forget it, let's go take a look first.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "narrator",
+                    "text": "Please go to the locked folder to check the issue.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "002",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "Why’s this place locked? I’ve still got an asset in there!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Relax. Once the Admin gets here, he’ll unlock it right away.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "When the Admin arrives, the files survive! When the Admin appears, the skies clear!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "What nonsense are you spouting? Don’t tell me you’ve been peeking at my downloads again?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "Tch, I’ve got zero interest. Just a little rhyme I picked up.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "7zip",
+                    "text": "Both of you, cut it out. If the Admin can’t unlock this, none of us can work properly.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Strange… I don’t remember locking this at all. Let’s try adjusting the permissions.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "003",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "paint",
+                    "text": "Huh? Looks like it’s open now!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "taskmanager",
+                    "text": "That fast? As expected of the Admin!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "Who on earth locked this place up? Wasted my time!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "Maybe it was you fat-fingering again, PS?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "Me? Don’t be ridiculous—I’ve been busy with assets the whole time!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Let’s head inside and see what’s going on.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "004",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "...What the—?! Recycle Bin? What’s he doing here?!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "Warning! Anomalous situation detected. Crime scene has been sealed!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "Network connection terminated. All programs, hold your positions!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "Requesting Admin support for external evidence collection!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "Hey, come on! I’ve still got a few downloads running!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "7zip",
+                    "text": "All you think about is downloading! Someone’s dead here, and that’s still on your mind?!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "W-what?! Recycle Bin… took his own life? But that’s not like him at all…",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "No wonder I couldn’t find him earlier… But I swear, the last time I saw him, he was still on the desktop.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "9",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Everyone, stay calm. The Admin will take care of this.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "10",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "All programs, return to the desktop immediately and await investigation.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "11",
+                    "mode": true,
+                    "characterId": "ie",
+                    "text": "Phew, I just got here… What happened?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "12",
+                    "mode": true,
+                    "characterId": "taskmanager",
+                    "text": "You’re always the slowest. I’ll fill you in on the way back.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "13",
+                    "mode": true,
+                    "characterId": "narrator",
+                    "text": "The programs gradually returned to the desktop. After examining the body, you can question them one by one.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "14",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Let’s examine the body first.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "005",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "narrator",
+                    "text": "The crime folder has been sealed. Network disconnected—local forensics access only.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "This area is now isolated. Every action will be logged as evidence.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "Recommendation: Begin with the three suspicious items—the 'Recycle Bin,' the knife image, and the farewell text.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Alright. I’ll examine them one by one.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "006",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Is this… his farewell note? It’s awfully short.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "007",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "This icon looks like Recycle Bin, but… the extension is .exe?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Properties say… it’s a .lnk shortcut, with an empty target path. Which means—this isn’t the real file.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "008",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "The blood colors don’t match.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Created with: Adobe Photoshop… Could it be PS’s doing? I’ll have to ask him about this.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "009",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "Have you obtained any useful leads?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "This isn’t suicide—it’s a carefully staged murder!",
+                    "portraitId": "default"
+                }
+            ]
+        }
+    ]
+}

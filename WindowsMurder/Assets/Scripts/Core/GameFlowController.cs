@@ -10,10 +10,11 @@ public class GameFlowController : MonoBehaviour
 {
     [Header("=== Stage配置 ===")]
     [SerializeField] private List<StageConfig> stageConfigs = new List<StageConfig>();
-    [SerializeField] private string startingStageId = "1";
+    [SerializeField] private string startingStageId = "Stage01_Desktop";
 
     [Header("=== 当前状态 ===")]
     [SerializeField] private string currentStageId;
+    [SerializeField] private string currentDialogueFile;
     [SerializeField] private string currentDialogueBlockId;
     [SerializeField] private List<string> unlockedClues = new List<string>();
     [SerializeField] private List<string> completedDialogueBlocks = new List<string>();
@@ -26,6 +27,9 @@ public class GameFlowController : MonoBehaviour
     public UnityEvent<string> OnStageChanged;
     public UnityEvent<string> OnClueUnlocked;
     public UnityEvent OnAutoSaveRequested;
+
+    [Header("=== 多语言设置 ===")]
+    [SerializeField] private bool useMultiLanguageScripts = true; // 是否启用多语言脚本
 
     [Header("=== 调试 ===")]
     [SerializeField] private bool debugMode = true;
@@ -227,11 +231,11 @@ public class GameFlowController : MonoBehaviour
     #region 对话块管理
 
     /// <summary>
-    /// 开始对话块
+    /// 开始对话块（使用dialogueBlockFileId作为标识）
     /// </summary>
-    public void StartDialogueBlock(string dialogueBlockId)
+    public void StartDialogueBlock(string dialogueBlockFileId)
     {
-        if (string.IsNullOrEmpty(dialogueBlockId))
+        if (string.IsNullOrEmpty(dialogueBlockFileId))
         {
             LogError("对话块ID不能为空");
             return;
@@ -244,49 +248,83 @@ public class GameFlowController : MonoBehaviour
         }
 
         // 查找对话块配置
-        var dialogueBlock = currentStage.GetDialogueBlock(dialogueBlockId);
+        var dialogueBlock = currentStage.GetDialogueBlock(dialogueBlockFileId);
         if (dialogueBlock == null)
         {
-            LogError($"找不到对话块配置: {dialogueBlockId}");
+            LogError($"找不到对话块配置: {dialogueBlockFileId}");
             return;
         }
 
         // 检查条件
         if (!CheckDialogueBlockCondition(dialogueBlock))
         {
-            LogDebug($"对话块 {dialogueBlockId} 条件不满足");
+            LogDebug($"对话块 {dialogueBlockFileId} 条件不满足");
             return;
         }
 
-        currentDialogueBlockId = dialogueBlockId;
+        // 根据当前语言设置构建文件名
+        string fileName = GetCurrentScriptFileName();
+
+        currentDialogueFile = fileName;
+        currentDialogueBlockId = dialogueBlockFileId;
 
         // 调用DialogueManager开始对话
         if (dialogueManager != null)
         {
-            dialogueManager.StartDialogue(dialogueBlock.dialogueFileId);
-            LogDebug($"开始对话块: {dialogueBlockId} -> {dialogueBlock.dialogueFileId}");
+            dialogueManager.StartDialogue(fileName, dialogueBlock.dialogueBlockFileId);
+            LogDebug($"开始对话块: {dialogueBlockFileId} -> 文件: {fileName}");
         }
+    }
+
+    /// <summary>
+    /// 根据当前语言设置获取脚本文件名
+    /// </summary>
+    private string GetCurrentScriptFileName()
+    {
+        string fileName = "zh"; // 默认中文
+
+        // 从 LanguageManager 获取当前语言
+        if (LanguageManager.Instance != null)
+        {
+            switch (LanguageManager.Instance.currentLanguage)
+            {
+                case SupportedLanguage.Chinese:
+                    fileName = "zh";
+                    break;
+                case SupportedLanguage.English:
+                    fileName = "en";
+                    break;
+                case SupportedLanguage.Japanese:
+                    fileName = "jp";
+                    break;
+                default:
+                    fileName = "zh";
+                    break;
+            }
+        }
+
+        return fileName;
     }
 
     /// <summary>
     /// 对话块完成时调用
     /// </summary>
-    public void OnDialogueBlockComplete(string dialogueBlockId)
+    public void OnDialogueBlockComplete(string dialogueBlockFileId)
     {
-        if (string.IsNullOrEmpty(dialogueBlockId)) return;
+        if (string.IsNullOrEmpty(dialogueBlockFileId)) return;
 
-        LogDebug($"对话块完成: {dialogueBlockId}");
+        LogDebug($"对话块完成: {dialogueBlockFileId}");
 
         // 标记为已完成
-        if (!completedDialogueBlocks.Contains(dialogueBlockId))
+        if (!completedDialogueBlocks.Contains(dialogueBlockFileId))
         {
-            completedDialogueBlocks.Add(dialogueBlockId);
+            completedDialogueBlocks.Add(dialogueBlockFileId);
         }
 
         // 解锁对应线索
         if (currentStage != null)
         {
-            var dialogueBlock = currentStage.GetDialogueBlock(dialogueBlockId);
+            var dialogueBlock = currentStage.GetDialogueBlock(dialogueBlockFileId);
             if (dialogueBlock != null && dialogueBlock.unlocksClues != null)
             {
                 foreach (string clue in dialogueBlock.unlocksClues)
@@ -296,6 +334,8 @@ public class GameFlowController : MonoBehaviour
             }
         }
 
+        // 清空当前对话状态
+        currentDialogueFile = null;
         currentDialogueBlockId = null;
 
         // 更新可交互对象状态
@@ -423,6 +463,7 @@ public class GameFlowController : MonoBehaviour
         return new GameFlowState
         {
             currentStageId = currentStageId,
+            currentDialogueFile = currentDialogueFile,
             currentDialogueBlockId = currentDialogueBlockId,
             unlockedClues = new List<string>(unlockedClues),
             completedDialogueBlocks = new List<string>(completedDialogueBlocks)
@@ -451,7 +492,11 @@ public class GameFlowController : MonoBehaviour
         // 如果有未完成的对话块，恢复它
         if (!string.IsNullOrEmpty(state.currentDialogueBlockId))
         {
-            StartDialogueBlock(state.currentDialogueBlockId);
+            currentDialogueFile = state.currentDialogueFile;
+            currentDialogueBlockId = state.currentDialogueBlockId;
+
+            // 注意：这里不自动重新开始对话，让玩家手动触发
+            LogDebug($"恢复未完成的对话状态: {currentDialogueFile}:{currentDialogueBlockId}");
         }
     }
 
@@ -484,15 +529,33 @@ public class GameFlowController : MonoBehaviour
         {
             foreach (var block in currentStage.dialogueBlocks)
             {
-                if (!completedDialogueBlocks.Contains(block.dialogueBlockId))
+                if (!completedDialogueBlocks.Contains(block.dialogueBlockFileId))
                 {
-                    completedDialogueBlocks.Add(block.dialogueBlockId);
+                    completedDialogueBlocks.Add(block.dialogueBlockFileId);
                 }
             }
 
             InitializeStageInteractables();
             TryProgressToNextStage();
         }
+    }
+
+    [ContextMenu("测试开始对话块")]
+    private void Debug_TestStartDialogueBlock()
+    {
+        if (currentStage != null && currentStage.dialogueBlocks.Count > 0)
+        {
+            StartDialogueBlock(currentStage.dialogueBlocks[0].dialogueBlockFileId);
+        }
+    }
+
+    [ContextMenu("显示当前状态")]
+    private void Debug_ShowCurrentState()
+    {
+        LogDebug($"当前Stage: {currentStageId}");
+        LogDebug($"当前对话: {currentDialogueFile}:{currentDialogueBlockId}");
+        LogDebug($"解锁线索: [{string.Join(", ", unlockedClues)}]");
+        LogDebug($"完成对话块: [{string.Join(", ", completedDialogueBlocks)}]");
     }
 
     private void LogDebug(string message)
@@ -544,9 +607,9 @@ public class StageConfig
         dialogueBlockDict = new Dictionary<string, DialogueBlockConfig>();
         foreach (var block in dialogueBlocks)
         {
-            if (!string.IsNullOrEmpty(block.dialogueBlockId))
+            if (!string.IsNullOrEmpty(block.dialogueBlockFileId))
             {
-                dialogueBlockDict[block.dialogueBlockId] = block;
+                dialogueBlockDict[block.dialogueBlockFileId] = block;
             }
         }
     }
@@ -554,16 +617,16 @@ public class StageConfig
     /// <summary>
     /// 获取对话块配置
     /// </summary>
-    public DialogueBlockConfig GetDialogueBlock(string blockId)
+    public DialogueBlockConfig GetDialogueBlock(string dialogueBlockFileId)
     {
         if (dialogueBlockDict == null)
         {
             InitializeDictionary();
         }
 
-        if (dialogueBlockDict.ContainsKey(blockId))
+        if (dialogueBlockDict.ContainsKey(dialogueBlockFileId))
         {
-            return dialogueBlockDict[blockId];
+            return dialogueBlockDict[dialogueBlockFileId];
         }
 
         return null;
@@ -576,10 +639,9 @@ public class StageConfig
 [System.Serializable]
 public class DialogueBlockConfig
 {
-    [Header("基础信息")]
-    public string dialogueBlockId = "Block_01";
-    public string dialogueFileId = "dialogue_01";
-    public string blockDescription = "与回收站的初次对话";
+    [Header("剧本配置")]
+    [Tooltip("剧本文件中的对话块ID")]
+    public string dialogueBlockFileId = "001";
 
     [Header("交互设置")]
     [Tooltip("关联的可交互对象名称（可选）")]
@@ -589,7 +651,7 @@ public class DialogueBlockConfig
     [Tooltip("需要的线索")]
     public List<string> requiredClues = new List<string>();
 
-    [Tooltip("需要完成的其他对话块")]
+    [Tooltip("需要完成的其他对话块（使用dialogueBlockFileId）")]
     public List<string> requiredDialogueBlocks = new List<string>();
 
     [Header("完成后解锁")]
@@ -604,6 +666,7 @@ public class DialogueBlockConfig
 public class GameFlowState
 {
     public string currentStageId;
+    public string currentDialogueFile;
     public string currentDialogueBlockId;
     public List<string> unlockedClues;
     public List<string> completedDialogueBlocks;

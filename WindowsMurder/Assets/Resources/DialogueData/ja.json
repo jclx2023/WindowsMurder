@@ -1,0 +1,357 @@
+{
+    "blocks": [
+        {
+            "blockId": "001",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "やっと仕事が終わった、何をしようかな？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "……あれ？ごみ箱が消えてる？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "警告！作業フォルダーがロックされているため、ほとんどのプログラムが正常にアクセスできません。パス：D:FilesWorks",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "このPCはまたおかしい…権限なんて変えてないのに",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "まあまあ、一先ず見に行こう。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "narrator",
+                    "text": "ロックされたフォルダーに行って問題を確認してください。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "002",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "なんでここロックされてるの？まだ素材が中に残ってるのに！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "落ち着いて。管理者が来れば、すぐに解除してくれるはずよ。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "管理者が来れば、ファイルも安泰！管理者が現れれば、空も晴れる！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "何をブツブツ言ってるんだ？まさかまた俺のダウンロードを覗いたんじゃないだろうな？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "チッ、興味なんてないよ。ただの言い回しを覚えてただけさ。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "7zip",
+                    "text": "二人ともやめろ。管理者が開けられなかったら、俺たち全員仕事にならないんだ。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "おかしいな……ここをロックした覚えはない。権限をいじってみるか。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "003",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "paint",
+                    "text": "あれ？もう開いたみたい！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "taskmanager",
+                    "text": "早っ！さすが管理者だな！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "一体誰がここをロックしたんだ？時間を無駄にしやがって！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "もしかして、自分で操作ミスったんじゃないの、PS？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "俺？冗談言うなよ、ずっと素材で手一杯だったんだ！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "中に入って、何が起きてるか見てみよう。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "004",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "……な、なんだこれ？！ごみ箱？どうしてここに？！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "警告！異常を検出。現場は封鎖された！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "ネット接続を遮断。すべてのプログラムはその場で待機せよ！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "管理者に外部からの証拠収集支援を要請！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "ちょっと待てよ！まだダウンロードが残ってるんだ！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "7zip",
+                    "text": "お前はダウンロードばっかりだな！ここで死者が出てるんだぞ、それでも気になるのか？！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "な、なに？！ごみ箱が……自殺したって？でもあいつの性格じゃ、そんなことありえない……",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "どうりでさっき見つからなかったわけだ……でも最後に会ったとき、確かにまだデスクトップにいたんだ。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "9",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "みんな落ち着いて。管理者が対処してくれる。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "10",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "すべてのプログラムは直ちにデスクトップへ戻り、調査を待て。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "11",
+                    "mode": true,
+                    "characterId": "ie",
+                    "text": "ふぅ、今来たばかりなんだけど？一体何があった？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "12",
+                    "mode": true,
+                    "characterId": "taskmanager",
+                    "text": "お前は本当に動作が遅いな。戻る途中で説明してやるよ。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "13",
+                    "mode": true,
+                    "characterId": "narrator",
+                    "text": "プログラムたちは次々とデスクトップへ戻っていった。遺体を調べた後で、彼らに話を聞きに行けるだろう。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "14",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "まずは遺体を調べよう。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "005",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "narrator",
+                    "text": "事件フォルダは封鎖された。ネットワークは切断、本地の証拠収集のみ許可されている。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "この場所は隔離された。すべての操作は証拠として記録される。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "提案：まず三つの不審なものから調べるべきだ――『ごみ箱』、ナイフの画像、それと『別れの文書』だ。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "よし。一つずつ確認してみよう。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "006",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "これが……遺書なのか？あまりにも短すぎる。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "007",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "アイコンはごみ箱に見えるけど……拡張子が .exe？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "プロパティを見ると…….lnk ショートカットで、ターゲットは空欄。つまり――これは本体じゃない。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "008",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "血の色が一致していない。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "作成ソフト：Adobe Photoshop……まさかPSの仕業か？後で問いただしてみよう。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "009",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "有力な手掛かりは見つかったか？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "これは自殺じゃない……明らかに仕組まれた殺人だ！",
+                    "portraitId": "default"
+                }
+            ]
+        }
+    ]
+}
