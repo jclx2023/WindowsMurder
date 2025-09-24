@@ -453,6 +453,38 @@ public class GameFlowController : MonoBehaviour
 
     #endregion
 
+    #region 公共接口
+    // 提供外部安全访问 Stage 配置
+    public IReadOnlyList<StageConfig> GetStageConfigsSafe()
+    {
+        return stageConfigs.AsReadOnly();
+    }
+
+    // 提供当前 StageId
+    public string GetCurrentStageIdSafe()
+    {
+        return currentStageId;
+    }
+
+    // 提供已完成的对话块列表
+    public IReadOnlyList<string> GetCompletedBlocksSafe()
+    {
+        return completedDialogueBlocks.AsReadOnly();
+    }
+
+    // 提供已解锁的线索
+    public IReadOnlyList<string> GetUnlockedCluesSafe()
+    {
+        return unlockedClues.AsReadOnly();
+    }
+
+    // 判断是否启用多语言
+    public bool IsMultiLanguageEnabled()
+    {
+        return useMultiLanguageScripts;
+    }
+    #endregion
+
     #region 存档支持
 
     /// <summary>
@@ -520,42 +552,6 @@ public class GameFlowController : MonoBehaviour
                 }
             }
         }
-    }
-
-    [ContextMenu("完成当前Stage所有对话")]
-    private void Debug_CompleteAllDialoguesInCurrentStage()
-    {
-        if (currentStage != null)
-        {
-            foreach (var block in currentStage.dialogueBlocks)
-            {
-                if (!completedDialogueBlocks.Contains(block.dialogueBlockFileId))
-                {
-                    completedDialogueBlocks.Add(block.dialogueBlockFileId);
-                }
-            }
-
-            InitializeStageInteractables();
-            TryProgressToNextStage();
-        }
-    }
-
-    [ContextMenu("测试开始对话块")]
-    private void Debug_TestStartDialogueBlock()
-    {
-        if (currentStage != null && currentStage.dialogueBlocks.Count > 0)
-        {
-            StartDialogueBlock(currentStage.dialogueBlocks[0].dialogueBlockFileId);
-        }
-    }
-
-    [ContextMenu("显示当前状态")]
-    private void Debug_ShowCurrentState()
-    {
-        LogDebug($"当前Stage: {currentStageId}");
-        LogDebug($"当前对话: {currentDialogueFile}:{currentDialogueBlockId}");
-        LogDebug($"解锁线索: [{string.Join(", ", unlockedClues)}]");
-        LogDebug($"完成对话块: [{string.Join(", ", completedDialogueBlocks)}]");
     }
 
     private void LogDebug(string message)

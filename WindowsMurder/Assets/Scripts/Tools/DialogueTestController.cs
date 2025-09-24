@@ -28,9 +28,6 @@ public class DialogueTestController : MonoBehaviour
         if (clearHistoryBtn != null)
             clearHistoryBtn.onClick.AddListener(ClearAllHistory);
 
-        if (stopDialogueBtn != null)
-            stopDialogueBtn.onClick.AddListener(StopCurrentDialogue);
-
         // 查找DialogueManager
         if (dialogueManager == null)
             dialogueManager = FindObjectOfType<DialogueManager>();
@@ -201,19 +198,6 @@ public class DialogueTestController : MonoBehaviour
             dialogueManager.ClearCharacterHistory("RecycleBin");
             dialogueManager.ClearCharacterHistory("TaskManager");
             dialogueManager.ClearCharacterHistory("TestCharacter");
-        }
-    }
-
-    /// <summary>
-    /// 停止当前对话
-    /// </summary>
-    public void StopCurrentDialogue()
-    {
-        Debug.Log("强制停止当前对话");
-
-        if (dialogueManager != null && dialogueManager.dialogueUI != null)
-        {
-            dialogueManager.dialogueUI.ForceEndDialogue();
         }
     }
 }

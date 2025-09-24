@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class DialogueUI : MonoBehaviour
 {
     [Header("UI组件")]
+    public GameObject dialoguePanel;               // 整个对话框面板
     public TextMeshProUGUI characterNameText;      // 角色名称
     public TextMeshProUGUI dialogueText;           // 对话文本显示区
     public Image characterPortrait;                // 角色立绘
@@ -29,43 +30,60 @@ public class DialogueUI : MonoBehaviour
     private string currentDialogueFileName;        // 当前对话的文件名
     private string currentDialogueBlockId;         // 当前对话的块ID
     private int currentLineIndex = 0;
+
     private bool isTyping = false;
     private bool inLLMMode = false;
-    private bool waitingForPlayerInput = false;  // 是否等待玩家输入
+    private bool waitingForPlayerInput = false;
     private bool isProcessingLLM = false;
+    private bool waitingForContinue = false;       // 是否等待玩家点击继续
+
     private string currentLLMCharacter;
     private Coroutine typingCoroutine;
+    private string fullCurrentText = "";           // 当前完整文本缓存
 
     void Start()
     {
-        // 绑定按钮事件
+        HideDialoguePanel();
+
         if (sendButton != null)
             sendButton.onClick.AddListener(OnSendMessage);
 
-        // 绑定输入框回车事件
         if (playerInputField != null)
             playerInputField.onSubmit.AddListener(delegate { OnSendMessage(); });
 
-        // 绑定对话框点击事件（用于LLM模式下重新激活输入）
         if (dialogueText != null)
         {
-            // 添加一个按钮组件来检测点击
             Button dialogueClickButton = dialogueText.gameObject.GetComponent<Button>();
             if (dialogueClickButton == null)
             {
                 dialogueClickButton = dialogueText.gameObject.AddComponent<Button>();
-                dialogueClickButton.transition = Selectable.Transition.None; // 不显示视觉反馈
+                dialogueClickButton.transition = Selectable.Transition.None;
             }
             dialogueClickButton.onClick.AddListener(OnDialogueTextClicked);
         }
-
-        // 初始状态：显示文本，隐藏输入
-        SetUIState(UIState.ShowingText);
     }
 
-    /// <summary>
-    /// UI状态枚举
-    /// </summary>
+    #region 对话框显示控制
+
+    public void ShowDialoguePanel()
+    {
+        if (dialoguePanel != null)
+            dialoguePanel.SetActive(true);
+    }
+
+    public void HideDialoguePanel()
+    {
+        if (dialoguePanel != null)
+            dialoguePanel.SetActive(false);
+    }
+
+    public bool IsDialoguePanelVisible()
+    {
+        return dialoguePanel != null && dialoguePanel.activeSelf;
+    }
+
+    #endregion
+
     private enum UIState
     {
         ShowingText,    // 显示文本（预设对话或AI回复）
@@ -73,27 +91,21 @@ public class DialogueUI : MonoBehaviour
         ProcessingAI    // 处理AI请求中
     }
 
-    /// <summary>
-    /// 设置UI状态
-    /// </summary>
     private void SetUIState(UIState state)
     {
         switch (state)
         {
             case UIState.ShowingText:
-                // 显示文本，隐藏输入
                 SetTextActive(true);
                 SetInputActive(false);
                 waitingForPlayerInput = false;
                 break;
 
             case UIState.WaitingInput:
-                // 隐藏文本，显示输入
                 SetTextActive(false);
                 SetInputActive(true);
                 waitingForPlayerInput = true;
 
-                // 聚焦输入框
                 if (playerInputField != null)
                 {
                     playerInputField.text = "";
@@ -103,48 +115,32 @@ public class DialogueUI : MonoBehaviour
                 break;
 
             case UIState.ProcessingAI:
-                // 显示处理提示，禁用输入
                 SetTextActive(true);
                 SetInputActive(false);
                 waitingForPlayerInput = false;
 
                 if (dialogueText != null)
-                {
                     dialogueText.text = waitingForAIHint;
-                }
                 break;
         }
     }
 
-    /// <summary>
-    /// 设置文本显示组件状态
-    /// </summary>
     private void SetTextActive(bool active)
     {
         if (dialogueText != null)
-        {
             dialogueText.gameObject.SetActive(active);
-        }
     }
 
-    /// <summary>
-    /// 设置输入组件状态
-    /// </summary>
     private void SetInputActive(bool active)
     {
         if (playerInputField != null)
-        {
             playerInputField.gameObject.SetActive(active);
-        }
         if (sendButton != null)
-        {
             sendButton.gameObject.SetActive(active);
-        }
     }
 
-    /// <summary>
-    /// 开始播放对话（新版本 - 接收文件名和块ID）
-    /// </summary>
+    #region 对话流程
+
     public void StartDialogue(DialogueData dialogueData, string fileName, string blockId)
     {
         if (dialogueData == null)
@@ -153,11 +149,7 @@ public class DialogueUI : MonoBehaviour
             return;
         }
 
-        if (string.IsNullOrEmpty(fileName) || string.IsNullOrEmpty(blockId))
-        {
-            Debug.LogError($"DialogueUI: 文件名或块ID为空 (fileName: {fileName}, blockId: {blockId})");
-            return;
-        }
+        ShowDialoguePanel();
 
         currentDialogue = dialogueData;
         currentDialogueFileName = fileName;
@@ -165,171 +157,60 @@ public class DialogueUI : MonoBehaviour
         currentLineIndex = 0;
         inLLMMode = false;
 
-        // 清空显示
         ClearDialogue();
-
-        Debug.Log($"DialogueUI: 开始播放对话 {fileName}:{blockId}");
         ShowNextLine();
     }
 
-    /// <summary>
-    /// 开始播放对话（兼容旧版本的重载方法）
-    /// </summary>
     public void StartDialogue(DialogueData dialogueData)
     {
-        // 如果没有提供文件名和块ID，使用默认值
         StartDialogue(dialogueData, "unknown", dialogueData?.conversationId ?? "unknown");
-        Debug.LogWarning("DialogueUI: 使用了旧版本的StartDialogue方法，建议传递fileName和blockId参数");
     }
 
-    /// <summary>
-    /// 显示下一句对话
-    /// </summary>
     public void ShowNextLine()
     {
         if (currentDialogue?.lines == null || currentLineIndex >= currentDialogue.lines.Count)
         {
-            // 对话结束
             OnDialogueEnd();
             return;
         }
 
         DialogueLine line = currentDialogue.lines[currentLineIndex];
 
-        if (line.mode) // 预设文本模式
-        {
+        if (line.mode) // 预设文本
             ShowPresetLine(line);
-        }
-        else // LLM模式
-        {
+        else
             StartLLMMode(line);
-        }
     }
 
-    /// <summary>
-    /// 显示预设文本
-    /// </summary>
     private void ShowPresetLine(DialogueLine line)
     {
         inLLMMode = false;
         SetUIState(UIState.ShowingText);
 
-        // 设置角色信息
         SetCharacterInfo(line.characterId, line.portraitId);
 
-        // 显示文本
-        if (useTypingEffect && !string.IsNullOrEmpty(line.text))
+        fullCurrentText = line.text ?? "";
+
+        if (useTypingEffect && !string.IsNullOrEmpty(fullCurrentText))
         {
             if (typingCoroutine != null)
                 StopCoroutine(typingCoroutine);
 
-            typingCoroutine = StartCoroutine(TypeText(line.text));
+            typingCoroutine = StartCoroutine(TypeText(fullCurrentText));
         }
         else
         {
-            dialogueText.text = line.text ?? "";
-        }
-
-        // 自动推进到下一句
-        currentLineIndex++;
-
-        // 如果下一句还是预设模式，延迟后继续
-        if (currentLineIndex < currentDialogue.lines.Count &&
-            currentDialogue.lines[currentLineIndex].mode)
-        {
-            StartCoroutine(DelayedNextLine());
-        }
-        else if (currentLineIndex < currentDialogue.lines.Count)
-        {
-            // 下一句是LLM模式，等待当前文本显示完成后继续
-            StartCoroutine(WaitForTypingThenContinue());
+            dialogueText.text = fullCurrentText;
+            waitingForContinue = true;
         }
     }
 
-    /// <summary>
-    /// 开始LLM对话模式
-    /// </summary>
-    private void StartLLMMode(DialogueLine line)
-    {
-        inLLMMode = true;
-        currentLLMCharacter = line.characterId;
-
-        // 设置角色信息
-        SetCharacterInfo(line.characterId, line.portraitId);
-
-        // 切换到等待输入状态
-        SetUIState(UIState.WaitingInput);
-
-        Debug.Log($"进入LLM模式，与 {GetCharacterDisplayName(line.characterId)} 对话");
-    }
-
-    /// <summary>
-    /// 对话文本被点击（用于LLM模式下重新激活输入）
-    /// </summary>
-    private void OnDialogueTextClicked()
-    {
-        if (inLLMMode && !waitingForPlayerInput && !isProcessingLLM)
-        {
-            // 重新激活输入状态
-            SetUIState(UIState.WaitingInput);
-            Debug.Log("重新激活输入模式");
-        }
-    }
-
-    /// <summary>
-    /// 设置角色信息
-    /// </summary>
-    private void SetCharacterInfo(string characterId, string portraitId)
-    {
-        // 设置角色名称
-        if (characterNameText != null)
-        {
-            characterNameText.text = GetCharacterDisplayName(characterId);
-        }
-
-        // 设置立绘（如果有的话）
-        if (characterPortrait != null && !string.IsNullOrEmpty(portraitId))
-        {
-            Sprite portrait = Resources.Load<Sprite>($"Portraits/{portraitId}");
-            if (portrait != null)
-            {
-                characterPortrait.sprite = portrait;
-                characterPortrait.gameObject.SetActive(true);
-            }
-            else
-            {
-                characterPortrait.gameObject.SetActive(false);
-            }
-        }
-    }
-
-    /// <summary>
-    /// 获取角色显示名称
-    /// </summary>
-    private string GetCharacterDisplayName(string characterId)
-    {
-        // 这里可以扩展为从配置文件读取
-        switch (characterId)
-        {
-            case "RecycleBin": return "回收站";
-            case "TaskManager": return "任务管理器";
-            case "ControlPanel": return "控制面板";
-            case "MyComputer": return "我的电脑";
-            case "me": return "我";
-            case "guardian": return "系统守护";
-            default: return characterId;
-        }
-    }
-
-    /// <summary>
-    /// 打字机效果
-    /// </summary>
     private IEnumerator TypeText(string text)
     {
         isTyping = true;
+        waitingForContinue = false;
         dialogueText.text = "";
 
-        // 播放打字音效
         if (audioSource != null && typingSound != null)
         {
             audioSource.clip = typingSound;
@@ -343,154 +224,97 @@ public class DialogueUI : MonoBehaviour
             yield return new WaitForSeconds(textSpeed);
         }
 
-        // 停止音效
         if (audioSource != null)
-        {
             audioSource.Stop();
-        }
 
         isTyping = false;
+        waitingForContinue = true;
     }
 
-    /// <summary>
-    /// 等待打字效果完成后继续
-    /// </summary>
-    private IEnumerator WaitForTypingThenContinue()
+    private void OnDialogueTextClicked()
     {
-        while (isTyping)
+        if (isTyping)
         {
-            yield return null;
+            SkipTyping();
         }
-
-        yield return new WaitForSeconds(1f); // 额外等待1秒
-        ShowNextLine();
+        else if (waitingForContinue)
+        {
+            waitingForContinue = false;
+            currentLineIndex++;
+            ShowNextLine();
+        }
     }
 
-    /// <summary>
-    /// 延迟显示下一句
-    /// </summary>
-    private IEnumerator DelayedNextLine()
+    private void SkipTyping()
     {
-        while (isTyping)
-        {
-            yield return null;
-        }
+        if (typingCoroutine != null)
+            StopCoroutine(typingCoroutine);
 
-        yield return new WaitForSeconds(2f); // 等待2秒
-        ShowNextLine();
+        if (audioSource != null)
+            audioSource.Stop();
+
+        dialogueText.text = fullCurrentText;
+        isTyping = false;
+        waitingForContinue = true;
     }
 
-    /// <summary>
-    /// 玩家发送消息
-    /// </summary>
-    public void OnSendMessage()
+    private void SetCharacterInfo(string characterId, string portraitId)
     {
-        if (!inLLMMode || !waitingForPlayerInput || playerInputField == null) return;
+        if (characterNameText != null)
+            characterNameText.text = GetCharacterDisplayName(characterId);
 
-        string message = playerInputField.text.Trim();
-        if (string.IsNullOrEmpty(message)) return;
-
-        Debug.Log($"玩家发送消息: {message}");
-
-        // 切换到处理AI状态
-        SetUIState(UIState.ProcessingAI);
-        isProcessingLLM = true;
-
-        // 检查是否结束LLM对话
-        DialogueLine currentLine = DialogueLoader.GetLineAt(currentDialogue, currentLineIndex);
-        if (currentLine != null && DialogueLoader.ShouldEndLLMDialogue(message, currentLine.endKeywords))
+        if (characterPortrait != null)
         {
-            EndLLMMode();
-            return;
-        }
-
-        // 发送给DialogueManager处理
-        DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
-        if (dialogueManager != null)
-        {
-            dialogueManager.ProcessLLMMessage(currentLLMCharacter, message, OnLLMResponse);
-        }
-        else
-        {
-            // 没有DialogueManager的话，显示默认回复
-            OnLLMResponse("系统错误：找不到对话管理器");
+            if (!string.IsNullOrEmpty(portraitId))
+            {
+                Sprite portrait = Resources.Load<Sprite>($"Portraits/{portraitId}");
+                if (portrait != null)
+                {
+                    characterPortrait.sprite = portrait;
+                    characterPortrait.gameObject.SetActive(true);
+                }
+                else
+                {
+                    characterPortrait.gameObject.SetActive(false);
+                }
+            }
+            else
+            {
+                characterPortrait.gameObject.SetActive(false);
+            }
         }
     }
 
-    /// <summary>
-    /// LLM回复回调
-    /// </summary>
-    public void OnLLMResponse(string response)
+    private string GetCharacterDisplayName(string characterId)
     {
-        if (!inLLMMode) return;
-
-        isProcessingLLM = false;
-
-        // 显示AI回复
-        SetUIState(UIState.ShowingText);
-
-        if (useTypingEffect)
+        switch (characterId)
         {
-            if (typingCoroutine != null)
-                StopCoroutine(typingCoroutine);
-            typingCoroutine = StartCoroutine(TypeTextThenWaitForClick(response));
+            case "RecycleBin": return "回收站";
+            case "TaskManager": return "任务管理器";
+            case "ControlPanel": return "控制面板";
+            case "MyComputer": return "我的电脑";
+            case "me": return "我";
+            case "guardian": return "系统守护";
+            default: return characterId;
         }
-        else
-        {
-            dialogueText.text = response;
-        }
-
-        Debug.Log($"AI回复: {response}");
     }
 
-    /// <summary>
-    /// 显示文本后等待点击
-    /// </summary>
-    private IEnumerator TypeTextThenWaitForClick(string text)
-    {
-        yield return StartCoroutine(TypeText(text));
-        // 打字完成后，等待玩家点击对话框来重新激活输入
-    }
-
-    /// <summary>
-    /// 结束LLM模式，继续预设对话
-    /// </summary>
-    private void EndLLMMode()
-    {
-        inLLMMode = false;
-        isProcessingLLM = false;
-
-        // 推进到下一句
-        currentLineIndex++;
-        ShowNextLine();
-    }
-
-    /// <summary>
-    /// 对话结束
-    /// </summary>
     private void OnDialogueEnd()
     {
         inLLMMode = false;
         isProcessingLLM = false;
-        SetUIState(UIState.ShowingText);
 
-        Debug.Log("DialogueUI: 对话播放完毕");
-
-        // 通知DialogueManager对话结束
         DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
         if (dialogueManager != null)
-        {
             dialogueManager.OnDialogueBlockComplete(currentDialogueFileName, currentDialogueBlockId);
-        }
 
-        // 清理状态
+        currentDialogue = null;
         currentDialogueFileName = null;
         currentDialogueBlockId = null;
+
+        HideDialoguePanel();
     }
 
-    /// <summary>
-    /// 清空对话显示
-    /// </summary>
     private void ClearDialogue()
     {
         if (dialogueText != null)
@@ -506,42 +330,72 @@ public class DialogueUI : MonoBehaviour
             playerInputField.text = "";
     }
 
-    /// <summary>
-    /// 跳过当前打字效果
-    /// </summary>
-    public void SkipTyping()
-    {
-        if (isTyping && typingCoroutine != null)
-        {
-            StopCoroutine(typingCoroutine);
-            isTyping = false;
+    #endregion
 
-            // 停止音效
-            if (audioSource != null)
-            {
-                audioSource.Stop();
-            }
+    #region LLM模式（保留原逻辑）
+
+    private void StartLLMMode(DialogueLine line)
+    {
+        inLLMMode = true;
+        currentLLMCharacter = line.characterId;
+
+        SetCharacterInfo(line.characterId, line.portraitId);
+        SetUIState(UIState.WaitingInput);
+    }
+
+    public void OnSendMessage()
+    {
+        if (!inLLMMode || !waitingForPlayerInput || playerInputField == null) return;
+
+        string message = playerInputField.text.Trim();
+        if (string.IsNullOrEmpty(message)) return;
+
+        SetUIState(UIState.ProcessingAI);
+        isProcessingLLM = true;
+
+        DialogueLine currentLine = DialogueLoader.GetLineAt(currentDialogue, currentLineIndex);
+        if (currentLine != null && DialogueLoader.ShouldEndLLMDialogue(message, currentLine.endKeywords))
+        {
+            EndLLMMode();
+            return;
+        }
+
+        DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
+        if (dialogueManager != null)
+            dialogueManager.ProcessLLMMessage(currentLLMCharacter, message, OnLLMResponse);
+        else
+            OnLLMResponse("系统错误：找不到对话管理器");
+    }
+
+    public void OnLLMResponse(string response)
+    {
+        if (!inLLMMode) return;
+
+        isProcessingLLM = false;
+        SetUIState(UIState.ShowingText);
+
+        fullCurrentText = response;
+
+        if (useTypingEffect)
+        {
+            if (typingCoroutine != null)
+                StopCoroutine(typingCoroutine);
+            typingCoroutine = StartCoroutine(TypeText(fullCurrentText));
+        }
+        else
+        {
+            dialogueText.text = fullCurrentText;
+            waitingForContinue = true;
         }
     }
 
-    /// <summary>
-    /// 强制结束当前对话
-    /// </summary>
-    public void ForceEndDialogue()
+    private void EndLLMMode()
     {
-        if (typingCoroutine != null)
-        {
-            StopCoroutine(typingCoroutine);
-        }
-
-        currentDialogue = null;
-        currentDialogueFileName = null;
-        currentDialogueBlockId = null;
-        currentLineIndex = 0;
         inLLMMode = false;
         isProcessingLLM = false;
-
-        SetUIState(UIState.ShowingText);
-        ClearDialogue();
+        currentLineIndex++;
+        ShowNextLine();
     }
+
+    #endregion
 }
