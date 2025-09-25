@@ -35,6 +35,7 @@ public class DialogueUI : MonoBehaviour
     private bool inLLMMode = false;
     private bool waitingForPlayerInput = false;
     private bool isProcessingLLM = false;
+    private bool aiRequestedEnd = false;
     private bool waitingForContinue = false;       // 是否等待玩家点击继续
 
     private string currentLLMCharacter;
@@ -241,6 +242,14 @@ public class DialogueUI : MonoBehaviour
 
         if (inLLMMode)
         {
+            // 检查AI是否已请求结束
+            if (aiRequestedEnd)
+            {
+                EndLLMMode();  // AI请求结束，进入下一行
+                return;
+            }
+
+            // AI未结束，切换到输入模式
             SetUIState(UIState.WaitingInput);
             return;
         }
@@ -346,6 +355,7 @@ public class DialogueUI : MonoBehaviour
     private void StartLLMMode(DialogueLine line)
     {
         inLLMMode = true;
+        aiRequestedEnd = false;  // 重置AI结束标记
         currentLLMCharacter = line.characterId;
 
         SetCharacterInfo(line.characterId, line.portraitId);
@@ -396,6 +406,14 @@ public class DialogueUI : MonoBehaviour
         isProcessingLLM = false;
         SetUIState(UIState.ShowingText);
 
+        // 检查AI是否请求结束对话
+        if (DialogueLoader.ShouldEndByAI(response))
+        {
+            aiRequestedEnd = true;
+            // 清理结束标记，避免显示给玩家
+            response = DialogueLoader.CleanEndMarker(response);
+        }
+
         fullCurrentText = response;
 
         if (useTypingEffect)
@@ -407,7 +425,7 @@ public class DialogueUI : MonoBehaviour
         else
         {
             dialogueText.text = fullCurrentText;
-            waitingForContinue = true; // 设置等待点击状态
+            waitingForContinue = true;
         }
     }
 

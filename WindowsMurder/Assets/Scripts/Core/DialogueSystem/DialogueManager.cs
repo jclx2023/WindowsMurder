@@ -212,25 +212,6 @@ public class DialogueManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 添加到对话历史
-    /// </summary>
-    private void AddToHistory(string characterId, string message)
-    {
-        if (!conversationHistory.ContainsKey(characterId))
-        {
-            conversationHistory[characterId] = new List<string>();
-        }
-
-        conversationHistory[characterId].Add(message);
-
-        // 限制历史长度，避免prompt过长
-        if (conversationHistory[characterId].Count > 8)
-        {
-            conversationHistory[characterId].RemoveAt(0);
-        }
-    }
-
-    /// <summary>
     /// 清除角色对话历史
     /// </summary>
     public void ClearCharacterHistory(string characterId)

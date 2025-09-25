@@ -150,16 +150,6 @@ public class DialogueLoader : MonoBehaviour
         return -1;
     }
 
-    public static int GetNextLLMLine(DialogueData data, int currentIndex)
-    {
-        if (data?.lines == null) return -1;
-        for (int i = currentIndex + 1; i < data.lines.Count; i++)
-        {
-            if (!data.lines[i].mode) return i;
-        }
-        return -1;
-    }
-
     public static bool ShouldEndLLMDialogue(string message, List<string> endKeywords)
     {
         if (string.IsNullOrEmpty(message) || endKeywords == null) return false;
@@ -175,5 +165,40 @@ public class DialogueLoader : MonoBehaviour
     {
         if (data?.lines == null || index < 0 || index >= data.lines.Count) return null;
         return data.lines[index];
+    }
+
+    public static bool ShouldEndByAI(string aiResponse)
+    {
+        if (string.IsNullOrEmpty(aiResponse)) return false;
+
+        string lowerResponse = aiResponse.ToLower().Trim();
+
+        // 检查末尾是否有end标记（可以调整检测逻辑）
+        return lowerResponse.EndsWith("end") ||
+               lowerResponse.EndsWith("end.") ||
+               lowerResponse.EndsWith("end。");
+    }
+
+    public static string CleanEndMarker(string aiResponse)
+    {
+        if (string.IsNullOrEmpty(aiResponse)) return aiResponse;
+
+        string cleaned = aiResponse.Trim();
+
+        // 移除末尾的end标记
+        if (cleaned.ToLower().EndsWith("end"))
+        {
+            cleaned = cleaned.Substring(0, cleaned.Length - 3).TrimEnd();
+        }
+        else if (cleaned.ToLower().EndsWith("end."))
+        {
+            cleaned = cleaned.Substring(0, cleaned.Length - 4).TrimEnd();
+        }
+        else if (cleaned.ToLower().EndsWith("end。"))
+        {
+            cleaned = cleaned.Substring(0, cleaned.Length - 4).TrimEnd();
+        }
+
+        return cleaned;
     }
 }
