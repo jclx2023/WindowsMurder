@@ -8,15 +8,12 @@ public class DialogueManager : MonoBehaviour
     [Header("组件引用")]
     public DialogueUI dialogueUI;
     public GeminiAPI geminiAPI;
-
-    [Header("角色Prompts")]
-    public CharacterPrompt[] characterPrompts; // 每个角色的独立prompt
+    public ConversationHistoryManager historyManager;
 
     [Header("调试")]
     public bool enableDebugLog = true;
 
     // 私有变量
-    private Dictionary<string, string> characterPromptsDict;
     private Dictionary<string, List<string>> conversationHistory; // 每个角色的对话历史
     private string currentDialogueFile;
     private string currentDialogueBlockId;
@@ -33,43 +30,21 @@ public class DialogueManager : MonoBehaviour
     private void InitializeManager()
     {
         // 初始化数据结构
-        characterPromptsDict = new Dictionary<string, string>();
         conversationHistory = new Dictionary<string, List<string>>();
-
-        // 加载角色Prompts
-        LoadCharacterPrompts();
 
         // 查找组件引用
         if (dialogueUI == null)
             dialogueUI = FindObjectOfType<DialogueUI>();
         if (geminiAPI == null)
             geminiAPI = FindObjectOfType<GeminiAPI>();
+        if (historyManager == null)
+            historyManager = FindObjectOfType<ConversationHistoryManager>();
 
         DebugLog("DialogueManager 初始化完成");
     }
-
-    /// <summary>
-    /// 加载角色Prompts
-    /// </summary>
-    private void LoadCharacterPrompts()
+    public string CleanAIResponsePublic(string response)
     {
-        if (characterPrompts == null) return;
-
-        foreach (var prompt in characterPrompts)
-        {
-            if (!string.IsNullOrEmpty(prompt.characterId) && !string.IsNullOrEmpty(prompt.prompt))
-            {
-                characterPromptsDict[prompt.characterId] = prompt.prompt;
-
-                // 初始化对话历史
-                if (!conversationHistory.ContainsKey(prompt.characterId))
-                {
-                    conversationHistory[prompt.characterId] = new List<string>();
-                }
-            }
-        }
-
-        DebugLog($"加载了 {characterPromptsDict.Count} 个角色Prompts");
+        return CleanAIResponse(response);
     }
 
     /// <summary>
@@ -108,12 +83,6 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 处理LLM消息 (从DialogueUI调用)
-    /// </summary>
-    /// <param name="characterId">角色ID</param>
-    /// <param name="playerMessage">玩家消息</param>
-    /// <param name="onResponse">回调函数</param>
     public void ProcessLLMMessage(string characterId, string playerMessage, Action<string> onResponse)
     {
         if (isProcessingLLM)
@@ -123,7 +92,7 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        if (string.IsNullOrEmpty(characterId) || string.IsNullOrEmpty(playerMessage))
+        if (string.IsNullOrEmpty(playerMessage))
         {
             onResponse?.Invoke("输入错误...");
             return;
@@ -141,13 +110,12 @@ public class DialogueManager : MonoBehaviour
     {
         isProcessingLLM = true;
 
-        // 构建完整prompt
-        string fullPrompt = BuildFullPrompt(characterId, playerMessage);
+        // 使用HistoryManager构建包含历史的prompt
+        string fullPrompt = historyManager.BuildPromptWithHistory(playerMessage);
 
         bool responseReceived = false;
         string aiResponse = "";
 
-        // 调用GeminiAPI
         yield return StartCoroutine(geminiAPI.GenerateText(
             fullPrompt,
             response =>
@@ -163,58 +131,18 @@ public class DialogueManager : MonoBehaviour
             }
         ));
 
-        // 等待响应
         while (!responseReceived)
         {
             yield return null;
         }
 
-        // 记录对话历史
-        AddToHistory(characterId, $"玩家: {playerMessage}");
-        AddToHistory(characterId, $"AI回复: {aiResponse}");
+        // 将AI回复添加到历史管理器
+        historyManager.AddLLMResponse(aiResponse);
 
-        // 返回结果
         onResponse?.Invoke(aiResponse);
-
         isProcessingLLM = false;
+
         DebugLog($"LLM响应完成: {aiResponse.Substring(0, Mathf.Min(30, aiResponse.Length))}...");
-    }
-
-    /// <summary>
-    /// 构建完整的prompt
-    /// </summary>
-    private string BuildFullPrompt(string characterId, string playerMessage)
-    {
-        // 获取角色基础prompt
-        string basePrompt = "";
-        if (characterPromptsDict.ContainsKey(characterId))
-        {
-            basePrompt = characterPromptsDict[characterId];
-        }
-        else
-        {
-            basePrompt = $"你是{characterId}程序，请回答用户问题。";
-            DebugLog($"警告: 找不到角色 {characterId} 的prompt，使用默认prompt");
-        }
-
-        // 添加对话历史
-        string historyText = "";
-        if (conversationHistory.ContainsKey(characterId) && conversationHistory[characterId].Count > 0)
-        {
-            historyText = "\n\n之前的对话:\n";
-            List<string> history = conversationHistory[characterId];
-            int startIndex = Mathf.Max(0, history.Count - 4); // 只保留最近2轮对话
-
-            for (int i = startIndex; i < history.Count; i++)
-            {
-                historyText += history[i] + "\n";
-            }
-        }
-
-        // 组合最终prompt
-        string fullPrompt = $"{basePrompt}{historyText}\n\n当前问题: {playerMessage}\n\n请回复:";
-
-        return fullPrompt;
     }
 
     /// <summary>
@@ -236,9 +164,9 @@ public class DialogueManager : MonoBehaviour
         }
 
         // 长度限制
-        if (cleaned.Length > 150)
+        if (cleaned.Length > 300)
         {
-            cleaned = cleaned.Substring(0, 147) + "...";
+            cleaned = cleaned.Substring(0, 297) + "...";
         }
 
         return cleaned;
@@ -363,18 +291,4 @@ public class DialogueManager : MonoBehaviour
     }
 
     #endregion
-}
-
-/// <summary>
-/// 角色Prompt配置
-/// </summary>
-[System.Serializable]
-public class CharacterPrompt
-{
-    [Header("角色信息")]
-    public string characterId;
-
-    [Header("完整Prompt")]
-    [TextArea(5, 15)]
-    public string prompt;
 }

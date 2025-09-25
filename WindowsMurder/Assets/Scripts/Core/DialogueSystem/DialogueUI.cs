@@ -236,8 +236,17 @@ public class DialogueUI : MonoBehaviour
         if (isTyping)
         {
             SkipTyping();
+            return;
         }
-        else if (waitingForContinue)
+
+        if (inLLMMode)
+        {
+            SetUIState(UIState.WaitingInput);
+            return;
+        }
+
+        // 普通对话模式：点击继续到下一行
+        if (waitingForContinue)
         {
             waitingForContinue = false;
             currentLineIndex++;
@@ -340,7 +349,23 @@ public class DialogueUI : MonoBehaviour
         currentLLMCharacter = line.characterId;
 
         SetCharacterInfo(line.characterId, line.portraitId);
-        SetUIState(UIState.WaitingInput);
+
+        // 使用HistoryManager开始LLM会话，直接发送初始prompt
+        DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
+        if (dialogueManager != null && dialogueManager.historyManager != null)
+        {
+            SetUIState(UIState.ProcessingAI); // 显示"思考中..."
+
+            dialogueManager.historyManager.StartLLMSession(
+                line.text,                    // 初始prompt
+                OnInitialLLMResponse,         // 处理初始回复的回调
+                dialogueManager               // 传递DialogueManager引用
+            );
+        }
+    }
+    private void OnInitialLLMResponse(string response)
+    {
+        OnLLMResponse(response); // 复用现有的回复处理逻辑
     }
 
     public void OnSendMessage()
@@ -361,10 +386,7 @@ public class DialogueUI : MonoBehaviour
         }
 
         DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
-        if (dialogueManager != null)
-            dialogueManager.ProcessLLMMessage(currentLLMCharacter, message, OnLLMResponse);
-        else
-            OnLLMResponse("系统错误：找不到对话管理器");
+        dialogueManager.ProcessLLMMessage(currentLLMCharacter, message, OnLLMResponse);
     }
 
     public void OnLLMResponse(string response)
@@ -385,12 +407,19 @@ public class DialogueUI : MonoBehaviour
         else
         {
             dialogueText.text = fullCurrentText;
-            waitingForContinue = true;
+            waitingForContinue = true; // 设置等待点击状态
         }
     }
 
     private void EndLLMMode()
     {
+        // 结束历史管理器的会话
+        DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
+        if (dialogueManager != null && dialogueManager.historyManager != null)
+        {
+            dialogueManager.historyManager.EndLLMSession();
+        }
+
         inLLMMode = false;
         isProcessingLLM = false;
         currentLineIndex++;
