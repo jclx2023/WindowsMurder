@@ -305,14 +305,79 @@ public class DialogueUI : MonoBehaviour
 
     private string GetCharacterDisplayName(string characterId)
     {
+        // 从 LanguageManager 获取当前语言
+        if (LanguageManager.Instance != null)
+        {
+            switch (LanguageManager.Instance.currentLanguage)
+            {
+                case SupportedLanguage.Chinese:
+                    return GetChineseCharacterName(characterId);
+
+                case SupportedLanguage.English:
+                    return GetEnglishCharacterName(characterId);
+
+                case SupportedLanguage.Japanese:
+                    return GetJapaneseCharacterName(characterId);
+
+                default:
+                    return GetEnglishCharacterName(characterId); // 默认使用中文
+            }
+        }
+
+        // 如果 LanguageManager 不可用，默认使用中文
+        return GetChineseCharacterName(characterId);
+    }
+
+    private string GetChineseCharacterName(string characterId)
+    {
         switch (characterId)
         {
-            case "RecycleBin": return "回收站";
-            case "TaskManager": return "任务管理器";
-            case "ControlPanel": return "控制面板";
-            case "MyComputer": return "我的电脑";
             case "me": return "我";
-            case "guardian": return "系统守护";
+            case "guardian": return "安全卫士";
+            case "narrator": return "旁白";
+            case "ps": return "PS";
+            case "controlpanel": return "控制面板";
+            case "qq": return "QQ";
+            case "7zip": return "7-Zip";
+            case "taskmanager": return "任务管理器";
+            case "xunlei": return "迅雷";
+            case "ie": return "IE";
+            default: return characterId;
+        }
+    }
+
+    private string GetEnglishCharacterName(string characterId)
+    {
+        switch (characterId)
+        {
+            case "me": return "I";
+            case "guardian": return "System Guardian";
+            case "narrator": return "Narrator";
+            case "ps": return "Photoshop";
+            case "controlpanel": return "Control Panel";
+            case "qq": return "QQ";
+            case "7zip": return "7-Zip";
+            case "taskmanager": return "Task Manager";
+            case "xunlei": return "Xunlei";
+            case "ie": return "Internet Explorer";
+            default: return characterId;
+        }
+    }
+
+    private string GetJapaneseCharacterName(string characterId)
+    {
+        switch (characterId)
+        {
+            case "me": return "私";
+            case "guardian": return "システムガーディアン";
+            case "narrator": return "ナレーター";
+            case "ps": return "フォトショップ";
+            case "controlpanel": return "コントロールパネル";
+            case "qq": return "QQ";
+            case "7zip": return "7-Zip";
+            case "taskmanager": return "タスクマネージャー";
+            case "xunlei": return "迅雷";
+            case "ie": return "インターネットエクスプローラー";
             default: return characterId;
         }
     }

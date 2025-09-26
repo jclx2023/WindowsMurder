@@ -305,15 +305,6 @@ public class LanguageManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 检查Key是否存在
-    /// </summary>
-    public bool HasKey(string key)
-    {
-        return translations.ContainsKey(currentLanguage) &&
-               translations[currentLanguage].ContainsKey(key);
-    }
-
-    /// <summary>
     /// 获取当前语言的所有Key
     /// </summary>
     public List<string> GetAllKeys()
@@ -323,18 +314,6 @@ public class LanguageManager : MonoBehaviour
             return new List<string>(translations[currentLanguage].Keys);
         }
         return new List<string>();
-    }
-
-    /// <summary>
-    /// 获取翻译统计信息
-    /// </summary>
-    public void PrintTranslationStats()
-    {
-        Debug.Log("=== 翻译统计信息 ===");
-        foreach (var lang in translations.Keys)
-        {
-            Debug.Log($"{lang}: {translations[lang].Count} 条翻译");
-        }
     }
 
     #endregion
