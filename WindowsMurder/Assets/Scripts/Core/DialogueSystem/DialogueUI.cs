@@ -335,7 +335,7 @@ public class DialogueUI : MonoBehaviour
             case "me": return "我";
             case "guardian": return "安全卫士";
             case "narrator": return "旁白";
-            case "ps": return "PS";
+            case "ps": return "PhotoShop";
             case "controlpanel": return "控制面板";
             case "qq": return "QQ";
             case "7zip": return "7-Zip";
