@@ -460,7 +460,9 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
     {
         if (iconImage == null) return;
 
-        Color iconColor = Color.white;
+        // 先保留当前 alpha
+        float currentAlpha = iconImage.color.a;
+        Color iconColor = new Color(1f, 1f, 1f, currentAlpha);
 
         if (isLocked)
         {
@@ -477,6 +479,7 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
         iconImage.color = iconColor;
     }
+
 
     public void SetLocked(bool locked)
     {
