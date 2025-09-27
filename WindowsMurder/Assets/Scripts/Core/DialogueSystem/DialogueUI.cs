@@ -317,7 +317,7 @@ public class DialogueUI : MonoBehaviour
         {
             if (!string.IsNullOrEmpty(portraitId))
             {
-                Sprite portrait = Resources.Load<Sprite>($"Portraits/{portraitId}");
+                Sprite portrait = Resources.Load<Sprite>($"Art/Characters/{characterId}");
                 if (portrait != null)
                 {
                     characterPortrait.sprite = portrait;
@@ -377,7 +377,7 @@ public class DialogueUI : MonoBehaviour
     {
         switch (characterId)
         {
-            case "me": return "I";
+            case "me": return "Me";
             case "guardian": return "System Guardian";
             case "narrator": return "Narrator";
             case "ps": return "Photoshop";
