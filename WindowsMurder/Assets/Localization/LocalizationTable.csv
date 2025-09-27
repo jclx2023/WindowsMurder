@@ -12,3 +12,6 @@
 1014,credits的window的title,制作人员,Credits,
 1015,StartButtonText_TMP,开始,start,
 1016,Title_TMP,语言设置,Language,
+1017,FullText_TMP,是否全屏,FullScreen,
+1018,Title_TMP,显示设置,DisplaySettings,
+1019,DialogueSpeedSliderText_TMP,对话速度,DialogueSpeed,

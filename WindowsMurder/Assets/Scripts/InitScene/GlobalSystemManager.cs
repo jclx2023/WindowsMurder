@@ -17,6 +17,9 @@ public class GlobalSystemManager : MonoBehaviour
     public bool isFullscreen = true;
     public Vector2Int resolution = new Vector2Int(1920, 1080);
 
+    [Header("对话系统设置")]
+    public float dialogueSpeed = 0.05f;           // 对话显示速度
+
     [Header("多语言设置")]
     public string csvFilePath = "Assets/Localization/LocalizationTable.csv";
     public SupportedLanguage defaultLanguage = SupportedLanguage.Chinese;
@@ -32,6 +35,7 @@ public class GlobalSystemManager : MonoBehaviour
     // 系统就绪事件
     public static System.Action OnLanguageSystemReady;
     public static System.Action OnSystemInitialized;
+    public static System.Action OnDialogueSettingsChanged;  // 对话设置变更事件
 
     void Awake()
     {
@@ -90,7 +94,6 @@ public class GlobalSystemManager : MonoBehaviour
         }
     }
 
-
     /// <summary>
     /// 初始化语言系统
     /// </summary>
@@ -139,6 +142,9 @@ public class GlobalSystemManager : MonoBehaviour
         resolution.x = PlayerPrefs.GetInt("ResolutionX", 1920);
         resolution.y = PlayerPrefs.GetInt("ResolutionY", 1080);
 
+        // 对话系统设置
+        dialogueSpeed = PlayerPrefs.GetFloat("DialogueSpeed", 0.05f);
+
         // 语言设置 - 从PlayerPrefs加载用户偏好
         string savedLanguage = PlayerPrefs.GetString("UserLanguage", defaultLanguage.ToString());
         if (System.Enum.TryParse<SupportedLanguage>(savedLanguage, out SupportedLanguage userLang))
@@ -182,6 +188,9 @@ public class GlobalSystemManager : MonoBehaviour
         PlayerPrefs.SetInt("IsFullscreen", isFullscreen ? 1 : 0);
         PlayerPrefs.SetInt("ResolutionX", resolution.x);
         PlayerPrefs.SetInt("ResolutionY", resolution.y);
+
+        // 保存对话系统设置
+        PlayerPrefs.SetFloat("DialogueSpeed", dialogueSpeed);
 
         // 保存语言设置
         if (LanguageManager.Instance != null)
@@ -241,24 +250,23 @@ public class GlobalSystemManager : MonoBehaviour
         Debug.Log($"显示设置：{resolution.x}x{resolution.y}, 全屏:{isFullscreen}");
     }
 
-    // ==================== 语言服务 ====================
+    // ==================== 对话系统服务 ====================
 
     /// <summary>
-    /// 设置语言 - 通过LanguageManager
+    /// 设置对话速度
     /// </summary>
-    public void SetLanguage(SupportedLanguage language)
+    public void SetDialogueSpeed(float speed)
     {
-        if (LanguageManager.Instance != null)
-        {
-            LanguageManager.Instance.SetLanguage(language);
-            // 保存设置在OnLanguageChanged中处理
-        }
-        else
-        {
-            Debug.LogWarning("LanguageManager未初始化，无法切换语言");
-        }
+        dialogueSpeed = Mathf.Clamp(speed, 0.01f, 0.2f);
+        SaveSettings();
+
+        // 通知对话系统设置已变更
+        OnDialogueSettingsChanged?.Invoke();
+
+        Debug.Log($"对话速度设置：{dialogueSpeed:F3}");
     }
 
+    // ==================== 语言服务 ====================
     /// <summary>
     /// 获取翻译文本
     /// </summary>
@@ -269,18 +277,6 @@ public class GlobalSystemManager : MonoBehaviour
             return LanguageManager.Instance.GetText(key);
         }
         return key; // 降级返回Key本身
-    }
-
-    /// <summary>
-    /// 重新加载语言表
-    /// </summary>
-    public void ReloadLanguageTable()
-    {
-        if (LanguageManager.Instance != null)
-        {
-            LanguageManager.Instance.ReloadTranslations();
-            Debug.Log("语言表已重新加载");
-        }
     }
 
     /// <summary>
@@ -360,7 +356,13 @@ public class GlobalSystemManager : MonoBehaviour
     }
 
     // ==================== 调试和状态查询 ====================
-
+    /// <summary>
+    /// 获取对话设置（供其他系统查询）
+    /// </summary>
+    public float GetDialogueSettings()
+    {
+        return (dialogueSpeed);
+    }
     void OnDestroy()
     {
         // 取消事件监听
@@ -369,31 +371,4 @@ public class GlobalSystemManager : MonoBehaviour
             LanguageManager.OnLanguageChanged -= OnLanguageChanged;
         }
     }
-
-    #region 编辑器调试方法
-
-#if UNITY_EDITOR
-
-    [ContextMenu("重新加载语言表")]
-    void EditorReloadLanguageTable()
-    {
-        ReloadLanguageTable();
-    }
-
-    [ContextMenu("测试语言切换")]
-    void TestLanguageSwitching()
-    {
-        if (LanguageManager.Instance != null)
-        {
-            var currentLang = LanguageManager.Instance.currentLanguage;
-            var nextLang = currentLang == SupportedLanguage.Chinese ?
-                SupportedLanguage.English : SupportedLanguage.Chinese;
-
-            Debug.Log($"切换语言：{currentLang} → {nextLang}");
-            SetLanguage(nextLang);
-        }
-    }
-#endif
-
-    #endregion
 }

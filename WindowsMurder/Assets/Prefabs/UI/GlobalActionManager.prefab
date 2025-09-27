@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   languageSettingsPrefab: {fileID: 128873806969726591, guid: 8dbd8ae8b3ed3b94f942d6e5b72d00fe, type: 3}
-  displaySettingsPrefab: {fileID: 0}
+  displaySettingsPrefab: {fileID: 6961427357217459907, guid: c0ce4886568d4c74d8a62e6de52cf835, type: 3}
   creditsWindowPrefab: {fileID: 4167320924422068870, guid: 1bdf5fad16ac3b14f8d88b9aae293efc, type: 3}
   windowOpenSound: {fileID: 0}
   sceneTransitionSound: {fileID: 0}

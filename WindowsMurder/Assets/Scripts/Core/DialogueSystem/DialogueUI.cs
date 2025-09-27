@@ -62,6 +62,17 @@ public class DialogueUI : MonoBehaviour
             }
             dialogueClickButton.onClick.AddListener(OnDialogueTextClicked);
         }
+
+        // 从GlobalSystemManager获取对话速度设置
+        UpdateDialogueSettings();
+
+        GlobalSystemManager.OnDialogueSettingsChanged += UpdateDialogueSettings;
+    }
+
+    private void UpdateDialogueSettings()
+    {
+        float settings = GlobalSystemManager.Instance.GetDialogueSettings();
+        textSpeed = settings;
     }
 
     #region 对话框显示控制
@@ -339,7 +350,7 @@ public class DialogueUI : MonoBehaviour
             case "controlpanel": return "控制面板";
             case "qq": return "QQ";
             case "7zip": return "7-Zip";
-            case "taskmanager": return "任务管理器";
+            case "mine": return "扫雷";
             case "xunlei": return "迅雷";
             case "ie": return "IE";
             default: return characterId;
@@ -357,7 +368,7 @@ public class DialogueUI : MonoBehaviour
             case "controlpanel": return "Control Panel";
             case "qq": return "QQ";
             case "7zip": return "7-Zip";
-            case "taskmanager": return "Task Manager";
+            case "mine": return "Minesweeper";
             case "xunlei": return "Xunlei";
             case "ie": return "Internet Explorer";
             default: return characterId;
@@ -375,7 +386,7 @@ public class DialogueUI : MonoBehaviour
             case "controlpanel": return "コントロールパネル";
             case "qq": return "QQ";
             case "7zip": return "7-Zip";
-            case "taskmanager": return "タスクマネージャー";
+            case "mine": return "Minesweeper";
             case "xunlei": return "迅雷";
             case "ie": return "インターネットエクスプローラー";
             default: return characterId;
