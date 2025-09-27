@@ -267,13 +267,8 @@ public class GameFlowController : MonoBehaviour
 
         currentDialogueFile = fileName;
         currentDialogueBlockId = dialogueBlockFileId;
-
-        // 调用DialogueManager开始对话
-        if (dialogueManager != null)
-        {
-            dialogueManager.StartDialogue(fileName, dialogueBlock.dialogueBlockFileId);
-            LogDebug($"开始对话块: {dialogueBlockFileId} -> 文件: {fileName}");
-        }
+        dialogueManager.StartDialogue(dialogueBlock.dialogueBlockFileId);
+        LogDebug($"开始对话块: {dialogueBlockFileId} -> 文件: {fileName}");
     }
 
     /// <summary>
@@ -343,9 +338,6 @@ public class GameFlowController : MonoBehaviour
 
         // 触发自动存档
         OnAutoSaveRequested?.Invoke();
-
-        // 检查是否可以进入下一Stage
-        TryProgressToNextStage();
     }
 
     /// <summary>

@@ -48,7 +48,46 @@ public class DialogueManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 获取当前语言对应的剧本文件名
+    /// </summary>
+    private string GetCurrentScriptFileName()
+    {
+        string fileName = "zh"; // 默认中文
+                                // 从 LanguageManager 获取当前语言
+        if (LanguageManager.Instance != null)
+        {
+            switch (LanguageManager.Instance.currentLanguage)
+            {
+                case SupportedLanguage.Chinese:
+                    fileName = "zh";
+                    break;
+                case SupportedLanguage.English:
+                    fileName = "en";
+                    break;
+                case SupportedLanguage.Japanese:
+                    fileName = "jp";
+                    break;
+                default:
+                    fileName = "zh";
+                    break;
+            }
+        }
+        return fileName;
+    }
+
+    /// <summary>
     /// 开始指定的对话
+    /// </summary>
+    /// <param name="fileName">剧本文件名</param>
+    /// <param name="blockId">对话块ID</param>
+    public void StartDialogue(string blockId)
+    {
+        string fileName = GetCurrentScriptFileName();
+        StartDialogue(fileName, blockId);
+    }
+
+    /// <summary>
+    /// 开始指定的对话 - 完整版本（保留兼容性）
     /// </summary>
     /// <param name="fileName">剧本文件名</param>
     /// <param name="blockId">对话块ID</param>
@@ -224,20 +263,6 @@ public class DialogueManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 获取当前对话信息
-    /// </summary>
-    /// <returns>返回格式: "fileName:blockId"</returns>
-    public string GetCurrentDialogueInfo()
-    {
-        if (string.IsNullOrEmpty(currentDialogueFile) || string.IsNullOrEmpty(currentDialogueBlockId))
-        {
-            return null;
-        }
-
-        return $"{currentDialogueFile}:{currentDialogueBlockId}";
-    }
-
-    /// <summary>
     /// 调试日志
     /// </summary>
     private void DebugLog(string message)
@@ -247,29 +272,4 @@ public class DialogueManager : MonoBehaviour
             Debug.Log($"[DialogueManager] {message}");
         }
     }
-
-    #region 调试工具
-
-    [ContextMenu("测试加载对话块")]
-    private void TestLoadDialogueBlock()
-    {
-        // 测试加载第一个对话块
-        StartDialogue("main_script", "001");
-    }
-
-    [ContextMenu("显示当前对话信息")]
-    private void ShowCurrentDialogueInfo()
-    {
-        string info = GetCurrentDialogueInfo();
-        if (!string.IsNullOrEmpty(info))
-        {
-            Debug.Log($"当前对话: {info}");
-        }
-        else
-        {
-            Debug.Log("当前没有进行中的对话");
-        }
-    }
-
-    #endregion
 }

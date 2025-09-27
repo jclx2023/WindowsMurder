@@ -6,41 +6,58 @@ using UnityEngine.UI;
 public class DialogueUI : MonoBehaviour
 {
     [Header("UI组件")]
-    public GameObject dialoguePanel;               // 整个对话框面板
-    public TextMeshProUGUI characterNameText;      // 角色名称
-    public TextMeshProUGUI dialogueText;           // 对话文本显示区
-    public Image characterPortrait;                // 角色立绘
-    public TMP_InputField playerInputField;        // 玩家输入框
-    public Button sendButton;                      // 发送按钮
+    public GameObject dialoguePanel;
+    public TextMeshProUGUI characterNameText;
+    public TextMeshProUGUI dialogueText;
+    public Image characterPortrait;
+    public TMP_InputField playerInputField;
+    public Button sendButton;
 
     [Header("效果设置")]
-    public float textSpeed = 0.05f;               // 打字机效果速度
-    public bool useTypingEffect = true;           // 是否使用打字机效果
+    public float textSpeed = 0.05f;
+    public bool useTypingEffect = true;
 
     [Header("音效")]
     public AudioSource audioSource;
-    public AudioClip typingSound;                 // 打字机音效
+    public AudioClip typingSound;
 
     [Header("LLM交互提示")]
     public string waitingForInputHint = "Please enter your question...";
     public string waitingForAIHint = "Thinking...";
 
+    // 事件系统
+    public static event System.Action<string, string, bool> OnLineStarted;
+    public static event System.Action<string, string, bool> OnLineCompleted;
+    public static event System.Action<string, string> OnDialogueBlockStarted;
+    public static event System.Action<string, string> OnDialogueBlockEnded;
+
+    // 公共属性
+    public DialogueLine CurrentLine
+    {
+        get
+        {
+            if (currentDialogue?.lines != null && currentLineIndex >= 0 && currentLineIndex < currentDialogue.lines.Count)
+                return currentDialogue.lines[currentLineIndex];
+            return null;
+        }
+    }
+    public string CurrentLineId => CurrentLine?.id;
+    public int CurrentLineIndex => currentLineIndex;
+
     // 私有变量
     private DialogueData currentDialogue;
-    private string currentDialogueFileName;        // 当前对话的文件名
-    private string currentDialogueBlockId;         // 当前对话的块ID
+    private string currentDialogueFileName;
+    private string currentDialogueBlockId;
     private int currentLineIndex = 0;
-
     private bool isTyping = false;
     private bool inLLMMode = false;
     private bool waitingForPlayerInput = false;
     private bool isProcessingLLM = false;
     private bool aiRequestedEnd = false;
-    private bool waitingForContinue = false;       // 是否等待玩家点击继续
-
+    private bool waitingForContinue = false;
     private string currentLLMCharacter;
     private Coroutine typingCoroutine;
-    private string fullCurrentText = "";           // 当前完整文本缓存
+    private string fullCurrentText = "";
 
     void Start()
     {
@@ -63,9 +80,7 @@ public class DialogueUI : MonoBehaviour
             dialogueClickButton.onClick.AddListener(OnDialogueTextClicked);
         }
 
-        // 从GlobalSystemManager获取对话速度设置
         UpdateDialogueSettings();
-
         GlobalSystemManager.OnDialogueSettingsChanged += UpdateDialogueSettings;
     }
 
@@ -74,8 +89,6 @@ public class DialogueUI : MonoBehaviour
         float settings = GlobalSystemManager.Instance.GetDialogueSettings();
         textSpeed = settings;
     }
-
-    #region 对话框显示控制
 
     public void ShowDialoguePanel()
     {
@@ -94,13 +107,11 @@ public class DialogueUI : MonoBehaviour
         return dialoguePanel != null && dialoguePanel.activeSelf;
     }
 
-    #endregion
-
     private enum UIState
     {
-        ShowingText,    // 显示文本（预设对话或AI回复）
-        WaitingInput,   // 等待玩家输入
-        ProcessingAI    // 处理AI请求中
+        ShowingText,
+        WaitingInput,
+        ProcessingAI
     }
 
     private void SetUIState(UIState state)
@@ -151,8 +162,6 @@ public class DialogueUI : MonoBehaviour
             sendButton.gameObject.SetActive(active);
     }
 
-    #region 对话流程
-
     public void StartDialogue(DialogueData dialogueData, string fileName, string blockId)
     {
         if (dialogueData == null)
@@ -168,6 +177,8 @@ public class DialogueUI : MonoBehaviour
         currentDialogueBlockId = blockId;
         currentLineIndex = 0;
         inLLMMode = false;
+
+        OnDialogueBlockStarted?.Invoke(fileName, blockId);
 
         ClearDialogue();
         ShowNextLine();
@@ -188,7 +199,7 @@ public class DialogueUI : MonoBehaviour
 
         DialogueLine line = currentDialogue.lines[currentLineIndex];
 
-        if (line.mode) // 预设文本
+        if (line.mode)
             ShowPresetLine(line);
         else
             StartLLMMode(line);
@@ -200,24 +211,26 @@ public class DialogueUI : MonoBehaviour
         SetUIState(UIState.ShowingText);
 
         SetCharacterInfo(line.characterId, line.portraitId);
-
         fullCurrentText = line.text ?? "";
+
+        OnLineStarted?.Invoke(line.id, line.characterId, true);
 
         if (useTypingEffect && !string.IsNullOrEmpty(fullCurrentText))
         {
             if (typingCoroutine != null)
                 StopCoroutine(typingCoroutine);
 
-            typingCoroutine = StartCoroutine(TypeText(fullCurrentText));
+            typingCoroutine = StartCoroutine(TypeText(fullCurrentText, line.id, line.characterId, true));
         }
         else
         {
             dialogueText.text = fullCurrentText;
             waitingForContinue = true;
+            OnLineCompleted?.Invoke(line.id, line.characterId, true);
         }
     }
 
-    private IEnumerator TypeText(string text)
+    private IEnumerator TypeText(string text, string lineId = null, string characterId = null, bool isPresetMode = true)
     {
         isTyping = true;
         waitingForContinue = false;
@@ -241,6 +254,11 @@ public class DialogueUI : MonoBehaviour
 
         isTyping = false;
         waitingForContinue = true;
+
+        if (!string.IsNullOrEmpty(lineId))
+        {
+            OnLineCompleted?.Invoke(lineId, characterId ?? "", isPresetMode);
+        }
     }
 
     private void OnDialogueTextClicked()
@@ -253,19 +271,16 @@ public class DialogueUI : MonoBehaviour
 
         if (inLLMMode)
         {
-            // 检查AI是否已请求结束
             if (aiRequestedEnd)
             {
-                EndLLMMode();  // AI请求结束，进入下一行
+                EndLLMMode();
                 return;
             }
 
-            // AI未结束，切换到输入模式
             SetUIState(UIState.WaitingInput);
             return;
         }
 
-        // 普通对话模式：点击继续到下一行
         if (waitingForContinue)
         {
             waitingForContinue = false;
@@ -285,6 +300,12 @@ public class DialogueUI : MonoBehaviour
         dialogueText.text = fullCurrentText;
         isTyping = false;
         waitingForContinue = true;
+
+        DialogueLine currentLine = CurrentLine;
+        if (currentLine != null)
+        {
+            OnLineCompleted?.Invoke(currentLine.id, currentLine.characterId, currentLine.mode);
+        }
     }
 
     private void SetCharacterInfo(string characterId, string portraitId)
@@ -316,26 +337,21 @@ public class DialogueUI : MonoBehaviour
 
     private string GetCharacterDisplayName(string characterId)
     {
-        // 从 LanguageManager 获取当前语言
         if (LanguageManager.Instance != null)
         {
             switch (LanguageManager.Instance.currentLanguage)
             {
                 case SupportedLanguage.Chinese:
                     return GetChineseCharacterName(characterId);
-
                 case SupportedLanguage.English:
                     return GetEnglishCharacterName(characterId);
-
                 case SupportedLanguage.Japanese:
                     return GetJapaneseCharacterName(characterId);
-
                 default:
-                    return GetEnglishCharacterName(characterId); // 默认使用中文
+                    return GetEnglishCharacterName(characterId);
             }
         }
 
-        // 如果 LanguageManager 不可用，默认使用中文
         return GetChineseCharacterName(characterId);
     }
 
@@ -398,6 +414,8 @@ public class DialogueUI : MonoBehaviour
         inLLMMode = false;
         isProcessingLLM = false;
 
+        OnDialogueBlockEnded?.Invoke(currentDialogueFileName, currentDialogueBlockId);
+
         DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
         if (dialogueManager != null)
             dialogueManager.OnDialogueBlockComplete(currentDialogueFileName, currentDialogueBlockId);
@@ -424,34 +442,32 @@ public class DialogueUI : MonoBehaviour
             playerInputField.text = "";
     }
 
-    #endregion
-
-    #region LLM模式（保留原逻辑）
-
     private void StartLLMMode(DialogueLine line)
     {
         inLLMMode = true;
-        aiRequestedEnd = false;  // 重置AI结束标记
+        aiRequestedEnd = false;
         currentLLMCharacter = line.characterId;
 
         SetCharacterInfo(line.characterId, line.portraitId);
 
-        // 使用HistoryManager开始LLM会话，直接发送初始prompt
+        OnLineStarted?.Invoke(line.id, line.characterId, false);
+
         DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
         if (dialogueManager != null && dialogueManager.historyManager != null)
         {
-            SetUIState(UIState.ProcessingAI); // 显示"思考中..."
+            SetUIState(UIState.ProcessingAI);
 
             dialogueManager.historyManager.StartLLMSession(
-                line.text,                    // 初始prompt
-                OnInitialLLMResponse,         // 处理初始回复的回调
-                dialogueManager               // 传递DialogueManager引用
+                line.text,
+                OnInitialLLMResponse,
+                dialogueManager
             );
         }
     }
+
     private void OnInitialLLMResponse(string response)
     {
-        OnLLMResponse(response); // 复用现有的回复处理逻辑
+        OnLLMResponse(response);
     }
 
     public void OnSendMessage()
@@ -482,11 +498,9 @@ public class DialogueUI : MonoBehaviour
         isProcessingLLM = false;
         SetUIState(UIState.ShowingText);
 
-        // 检查AI是否请求结束对话
         if (DialogueLoader.ShouldEndByAI(response))
         {
             aiRequestedEnd = true;
-            // 清理结束标记，避免显示给玩家
             response = DialogueLoader.CleanEndMarker(response);
         }
 
@@ -496,18 +510,22 @@ public class DialogueUI : MonoBehaviour
         {
             if (typingCoroutine != null)
                 StopCoroutine(typingCoroutine);
-            typingCoroutine = StartCoroutine(TypeText(fullCurrentText));
+
+            DialogueLine currentLine = CurrentLine;
+            typingCoroutine = StartCoroutine(TypeText(fullCurrentText, currentLine?.id, currentLine?.characterId, false));
         }
         else
         {
             dialogueText.text = fullCurrentText;
             waitingForContinue = true;
+
+            DialogueLine currentLine = CurrentLine;
+            OnLineCompleted?.Invoke(currentLine?.id ?? "", currentLine?.characterId ?? "", false);
         }
     }
 
     private void EndLLMMode()
     {
-        // 结束历史管理器的会话
         DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
         if (dialogueManager != null && dialogueManager.historyManager != null)
         {
@@ -519,6 +537,4 @@ public class DialogueUI : MonoBehaviour
         currentLineIndex++;
         ShowNextLine();
     }
-
-    #endregion
 }
