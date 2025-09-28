@@ -78,12 +78,12 @@ public class Stage1Controller : MonoBehaviour
     /// <summary>
     /// 对话行开始事件处理
     /// </summary>
-    private void OnDialogueLineStarted(string lineId, string characterId, bool isPresetMode)
+    private void OnDialogueLineStarted(string lineId, string characterId, string blockId, bool isPresetMode)
     {
-        // 检查是否是我们要监听的对话行
-        if (lineId == "2" && flashImage != null)
+        // 检查是否是特定的对话块和对话行
+        if (lineId == "2" && blockId == "001" && flashImage != null)
         {
-            Debug.Log($"检测到对话行ID=2，触发闪烁效果");
+            Debug.Log($"检测到对话块001的对话行ID=2，触发闪烁效果");
             StartCoroutine(FlashEffect());
         }
     }

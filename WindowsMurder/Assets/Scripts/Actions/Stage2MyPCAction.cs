@@ -7,21 +7,15 @@ public class Stage2MyPCAction : IconAction
 {
     [Header("窗口配置")]
     public GameObject folderWindowPrefab;      // 文件夹窗口预制体
-    public string defaultPathId = "root";   // 默认打开路径
-
-    private Canvas parentCanvas;
-
-    void Start()
-    {
-        parentCanvas = GetComponentInParent<Canvas>();
-    }
+    public Transform windowParent;             // 窗口生成的父对象
+    public string defaultPathId = "root";      // 默认打开路径
 
     public override void Execute()
     {
-        if (folderWindowPrefab != null && parentCanvas != null)
+        if (folderWindowPrefab != null && windowParent != null)
         {
             // 实例化文件夹窗口
-            GameObject windowInstance = Instantiate(folderWindowPrefab, parentCanvas.transform);
+            GameObject windowInstance = Instantiate(folderWindowPrefab, windowParent);
 
             // 设置初始路径
             ExplorerManager explorerManager = windowInstance.GetComponent<ExplorerManager>();

@@ -25,9 +25,9 @@ public class DialogueUI : MonoBehaviour
     public string waitingForInputHint = "Please enter your question...";
     public string waitingForAIHint = "Thinking...";
 
-    // 事件系统
-    public static event System.Action<string, string, bool> OnLineStarted;
-    public static event System.Action<string, string, bool> OnLineCompleted;
+    // 事件系统 - 新增blockId参数
+    public static event System.Action<string, string, string, bool> OnLineStarted; // lineId, characterId, blockId, isPresetMode
+    public static event System.Action<string, string, string, bool> OnLineCompleted; // lineId, characterId, blockId, isPresetMode
     public static event System.Action<string, string> OnDialogueBlockStarted;
     public static event System.Action<string, string> OnDialogueBlockEnded;
 
@@ -213,7 +213,8 @@ public class DialogueUI : MonoBehaviour
         SetCharacterInfo(line.characterId, line.portraitId);
         fullCurrentText = line.text ?? "";
 
-        OnLineStarted?.Invoke(line.id, line.characterId, true);
+        // 事件中包含blockId
+        OnLineStarted?.Invoke(line.id, line.characterId, currentDialogueBlockId, true);
 
         if (useTypingEffect && !string.IsNullOrEmpty(fullCurrentText))
         {
@@ -226,7 +227,7 @@ public class DialogueUI : MonoBehaviour
         {
             dialogueText.text = fullCurrentText;
             waitingForContinue = true;
-            OnLineCompleted?.Invoke(line.id, line.characterId, true);
+            OnLineCompleted?.Invoke(line.id, line.characterId, currentDialogueBlockId, true);
         }
     }
 
@@ -257,7 +258,8 @@ public class DialogueUI : MonoBehaviour
 
         if (!string.IsNullOrEmpty(lineId))
         {
-            OnLineCompleted?.Invoke(lineId, characterId ?? "", isPresetMode);
+            // 事件中包含blockId
+            OnLineCompleted?.Invoke(lineId, characterId ?? "", currentDialogueBlockId, isPresetMode);
         }
     }
 
@@ -304,7 +306,8 @@ public class DialogueUI : MonoBehaviour
         DialogueLine currentLine = CurrentLine;
         if (currentLine != null)
         {
-            OnLineCompleted?.Invoke(currentLine.id, currentLine.characterId, currentLine.mode);
+            // 事件中包含blockId
+            OnLineCompleted?.Invoke(currentLine.id, currentLine.characterId, currentDialogueBlockId, currentLine.mode);
         }
     }
 
@@ -450,7 +453,8 @@ public class DialogueUI : MonoBehaviour
 
         SetCharacterInfo(line.characterId, line.portraitId);
 
-        OnLineStarted?.Invoke(line.id, line.characterId, false);
+        // 事件中包含blockId
+        OnLineStarted?.Invoke(line.id, line.characterId, currentDialogueBlockId, false);
 
         DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
         if (dialogueManager != null && dialogueManager.historyManager != null)
@@ -520,7 +524,8 @@ public class DialogueUI : MonoBehaviour
             waitingForContinue = true;
 
             DialogueLine currentLine = CurrentLine;
-            OnLineCompleted?.Invoke(currentLine?.id ?? "", currentLine?.characterId ?? "", false);
+            // 事件中包含blockId
+            OnLineCompleted?.Invoke(currentLine?.id ?? "", currentLine?.characterId ?? "", currentDialogueBlockId, false);
         }
     }
 
