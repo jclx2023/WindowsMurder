@@ -57,33 +57,91 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     void Start()
     {
-        // 更新显示
+        // 原有的更新显示代码
         UpdateDisplay();
 
         // 确保窗口在画布范围内
         ClampToCanvas();
+
+        // 自动注册到WindowManager
+        RegisterToWindowManager();
     }
 
-    #region 公共方法
-
     /// <summary>
-    /// 设置窗口图标
+    /// 自动注册到窗口管理器
     /// </summary>
-    public void SetIcon(Sprite icon)
+    private void RegisterToWindowManager()
     {
-        windowIcon = icon;
-        if (iconImage != null)
+        if (WindowManager.Instance != null)
         {
-            iconImage.sprite = icon;
-            iconImage.gameObject.SetActive(icon != null);
+            // 直接注册，WindowManager会自动获取层级信息
+            WindowManager.Instance.RegisterWindow(this);
+
+            Debug.Log($"窗口 '{windowTitle}' 已自动注册到WindowManager");
+            LogHierarchyInfo();
+        }
+        else
+        {
+            // 如果WindowManager还未初始化，延迟注册
+            StartCoroutine(DelayedRegister());
         }
     }
 
-    //public void CloseWindow()
-    //{
-    //    OnWindowClosed?.Invoke(this);
-    //    gameObject.SetActive(false);
-    //}
+    /// <summary>
+    /// 延迟注册（处理初始化顺序问题）
+    /// </summary>
+    private System.Collections.IEnumerator DelayedRegister()
+    {
+        // 等待WindowManager初始化
+        while (WindowManager.Instance == null)
+        {
+            yield return null;
+        }
+
+        // 注册到WindowManager
+        WindowManager.Instance.RegisterWindow(this);
+
+        Debug.Log($"窗口 '{windowTitle}' 延迟注册到WindowManager成功");
+        LogHierarchyInfo();
+    }
+
+    /// <summary>
+    /// 打印层级信息（调试用）
+    /// </summary>
+    private void LogHierarchyInfo()
+    {
+        if (WindowManager.Instance != null)
+        {
+            var hierarchyInfo = WindowManager.Instance.GetWindowHierarchyInfo(this);
+            if (hierarchyInfo != null)
+            {
+                Debug.Log($"窗口层级信息 - 路径: {hierarchyInfo.containerPath}, 深度: {hierarchyInfo.hierarchyLevel}, 标签: {hierarchyInfo.containerTag}");
+            }
+        }
+    }
+
+    /// <summary>
+    /// 获取窗口层级路径（供外部调用）
+    /// </summary>
+    public string GetHierarchyPath()
+    {
+        if (WindowManager.Instance != null)
+        {
+            var hierarchyInfo = WindowManager.Instance.GetWindowHierarchyInfo(this);
+            return hierarchyInfo?.containerPath ?? "";
+        }
+        return "";
+    }
+
+    /// <summary>
+    /// 在窗口销毁时确保注销
+    /// </summary>
+    void OnDestroy()
+    {
+        WindowManager.Instance.UnregisterWindow(this);
+    }
+
+    #region 公共方法
 
     /// <summary>
     /// 关闭窗口（销毁对象）

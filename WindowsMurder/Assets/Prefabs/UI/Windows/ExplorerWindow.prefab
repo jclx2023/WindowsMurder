@@ -516,7 +516,7 @@ MonoBehaviour:
   windowTitleText: {fileID: 172198150502853362}
   allPaths:
   - pathId: root
-    displayName: 
+    displayName: Exploer
     contentContainer: {fileID: 1507396916012242263}
     isAccessible: 1
     requiresPermission: 0
@@ -543,18 +543,18 @@ MonoBehaviour:
     displayName: D:\Files\Works
     contentContainer: {fileID: 7341174673764377722}
     isAccessible: 1
-    requiresPermission: 0
+    requiresPermission: 1
     isCurrentPath: 0
   - pathId: E
     displayName: E:\
     contentContainer: {fileID: 550977735798106698}
-    isAccessible: 1
+    isAccessible: 0
     requiresPermission: 0
     isCurrentPath: 0
   - pathId: EDownloads
     displayName: E:\Downloads
     contentContainer: {fileID: 1665975768798829447}
-    isAccessible: 1
+    isAccessible: 0
     requiresPermission: 0
     isCurrentPath: 0
   defaultPathId: root

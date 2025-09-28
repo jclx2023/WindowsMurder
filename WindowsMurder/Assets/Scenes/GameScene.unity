@@ -2240,6 +2240,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -374
       objectReference: {fileID: 0}
+    - target: {fileID: 1175682551707607844, guid: 3d228239b34418849957c8010943724c, type: 3}
+      propertyPath: m_ChildControlHeight
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2440526665540986011, guid: 3d228239b34418849957c8010943724c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -2526,6 +2530,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8863038871299938572, guid: 3d228239b34418849957c8010943724c, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8979793463609499424, guid: 3d228239b34418849957c8010943724c, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -5776,6 +5784,10 @@ PrefabInstance:
     - target: {fileID: 7858330604759296389, guid: d6ee1c8e3e46fe7478b10db1173f46f2, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8402245781516927714, guid: d6ee1c8e3e46fe7478b10db1173f46f2, type: 3}
+      propertyPath: allPaths.Array.data[5].isAccessible
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8801866553879966415, guid: d6ee1c8e3e46fe7478b10db1173f46f2, type: 3}
       propertyPath: m_AnchorMax.y

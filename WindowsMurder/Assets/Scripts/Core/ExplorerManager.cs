@@ -10,8 +10,8 @@ using TMPro;
 public class PathInfo
 {
     [Header("路径配置")]
-    public string pathId;                    // 路径ID，如 "C_Drive", "SystemTask"
-    public string displayName;               // 显示名称，如 "C:", "SystemTask"
+    public string pathId;                    // 路径ID
+    public string displayName;               // 显示名称
     public GameObject contentContainer;      // 该路径下的内容容器
 
     [Header("状态设置")]
@@ -253,8 +253,8 @@ public class ExplorerManager : MonoBehaviour
             if (showPathInTitle)
             {
                 // 组合显示：窗口类型名 - 路径
-                string pathName = GetLocalizedPathName(currentPath);
-                displayText = $"{windowTypeName} - {pathName}";
+                string pathName = currentPath.displayName;
+                displayText = $"{pathName}";
             }
             else
             {
@@ -264,24 +264,6 @@ public class ExplorerManager : MonoBehaviour
 
             windowTitleText.text = displayText;
         }
-    }
-
-    /// <summary>
-    /// 获取本地化的路径名称
-    /// </summary>
-    private string GetLocalizedPathName(PathInfo path)
-    {
-        // 尝试本地化翻译
-        if (LanguageManager.Instance != null)
-        {
-            string localizedText = LanguageManager.Instance.GetText($"path_{path.pathId}");
-            if (!string.IsNullOrEmpty(localizedText))
-            {
-                return localizedText;
-            }
-        }
-
-        return path.displayName;
     }
 
     #endregion

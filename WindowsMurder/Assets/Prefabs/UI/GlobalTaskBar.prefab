@@ -394,16 +394,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
+    m_Left: 5
+    m_Right: 5
+    m_Top: 2
+    m_Bottom: 2
   m_ChildAlignment: 0
-  m_Spacing: 0
-  m_ChildForceExpandWidth: 1
+  m_Spacing: 4
+  m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
+  m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
@@ -422,7 +422,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1206642656777333640}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -1939,9 +1939,17 @@ MonoBehaviour:
   displayButton: {fileID: 2782081968334499021}
   creditsButton: {fileID: 6872595417212945549}
   shutdownButton: {fileID: 3901954550874545530}
+  windowButtonContainer: {fileID: 6494083500924255958}
+  windowButtonPrefab: {fileID: 1125174263838335947, guid: 24e86f1f62cfa0042b78a8e849765c53, type: 3}
+  maxVisibleButtons: 10
+  normalButtonColor: {r: 1, g: 1, b: 1, a: 1}
+  activeButtonColor: {r: 0, g: 1, b: 1, a: 1}
+  hoveredButtonColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   buttonClickSound: {fileID: 0}
   menuOpenSound: {fileID: 0}
   menuCloseSound: {fileID: 0}
+  globalActionManagerPrefab: {fileID: 2283545464550714081, guid: a894820094ea11b4bb096d0873a9167a, type: 3}
+  createActionManagerAtStart: 1
 --- !u!1 &5180710451980572005
 GameObject:
   m_ObjectHideFlags: 0
