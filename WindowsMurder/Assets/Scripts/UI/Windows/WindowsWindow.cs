@@ -16,7 +16,7 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     [Header("UI组件引用")]
     [SerializeField] private RectTransform windowRect;
     [SerializeField] private RectTransform titleBarRect;
-    [SerializeField] private TMP_Text titleText;  // 标题栏文本组件（绑定了LocalizationID）
+    [SerializeField] private TMP_Text titleText;
     [SerializeField] private Image iconImage;
     [SerializeField] private Button closeButton;
 
@@ -28,7 +28,7 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     // 初始化标记
     private bool isInitialized = false;
-    private bool isRegistered = false;  // 新增：标记是否已注册
+    private bool isRegistered = false;
 
     // 事件
     public static event System.Action<WindowsWindow> OnWindowClosed;
@@ -40,16 +40,13 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     void Awake()
     {
-        // 初始化组件引用（只在创建时执行一次）
         InitializeComponents();
     }
 
     void Start()
     {
-        // 一次性初始化（只在创建时执行一次）
         PerformOneTimeInitialization();
 
-        // Start之后，如果窗口是激活状态，延迟注册确保LocalizationID更新完成
         if (gameObject.activeInHierarchy && isInitialized)
         {
             StartCoroutine(DelayedInitialRegister());
@@ -153,17 +150,11 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     /// </summary>
     private System.Collections.IEnumerator DelayedInitialRegister()
     {
-        // 等待一帧，确保所有组件的Start都执行完毕
         yield return null;
-
-        // 再等待一帧，确保LocalizationID的UpdateText执行完成
         yield return null;
-
-        // 现在titleText应该已经被LocalizationID更新了
         if (gameObject.activeInHierarchy && !isRegistered)
         {
             RegisterToWindowManager();
-            Debug.Log($"窗口初始注册完成（已等待多语言更新）: {Title}");
         }
     }
 
@@ -234,8 +225,6 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     /// </summary>
     private void OnLanguageChanged(SupportedLanguage newLanguage)
     {
-        // LocalizationID会自动更新titleText的内容
-        // 等待一帧后通知标题已更改（确保LocalizationID已更新完成）
         StartCoroutine(NotifyTitleChanged());
     }
 

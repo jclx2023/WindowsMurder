@@ -177,6 +177,7 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
     public GameObject selectionHighlight;  // 选中高亮效果
 
     [Header("右键菜单")]
+    public bool canShowContextMenu = true;     // 是否可以显示右键菜单
     public List<ContextMenuItem> contextMenuItems = new List<ContextMenuItem>();
     public GameObject contextMenuPrefab;       // 右键菜单预制体引用
 
@@ -221,6 +222,9 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
     void OnDisable()
     {
+        // 清理所有状态
+        CleanupState();
+
         AllIcons.Remove(this);
         if (CurrentSelectedIcon == this)
             CurrentSelectedIcon = null;
@@ -228,9 +232,42 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
     void OnDestroy()
     {
+        CleanupState();
+
         AllIcons.Remove(this);
         if (CurrentSelectedIcon == this)
             CurrentSelectedIcon = null;
+    }
+
+    #endregion
+
+    #region 状态清理
+
+    /// <summary>
+    /// 清理icon的所有交互状态（在禁用或销毁时调用）
+    /// </summary>
+    private void CleanupState()
+    {
+        // 停止所有协程
+        if (tooltipCoroutine != null)
+        {
+            StopCoroutine(tooltipCoroutine);
+            tooltipCoroutine = null;
+        }
+
+        // 隐藏高亮效果
+        if (selectionHighlight != null)
+        {
+            selectionHighlight.SetActive(false);
+        }
+
+        // 重置选中状态
+        isSelected = false;
+
+        // 隐藏右键菜单
+        HideContextMenu();
+
+        Debug.Log($"InteractableIcon: {name} 已清理状态");
     }
 
     #endregion
@@ -263,14 +300,6 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
         {
             selectionHighlight.SetActive(true);
         }
-
-        // 显示工具提示
-        if (SHOW_TOOLTIP)
-        {
-            if (tooltipCoroutine != null)
-                StopCoroutine(tooltipCoroutine);
-            tooltipCoroutine = StartCoroutine(ShowTooltipAfterDelay());
-        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -280,14 +309,6 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
         {
             selectionHighlight.SetActive(false);
         }
-
-        // 隐藏工具提示
-        if (tooltipCoroutine != null)
-        {
-            StopCoroutine(tooltipCoroutine);
-            tooltipCoroutine = null;
-        }
-        HideTooltip();
     }
 
     #endregion
@@ -315,6 +336,20 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
     void HandleRightClick(PointerEventData eventData)
     {
+        // 检查是否允许显示右键菜单
+        if (!canShowContextMenu)
+        {
+            Debug.Log($"InteractableIcon: {name} 不支持右键菜单");
+            return;
+        }
+
+        // 检查是否有菜单项
+        if (contextMenuItems.Count == 0)
+        {
+            Debug.Log($"InteractableIcon: {name} 没有配置右键菜单项");
+            return;
+        }
+
         // 先选中图标
         SelectIcon();
 
@@ -341,10 +376,6 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
             Debug.Log($"InteractableIcon: 执行 {name} 的交互行为");
             iconAction.TryExecute();
         }
-        else
-        {
-            Debug.LogWarning($"InteractableIcon: {name} 没有配置交互行为");
-        }
     }
 
     #endregion
@@ -369,7 +400,6 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
         }
 
         OnIconSelected?.Invoke(this);
-        Debug.Log($"选中了图标");
     }
 
     public void DeselectIcon()
@@ -386,23 +416,12 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
         }
     }
 
-    public static void DeselectAllIcons()
-    {
-        foreach (var icon in AllIcons)
-        {
-            icon.DeselectIcon();
-        }
-        CurrentSelectedIcon = null;
-    }
-
     #endregion
 
     #region 右键菜单
 
     void ShowContextMenu(Vector2 screenPosition)
     {
-        if (contextMenuItems.Count == 0) return;
-
         // 隐藏已存在的菜单
         HideContextMenu();
 
@@ -424,6 +443,7 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
         if (activeContextMenu != null)
         {
             activeContextMenu.Hide();
+            activeContextMenu = null;
         }
     }
 
@@ -431,25 +451,7 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
     {
         // 只触发静态事件，让其他系统处理右键菜单逻辑
         OnContextMenuItemClicked?.Invoke(this, itemId);
-    }
-
-    #endregion
-
-    #region 工具提示
-
-    IEnumerator ShowTooltipAfterDelay()
-    {
-        yield return new WaitForSeconds(1f); // 悬停1秒后显示提示
-
-        // 这里可以显示工具提示
-        Debug.Log($"显示提示: ");
-        // 实际项目中可以调用UI管理器显示提示框
-    }
-
-    void HideTooltip()
-    {
-        // 隐藏工具提示
-        // 实际项目中可以调用UI管理器隐藏提示框
+        Debug.Log($"InteractableIcon: {name} 选择了菜单项 {itemId}");
     }
 
     #endregion
@@ -479,25 +481,5 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
         iconImage.color = iconColor;
     }
-
-
-    public void SetLocked(bool locked)
-    {
-        isLocked = locked;
-        ApplyVisualState();
-    }
-
-    public void SetCorrupted(bool corrupted)
-    {
-        isCorrupted = corrupted;
-        ApplyVisualState();
-    }
-
-    public void SetHidden(bool hidden)
-    {
-        isHidden = hidden;
-        ApplyVisualState();
-    }
-
     #endregion
 }

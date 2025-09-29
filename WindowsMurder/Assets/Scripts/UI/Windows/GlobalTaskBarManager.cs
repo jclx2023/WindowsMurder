@@ -132,7 +132,7 @@ public class GlobalTaskBarManager : MonoBehaviour
         currentSceneName = SceneManager.GetActiveScene().name;
         UpdateMenuButtonsForScene();
 
-        Debug.Log("TaskBar系统（含窗口管理）初始化完成");
+        Debug.Log("TaskBar系统初始化完成");
     }
 
     /// <summary>
@@ -160,43 +160,7 @@ public class GlobalTaskBarManager : MonoBehaviour
             InitializeActionManager();
         }
 
-        // 验证窗口按钮组件
-        ValidateWindowButtonComponents();
-
         Debug.Log("全局任务栏初始化完成");
-    }
-
-    /// <summary>
-    /// 验证窗口按钮相关组件
-    /// </summary>
-    void ValidateWindowButtonComponents()
-    {
-        if (windowButtonContainer == null)
-        {
-            Debug.LogError("TaskBar: windowButtonContainer 未设置！");
-        }
-
-        if (windowButtonPrefab == null)
-        {
-            Debug.LogError("TaskBar: windowButtonPrefab 未设置！");
-        }
-
-        // 检查预制体是否有Button和Text组件
-        if (windowButtonPrefab != null)
-        {
-            Button button = windowButtonPrefab.GetComponent<Button>();
-            if (button == null)
-            {
-                Debug.LogError("TaskBar: windowButtonPrefab 缺少 Button 组件！");
-            }
-
-            TextMeshProUGUI text = windowButtonPrefab.GetComponentInChildren<TextMeshProUGUI>();
-            Text uiText = windowButtonPrefab.GetComponentInChildren<Text>();
-            if (text == null && uiText == null)
-            {
-                Debug.LogError("TaskBar: windowButtonPrefab 缺少 Text 或 TextMeshProUGUI 组件！");
-            }
-        }
     }
 
     #region 窗口按钮管理
@@ -248,12 +212,6 @@ public class GlobalTaskBarManager : MonoBehaviour
     /// </summary>
     void CreateWindowButton(WindowsWindow window, WindowHierarchyInfo hierarchyInfo)
     {
-        if (window == null || windowButtonContainer == null || windowButtonPrefab == null)
-        {
-            Debug.LogError("TaskBar: 创建窗口按钮失败 - 缺少必要组件");
-            return;
-        }
-
         // 检查是否已经存在按钮（防止重复创建）
         if (windowButtonMap.ContainsKey(window))
         {
@@ -324,16 +282,8 @@ public class GlobalTaskBarManager : MonoBehaviour
     void OnWindowButtonClicked(WindowsWindow window)
     {
         PlayButtonClick();
-
-        if (WindowManager.Instance != null && window != null)
-        {
-            WindowManager.Instance.ActivateWindow(window);
-            Debug.Log($"TaskBar: 通过按钮激活窗口 - {window.Title}");
-        }
-        else
-        {
-            Debug.LogError("TaskBar: 无法激活窗口 - WindowManager或窗口为空");
-        }
+        WindowManager.Instance.ActivateWindow(window);
+        Debug.Log($"TaskBar: 通过按钮激活窗口 - {window.Title}");
     }
 
     /// <summary>
@@ -378,22 +328,8 @@ public class GlobalTaskBarManager : MonoBehaviour
     /// </summary>
     void UpdateButtonText(GameObject buttonObj, string text)
     {
-        if (buttonObj == null) return;
-
-        // 尝试TextMeshProUGUI
         TextMeshProUGUI tmpText = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
-        if (tmpText != null)
-        {
-            tmpText.text = text;
-            return;
-        }
-
-        // 尝试Text组件
-        Text uiText = buttonObj.GetComponentInChildren<Text>();
-        if (uiText != null)
-        {
-            uiText.text = text;
-        }
+        tmpText.text = text;
     }
 
     #endregion
@@ -521,26 +457,13 @@ public class GlobalTaskBarManager : MonoBehaviour
     void UpdateMenuButtonsForScene()
     {
         bool isMainMenuScene = (currentSceneName == "MainMenu");
-        bool isGameScene = (currentSceneName.Contains("Game") || currentSceneName == "GameScene");
-
-        if (mainMenuButton != null)
-        {
-            mainMenuButton.gameObject.SetActive(isGameScene);
-        }
-
-        if (newGameButton != null)
-        {
-            newGameButton.gameObject.SetActive(isMainMenuScene);
-        }
-
-        if (continueButton != null)
-        {
-            bool hasGameSave = GlobalSystemManager.Instance != null &&
-                              GlobalSystemManager.Instance.HasGameSave();
-            continueButton.gameObject.SetActive(isMainMenuScene);
-            continueButton.interactable = hasGameSave;
-        }
-
+        bool isGameScene = currentSceneName == "GameScene";
+        mainMenuButton.gameObject.SetActive(isGameScene);
+        newGameButton.gameObject.SetActive(isMainMenuScene);
+        bool hasGameSave = GlobalSystemManager.Instance != null &&
+                          GlobalSystemManager.Instance.HasGameSave();
+        continueButton.gameObject.SetActive(isMainMenuScene);
+        continueButton.interactable = hasGameSave;
         Debug.Log($"TaskBar按钮状态更新 - MainMenu: {isMainMenuScene}, Game: {isGameScene}");
     }
 
