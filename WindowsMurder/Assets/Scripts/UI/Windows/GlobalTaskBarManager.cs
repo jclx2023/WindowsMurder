@@ -102,6 +102,9 @@ public class GlobalTaskBarManager : MonoBehaviour
 
         // 取消窗口选择事件监听
         WindowsWindow.OnWindowSelected -= OnWindowSelected;
+
+        // 取消窗口标题变化事件监听
+        WindowsWindow.OnWindowTitleChanged -= OnWindowTitleChanged;
     }
 
     /// <summary>
@@ -121,6 +124,9 @@ public class GlobalTaskBarManager : MonoBehaviour
 
         // 监听窗口选择事件
         WindowsWindow.OnWindowSelected += OnWindowSelected;
+
+        // 监听窗口标题变化事件
+        WindowsWindow.OnWindowTitleChanged += OnWindowTitleChanged;
 
         // 初始化当前场景
         currentSceneName = SceneManager.GetActiveScene().name;
@@ -196,19 +202,25 @@ public class GlobalTaskBarManager : MonoBehaviour
     #region 窗口按钮管理
 
     /// <summary>
-    /// 窗口注册事件处理
+    /// 窗口注册事件处理（窗口激活时）
     /// </summary>
     void OnWindowRegistered(WindowsWindow window, WindowHierarchyInfo hierarchyInfo)
     {
+        if (window == null) return;
+
         CreateWindowButton(window, hierarchyInfo);
+        Debug.Log($"TaskBar: 窗口激活，创建按钮 - {window.Title}");
     }
 
     /// <summary>
-    /// 窗口注销事件处理
+    /// 窗口注销事件处理（窗口禁用或销毁时）
     /// </summary>
     void OnWindowUnregistered(WindowsWindow window, WindowHierarchyInfo hierarchyInfo)
     {
+        if (window == null) return;
+
         RemoveWindowButton(window);
+        Debug.Log($"TaskBar: 窗口禁用/关闭，移除按钮 - {window.Title}");
     }
 
     /// <summary>
@@ -217,6 +229,18 @@ public class GlobalTaskBarManager : MonoBehaviour
     void OnWindowSelected(WindowsWindow window)
     {
         UpdateActiveWindowButton(window);
+    }
+
+    /// <summary>
+    /// 窗口标题变化事件处理
+    /// </summary>
+    void OnWindowTitleChanged(WindowsWindow window)
+    {
+        if (window != null && windowButtonMap.ContainsKey(window))
+        {
+            UpdateButtonText(windowButtonMap[window], window.Title);
+            Debug.Log($"TaskBar: 窗口标题已更新 - {window.Title}");
+        }
     }
 
     /// <summary>
@@ -230,10 +254,10 @@ public class GlobalTaskBarManager : MonoBehaviour
             return;
         }
 
-        // 检查是否已经存在按钮
+        // 检查是否已经存在按钮（防止重复创建）
         if (windowButtonMap.ContainsKey(window))
         {
-            Debug.LogWarning($"TaskBar: 窗口 {window.Title} 的按钮已存在");
+            Debug.LogWarning($"TaskBar: 窗口 {window.Title} 的按钮已存在，跳过创建");
             return;
         }
 
@@ -258,7 +282,7 @@ public class GlobalTaskBarManager : MonoBehaviour
         windowButtonMap[window] = buttonObj;
         buttonWindowMap[buttonObj] = window;
 
-        Debug.Log($"TaskBar: 已创建窗口按钮 - {window.Title} (层级: {hierarchyInfo.containerPath})");
+        Debug.Log($"TaskBar: 按钮创建成功 - {window.Title} (层级: {hierarchyInfo.containerPath})");
     }
 
     /// <summary>
@@ -275,7 +299,7 @@ public class GlobalTaskBarManager : MonoBehaviour
 
         // 清理映射关系
         windowButtonMap.Remove(window);
-        if (buttonWindowMap.ContainsKey(buttonObj))
+        if (buttonObj != null && buttonWindowMap.ContainsKey(buttonObj))
         {
             buttonWindowMap.Remove(buttonObj);
         }
@@ -290,9 +314,8 @@ public class GlobalTaskBarManager : MonoBehaviour
         if (buttonObj != null)
         {
             Destroy(buttonObj);
+            Debug.Log($"TaskBar: 按钮已销毁 - {window.Title}");
         }
-
-        Debug.Log($"TaskBar: 已移除窗口按钮 - {window.Title}");
     }
 
     /// <summary>
@@ -373,23 +396,6 @@ public class GlobalTaskBarManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 刷新所有窗口按钮（处理窗口标题变化）
-    /// </summary>
-    public void RefreshAllWindowButtons()
-    {
-        foreach (var kvp in windowButtonMap)
-        {
-            WindowsWindow window = kvp.Key;
-            GameObject buttonObj = kvp.Value;
-
-            if (window != null && buttonObj != null)
-            {
-                UpdateButtonText(buttonObj, window.Title);
-            }
-        }
-    }
-
     #endregion
 
     #region 原有任务栏功能（保持不变）
@@ -442,20 +448,20 @@ public class GlobalTaskBarManager : MonoBehaviour
 
     void BindMenuButtons()
     {
-        mainMenuButton.onClick.RemoveAllListeners();
-        mainMenuButton.onClick.AddListener(() => ExecuteAction("BackToMainMenu"));
-        newGameButton.onClick.RemoveAllListeners();
-        newGameButton.onClick.AddListener(() => ExecuteAction("NewGame"));
-        continueButton.onClick.RemoveAllListeners();
-        continueButton.onClick.AddListener(() => ExecuteAction("Continue"));
-        languageButton.onClick.RemoveAllListeners();
-        languageButton.onClick.AddListener(() => ExecuteAction("OpenLanguageSettings"));
-        displayButton.onClick.RemoveAllListeners();
-        displayButton.onClick.AddListener(() => ExecuteAction("OpenDisplaySettings"));
-        creditsButton.onClick.RemoveAllListeners();
-        creditsButton.onClick.AddListener(() => ExecuteAction("OpenCredits"));
-        shutdownButton.onClick.RemoveAllListeners();
-        shutdownButton.onClick.AddListener(() => ExecuteAction("Shutdown"));
+            mainMenuButton.onClick.RemoveAllListeners();
+            mainMenuButton.onClick.AddListener(() => ExecuteAction("BackToMainMenu"));
+            newGameButton.onClick.RemoveAllListeners();
+            newGameButton.onClick.AddListener(() => ExecuteAction("NewGame"));
+            continueButton.onClick.RemoveAllListeners();
+            continueButton.onClick.AddListener(() => ExecuteAction("Continue"));
+            languageButton.onClick.RemoveAllListeners();
+            languageButton.onClick.AddListener(() => ExecuteAction("OpenLanguageSettings"));
+            displayButton.onClick.RemoveAllListeners();
+            displayButton.onClick.AddListener(() => ExecuteAction("OpenDisplaySettings"));
+            creditsButton.onClick.RemoveAllListeners();
+            creditsButton.onClick.AddListener(() => ExecuteAction("OpenCredits"));
+            shutdownButton.onClick.RemoveAllListeners();
+            shutdownButton.onClick.AddListener(() => ExecuteAction("Shutdown"));
     }
 
     void ExecuteAction(string actionName)
@@ -515,16 +521,18 @@ public class GlobalTaskBarManager : MonoBehaviour
     void UpdateMenuButtonsForScene()
     {
         bool isMainMenuScene = (currentSceneName == "MainMenu");
-        bool isGameScene = currentSceneName == "GameScene";
+        bool isGameScene = (currentSceneName.Contains("Game") || currentSceneName == "GameScene");
 
         if (mainMenuButton != null)
         {
             mainMenuButton.gameObject.SetActive(isGameScene);
         }
+
         if (newGameButton != null)
         {
             newGameButton.gameObject.SetActive(isMainMenuScene);
         }
+
         if (continueButton != null)
         {
             bool hasGameSave = GlobalSystemManager.Instance != null &&
@@ -532,6 +540,7 @@ public class GlobalTaskBarManager : MonoBehaviour
             continueButton.gameObject.SetActive(isMainMenuScene);
             continueButton.interactable = hasGameSave;
         }
+
         Debug.Log($"TaskBar按钮状态更新 - MainMenu: {isMainMenuScene}, Game: {isGameScene}");
     }
 

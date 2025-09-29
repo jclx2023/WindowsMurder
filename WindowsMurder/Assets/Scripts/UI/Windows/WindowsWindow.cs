@@ -4,20 +4,19 @@ using UnityEngine.EventSystems;
 using TMPro;
 
 /// <summary>
-/// Windows风格基础窗口组件
-/// 支持拖拽、关闭、显示图标和标题
+/// Windows风格基础窗口组件 - 支持动态标题和激活状态管理
 /// </summary>
 public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerDownHandler
 {
     [Header("窗口设置")]
-    [SerializeField] private string windowTitle = "NewWindow";
+    [SerializeField] private string windowTitle = "NewWindow"; // 仅用于编辑器显示
     [SerializeField] private Sprite windowIcon;
     [SerializeField] private bool canClose = true;
 
     [Header("UI组件引用")]
     [SerializeField] private RectTransform windowRect;
     [SerializeField] private RectTransform titleBarRect;
-    [SerializeField] private TMP_Text titleText;
+    [SerializeField] private TMP_Text titleText;  // 标题栏文本组件（绑定了LocalizationID）
     [SerializeField] private Image iconImage;
     [SerializeField] private Button closeButton;
 
@@ -27,14 +26,67 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     private Canvas parentCanvas;
     private RectTransform canvasRect;
 
+    // 初始化标记
+    private bool isInitialized = false;
+    private bool isRegistered = false;  // 新增：标记是否已注册
+
     // 事件
     public static event System.Action<WindowsWindow> OnWindowClosed;
     public static event System.Action<WindowsWindow> OnWindowSelected;
+    public static event System.Action<WindowsWindow> OnWindowTitleChanged;
 
-    // 属性
-    public string Title => windowTitle;
+    // 属性 - 动态读取titleText的内容
+    public string Title => titleText != null ? titleText.text : windowTitle;
 
     void Awake()
+    {
+        // 初始化组件引用（只在创建时执行一次）
+        InitializeComponents();
+    }
+
+    void Start()
+    {
+        // 一次性初始化（只在创建时执行一次）
+        PerformOneTimeInitialization();
+
+        // Start之后，如果窗口是激活状态，延迟注册确保LocalizationID更新完成
+        if (gameObject.activeInHierarchy && isInitialized)
+        {
+            StartCoroutine(DelayedInitialRegister());
+        }
+    }
+
+    void OnEnable()
+    {
+        if (isInitialized && !isRegistered)
+        {
+            RegisterToWindowManager();
+        }
+    }
+
+    void OnDisable()
+    {
+        // 窗口禁用时从WindowManager注销
+        if (isRegistered && WindowManager.Instance != null)
+        {
+            WindowManager.Instance.UnregisterWindow(this);
+            isRegistered = false;
+            Debug.Log($"窗口已注销（禁用）: {Title}");
+        }
+    }
+
+    void OnDestroy()
+    {
+        // 清理事件监听
+        CleanupEventListeners();
+    }
+
+    #region 初始化
+
+    /// <summary>
+    /// 初始化组件引用
+    /// </summary>
+    private void InitializeComponents()
     {
         // 获取Canvas组件
         parentCanvas = GetComponentInParent<Canvas>();
@@ -50,39 +102,92 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         // 设置关闭按钮事件
         if (closeButton != null)
         {
+            closeButton.onClick.RemoveAllListeners();
             closeButton.onClick.AddListener(CloseWindow);
             closeButton.gameObject.SetActive(canClose);
         }
     }
 
-    void Start()
+    /// <summary>
+    /// 执行一次性初始化
+    /// </summary>
+    private void PerformOneTimeInitialization()
     {
-        // 原有的更新显示代码
+        // 更新显示
         UpdateDisplay();
 
         // 确保窗口在画布范围内
         ClampToCanvas();
 
-        // 自动注册到WindowManager
-        RegisterToWindowManager();
+        // 监听语言变化事件
+        LanguageManager.OnLanguageChanged += OnLanguageChanged;
+
+        // 标记为已初始化
+        isInitialized = true;
+
+        Debug.Log($"窗口初始化完成: {Title}");
     }
 
     /// <summary>
-    /// 自动注册到窗口管理器
+    /// 清理事件监听
+    /// </summary>
+    private void CleanupEventListeners()
+    {
+        // 取消语言事件监听
+        LanguageManager.OnLanguageChanged -= OnLanguageChanged;
+
+        // 确保从WindowManager注销（处理直接销毁的情况）
+        if (isRegistered && WindowManager.Instance != null)
+        {
+            WindowManager.Instance.UnregisterWindow(this);
+            isRegistered = false;
+        }
+    }
+
+    #endregion
+
+    #region 窗口管理器注册
+
+    /// <summary>
+    /// 延迟初始注册（等待LocalizationID更新完成）
+    /// </summary>
+    private System.Collections.IEnumerator DelayedInitialRegister()
+    {
+        // 等待一帧，确保所有组件的Start都执行完毕
+        yield return null;
+
+        // 再等待一帧，确保LocalizationID的UpdateText执行完成
+        yield return null;
+
+        // 现在titleText应该已经被LocalizationID更新了
+        if (gameObject.activeInHierarchy && !isRegistered)
+        {
+            RegisterToWindowManager();
+            Debug.Log($"窗口初始注册完成（已等待多语言更新）: {Title}");
+        }
+    }
+
+    /// <summary>
+    /// 注册到窗口管理器
     /// </summary>
     private void RegisterToWindowManager()
     {
+        // 防止重复注册
+        if (isRegistered)
+        {
+            Debug.LogWarning($"窗口 {Title} 已经注册过了，跳过重复注册");
+            return;
+        }
+
         if (WindowManager.Instance != null)
         {
-            // 直接注册，WindowManager会自动获取层级信息
             WindowManager.Instance.RegisterWindow(this);
-
-            Debug.Log($"窗口 '{windowTitle}' 已自动注册到WindowManager");
-            LogHierarchyInfo();
+            isRegistered = true;
+            Debug.Log($"窗口已注册: {Title}");
         }
         else
         {
-            // 如果WindowManager还未初始化，延迟注册
+            // WindowManager还未初始化，延迟注册
             StartCoroutine(DelayedRegister());
         }
     }
@@ -98,25 +203,12 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
             yield return null;
         }
 
-        // 注册到WindowManager
-        WindowManager.Instance.RegisterWindow(this);
-
-        Debug.Log($"窗口 '{windowTitle}' 延迟注册到WindowManager成功");
-        LogHierarchyInfo();
-    }
-
-    /// <summary>
-    /// 打印层级信息（调试用）
-    /// </summary>
-    private void LogHierarchyInfo()
-    {
-        if (WindowManager.Instance != null)
+        // 再次检查窗口是否仍然激活且未注册
+        if (gameObject.activeInHierarchy && !isRegistered)
         {
-            var hierarchyInfo = WindowManager.Instance.GetWindowHierarchyInfo(this);
-            if (hierarchyInfo != null)
-            {
-                Debug.Log($"窗口层级信息 - 路径: {hierarchyInfo.containerPath}, 深度: {hierarchyInfo.hierarchyLevel}, 标签: {hierarchyInfo.containerTag}");
-            }
+            WindowManager.Instance.RegisterWindow(this);
+            isRegistered = true;
+            Debug.Log($"窗口延迟注册成功: {Title}");
         }
     }
 
@@ -133,16 +225,34 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         return "";
     }
 
+    #endregion
+
+    #region 标题管理
+
     /// <summary>
-    /// 在窗口销毁时确保注销
+    /// 语言变化回调
     /// </summary>
-    void OnDestroy()
+    private void OnLanguageChanged(SupportedLanguage newLanguage)
     {
-        WindowManager.Instance.UnregisterWindow(this);
+        // LocalizationID会自动更新titleText的内容
+        // 等待一帧后通知标题已更改（确保LocalizationID已更新完成）
+        StartCoroutine(NotifyTitleChanged());
     }
 
-    #region 公共方法
+    /// <summary>
+    /// 延迟通知标题已更改
+    /// </summary>
+    private System.Collections.IEnumerator NotifyTitleChanged()
+    {
+        yield return null; // 等待一帧，让LocalizationID完成更新
 
+        OnWindowTitleChanged?.Invoke(this);
+        Debug.Log($"窗口标题已更新: {Title}");
+    }
+
+    #endregion
+
+    #region 公共方法
     /// <summary>
     /// 关闭窗口（销毁对象）
     /// </summary>
@@ -167,13 +277,11 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        // 点击窗口时将其移到最前面
         BringToFront();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        // 检查是否在标题栏区域拖拽
         if (titleBarRect != null && RectTransformUtility.RectangleContainsScreenPoint(
             titleBarRect, eventData.position, eventData.pressEventCamera))
         {
@@ -195,8 +303,6 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
             windowRect.anchoredPosition += deltaPosition;
 
             lastMousePosition = currentMousePosition;
-
-            // 限制在画布范围内
             ClampToCanvas();
         }
     }
@@ -233,7 +339,6 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         Vector2 windowSize = windowRect.sizeDelta;
         Vector2 position = windowRect.anchoredPosition;
 
-        // 计算边界（确保标题栏可见）
         float titleBarHeight = titleBarRect != null ? titleBarRect.sizeDelta.y : 30f;
 
         float minX = -canvasSize.x / 2 + windowSize.x / 2;
@@ -241,7 +346,6 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         float minY = -canvasSize.y / 2 + titleBarHeight;
         float maxY = canvasSize.y / 2 - windowSize.y / 2;
 
-        // 限制位置
         position.x = Mathf.Clamp(position.x, minX, maxX);
         position.y = Mathf.Clamp(position.y, minY, maxY);
 

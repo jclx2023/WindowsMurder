@@ -2422,6 +2422,7 @@ GameObject:
   - component: {fileID: 8215875248979999173}
   - component: {fileID: 7868718241598596136}
   - component: {fileID: 4284456097424513764}
+  - component: {fileID: 1359216334315185456}
   m_Layer: 5
   m_Name: StartButtonText
   m_TagString: Untagged
@@ -2545,6 +2546,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1359216334315185456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6168744451862186138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dede7ab8aa4c29a4f9b21a796d920efa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: 1022
+  description: StartButtonText_TMP
 --- !u!1 &6332161423400148403
 GameObject:
   m_ObjectHideFlags: 0
