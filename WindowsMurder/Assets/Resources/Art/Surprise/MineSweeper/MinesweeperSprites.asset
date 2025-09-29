@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0529b48286bf59547b6e5db6939acb89, type: 3}
+  m_Name: MinesweeperSprites
+  m_EditorClassIdentifier: 
+  coveredSprite: {fileID: 21300000, guid: a603d95d464d4c04fa7e76e7012b01d7, type: 3}
+  revealedSprite: {fileID: 21300000, guid: a65051b7638eeea4e8b04e790cb7c998, type: 3}
+  flagSprite: {fileID: 21300000, guid: 6b3ff961e0f301742ba223b587884a98, type: 3}
+  questionSprite: {fileID: 21300000, guid: be773484b8da80e489ab7d790422d605, type: 3}
+  mineSprite: {fileID: 21300000, guid: 0e57507b2fcfa884bbdc979c86e7071d, type: 3}
+  mineDeathSprite: {fileID: 21300000, guid: e01450b3c2aeee14fa00c45d5255b3ec, type: 3}
+  mineFlaggedSprite: {fileID: 0}
+  number1: {fileID: 21300000, guid: 045578eea02a46442b80d07ae10ea5f0, type: 3}
+  number2: {fileID: 21300000, guid: a4785fe9dbc929b4a9d50a12f3e36e24, type: 3}
+  number3: {fileID: 21300000, guid: 3c632249bded7be4e9583012672106c5, type: 3}
+  number4: {fileID: 21300000, guid: d33bad88298d6f342a3d6a607b5ff404, type: 3}
+  number5: {fileID: 21300000, guid: 28cdcec7ad452df44af962059c364eb1, type: 3}
+  number6: {fileID: 21300000, guid: c87a8a3bb3b66e944982a35f01701679, type: 3}
+  number7: {fileID: 21300000, guid: b3c8cf91ff4019d458d2d0431aaee570, type: 3}
+  number8: {fileID: 21300000, guid: 026ee66fe844e7647b78e103c5dd1fc6, type: 3}
+  digit0: {fileID: 21300000, guid: 6fccb5c0191fcce4ab917467384ea4e9, type: 3}
+  digit1: {fileID: 21300000, guid: 9fba464eb73f8fd4e830d1513645cf07, type: 3}
+  digit2: {fileID: 21300000, guid: 8495c38bd50011c4bb5f4b825ee1b6ef, type: 3}
+  digit3: {fileID: 21300000, guid: 22e4645fadd946a48ab69df493a17320, type: 3}
+  digit4: {fileID: 21300000, guid: 9aff5b128f25a3d43b2250bc73a0527e, type: 3}
+  digit5: {fileID: 21300000, guid: 598fd7636dcafca4d90664a0d5b008b7, type: 3}
+  digit6: {fileID: 21300000, guid: c2f2b6fa81534a740b7df1781d3ffffa, type: 3}
+  digit7: {fileID: 21300000, guid: f35a6509f0143ff4e9e1af94c78267bb, type: 3}
+  digit8: {fileID: 21300000, guid: 8fbc4340c4690d646a41afc5a67c84f0, type: 3}
+  digit9: {fileID: 21300000, guid: 23f415a6f329c0a4fbe6bd6b009275ac, type: 3}
+  smileSprite: {fileID: 21300000, guid: 2f286a96995f8184392f3bb02bb8840d, type: 3}
+  winSprite: {fileID: 21300000, guid: e6be6913440d81745b6df4d3d1049136, type: 3}
+  deadSprite: {fileID: 21300000, guid: 75841d1c5ff40a443830704c23fb987d, type: 3}
+  ohhSprite: {fileID: 21300000, guid: 2183a2c39168fc942b439da1306c6104, type: 3}
