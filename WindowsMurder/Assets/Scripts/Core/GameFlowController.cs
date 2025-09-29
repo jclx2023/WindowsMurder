@@ -47,16 +47,32 @@ public class GameFlowController : MonoBehaviour
         CacheStageObjects();
     }
 
+    void OnEnable()
+    {
+        // 订阅静态事件
+        GameEvents.OnClueUnlockRequested += HandleClueUnlockRequest;
+        GameEvents.OnDialogueBlockRequested += HandleDialogueBlockRequest;
+        GameEvents.OnStageChangeRequested += HandleStageChangeRequest;
+
+        LogDebug("已订阅游戏事件");
+    }
+
+    void OnDisable()
+    {
+        // 取消订阅，防止内存泄漏
+        GameEvents.OnClueUnlockRequested -= HandleClueUnlockRequest;
+        GameEvents.OnDialogueBlockRequested -= HandleDialogueBlockRequest;
+        GameEvents.OnStageChangeRequested -= HandleStageChangeRequest;
+
+        LogDebug("已取消订阅游戏事件");
+    }
+
     void Start()
     {
         // 查找DialogueManager
         if (dialogueManager == null)
         {
             dialogueManager = FindObjectOfType<DialogueManager>();
-            if (dialogueManager == null)
-            {
-                LogError("未找到DialogueManager组件！");
-            }
         }
 
         // 如果没有从存档加载，则从起始Stage开始
@@ -123,6 +139,34 @@ public class GameFlowController : MonoBehaviour
 
     #endregion
 
+    #region 事件处理器
+
+    /// <summary>
+    /// 处理线索解锁请求
+    /// </summary>
+    private void HandleClueUnlockRequest(string clueId)
+    {
+        UnlockClue(clueId);
+    }
+
+    /// <summary>
+    /// 处理对话块请求
+    /// </summary>
+    private void HandleDialogueBlockRequest(string blockId)
+    {
+        StartDialogueBlock(blockId);
+    }
+
+    /// <summary>
+    /// 处理Stage切换请求
+    /// </summary>
+    private void HandleStageChangeRequest(string stageId)
+    {
+        LoadStage(stageId);
+    }
+
+    #endregion
+
     #region Stage管理
 
     /// <summary>
@@ -130,24 +174,6 @@ public class GameFlowController : MonoBehaviour
     /// </summary>
     public void LoadStage(string stageId)
     {
-        if (string.IsNullOrEmpty(stageId))
-        {
-            LogError("Stage ID不能为空");
-            return;
-        }
-
-        if (!stageConfigDict.ContainsKey(stageId))
-        {
-            LogError($"找不到Stage配置: {stageId}");
-            return;
-        }
-
-        if (!stageObjectDict.ContainsKey(stageId))
-        {
-            LogError($"找不到Stage对象: {stageId}");
-            return;
-        }
-
         LogDebug($"加载Stage: {stageId}");
 
         // 隐藏所有Stage
@@ -166,7 +192,7 @@ public class GameFlowController : MonoBehaviour
         // 初始化Stage内的可交互对象
         InitializeStageInteractables();
 
-        // 触发事件
+        // 触发Unity事件
         OnStageChanged?.Invoke(stageId);
 
         LogDebug($"Stage {stageId} 加载完成");
@@ -235,18 +261,6 @@ public class GameFlowController : MonoBehaviour
     /// </summary>
     public void StartDialogueBlock(string dialogueBlockFileId)
     {
-        if (string.IsNullOrEmpty(dialogueBlockFileId))
-        {
-            LogError("对话块ID不能为空");
-            return;
-        }
-
-        if (currentStage == null)
-        {
-            LogError("当前Stage为空");
-            return;
-        }
-
         // 查找对话块配置
         var dialogueBlock = currentStage.GetDialogueBlock(dialogueBlockFileId);
         if (dialogueBlock == null)
@@ -390,7 +404,11 @@ public class GameFlowController : MonoBehaviour
             unlockedClues.Add(clueId);
             LogDebug($"解锁线索: {clueId}");
 
+            // 触发Unity事件
             OnClueUnlocked?.Invoke(clueId);
+
+            // 触发静态事件
+            GameEvents.NotifyClueUnlocked(clueId);
 
             // 更新可交互对象状态
             InitializeStageInteractables();
@@ -446,35 +464,31 @@ public class GameFlowController : MonoBehaviour
     #endregion
 
     #region 公共接口
-    // 提供外部安全访问 Stage 配置
+
+    /// <summary>
+    /// 提供外部安全访问 Stage 配置
+    /// </summary>
     public IReadOnlyList<StageConfig> GetStageConfigsSafe()
     {
         return stageConfigs.AsReadOnly();
     }
 
-    // 提供当前 StageId
+    /// <summary>
+    /// 提供当前 StageId
+    /// </summary>
     public string GetCurrentStageIdSafe()
     {
         return currentStageId;
     }
 
-    // 提供已完成的对话块列表
+    /// <summary>
+    /// 提供已完成的对话块列表
+    /// </summary>
     public IReadOnlyList<string> GetCompletedBlocksSafe()
     {
         return completedDialogueBlocks.AsReadOnly();
     }
 
-    // 提供已解锁的线索
-    public IReadOnlyList<string> GetUnlockedCluesSafe()
-    {
-        return unlockedClues.AsReadOnly();
-    }
-
-    // 判断是否启用多语言
-    public bool IsMultiLanguageEnabled()
-    {
-        return useMultiLanguageScripts;
-    }
     #endregion
 
     #region 存档支持
@@ -519,7 +533,6 @@ public class GameFlowController : MonoBehaviour
             currentDialogueFile = state.currentDialogueFile;
             currentDialogueBlockId = state.currentDialogueBlockId;
 
-            // 注意：这里不自动重新开始对话，让玩家手动触发
             LogDebug($"恢复未完成的对话状态: {currentDialogueFile}:{currentDialogueBlockId}");
         }
     }
@@ -527,24 +540,6 @@ public class GameFlowController : MonoBehaviour
     #endregion
 
     #region 调试工具
-
-    [ContextMenu("解锁所有线索")]
-    private void Debug_UnlockAllClues()
-    {
-        foreach (var stage in stageConfigs)
-        {
-            foreach (var block in stage.dialogueBlocks)
-            {
-                if (block.unlocksClues != null)
-                {
-                    foreach (string clue in block.unlocksClues)
-                    {
-                        UnlockClue(clue);
-                    }
-                }
-            }
-        }
-    }
 
     private void LogDebug(string message)
     {

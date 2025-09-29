@@ -514,48 +514,58 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   windowTitleText: {fileID: 172198150502853362}
+  accessDeniedWindowPrefab: {fileID: 4035110604846965336, guid: 5677c1a2ad2353345aabeeb7864e9bb1, type: 3}
+  notificationParent: {fileID: 0}
   allPaths:
   - pathId: root
     displayName: Exploer
     contentContainer: {fileID: 1507396916012242263}
     isAccessible: 1
     requiresPermission: 0
+    requiredClues: []
     isCurrentPath: 0
   - pathId: C
     displayName: C:\
     contentContainer: {fileID: 2228250008320835040}
     isAccessible: 1
     requiresPermission: 0
+    requiredClues: []
     isCurrentPath: 0
   - pathId: D
     displayName: D:\
     contentContainer: {fileID: 7754657132380350906}
     isAccessible: 1
     requiresPermission: 0
+    requiredClues: []
     isCurrentPath: 0
   - pathId: DFiles
     displayName: D:\Files
     contentContainer: {fileID: 7010167112799806622}
     isAccessible: 1
     requiresPermission: 0
+    requiredClues: []
     isCurrentPath: 0
   - pathId: DFilesWorks
     displayName: D:\Files\Works
     contentContainer: {fileID: 7341174673764377722}
     isAccessible: 1
     requiresPermission: 1
+    requiredClues:
+    - WorksAutu
     isCurrentPath: 0
   - pathId: E
     displayName: E:\
     contentContainer: {fileID: 550977735798106698}
     isAccessible: 0
     requiresPermission: 0
+    requiredClues: []
     isCurrentPath: 0
   - pathId: EDownloads
     displayName: E:\Downloads
     contentContainer: {fileID: 1665975768798829447}
     isAccessible: 0
     requiresPermission: 0
+    requiredClues: []
     isCurrentPath: 0
   defaultPathId: root
   windowTypeName: Exploer
@@ -2131,6 +2141,10 @@ PrefabInstance:
     - target: {fileID: 5112393668048915835, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
       propertyPath: m_Name
       value: Works
+      objectReference: {fileID: 0}
+    - target: {fileID: 6756268606918930700, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
+      propertyPath: targetPathId
+      value: DFilesWorks
       objectReference: {fileID: 0}
     - target: {fileID: 8830655951057395809, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
       propertyPath: m_Material

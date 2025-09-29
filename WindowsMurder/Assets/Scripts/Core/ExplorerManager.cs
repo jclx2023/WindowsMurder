@@ -18,6 +18,10 @@ public class PathInfo
     public bool isAccessible = true;         // 是否可访问
     public bool requiresPermission = false;  // 是否需要权限验证
 
+    [Header("权限条件")]
+    [Tooltip("需要的线索ID列表（全部满足才能访问）")]
+    public List<string> requiredClues = new List<string>();
+
     [Header("调试信息")]
     [SerializeField] public bool isCurrentPath = false; // Inspector中显示是否为当前路径
 
@@ -40,20 +44,24 @@ public class ExplorerManager : MonoBehaviour
     [Header("UI组件引用")]
     public TextMeshProUGUI windowTitleText;          // 窗口标题文本（显示当前路径）
 
+    [Header("权限提示窗口")]
+    [SerializeField] private GameObject accessDeniedWindowPrefab;  // 权限被拒绝提示窗口预制体
+    [SerializeField] private Transform notificationParent;          // 提示窗口的父对象（通常是Canvas）
+
     [Header("路径配置")]
     public List<PathInfo> allPaths = new List<PathInfo>();   // 所有可用路径
-    public string defaultPathId = "root";                 // 默认路径
+    public string defaultPathId = "root";                     // 默认路径
 
     [Header("窗口设置")]
     public string windowTypeName = "文件资源管理器";         // 窗口类型名称
-    public bool showPathInTitle = true;                      // 是否在标题中显示路径
+    public bool showPathInTitle = true;                       // 是否在标题中显示路径
 
     [Header("调试设置")]
-    public bool enableDebugLog = true;                       // 是否启用调试日志
+    public bool enableDebugLog = true;                        // 是否启用调试日志
 
     // 实例事件委托 - 每个窗口实例独立的事件
-    public event Action<string> OnPathChanged;               // 路径切换事件
-    public event Action<string> OnPathAccessDenied;          // 路径访问被拒绝事件
+    public event Action<string> OnPathChanged;                // 路径切换事件
+    public event Action<string> OnPathAccessDenied;           // 路径访问被拒绝事件
 
     // 静态事件委托 - 全局事件（可选）
     public static event Action<ExplorerManager, string> OnAnyWindowPathChanged;
@@ -62,6 +70,7 @@ public class ExplorerManager : MonoBehaviour
     private string currentPathId;
     private PathInfo currentPath;
     private Dictionary<string, PathInfo> pathDictionary;
+    private GameFlowController flowController;
 
     // 静态管理 - 跟踪所有窗口实例
     public static List<ExplorerManager> AllInstances { get; private set; } = new List<ExplorerManager>();
@@ -80,6 +89,9 @@ public class ExplorerManager : MonoBehaviour
         {
             AllInstances.Add(this);
         }
+
+        // 订阅线索解锁事件，当线索解锁时刷新路径权限
+        GameEvents.OnClueUnlocked += OnClueUnlockedHandler;
     }
 
     void Start()
@@ -92,6 +104,9 @@ public class ExplorerManager : MonoBehaviour
     {
         // 从全局实例列表移除
         AllInstances.Remove(this);
+
+        // 取消订阅
+        GameEvents.OnClueUnlocked -= OnClueUnlockedHandler;
     }
 
     void OnDestroy()
@@ -105,6 +120,7 @@ public class ExplorerManager : MonoBehaviour
 
     void InitializeManager()
     {
+        flowController = FindObjectOfType<GameFlowController>();
         // 构建路径字典
         pathDictionary = new Dictionary<string, PathInfo>();
 
@@ -127,7 +143,6 @@ public class ExplorerManager : MonoBehaviour
             Debug.Log($"ExplorerManager ({name}): 初始化完成，加载了 {pathDictionary.Count} 个路径");
         }
     }
-
     #endregion
 
     #region 路径导航
@@ -143,12 +158,11 @@ public class ExplorerManager : MonoBehaviour
         // 检查访问权限
         if (!CanAccessPath(targetPath))
         {
-            if (enableDebugLog)
-            {
-                Debug.Log($"ExplorerManager ({name}): 路径访问被拒绝 - {targetPathId}");
-            }
-
+            // 触发事件
             OnPathAccessDenied?.Invoke(targetPathId);
+            // 显示权限被拒绝提示窗口
+            ShowAccessDeniedNotification();
+
             return false;
         }
 
@@ -205,36 +219,75 @@ public class ExplorerManager : MonoBehaviour
     /// </summary>
     private bool CanAccessPath(PathInfo path)
     {
+        // 检查基础可访问性
         if (!path.isAccessible)
         {
             return false;
         }
 
-        if (path.requiresPermission)
+        if (!path.requiresPermission)
         {
-            // TODO: 集成游戏权限系统
-            // 可以通过静态接口查询全局权限状态
-            // return SystemPermissionManager.HasPermission(path.pathId);
             return true;
         }
 
+        // 检查是否需要线索权限
+        if (path.requiredClues != null && path.requiredClues.Count > 0)
+        {
+            // 检查每个必需的线索
+            foreach (string clueId in path.requiredClues)
+            {
+                if (!flowController.HasClue(clueId))
+                {
+                    if (enableDebugLog)
+                    {
+                        Debug.Log($"ExplorerManager ({name}): 缺少必需线索 - {clueId}");
+                    }
+                    return false;
+                }
+            }
+        }
+
+        // 通过所有检查
         return true;
     }
 
     /// <summary>
-    /// 设置路径的访问权限
+    /// 线索解锁事件处理器
     /// </summary>
-    public void SetPathAccessible(string pathId, bool accessible)
+    private void OnClueUnlockedHandler(string clueId)
     {
-        if (pathDictionary.ContainsKey(pathId))
+        // 当线索解锁时，检查是否有路径因此变得可访问
+        foreach (var path in allPaths)
         {
-            pathDictionary[pathId].isAccessible = accessible;
-
-            if (enableDebugLog)
+            if (path.requiresPermission && path.requiredClues.Contains(clueId))
             {
-                Debug.Log($"ExplorerManager ({name}): 路径 {pathId} 访问权限设置为 {accessible}");
+                if (enableDebugLog)
+                {
+                    Debug.Log($"ExplorerManager ({name}): 线索 {clueId} 解锁，路径 {path.pathId} 可能变得可访问");
+                }
             }
         }
+    }
+
+    #endregion
+
+    #region 权限提示窗口
+
+    private void ShowAccessDeniedNotification()
+    {
+        // 确定生成位置
+        Transform parent = notificationParent;
+        if (parent == null)
+        {
+            // 查找名为 "DialogueCanvas" 的 GameObject
+            GameObject dialogueCanvasObj = GameObject.Find("DialogueCanvas");
+            if (dialogueCanvasObj != null)
+            {
+                parent = dialogueCanvasObj.transform;
+            }
+        }
+        // 生成提示窗口（预制体中已经预设好所有内容）
+        GameObject notificationObj = Instantiate(accessDeniedWindowPrefab, parent);
     }
 
     #endregion
@@ -276,41 +329,6 @@ public class ExplorerManager : MonoBehaviour
     public string GetCurrentPathId()
     {
         return currentPathId;
-    }
-
-    /// <summary>
-    /// 获取当前路径信息
-    /// </summary>
-    public PathInfo GetCurrentPath()
-    {
-        return currentPath;
-    }
-
-    #endregion
-
-    #region 静态工具方法
-
-    /// <summary>
-    /// 查找显示指定路径的窗口实例
-    /// </summary>
-    public static ExplorerManager FindWindowWithPath(string pathId)
-    {
-        foreach (var instance in AllInstances)
-        {
-            if (instance.GetCurrentPathId() == pathId)
-            {
-                return instance;
-            }
-        }
-        return null;
-    }
-
-    /// <summary>
-    /// 获取所有活跃的资源管理器窗口数量
-    /// </summary>
-    public static int GetActiveWindowCount()
-    {
-        return AllInstances.Count;
     }
 
     #endregion
