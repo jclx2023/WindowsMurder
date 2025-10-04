@@ -20,3 +20,15 @@
 1022,StartButtonText_TMP,开始,start,
 1023,Title_TMP,访问被拒绝,Access Denied,アクセス拒否
 1024,Text (TMP)_TMP,这里暂时没有可看的内容，去别处探索一下吧。,"Nothing to see here right now, try exploring somewhere else.",ここには今は見るものがありません。別の場所を探検してみましょう。
+1025,常规tab,常规,General,全般
+1026,Text (TMP)_TMP,确定,OK,オーケー
+1027,Text (TMP)_TMP,取消,Cancel,キャンセル
+1028,Text (TMP)_TMP,应用,Apply,適用
+1032,Text (TMP)_TMP,属性,Attributes,属性
+1033,Text (TMP)_TMP,只读,Read-only,読み取り専用
+1034,Text (TMP) (1)_TMP,隐藏,Hidden,隠し
+1036,Text (TMP)_TMP,解锁,Unlock,アンロック
+1037,Type_TMP,类型:            文件夹,Type:       Folder,種類:           フォルダー
+1038,Location_TMP,位置:            D:\Files,Location: D:\Files,場所:           D:\Files
+1039,Size_TMP,"大小:            2.33GB(2,501,818,450字节)","Size:        2.33GB(2,501,818,450bytes)","サイズ:         2.33GB(2,501,818,450bytes)"
+1040,Created_TMP,创建时间:       2002年9月2日,Created:  Sept.2nd / 2002,作成日時:       2002.09.02
