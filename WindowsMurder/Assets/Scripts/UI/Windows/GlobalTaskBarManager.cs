@@ -369,7 +369,6 @@ public class GlobalTaskBarManager : MonoBehaviour
         if (actionManager != null)
         {
             actionManager.InitializeManager();
-            Debug.Log("GlobalActionManager 由TaskBar创建并初始化完成");
         }
     }
 

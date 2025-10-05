@@ -66,7 +66,6 @@ public class GlobalActionManager : MonoBehaviour
     /// </summary>
     public void InitializeManager()
     {
-        Debug.Log("GlobalActionManager 初始化完成，等待处理用户交互");
 
         // 确保SaveManager存在
         if (SaveManager.Instance == null)

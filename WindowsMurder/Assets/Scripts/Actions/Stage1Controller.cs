@@ -50,8 +50,6 @@ public class Stage1Controller : MonoBehaviour
 
         // 订阅对话事件
         SubscribeToDialogueEvents();
-
-        Debug.Log("Stage1 初始化完成，点击任意位置开始对话");
     }
 
     /// <summary>
@@ -83,7 +81,6 @@ public class Stage1Controller : MonoBehaviour
         // 检查是否是特定的对话块和对话行
         if (lineId == "2" && blockId == "001" && flashImage != null)
         {
-            Debug.Log($"检测到对话块001的对话行ID=2，触发闪烁效果");
             StartCoroutine(FlashEffect());
         }
     }

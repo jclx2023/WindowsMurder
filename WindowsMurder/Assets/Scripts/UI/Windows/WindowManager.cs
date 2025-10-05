@@ -180,7 +180,7 @@ public class WindowManager : MonoBehaviour
         hierarchyWindows[hierarchyKey].Add(window);
 
         // 处理窗口位置（仅在同一容器内自动排列）
-        if (autoArrangeNewWindows)
+        if (autoArrangeNewWindows && !window.ShouldSkipAutoArrange())
         {
             ArrangeWindowInHierarchy(window, hierarchyKey);
         }
@@ -275,71 +275,11 @@ public class WindowManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 获取指定层级路径的窗口
-    /// </summary>
-    public List<WindowsWindow> GetHierarchyWindows(string hierarchyPath)
-    {
-        if (hierarchyWindows.ContainsKey(hierarchyPath))
-        {
-            return new List<WindowsWindow>(hierarchyWindows[hierarchyPath]);
-        }
-        return new List<WindowsWindow>();
-    }
-
-    /// <summary>
     /// 获取窗口的层级信息
     /// </summary>
     public WindowHierarchyInfo GetWindowHierarchyInfo(WindowsWindow window)
     {
         return windowHierarchyMap.ContainsKey(window) ? windowHierarchyMap[window] : null;
-    }
-
-    /// <summary>
-    /// 层叠排列指定层级的窗口
-    /// </summary>
-    public void CascadeWindowsInHierarchy(string hierarchyPath)
-    {
-        if (!hierarchyWindows.ContainsKey(hierarchyPath)) return;
-
-        var windows = hierarchyWindows[hierarchyPath];
-        for (int i = 0; i < windows.Count; i++)
-        {
-            if (windows[i] != null)
-            {
-                RectTransform rect = windows[i].GetComponent<RectTransform>();
-                Vector2 newPosition = defaultWindowPosition + cascadeOffset * i;
-                rect.anchoredPosition = newPosition;
-            }
-        }
-
-        Debug.Log($"已层叠排列层级 '{hierarchyPath}' 中的 {windows.Count} 个窗口");
-    }
-
-    /// <summary>
-    /// 关闭指定层级的所有窗口
-    /// </summary>
-    public void CloseHierarchyWindows(string hierarchyPath)
-    {
-        if (!hierarchyWindows.ContainsKey(hierarchyPath)) return;
-
-        var windows = new List<WindowsWindow>(hierarchyWindows[hierarchyPath]);
-        foreach (var window in windows)
-        {
-            if (window != null)
-            {
-                window.CloseWindow();
-            }
-        }
-
-        Debug.Log($"已关闭层级 '{hierarchyPath}' 中的所有窗口");
-    }
-
-    /// <summary>
-    /// 获取所有层级路径
-    /// </summary>
-    public List<string> GetAllHierarchyPaths()
-    {
-        return new List<string>(hierarchyWindows.Keys);
     }
 
     #endregion
@@ -507,7 +447,6 @@ public class WindowManager : MonoBehaviour
             activeWindows.Add(window);
         }
 
-        Debug.Log($"窗口已选中: {window.Title}");
     }
 
     #endregion

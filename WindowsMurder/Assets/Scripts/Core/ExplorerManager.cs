@@ -318,7 +318,6 @@ public class ExplorerManager : MonoBehaviour
             windowTitleText.text = displayText;
         }
     }
-
     #endregion
 
     #region 公共接口

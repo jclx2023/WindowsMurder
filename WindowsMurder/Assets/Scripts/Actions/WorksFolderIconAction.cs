@@ -8,43 +8,35 @@ public class WorksFolderIconAction : IconAction
 {
     [Header("解锁配置")]
     [SerializeField] private string clueId = "works_folder_unlocked";
-    [SerializeField] private string lockIconName = "Image_Lock";
+    [SerializeField] private GameObject lockIconObject;  // 直接引用锁图标对象
 
     [Header("窗口预制体")]
-    [SerializeField] private GameObject lockedMessagePrefab;     // 锁定提示弹窗
-    [SerializeField] private GameObject propertiesWindowPrefab;  // 属性窗口
+    [SerializeField] private GameObject lockedMessagePrefab;
+    [SerializeField] private GameObject propertiesWindowPrefab;
 
     [Header("窗口容器")]
-    [SerializeField] private Transform windowContainer;          // 窗口生成的父对象
+    [SerializeField] private Transform windowContainer;
 
     [Header("调试")]
     [SerializeField] private bool debugMode = true;
 
     // 组件引用
     private GameFlowController flowController;
-    private GameObject lockIconObject;
     private InteractableIcon iconComponent;
 
     #region 初始化
 
     void Awake()
     {
-        // 获取组件引用
         flowController = FindObjectOfType<GameFlowController>();
         iconComponent = GetComponent<InteractableIcon>();
     }
 
-    void Start()
-    {
-        // 查找锁图标子对象
-        FindLockIcon();
-
-        // 检查初始解锁状态
-        CheckInitialUnlockStatus();
-    }
-
     void OnEnable()
     {
+        // 检查初始解锁状态
+        CheckInitialUnlockStatus();
+
         // 订阅右键菜单事件
         InteractableIcon.OnContextMenuItemClicked += OnContextMenuItemClicked;
 
@@ -56,27 +48,10 @@ public class WorksFolderIconAction : IconAction
 
     void OnDisable()
     {
-        // 取消订阅
         InteractableIcon.OnContextMenuItemClicked -= OnContextMenuItemClicked;
         GameEvents.OnClueUnlocked -= OnClueUnlocked;
 
         LogDebug("已取消订阅事件");
-    }
-
-    /// <summary>
-    /// 查找锁图标子对象
-    /// </summary>
-    private void FindLockIcon()
-    {
-        if (!string.IsNullOrEmpty(lockIconName))
-        {
-            Transform lockTransform = transform.Find(lockIconName);
-            if (lockTransform != null)
-            {
-                lockIconObject = lockTransform.gameObject;
-                LogDebug($"找到锁图标: {lockIconName}");
-            }
-        }
     }
 
     /// <summary>
@@ -93,7 +68,7 @@ public class WorksFolderIconAction : IconAction
 
     #endregion
 
-    #region 双击交互 - IconAction重写
+    #region 双击交互
 
     public override void Execute()
     {
@@ -101,12 +76,10 @@ public class WorksFolderIconAction : IconAction
 
         if (IsUnlocked())
         {
-            // 已解锁 - 推进到下一Stage
             ProgressToNextStage();
         }
         else
         {
-            // 未解锁 - 显示提示弹窗
             ShowLockedMessage();
         }
     }
@@ -130,28 +103,16 @@ public class WorksFolderIconAction : IconAction
         ExplorerManager explorer = GetComponentInParent<ExplorerManager>();
         if (explorer != null)
         {
-            LogDebug("找到ExplorerManager");
-
             WindowsWindow window = explorer.GetComponent<WindowsWindow>();
             if (window != null && window.windowRect != null)
             {
-                // 获取窗口位置
                 Vector2 position = window.windowRect.anchoredPosition;
 
-                // 缓存到GameFlowController
                 WindowTransitionData transitionData = new WindowTransitionData(position);
                 flowController.CacheWindowTransition(transitionData);
 
                 LogDebug($"已缓存窗口位置: {position}");
             }
-            else
-            {
-                LogError("无法找到WindowsWindow组件或windowRect为空");
-            }
-        }
-        else
-        {
-            LogError("无法找到ExplorerManager，窗口位置将不会被缓存");
         }
 
         flowController.TryProgressToNextStage();
@@ -162,45 +123,29 @@ public class WorksFolderIconAction : IconAction
     /// </summary>
     private void ShowLockedMessage()
     {
-        // 实例化提示弹窗
         GameObject messageWindow = Instantiate(lockedMessagePrefab, windowContainer);
         LogDebug("已显示锁定提示弹窗");
     }
 
     #endregion
 
-    #region 右键菜单 - 属性窗口
+    #region 右键菜单
 
-    /// <summary>
-    /// 右键菜单项点击事件处理
-    /// </summary>
     private void OnContextMenuItemClicked(InteractableIcon icon, string itemId)
     {
-        // 检查是否是自己触发的
         if (icon.gameObject != gameObject)
         {
-            Debug.Log("不是自己触发的，忽略");
             return;
         }
 
-        // 检查是否是Properties菜单项
         if (itemId == "properties")
         {
-            Debug.Log("匹配成功，显示属性窗口");
             ShowPropertiesWindow();
-        }
-        else
-        {
-            Debug.Log($"itemId不匹配，期望'properties'，实际'{itemId}'");
         }
     }
 
-    /// <summary>
-    /// 显示属性窗口
-    /// </summary>
     private void ShowPropertiesWindow()
     {
-        // 实例化属性窗口
         GameObject propertiesWindow = Instantiate(propertiesWindowPrefab, windowContainer);
         LogDebug("已生成属性窗口");
     }
@@ -229,7 +174,11 @@ public class WorksFolderIconAction : IconAction
         if (lockIconObject != null)
         {
             lockIconObject.SetActive(false);
-            LogDebug("锁图标已隐藏");
+            LogDebug($"锁图标已隐藏: {lockIconObject.name}");
+        }
+        else
+        {
+            LogDebug("警告：尝试隐藏锁图标，但对象引用为空！");
         }
     }
 
@@ -243,11 +192,6 @@ public class WorksFolderIconAction : IconAction
         {
             Debug.Log($"[WorksFolderIcon] {message}");
         }
-    }
-
-    private void LogError(string message)
-    {
-        Debug.LogError($"[WorksFolderIcon] {message}");
     }
 
     #endregion

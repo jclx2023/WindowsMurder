@@ -3990,14 +3990,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5112393668048915835, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 370471448156927501}
+      addedObject: {fileID: 1795879996759318460}
   m_SourcePrefab: {fileID: 100100000, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
 --- !u!1 &1449354899482881270 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5112393668048915835, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
   m_PrefabInstance: {fileID: 5976270582929760653}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &370471448156927501
+--- !u!114 &1795879996759318460
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4006,17 +4006,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1449354899482881270}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45faaccd8c77c0741ab5262caa77bb81, type: 3}
+  m_Script: {fileID: 11500000, guid: b2a9f56b4379b3a4a910b3a5aa9592d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  clueId: works_folder_unlocked
-  lockIconName: Image_Lock
-  lockedMessagePrefab: {fileID: 1641665206790833336, guid: 16fc0cdd618f0e040be19541b2b45423, type: 3}
-  propertiesWindowPrefab: {fileID: 7143675285256313410, guid: 09a05a29735ec5d4db52b39bbfd54457, type: 3}
-  windowContainer: {fileID: 0}
-  debugMode: 1
+  targetPathId: DFilesWorks
 --- !u!224 &5298923989349722095 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1974394290131519074, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
@@ -4808,7 +4803,7 @@ PrefabInstance:
     - target: {fileID: 7591571878563265274, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 5e1498875e169a74a823453dccd42090, type: 3}
+      objectReference: {fileID: 21300000, guid: 72182374368c94545870750ba47071a6, type: 3}
     - target: {fileID: 7591571878563265274, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_Material
       value: 

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 /// <summary>
 /// Stage3初始化器 - 负责Stage3激活时创建Explorer窗口并应用窗口转换数据
@@ -90,7 +91,6 @@ public class Stage3Initializer : MonoBehaviour
         if (stage3Controller != null && explorerManager != null)
         {
             stage3Controller.SetExplorerReference(explorerManager);
-            LogDebug("已将Explorer引用传递给Stage3Controller");
         }
 
         LogDebug("Stage3初始化完成");
@@ -101,21 +101,21 @@ public class Stage3Initializer : MonoBehaviour
     /// </summary>
     private ExplorerManager CreateExplorerWindow(Vector2 position)
     {
-        // 实例化预制体
         GameObject explorerWindow = Instantiate(explorerStage3Prefab, canvasTransform);
 
-        // 获取RectTransform组件
-        RectTransform windowRect = explorerWindow.GetComponent<RectTransform>();
+        // 立即设置外部位置（在Start之前）
+        WindowsWindow window = explorerWindow.GetComponent<WindowsWindow>();
+        if (window != null)
+        {
+            window.SetExternalInitialPosition(position);
+            LogDebug($"已向WindowsWindow传递初始位置: {position}");
+        }
 
-        // 应用窗口位置
-        windowRect.anchoredPosition = position;
-        LogDebug($"Explorer窗口已创建，位置: {position}");
+        ExplorerManager explorerManager = explorerWindow.GetComponent<ExplorerManager>();
 
-        // 可选：确保窗口显示在最前面
         explorerWindow.transform.SetAsLastSibling();
 
-        // 获取ExplorerManager组件
-        ExplorerManager explorerManager = explorerWindow.GetComponent<ExplorerManager>();
+        LogDebug($"Explorer窗口已创建");
 
         return explorerManager;
     }

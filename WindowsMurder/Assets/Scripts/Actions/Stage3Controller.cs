@@ -74,7 +74,6 @@ public class Stage3Controller : MonoBehaviour
     public void SetExplorerReference(ExplorerManager explorer)
     {
         explorerManager = explorer;
-        LogDebug("接收到Explorer引用");
 
         // 获取Explorer中的icons引用
         if (!GetExplorerIcons())
@@ -100,19 +99,12 @@ public class Stage3Controller : MonoBehaviour
     /// </summary>
     private bool GetExplorerIcons()
     {
-
         // 查找ExplorerIconGetter组件
         ExplorerIconGetter iconGetter = explorerManager.GetComponent<ExplorerIconGetter>();
-        if (iconGetter == null)
-        {
-            LogError("Explorer预制体上缺少ExplorerIconGetter组件！");
-            return false;
-        }
 
         // 获取icons引用
         ieIconInExplorer = iconGetter.GetIEIcon();
         explorerIcons = iconGetter.GetProgramIcons();
-        LogDebug($"成功获取Explorer icons: IE + {explorerIcons.Count}个程序图标");
         return true;
     }
 
@@ -187,8 +179,6 @@ public class Stage3Controller : MonoBehaviour
             return;
         }
 
-        LogDebug($"检测到对话块004的对话行: lineId={lineId}");
-
         // lineId == 11: IE出现
         if (lineId == "11")
         {
@@ -209,11 +199,6 @@ public class Stage3Controller : MonoBehaviour
         if (ieIconInExplorer != null)
         {
             ieIconInExplorer.SetActive(true);
-            LogDebug("IE图标已显示");
-        }
-        else
-        {
-            LogError("IE图标引用为空！");
         }
     }
 
@@ -253,8 +238,6 @@ public class Stage3Controller : MonoBehaviour
                 }
             }
         }
-
-        LogDebug($"已隐藏Explorer中的 {(explorerIcons != null ? explorerIcons.Count + 1 : 1)} 个图标");
     }
 
     /// <summary>
@@ -271,8 +254,6 @@ public class Stage3Controller : MonoBehaviour
                     icon.SetActive(true);
                 }
             }
-
-            LogDebug($"已显示桌面上的 {desktopIcons.Count} 个图标");
         }
     }
 

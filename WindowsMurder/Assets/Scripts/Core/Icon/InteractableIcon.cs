@@ -267,7 +267,7 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
         // 隐藏右键菜单
         HideContextMenu();
 
-        Debug.Log($"InteractableIcon: {name} 已清理状态");
+        //Debug.Log($"InteractableIcon: {name} 已清理状态");
     }
 
     #endregion
@@ -359,10 +359,19 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
     void HandleDoubleClick()
     {
-        // 新的交互行为处理
+        // 双击时清理悬停效果（防止交互后悬停效果残留）
+        CleanupHoverEffect();
+
+        // 执行交互行为
         HandleIconInteraction();
     }
-
+    private void CleanupHoverEffect()
+    {
+        if (selectionHighlight != null && !isSelected)
+        {
+            selectionHighlight.SetActive(false);
+        }
+    }
     /// <summary>
     /// 处理icon的双击交互 - 集成的交互管理逻辑
     /// </summary>
@@ -440,6 +449,7 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
     void HideContextMenu()
     {
+        CleanupHoverEffect();
         if (activeContextMenu != null)
         {
             activeContextMenu.Hide();
