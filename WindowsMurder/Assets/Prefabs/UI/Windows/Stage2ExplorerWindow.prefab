@@ -554,7 +554,7 @@ MonoBehaviour:
   - pathId: C
     displayName: C:\
     contentContainer: {fileID: 9095208946919560138}
-    isAccessible: 1
+    isAccessible: 0
     requiresPermission: 0
     requiredClues: []
     isCurrentPath: 0
@@ -582,7 +582,7 @@ MonoBehaviour:
   - pathId: E
     displayName: E:\
     contentContainer: {fileID: 3156500516903745959}
-    isAccessible: 1
+    isAccessible: 0
     requiresPermission: 0
     requiredClues: []
     isCurrentPath: 0
@@ -1959,7 +1959,7 @@ MonoBehaviour:
   actionName: 
   isEnabled: 1
   clueId: works_folder_unlocked
-  lockIconName: Image_Lock
+  lockIconObject: {fileID: 0}
   lockedMessagePrefab: {fileID: 1641665206790833336, guid: 16fc0cdd618f0e040be19541b2b45423, type: 3}
   propertiesWindowPrefab: {fileID: 7143675285256313410, guid: 09a05a29735ec5d4db52b39bbfd54457, type: 3}
   windowContainer: {fileID: 0}

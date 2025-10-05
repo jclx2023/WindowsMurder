@@ -35,3 +35,10 @@
 1041,Title_TMP,Works-属性,Works-Stats,Works-属性
 1042,Text (TMP)_TMP,文件夹拒绝访问,AccessDenied,アクセス拒否
 2020,右键菜单属性,属性,Properties,プロパティ
+1043,MainMenuText_TMP,返回主菜单,MainMenu,
+1044,NewGameText_TMP,新游戏,NewGame,
+1045,ContinueText_TMP,继续游戏,Continue,
+1046,LanguageText_TMP,语言设置,Language,
+1047,DisplayText_TMP,显示设置,Display,
+1048,CreditsText_TMP,制作人员,Credits,
+1049,ShutdownText_TMP,关机,Shutdown,
