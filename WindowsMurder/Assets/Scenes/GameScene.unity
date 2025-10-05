@@ -1846,7 +1846,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  folderWindowPrefab: {fileID: 3324357439021588029, guid: d6ee1c8e3e46fe7478b10db1173f46f2, type: 3}
+  folderWindowPrefab: {fileID: 1296558822151280354, guid: cc637ddd572f0c34593c7ced701f246a, type: 3}
   windowParent: {fileID: 1909598888}
   defaultPathId: root
 --- !u!1 &962929470 stripped
@@ -4905,8 +4905,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flowController: {fileID: 1959642072}
-  ieIconInExplorer: {fileID: 0}
-  explorerIcons: []
   desktopIcons: []
   targetPathId: DFilesWorks
   dialogueBlockId: 004

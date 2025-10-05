@@ -25,6 +25,7 @@ public class Stage3Controller : MonoBehaviour
     private GameObject ieIconInExplorer;  // 运行时获取
     private List<GameObject> explorerIcons;  // 运行时获取
     private bool flowStarted = false;
+    private bool eventSubscribed = false;  // 防止重复订阅
 
     #region Unity生命周期
 
@@ -41,18 +42,26 @@ public class Stage3Controller : MonoBehaviour
         }
     }
 
-    void Start()
+    void OnEnable()
     {
         // 订阅对话行事件
-        DialogueUI.OnLineStarted += OnDialogueLineStarted;
-        LogDebug("已订阅对话行事件");
+        if (!eventSubscribed)
+        {
+            DialogueUI.OnLineStarted += OnDialogueLineStarted;
+            eventSubscribed = true;
+            LogDebug("已订阅对话行事件");
+        }
     }
 
-    void OnDestroy()
+    void OnDisable()
     {
         // 取消事件订阅
-        DialogueUI.OnLineStarted -= OnDialogueLineStarted;
-        LogDebug("已取消订阅对话行事件");
+        if (eventSubscribed)
+        {
+            DialogueUI.OnLineStarted -= OnDialogueLineStarted;
+            eventSubscribed = false;
+            LogDebug("已取消订阅对话行事件");
+        }
     }
 
     #endregion
@@ -103,7 +112,6 @@ public class Stage3Controller : MonoBehaviour
         // 获取icons引用
         ieIconInExplorer = iconGetter.GetIEIcon();
         explorerIcons = iconGetter.GetProgramIcons();
-
         LogDebug($"成功获取Explorer icons: IE + {explorerIcons.Count}个程序图标");
         return true;
     }

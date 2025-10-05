@@ -40,13 +40,9 @@ public class Stage3Initializer : MonoBehaviour
 
         // 查找Stage3Controller
         stage3Controller = GetComponent<Stage3Controller>();
-        if (stage3Controller == null)
-        {
-            LogError("未找到Stage3Controller组件！请确保同一GameObject上挂载了Stage3Controller");
-        }
     }
 
-    void Start()
+    void OnEnable()
     {
         // 防止重复初始化
         if (hasInitialized)
@@ -120,10 +116,6 @@ public class Stage3Initializer : MonoBehaviour
 
         // 获取ExplorerManager组件
         ExplorerManager explorerManager = explorerWindow.GetComponent<ExplorerManager>();
-        if (explorerManager == null)
-        {
-            LogError("创建的Explorer窗口缺少ExplorerManager组件！");
-        }
 
         return explorerManager;
     }
