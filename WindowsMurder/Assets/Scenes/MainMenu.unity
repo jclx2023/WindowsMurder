@@ -1365,6 +1365,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4284456097424513764, guid: 3d228239b34418849957c8010943724c, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: ce01aa57be5ec024ca65cf9a5ab00824, type: 2}
+    - target: {fileID: 4284456097424513764, guid: 3d228239b34418849957c8010943724c, type: 3}
+      propertyPath: m_fontStyle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4284456097424513764, guid: 3d228239b34418849957c8010943724c, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 7562195619927703879, guid: ce01aa57be5ec024ca65cf9a5ab00824, type: 2}
     - target: {fileID: 4983989258967745050, guid: 3d228239b34418849957c8010943724c, type: 3}
       propertyPath: m_Name
       value: GlobalTaskBar
