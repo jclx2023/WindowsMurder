@@ -126,6 +126,34 @@ public class WorksFolderIconAction : IconAction
     private void ProgressToNextStage()
     {
         LogDebug("尝试推进到下一Stage");
+
+        ExplorerManager explorer = GetComponentInParent<ExplorerManager>();
+        if (explorer != null)
+        {
+            LogDebug("找到ExplorerManager");
+
+            WindowsWindow window = explorer.GetComponent<WindowsWindow>();
+            if (window != null && window.windowRect != null)
+            {
+                // 获取窗口位置
+                Vector2 position = window.windowRect.anchoredPosition;
+
+                // 缓存到GameFlowController
+                WindowTransitionData transitionData = new WindowTransitionData(position);
+                flowController.CacheWindowTransition(transitionData);
+
+                LogDebug($"已缓存窗口位置: {position}");
+            }
+            else
+            {
+                LogError("无法找到WindowsWindow组件或windowRect为空");
+            }
+        }
+        else
+        {
+            LogError("无法找到ExplorerManager，窗口位置将不会被缓存");
+        }
+
         flowController.TryProgressToNextStage();
     }
 
@@ -134,7 +162,6 @@ public class WorksFolderIconAction : IconAction
     /// </summary>
     private void ShowLockedMessage()
     {
-
         // 实例化提示弹窗
         GameObject messageWindow = Instantiate(lockedMessagePrefab, windowContainer);
         LogDebug("已显示锁定提示弹窗");
@@ -173,7 +200,6 @@ public class WorksFolderIconAction : IconAction
     /// </summary>
     private void ShowPropertiesWindow()
     {
-
         // 实例化属性窗口
         GameObject propertiesWindow = Instantiate(propertiesWindowPrefab, windowContainer);
         LogDebug("已生成属性窗口");

@@ -4,6 +4,20 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
+/// 窗口转换数据 - 用于跨Stage传递窗口位置信息
+/// </summary>
+[System.Serializable]
+public struct WindowTransitionData
+{
+    public Vector2 windowPosition;
+
+    public WindowTransitionData(Vector2 position)
+    {
+        windowPosition = position;
+    }
+}
+
+/// <summary>
 /// 游戏流程控制器 - 管理Stage切换、条件判断和进度推进
 /// </summary>
 public class GameFlowController : MonoBehaviour
@@ -38,6 +52,9 @@ public class GameFlowController : MonoBehaviour
     private Dictionary<string, StageConfig> stageConfigDict;
     private Dictionary<string, GameObject> stageObjectDict;
     private StageConfig currentStage;
+
+    // 【新增】窗口转换数据缓存
+    private WindowTransitionData? cachedWindowTransition;
 
     #region 初始化
 
@@ -487,6 +504,35 @@ public class GameFlowController : MonoBehaviour
     public IReadOnlyList<string> GetCompletedBlocksSafe()
     {
         return completedDialogueBlocks.AsReadOnly();
+    }
+
+    /// <summary>
+    /// 【新增】缓存窗口转换数据
+    /// </summary>
+    public void CacheWindowTransition(WindowTransitionData data)
+    {
+        cachedWindowTransition = data;
+        LogDebug($"缓存窗口转换数据 - 位置: {data.windowPosition}");
+    }
+
+    /// <summary>
+    /// 消费窗口转换数据（一次性）
+    /// </summary>
+    public WindowTransitionData? ConsumeWindowTransition()
+    {
+        var data = cachedWindowTransition;
+        cachedWindowTransition = null; // 消费后清空
+
+        if (data.HasValue)
+        {
+            LogDebug($"消费窗口转换数据 - 位置: {data.Value.windowPosition}");
+        }
+        else
+        {
+            LogDebug("无缓存的窗口转换数据");
+        }
+
+        return data;
     }
 
     #endregion

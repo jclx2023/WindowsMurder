@@ -14,7 +14,7 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     [SerializeField] private bool canClose = true;
 
     [Header("UI组件引用")]
-    [SerializeField] private RectTransform windowRect;
+    [SerializeField] public RectTransform windowRect;
     [SerializeField] private RectTransform titleBarRect;
     [SerializeField] private TMP_Text titleText;
     [SerializeField] private Image iconImage;
