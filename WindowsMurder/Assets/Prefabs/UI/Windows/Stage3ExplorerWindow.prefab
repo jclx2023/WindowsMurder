@@ -3079,7 +3079,7 @@ MonoBehaviour:
   clueId: clue_recyclebin
   beforeDialogueBlockId: 0051
   afterDialogueBlockId: 007
-  windowPrefab: {fileID: 0}
+  windowPrefab: {fileID: 7884548954017114481, guid: 1855663398ef3dd4e810d23e6c1b0965, type: 3}
   targetCanvas: {fileID: 0}
   allowReopenAfterComplete: 1
   enableDebugLog: 1

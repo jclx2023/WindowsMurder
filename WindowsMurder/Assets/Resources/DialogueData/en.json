@@ -360,7 +360,7 @@
                     "id": "1",
                     "mode": true,
                     "characterId": "narrator",
-                    "text": "123",
+                    "text": "The knife.jpg we found at the scene shows Photoshop as its creator—maybe we should ask him about it.",
                     "portraitId": "default"
                 },
                 {
@@ -380,7 +380,7 @@
                     "id": "3",
                     "mode": true,
                     "characterId": "me",
-                    "text": "123",
+                    "text": "If he’s telling the truth, then knife.jpg was probably downloaded from somewhere. Maybe we should ask around?",
                     "portraitId": "default"
                 }
             ]
@@ -561,6 +561,145 @@
                     "mode": true,
                     "characterId": "notepad",
                     "text": "The Works folder is calling… just a touch from you, and it’ll see the light again.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "0051",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "The Recycle Bin…? This folder was locked like a sealed room—no one else should’ve been able to enter.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Could it have locked the place itself, then killed itself inside?",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "0052",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "A knife photo… something about the blood looks off.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "0053",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "A file named ‘goodbye’? Looks like a suicide note…",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "916",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "Don’t ask me to edit anything now—check the scene first.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "917",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "Hey, Admin! Any new leads yet? We’re all waiting for your verdict.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "918",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "7-zip",
+                    "text": "Unpack this mystery first.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "919",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "Forget downloads for now",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "920",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Stay calm. Focus on the evidence",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "921",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ie",
+                    "text": "The network’s down—I can’t help much.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "922",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "The answers lie buried in the records—but first, find your way in.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "923",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "Hmm? Looking at other files? That ‘goodbye’ one feels off to me…",
                     "portraitId": "default"
                 }
             ]

@@ -5271,9 +5271,13 @@ MonoBehaviour:
       requiredClues: []
       requiredDialogueBlocks: []
       unlocksClues: []
-    requiredCluesForProgress: []
+    requiredCluesForProgress:
+    - clue_recyclebin
+    - clue_knife
+    - clue_goodbye
     requiredDialogueBlocksForProgress:
     - 004
+    - 005
     nextStageId: Stage4_Desktop
   - stageId: Stage4_Desktop
     dialogueBlocks:
