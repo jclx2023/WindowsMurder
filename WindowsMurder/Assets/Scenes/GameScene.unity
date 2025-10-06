@@ -359,7 +359,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  blockId: 907
+  blockId: 921
 --- !u!1 &144570304
 GameObject:
   m_ObjectHideFlags: 0
@@ -1345,7 +1345,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  blockId: 905
+  blockId: 920
 --- !u!1 &598565147
 GameObject:
   m_ObjectHideFlags: 0
@@ -1981,7 +1981,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  blockId: 904
+  blockId: 919
 --- !u!1 &962929470 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1413202274897746847, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
@@ -2127,7 +2127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  blockId: 909
+  blockId: 923
 --- !u!1 &1000310342
 GameObject:
   m_ObjectHideFlags: 0
@@ -3646,7 +3646,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  blockId: 901
+  blockId: 916
 --- !u!1001 &1464466273
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4035,7 +4035,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  blockId: 903
+  blockId: 918
 --- !u!1 &1500453051
 GameObject:
   m_ObjectHideFlags: 0
@@ -4604,7 +4604,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  blockId: 902
+  blockId: 917
 --- !u!1 &1737407503
 GameObject:
   m_ObjectHideFlags: 0
@@ -4976,8 +4976,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Stage3
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ce01aa57be5ec024ca65cf9a5ab00824, type: 2}
+  m_sharedMaterial: {fileID: 7562195619927703879, guid: ce01aa57be5ec024ca65cf9a5ab00824, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5065,7 +5065,7 @@ GameObject:
   - component: {fileID: 1924530953}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: WIndowCanvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5227,6 +5227,46 @@ MonoBehaviour:
   - stageId: Stage3_DFilesWorks
     dialogueBlocks:
     - dialogueBlockFileId: 004
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 005
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 0051
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 0052
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 0053
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 006
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 007
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 008
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 009
       interactableObjectName: 
       requiredClues: []
       requiredDialogueBlocks: []
@@ -5457,7 +5497,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  blockId: 906
+  blockId: 922
 --- !u!1001 &1584376116049801732
 PrefabInstance:
   m_ObjectHideFlags: 0
