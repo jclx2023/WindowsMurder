@@ -10,6 +10,8 @@ public class EvidenceIconAction : IconAction
     [Header("=== 证物配置 ===")]
     public string evidenceId = "recyclebin";
 
+    public string clueId = "clue_recyclebin";
+
     [Header("=== 对话块配置 ===")]
     public string beforeDialogueBlockId = "001";
     public string afterDialogueBlockId = "002";
@@ -25,6 +27,7 @@ public class EvidenceIconAction : IconAction
     [Header("=== 状态显示（运行时只读）===")]
     [SerializeField] private InvestigationState currentState = InvestigationState.NotInvestigated;
     [SerializeField] private bool isWaitingForDialogue = false;
+    [SerializeField] private bool isWaitingForClue = false;
 
     // 私有变量
     private string waitingForDialogueBlockId;
@@ -39,6 +42,8 @@ public class EvidenceIconAction : IconAction
         NotInvestigated,
         PlayingBeforeDialogue,
         WindowOpen,
+        WaitingForClue,         // 窗口已打开，等待线索解锁
+        PlayingAfterDialogue,   // 线索已解锁，正在播放after对话
         Completed
     }
 
@@ -46,38 +51,35 @@ public class EvidenceIconAction : IconAction
 
     void Start()
     {
-        // 查找引用
         gameFlowController = FindObjectOfType<GameFlowController>();
-
-        // 查找Canvas：优先使用手动配置，否则从父级查找
         FindTargetCanvas();
-
-        // 恢复状态（从存档）
         RestoreStateFromSave();
     }
 
     void OnEnable()
     {
+        // 订阅对话结束事件
         DialogueUI.OnDialogueBlockEnded += HandleDialogueEnded;
-        DebugLog("已订阅对话事件");
+
+        // 订阅线索解锁事件
+        GameEvents.OnClueUnlocked += HandleClueUnlocked;
+
+        DebugLog("已订阅事件");
     }
 
     void OnDisable()
     {
         DialogueUI.OnDialogueBlockEnded -= HandleDialogueEnded;
-        DebugLog("已取消订阅对话事件");
+        GameEvents.OnClueUnlocked -= HandleClueUnlocked;
+        DebugLog("已取消订阅事件");
     }
 
     #endregion
 
     #region Canvas查找
 
-    /// <summary>
-    /// 查找目标Canvas
-    /// </summary>
     private void FindTargetCanvas()
     {
-        // 1. 从父级查找最近的Canvas
         canvas = GetComponentInParent<Canvas>();
         if (canvas != null)
         {
@@ -85,7 +87,6 @@ public class EvidenceIconAction : IconAction
             return;
         }
 
-        // 2. 如果没找到，尝试通过Tag查找（需要提前设置Tag）
         GameObject canvasObj = GameObject.FindWithTag("WindowCanvas");
         if (canvasObj != null)
         {
@@ -117,8 +118,18 @@ public class EvidenceIconAction : IconAction
             }
             else
             {
-                currentState = InvestigationState.WindowOpen;
-                DebugLog("从存档恢复状态：窗口已打开过");
+                // 检查线索是否已解锁
+                if (gameFlowController.HasClue(clueId))
+                {
+                    currentState = InvestigationState.PlayingAfterDialogue;
+                    DebugLog("从存档恢复状态：线索已解锁");
+                }
+                else
+                {
+                    currentState = InvestigationState.WaitingForClue;
+                    isWaitingForClue = true;
+                    DebugLog("从存档恢复状态：等待线索解锁");
+                }
             }
         }
     }
@@ -142,6 +153,8 @@ public class EvidenceIconAction : IconAction
                 break;
 
             case InvestigationState.WindowOpen:
+            case InvestigationState.WaitingForClue:
+            case InvestigationState.PlayingAfterDialogue:
             case InvestigationState.Completed:
                 if (allowReopenAfterComplete)
                 {
@@ -186,8 +199,23 @@ public class EvidenceIconAction : IconAction
         DebugLog($"开始播放前置对话: {beforeDialogueBlockId}");
     }
 
+    private void PlayAfterDialogue()
+    {
+        currentState = InvestigationState.PlayingAfterDialogue;
+        isWaitingForDialogue = true;
+        waitingForDialogueBlockId = afterDialogueBlockId;
+
+        gameFlowController.StartDialogueBlock(afterDialogueBlockId);
+
+        DebugLog($"开始播放后置对话: {afterDialogueBlockId}");
+    }
+
+    /// <summary>
+    /// 处理对话结束事件
+    /// </summary>
     private void HandleDialogueEnded(string fileName, string blockId)
     {
+        // 检查是否是我们等待的对话
         if (blockId == waitingForDialogueBlockId)
         {
             DebugLog($"监听到对话结束: {blockId}");
@@ -195,7 +223,15 @@ public class EvidenceIconAction : IconAction
             waitingForDialogueBlockId = null;
             isWaitingForDialogue = false;
 
-            OnBeforeDialogueComplete();
+            // 根据是哪个对话块完成来处理
+            if (blockId == beforeDialogueBlockId)
+            {
+                OnBeforeDialogueComplete();
+            }
+            else if (blockId == afterDialogueBlockId)
+            {
+                OnAfterDialogueComplete();
+            }
         }
     }
 
@@ -205,19 +241,46 @@ public class EvidenceIconAction : IconAction
         CreateWindow();
     }
 
+    private void OnAfterDialogueComplete()
+    {
+        DebugLog("后置对话完成，调查完成");
+        currentState = InvestigationState.Completed;
+    }
+
+    #endregion
+
+    #region 线索解锁处理
+
+    /// <summary>
+    /// 处理线索解锁事件（核心逻辑：线索解锁后触发after对话）
+    /// </summary>
+    private void HandleClueUnlocked(string unlockedClueId)
+    {
+        // 只有当我们在等待这个线索时才处理
+        if (unlockedClueId == clueId && isWaitingForClue)
+        {
+            DebugLog($"监听到线索解锁: {clueId}，准备播放after对话");
+
+            isWaitingForClue = false;
+
+            // 触发after对话
+            PlayAfterDialogue();
+        }
+    }
+
     #endregion
 
     #region 窗口管理
 
     private void CreateWindow()
     {
-
         GameObject windowObj = Instantiate(windowPrefab, canvas.transform);
         windowObj.name = $"{evidenceId}_Window";
 
-        currentState = InvestigationState.WindowOpen;
+        currentState = InvestigationState.WaitingForClue;
+        isWaitingForClue = true;
 
-        DebugLog($"已创建窗口: {windowObj.name}，父级Canvas: {canvas.name}");
+        DebugLog($"已创建窗口: {windowObj.name}，等待线索解锁");
     }
 
     #endregion

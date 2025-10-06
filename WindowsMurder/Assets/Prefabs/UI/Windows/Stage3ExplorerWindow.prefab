@@ -3076,13 +3076,16 @@ MonoBehaviour:
   actionName: 
   isEnabled: 1
   evidenceId: recyclebin
+  clueId: clue_recyclebin
   beforeDialogueBlockId: 0051
   afterDialogueBlockId: 007
   windowPrefab: {fileID: 0}
+  targetCanvas: {fileID: 0}
   allowReopenAfterComplete: 1
   enableDebugLog: 1
   currentState: 0
   isWaitingForDialogue: 0
+  isWaitingForClue: 0
 --- !u!1001 &4735310169358028830
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3524,13 +3527,16 @@ MonoBehaviour:
   actionName: 
   isEnabled: 1
   evidenceId: knife
+  clueId: clue_knife
   beforeDialogueBlockId: 0052
   afterDialogueBlockId: 008
   windowPrefab: {fileID: 0}
+  targetCanvas: {fileID: 0}
   allowReopenAfterComplete: 1
   enableDebugLog: 1
   currentState: 0
   isWaitingForDialogue: 0
+  isWaitingForClue: 0
 --- !u!1001 &5919156913288543066
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4749,13 +4755,16 @@ MonoBehaviour:
   actionName: 
   isEnabled: 1
   evidenceId: goodbye
+  clueId: clue_goodbye
   beforeDialogueBlockId: 0053
   afterDialogueBlockId: 006
   windowPrefab: {fileID: 0}
+  targetCanvas: {fileID: 0}
   allowReopenAfterComplete: 1
   enableDebugLog: 1
   currentState: 0
   isWaitingForDialogue: 0
+  isWaitingForClue: 0
 --- !u!1001 &8713047891686557757
 PrefabInstance:
   m_ObjectHideFlags: 0
