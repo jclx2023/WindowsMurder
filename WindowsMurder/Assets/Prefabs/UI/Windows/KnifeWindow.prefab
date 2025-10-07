@@ -195,8 +195,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 841c138c9d365e045b0187d66df798f6, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -474,6 +474,7 @@ GameObject:
   - component: {fileID: 1718464527549456559}
   - component: {fileID: 3383588718635094886}
   - component: {fileID: 7419636587673675971}
+  - component: {fileID: 1372488950010383236}
   m_Layer: 5
   m_Name: Title
   m_TagString: Untagged
@@ -597,6 +598,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1372488950010383236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5462256908255288160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dede7ab8aa4c29a4f9b21a796d920efa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: 1066
+  description: Title_TMP
 --- !u!1 &6324398764391153091
 GameObject:
   m_ObjectHideFlags: 0
@@ -857,7 +872,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a3670565eedfddb458c7e92b053f3f78, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 39740baeaeefd95409f2acd7b9e3a2dd, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

@@ -638,7 +638,7 @@
                 {
                     "id": "1",
                     "mode": true,
-                    "characterId": "7-zip",
+                    "characterId": "7zip",
                     "text": "Unpack this mystery first.",
                     "portraitId": "default"
                 }
@@ -747,14 +747,14 @@
                     "id": "1",
                     "mode": true,
                     "characterId": "me",
-                    "text": "",
+                    "text": "The file’s EXIF data... might contain some useful information.",
                     "portraitId": "default"
                 },
                 {
                     "id": "2",
                     "mode": true,
                     "characterId": "me",
-                    "text": "",
+                    "text": "It says the creator is Adobe Photoshop CS2?",
                     "portraitId": "default"
                 }
             ]

@@ -13,9 +13,19 @@ public class DialogueUI : MonoBehaviour
     public TMP_InputField playerInputField;
     public Button sendButton;
 
-    [Header("效果设置")]
+    [Header("打字机效果设置")]
     public float textSpeed = 0.05f;
     public bool useTypingEffect = true;
+
+    [Header("文字动画效果")]
+    public bool enableBounceEffect = true;           // 是否启用弹跳效果
+    public float bounceHeight = 8f;                   // 弹跳高度（像素）
+    public float bounceDuration = 0.3f;               // 弹跳持续时间
+    public AnimationCurve bounceCurve = AnimationCurve.EaseInOut(0, 0, 1, 1); // 弹跳曲线
+
+    public bool enableRandomOffset = true;            // 是否启用随机偏移
+    public float randomOffsetRange = 2f;              // 随机偏移范围（像素）
+    public float offsetSmoothTime = 0.15f;            // 偏移平滑时间
 
     [Header("音效")]
     public AudioSource audioSource;
@@ -25,9 +35,9 @@ public class DialogueUI : MonoBehaviour
     public string waitingForInputHint = "Please enter your question...";
     public string waitingForAIHint = "Thinking...";
 
-    // 事件系统 - 新增blockId参数
-    public static event System.Action<string, string, string, bool> OnLineStarted; // lineId, characterId, blockId, isPresetMode
-    public static event System.Action<string, string, string, bool> OnLineCompleted; // lineId, characterId, blockId, isPresetMode
+    // 事件系统
+    public static event System.Action<string, string, string, bool> OnLineStarted;
+    public static event System.Action<string, string, string, bool> OnLineCompleted;
     public static event System.Action<string, string> OnDialogueBlockStarted;
     public static event System.Action<string, string> OnDialogueBlockEnded;
 
@@ -213,7 +223,6 @@ public class DialogueUI : MonoBehaviour
         SetCharacterInfo(line.characterId, line.portraitId);
         fullCurrentText = line.text ?? "";
 
-        // 事件中包含blockId
         OnLineStarted?.Invoke(line.id, line.characterId, currentDialogueBlockId, true);
 
         if (useTypingEffect && !string.IsNullOrEmpty(fullCurrentText))
@@ -231,12 +240,16 @@ public class DialogueUI : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 打字机效果 + 弹跳和随机偏移动画
+    /// </summary>
     private IEnumerator TypeText(string text, string lineId = null, string characterId = null, bool isPresetMode = true)
     {
         isTyping = true;
         waitingForContinue = false;
         dialogueText.text = "";
 
+        // 播放打字音效
         if (audioSource != null && typingSound != null)
         {
             audioSource.clip = typingSound;
@@ -244,12 +257,24 @@ public class DialogueUI : MonoBehaviour
             audioSource.Play();
         }
 
-        foreach (char c in text.ToCharArray())
+        // 逐字添加文本
+        for (int i = 0; i < text.Length; i++)
         {
-            dialogueText.text += c;
+            dialogueText.text += text[i];
+
+            // 强制更新网格以获取新字符信息
+            dialogueText.ForceMeshUpdate();
+
+            // 为新添加的字符应用动画效果
+            if (enableBounceEffect || enableRandomOffset)
+            {
+                StartCoroutine(AnimateCharacter(i));
+            }
+
             yield return new WaitForSeconds(textSpeed);
         }
 
+        // 停止音效
         if (audioSource != null)
             audioSource.Stop();
 
@@ -258,8 +283,98 @@ public class DialogueUI : MonoBehaviour
 
         if (!string.IsNullOrEmpty(lineId))
         {
-            // 事件中包含blockId
             OnLineCompleted?.Invoke(lineId, characterId ?? "", currentDialogueBlockId, isPresetMode);
+        }
+    }
+
+    /// <summary>
+    /// 为单个字符添加弹跳和偏移动画
+    /// </summary>
+    private IEnumerator AnimateCharacter(int charIndex)
+    {
+        // 生成随机偏移（如果启用）
+        Vector2 randomOffset = Vector2.zero;
+        if (enableRandomOffset)
+        {
+            randomOffset = new Vector2(
+                Random.Range(-randomOffsetRange, randomOffsetRange),
+                Random.Range(-randomOffsetRange, randomOffsetRange)
+            );
+        }
+
+        float elapsedTime = 0f;
+        float animDuration = enableBounceEffect ? bounceDuration : offsetSmoothTime;
+
+        while (elapsedTime < animDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float progress = Mathf.Clamp01(elapsedTime / animDuration);
+
+            // 更新网格信息
+            dialogueText.ForceMeshUpdate();
+            TMP_TextInfo textInfo = dialogueText.textInfo;
+
+            // 检查字符索引是否有效
+            if (charIndex >= textInfo.characterCount || !textInfo.characterInfo[charIndex].isVisible)
+                yield break;
+
+            TMP_CharacterInfo charInfo = textInfo.characterInfo[charIndex];
+            int materialIndex = charInfo.materialReferenceIndex;
+            int vertexIndex = charInfo.vertexIndex;
+
+            // 获取顶点数组
+            Vector3[] vertices = textInfo.meshInfo[materialIndex].vertices;
+
+            // 计算弹跳偏移
+            Vector3 bounceOffset = Vector3.zero;
+            if (enableBounceEffect)
+            {
+                float bounceValue = bounceCurve.Evaluate(progress);
+                float currentHeight = bounceHeight * (1 - bounceValue);
+                bounceOffset = new Vector3(0, currentHeight, 0);
+            }
+
+            // 计算随机偏移（带平滑过渡）
+            Vector3 currentRandomOffset = Vector3.zero;
+            if (enableRandomOffset)
+            {
+                float offsetProgress = Mathf.SmoothStep(1f, 0f, progress);
+                currentRandomOffset = randomOffset * offsetProgress;
+            }
+
+            // 组合总偏移
+            Vector3 totalOffset = bounceOffset + currentRandomOffset;
+
+            // 获取字符的4个顶点的原始位置
+            Vector3 bottomLeft = vertices[vertexIndex + 0];
+            Vector3 topLeft = vertices[vertexIndex + 1];
+            Vector3 topRight = vertices[vertexIndex + 2];
+            Vector3 bottomRight = vertices[vertexIndex + 3];
+
+            // 计算字符中心点
+            Vector3 center = (bottomLeft + topLeft + topRight + bottomRight) / 4f;
+
+            // 应用偏移到所有顶点
+            vertices[vertexIndex + 0] = bottomLeft + totalOffset;
+            vertices[vertexIndex + 1] = topLeft + totalOffset;
+            vertices[vertexIndex + 2] = topRight + totalOffset;
+            vertices[vertexIndex + 3] = bottomRight + totalOffset;
+
+            // 更新网格
+            dialogueText.UpdateVertexData(TMP_VertexDataUpdateFlags.Vertices);
+
+            yield return null;
+        }
+
+        // 动画结束，确保字符回到正常位置
+        dialogueText.ForceMeshUpdate();
+        TMP_TextInfo finalTextInfo = dialogueText.textInfo;
+
+        if (charIndex < finalTextInfo.characterCount && finalTextInfo.characterInfo[charIndex].isVisible)
+        {
+            TMP_CharacterInfo finalCharInfo = finalTextInfo.characterInfo[charIndex];
+            int finalMaterialIndex = finalCharInfo.materialReferenceIndex;
+            dialogueText.UpdateVertexData(TMP_VertexDataUpdateFlags.Vertices);
         }
     }
 
@@ -299,14 +414,18 @@ public class DialogueUI : MonoBehaviour
         if (audioSource != null)
             audioSource.Stop();
 
+        // 停止所有字符动画
+        StopAllCoroutines();
+
         dialogueText.text = fullCurrentText;
+        dialogueText.ForceMeshUpdate();
+
         isTyping = false;
         waitingForContinue = true;
 
         DialogueLine currentLine = CurrentLine;
         if (currentLine != null)
         {
-            // 事件中包含blockId
             OnLineCompleted?.Invoke(currentLine.id, currentLine.characterId, currentDialogueBlockId, currentLine.mode);
         }
     }
@@ -453,7 +572,6 @@ public class DialogueUI : MonoBehaviour
 
         SetCharacterInfo(line.characterId, line.portraitId);
 
-        // 事件中包含blockId
         OnLineStarted?.Invoke(line.id, line.characterId, currentDialogueBlockId, false);
 
         DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
@@ -524,7 +642,6 @@ public class DialogueUI : MonoBehaviour
             waitingForContinue = true;
 
             DialogueLine currentLine = CurrentLine;
-            // 事件中包含blockId
             OnLineCompleted?.Invoke(currentLine?.id ?? "", currentLine?.characterId ?? "", currentDialogueBlockId, false);
         }
     }

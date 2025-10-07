@@ -638,7 +638,7 @@
                 {
                     "id": "1",
                     "mode": true,
-                    "characterId": "7-zip",
+                    "characterId": "7zip",
                     "text": "この謎を解凍しよう。",
                     "portraitId": "default"
                 }
@@ -747,14 +747,14 @@
                     "id": "1",
                     "mode": true,
                     "characterId": "me",
-                    "text": "",
+                    "text": "このファイルの EXIF データには… 何か役に立つ情報があるかもしれないね。",
                     "portraitId": "default"
                 },
                 {
                     "id": "2",
                     "mode": true,
                     "characterId": "me",
-                    "text": "",
+                    "text": "作成者は Adobe Photoshop CS2 と表示されている？",
                     "portraitId": "default"
                 }
             ]

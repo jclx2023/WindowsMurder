@@ -457,13 +457,23 @@ public class GlobalTaskBarManager : MonoBehaviour
     {
         bool isMainMenuScene = (currentSceneName == "MainMenu");
         bool isGameScene = currentSceneName == "GameScene";
+
         mainMenuButton.gameObject.SetActive(isGameScene);
         newGameButton.gameObject.SetActive(isMainMenuScene);
-        bool hasGameSave = GlobalSystemManager.Instance != null &&
-                          GlobalSystemManager.Instance.HasGameSave();
+        bool hasGameSave = false;
+        if (SaveManager.Instance != null)
+        {
+            hasGameSave = SaveManager.Instance.HasSaveData();
+        }
+        else if (GlobalSystemManager.Instance != null)
+        {
+            hasGameSave = GlobalSystemManager.Instance.HasGameSave();
+        }
+
         continueButton.gameObject.SetActive(isMainMenuScene);
         continueButton.interactable = hasGameSave;
-        Debug.Log($"TaskBar按钮状态更新 - MainMenu: {isMainMenuScene}, Game: {isGameScene}");
+
+        Debug.Log($"TaskBar按钮状态更新 - MainMenu: {isMainMenuScene}, Game: {isGameScene}, HasSave: {hasGameSave}");
     }
 
     public void ToggleStartMenu()
