@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 /// <summary>
 /// 通用证物调查Action - 支持多线索解锁和右键菜单
@@ -360,12 +361,24 @@ public class EvidenceIconAction : IconAction
         // 检查是否所有线索都已解锁
         if (isWaitingForClues && AreAllCluesUnlocked())
         {
-            DebugLog("所有线索已集齐，准备播放after对话");
+            DebugLog("所有线索已集齐，延迟几帧后播放after对话");
             isWaitingForClues = false;
 
-            // 触发after对话
-            PlayAfterDialogue();
+            // 使用协程延迟触发after对话
+            StartCoroutine(DelayedPlayAfterDialogue());
         }
+    }
+
+    /// <summary>
+    /// 延迟几帧后播放after对话，避免与前一个对话块冲突
+    /// </summary>
+    private IEnumerator DelayedPlayAfterDialogue()
+    {
+        // 等待3帧，确保前一个对话块完全结束
+        yield return null;
+        yield return null;
+        yield return null;
+        PlayAfterDialogue();
     }
 
     /// <summary>

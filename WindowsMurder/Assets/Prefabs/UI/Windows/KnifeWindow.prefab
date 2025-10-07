@@ -528,7 +528,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Title
+  m_text: Knife.jpg
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ce01aa57be5ec024ca65cf9a5ab00824, type: 2}
   m_sharedMaterial: {fileID: 7562195619927703879, guid: ce01aa57be5ec024ca65cf9a5ab00824, type: 2}

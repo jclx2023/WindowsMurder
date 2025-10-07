@@ -12,7 +12,7 @@ public class KnifePropertiesWindow : MonoBehaviour
     [SerializeField] private GameObject detailsPanel;
 
     [Header("=== Details 首次查看对话配置 ===")]
-    [SerializeField] private string detailsDialogueBlockId = "knife_details_dialogue";
+    [SerializeField] private string detailsDialogueBlockId = "410";
     [SerializeField] private float dialogueDelay = 1f;
     [Tooltip("是否在打开对话时关闭窗口")]
     [SerializeField] private bool closeWindowOnDialogue = false;
