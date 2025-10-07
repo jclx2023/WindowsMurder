@@ -20,7 +20,7 @@ public enum SupportedLanguage
 public class LanguageManager : MonoBehaviour
 {
     [Header("配置设置")]
-    public string csvFilePath = "Assets/Localization/LocalizationTable.csv";
+    public string csvFileName = "Localization/LocalizationTable.csv"; // 相对于StreamingAssets的路径
     public SupportedLanguage currentLanguage = SupportedLanguage.Chinese;
 
     [Header("调试设置")]
@@ -88,11 +88,17 @@ public class LanguageManager : MonoBehaviour
     /// </summary>
     public void LoadTranslations()
     {
-        string fullPath = Path.Combine(Application.dataPath.Replace("Assets", ""), csvFilePath);
+        string fullPath = Path.Combine(Application.streamingAssetsPath, csvFileName);
+
+        if (enableDebugLog)
+        {
+            Debug.Log($"LanguageManager: 尝试加载翻译文件: {fullPath}");
+        }
 
         if (!File.Exists(fullPath))
         {
             Debug.LogError($"LanguageManager: 翻译文件不存在: {fullPath}");
+            Debug.LogError($"请确保文件位于: Assets/StreamingAssets/{csvFileName}");
             return;
         }
 

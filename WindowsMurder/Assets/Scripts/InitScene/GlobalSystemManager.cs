@@ -20,8 +20,8 @@ public class GlobalSystemManager : MonoBehaviour
     [Header("对话系统设置")]
     public float dialogueSpeed = 0.05f;           // 对话显示速度
 
-    [Header("多语言设置")]
-    public string csvFilePath = "Assets/Localization/LocalizationTable.csv";
+    [Header("语言系统设置")]
+    public string csvFileName = "Localization/LocalizationTable.csv";
     public SupportedLanguage defaultLanguage = SupportedLanguage.Chinese;
     public bool enableLanguageDebug = true;
 
@@ -103,9 +103,9 @@ public class GlobalSystemManager : MonoBehaviour
         {
             GameObject langManagerObj = new GameObject("LanguageManager");
             langManagerObj.transform.SetParent(transform);
-
             var langManager = langManagerObj.AddComponent<LanguageManager>();
-            langManager.csvFilePath = csvFilePath;
+
+            langManager.csvFileName = csvFileName;
             langManager.currentLanguage = defaultLanguage;
             langManager.enableDebugLog = enableLanguageDebug;
         }
@@ -113,7 +113,6 @@ public class GlobalSystemManager : MonoBehaviour
         // 监听语言切换事件
         LanguageManager.OnLanguageChanged += OnLanguageChanged;
         OnLanguageSystemReady?.Invoke();
-
         Debug.Log("语言系统初始化完成");
     }
 

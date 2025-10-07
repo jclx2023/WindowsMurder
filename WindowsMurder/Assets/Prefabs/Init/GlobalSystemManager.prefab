@@ -49,8 +49,9 @@ MonoBehaviour:
   musicVolume: 1
   isFullscreen: 1
   resolution: {x: 1920, y: 1080}
+  dialogueSpeed: 0.05
   csvFilePath: Assets/Localization/LocalizationTable.csv
-  defaultLanguage: 1
+  defaultLanguage: 0
   enableLanguageDebug: 1
   hasGameSave: 0
   currentGameProgress: 
