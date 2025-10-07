@@ -1,16 +1,22 @@
 using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 通用证物调查Action - 处理双击触发对话和生成窗口
-/// 适用于所有需要"对话-窗口"流程的证物icon
+/// 通用证物调查Action - 支持多线索解锁和右键菜单
+/// 适用于所有需要"对话-窗口-多线索-对话"流程的证物icon
 /// </summary>
 public class EvidenceIconAction : IconAction
 {
     [Header("=== 证物配置 ===")]
-    public string evidenceId = "recyclebin";
+    public string evidenceId = "knife";
 
-    public string clueId = "clue_recyclebin";
+    [Header("=== 线索配置 ===")]
+    [Tooltip("需要解锁的所有线索ID")]
+    public List<string> requiredClues = new List<string> { "clue_dark_red", "clue_bright_red" };
+
+    [Tooltip("是否需要所有线索（false=任意一个即可）")]
+    public bool requireAllClues = true;
 
     [Header("=== 对话块配置 ===")]
     public string beforeDialogueBlockId = "001";
@@ -18,6 +24,7 @@ public class EvidenceIconAction : IconAction
 
     [Header("=== 窗口配置 ===")]
     public GameObject windowPrefab;
+    public GameObject propertiesWindowPrefab; // 属性窗口预制体
     public Canvas targetCanvas;
 
     [Header("=== 功能选项 ===")]
@@ -27,12 +34,15 @@ public class EvidenceIconAction : IconAction
     [Header("=== 状态显示（运行时只读）===")]
     [SerializeField] private InvestigationState currentState = InvestigationState.NotInvestigated;
     [SerializeField] private bool isWaitingForDialogue = false;
-    [SerializeField] private bool isWaitingForClue = false;
+    [SerializeField] private bool isWaitingForClues = false;
+    [SerializeField] private List<string> unlockedCluesList = new List<string>();
 
     // 私有变量
     private string waitingForDialogueBlockId;
     private GameFlowController gameFlowController;
     private Canvas canvas;
+    private HashSet<string> unlockedClues = new HashSet<string>();
+    private InteractableIcon iconComponent;
 
     /// <summary>
     /// 调查状态枚举
@@ -42,12 +52,17 @@ public class EvidenceIconAction : IconAction
         NotInvestigated,
         PlayingBeforeDialogue,
         WindowOpen,
-        WaitingForClue,         // 窗口已打开，等待线索解锁
-        PlayingAfterDialogue,   // 线索已解锁，正在播放after对话
+        WaitingForClues,
+        PlayingAfterDialogue,
         Completed
     }
 
     #region Unity生命周期
+
+    void Awake()
+    {
+        iconComponent = GetComponent<InteractableIcon>();
+    }
 
     void Start()
     {
@@ -64,6 +79,9 @@ public class EvidenceIconAction : IconAction
         // 订阅线索解锁事件
         GameEvents.OnClueUnlocked += HandleClueUnlocked;
 
+        // 订阅右键菜单事件
+        InteractableIcon.OnContextMenuItemClicked += OnContextMenuItemClicked;
+
         DebugLog("已订阅事件");
     }
 
@@ -71,6 +89,8 @@ public class EvidenceIconAction : IconAction
     {
         DialogueUI.OnDialogueBlockEnded -= HandleDialogueEnded;
         GameEvents.OnClueUnlocked -= HandleClueUnlocked;
+        InteractableIcon.OnContextMenuItemClicked -= OnContextMenuItemClicked;
+
         DebugLog("已取消订阅事件");
     }
 
@@ -109,34 +129,45 @@ public class EvidenceIconAction : IconAction
 
         var completedBlocks = gameFlowController.GetCompletedBlocksSafe();
 
+        // 检查前置对话是否完成
         if (completedBlocks.Contains(beforeDialogueBlockId))
         {
+            // 检查后置对话是否完成
             if (completedBlocks.Contains(afterDialogueBlockId))
             {
                 currentState = InvestigationState.Completed;
                 DebugLog("从存档恢复状态：已完成");
+                return;
+            }
+
+            // 检查已解锁的线索
+            foreach (string clueId in requiredClues)
+            {
+                if (gameFlowController.HasClue(clueId))
+                {
+                    unlockedClues.Add(clueId);
+                    unlockedCluesList.Add(clueId);
+                }
+            }
+
+            // 判断是否所有线索都已解锁
+            if (AreAllCluesUnlocked())
+            {
+                currentState = InvestigationState.PlayingAfterDialogue;
+                DebugLog($"从存档恢复状态：所有线索已解锁 ({unlockedClues.Count}/{requiredClues.Count})");
             }
             else
             {
-                // 检查线索是否已解锁
-                if (gameFlowController.HasClue(clueId))
-                {
-                    currentState = InvestigationState.PlayingAfterDialogue;
-                    DebugLog("从存档恢复状态：线索已解锁");
-                }
-                else
-                {
-                    currentState = InvestigationState.WaitingForClue;
-                    isWaitingForClue = true;
-                    DebugLog("从存档恢复状态：等待线索解锁");
-                }
+                currentState = InvestigationState.WaitingForClues;
+                isWaitingForClues = true;
+                DebugLog($"从存档恢复状态：等待线索解锁 ({unlockedClues.Count}/{requiredClues.Count})");
             }
         }
     }
 
     #endregion
 
-    #region 交互执行
+    #region 双击交互
 
     public override void Execute()
     {
@@ -153,7 +184,7 @@ public class EvidenceIconAction : IconAction
                 break;
 
             case InvestigationState.WindowOpen:
-            case InvestigationState.WaitingForClue:
+            case InvestigationState.WaitingForClues:
             case InvestigationState.PlayingAfterDialogue:
             case InvestigationState.Completed:
                 if (allowReopenAfterComplete)
@@ -182,6 +213,57 @@ public class EvidenceIconAction : IconAction
         }
 
         return base.CanExecute();
+    }
+
+    #endregion
+
+    #region 右键菜单
+
+    /// <summary>
+    /// 右键菜单项点击事件处理
+    /// </summary>
+    private void OnContextMenuItemClicked(InteractableIcon icon, string itemId)
+    {
+        // 检查是否是本图标的事件
+        if (icon.gameObject != gameObject)
+        {
+            return;
+        }
+
+        DebugLog($"右键菜单点击: {itemId}");
+
+        switch (itemId)
+        {
+            case "properties":
+                ShowPropertiesWindow();
+                break;
+
+            case "open":
+                // 可选：右键也能打开
+                Execute();
+                break;
+
+            // 可以添加更多自定义菜单项
+            default:
+                DebugLog($"未处理的菜单项: {itemId}");
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 显示属性窗口
+    /// </summary>
+    private void ShowPropertiesWindow()
+    {
+        if (canvas == null)
+        {
+            canvas = targetCanvas != null ? targetCanvas : FindObjectOfType<Canvas>();
+        }
+
+        GameObject propertiesWindow = Instantiate(propertiesWindowPrefab, canvas.transform);
+        propertiesWindow.name = $"{evidenceId}_Properties";
+
+        DebugLog($"已生成属性窗口: {propertiesWindow.name}");
     }
 
     #endregion
@@ -252,19 +334,61 @@ public class EvidenceIconAction : IconAction
     #region 线索解锁处理
 
     /// <summary>
-    /// 处理线索解锁事件（核心逻辑：线索解锁后触发after对话）
+    /// 处理线索解锁事件（核心逻辑：所有线索解锁后触发after对话）
     /// </summary>
     private void HandleClueUnlocked(string unlockedClueId)
     {
-        // 只有当我们在等待这个线索时才处理
-        if (unlockedClueId == clueId && isWaitingForClue)
+        // 检查是否是我们需要的线索之一
+        if (!requiredClues.Contains(unlockedClueId))
         {
-            DebugLog($"监听到线索解锁: {clueId}，准备播放after对话");
+            return;
+        }
 
-            isWaitingForClue = false;
+        // 检查是否已经解锁过
+        if (unlockedClues.Contains(unlockedClueId))
+        {
+            DebugLog($"线索 [{unlockedClueId}] 已经解锁过，忽略");
+            return;
+        }
+
+        // 记录解锁的线索
+        unlockedClues.Add(unlockedClueId);
+        unlockedCluesList.Add(unlockedClueId);
+
+        DebugLog($"线索已解锁: {unlockedClueId} ({unlockedClues.Count}/{requiredClues.Count})");
+
+        // 检查是否所有线索都已解锁
+        if (isWaitingForClues && AreAllCluesUnlocked())
+        {
+            DebugLog("所有线索已集齐，准备播放after对话");
+            isWaitingForClues = false;
 
             // 触发after对话
             PlayAfterDialogue();
+        }
+    }
+
+    /// <summary>
+    /// 检查是否所有线索都已解锁
+    /// </summary>
+    private bool AreAllCluesUnlocked()
+    {
+        if (requireAllClues)
+        {
+            // 需要所有线索
+            foreach (string clueId in requiredClues)
+            {
+                if (!unlockedClues.Contains(clueId))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        else
+        {
+            // 只需要任意一个线索
+            return unlockedClues.Count > 0;
         }
     }
 
@@ -274,19 +398,23 @@ public class EvidenceIconAction : IconAction
 
     private void CreateWindow()
     {
+        if (canvas == null)
+        {
+            canvas = targetCanvas != null ? targetCanvas : FindObjectOfType<Canvas>();
+        }
         GameObject windowObj = Instantiate(windowPrefab, canvas.transform);
         windowObj.name = $"{evidenceId}_Window";
 
-        currentState = InvestigationState.WaitingForClue;
-        isWaitingForClue = true;
+        currentState = InvestigationState.WaitingForClues;
+        isWaitingForClues = true;
 
-        DebugLog($"已创建窗口: {windowObj.name}，等待线索解锁");
+        DebugLog($"已创建窗口: {windowObj.name}，等待线索解锁 (需要 {requiredClues.Count} 个)");
     }
 
     #endregion
 
-    #region 调试工具
 
+    #region 调试工具
     private void DebugLog(string message)
     {
         if (enableDebugLog)

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5563284699628820557}
   - component: {fileID: 2856092726994867930}
   - component: {fileID: 2146909176833218241}
+  - component: {fileID: 5324819089761773934}
   m_Layer: 5
   m_Name: KnifeWindow
   m_TagString: Untagged
@@ -98,6 +99,38 @@ MonoBehaviour:
   titleText: {fileID: 7419636587673675971}
   iconImage: {fileID: 1765961150907697500}
   closeButton: {fileID: 1186946495856775318}
+--- !u!114 &5324819089761773934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1184795904303463867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eda55e39674eb94193cdd0b32ca160d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  evidenceId: blood_evidence
+  targetColors:
+  - colorId: knife
+    targetColor: {r: 0.5294118, g: 0.098039225, b: 0.054901965, a: 0}
+    tolerance: 0.05
+    dialogueBlockId: 400
+    description: 
+  - colorId: recycle
+    targetColor: {r: 0.94117653, g: 0.07450981, b: 0.19215688, a: 0}
+    tolerance: 0.05
+    dialogueBlockId: 401
+    description: 
+  completionDialogueId: 402
+  unlockedClueId: fake_blood
+  requireAllColors: 1
+  gameFlowController: {fileID: 0}
+  pickedColorIdsList: []
+  isCompleted: 0
+  pickAttempts: 0
+  debugMode: 1
 --- !u!1 &1222533489556294005
 GameObject:
   m_ObjectHideFlags: 0
