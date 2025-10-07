@@ -5271,10 +5271,17 @@ MonoBehaviour:
       requiredClues: []
       requiredDialogueBlocks: []
       unlocksClues: []
+    - dialogueBlockFileId: 410
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues:
+      - knife_stat
     requiredCluesForProgress:
     - clue_recyclebin
-    - clue_knife
+    - fake_blood
     - clue_goodbye
+    - knife_stat
     requiredDialogueBlocksForProgress:
     - 004
     - 005

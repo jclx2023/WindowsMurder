@@ -3574,12 +3574,12 @@ MonoBehaviour:
   evidenceId: knife
   requiredClues:
   - fake_blood
-  - knife_stats
+  - knife_stat
   requireAllClues: 1
   beforeDialogueBlockId: 0052
   afterDialogueBlockId: 008
   windowPrefab: {fileID: 1184795904303463867, guid: 7d9925433b6fffc4d8018533fd133649, type: 3}
-  propertiesWindowPrefab: {fileID: 0}
+  propertiesWindowPrefab: {fileID: 6899630851292337129, guid: c317368143356bf4dbf76c65d9b86487, type: 3}
   targetCanvas: {fileID: 0}
   allowReopenAfterComplete: 1
   enableDebugLog: 1

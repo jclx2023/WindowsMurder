@@ -111,7 +111,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6eda55e39674eb94193cdd0b32ca160d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  evidenceId: blood_evidence
   targetColors:
   - colorId: knife
     targetColor: {r: 0.5294118, g: 0.098039225, b: 0.054901965, a: 0}
@@ -341,10 +340,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eyedropperButton: {fileID: 1659599700512324991}
   buttonIcon: {fileID: 5232086231701720042}
-  eyedropperCursor: {fileID: 0}
+  eyedropperCursor: {fileID: 2800000, guid: b09c3c8ef99e3244698caa1a3fdbc5bb, type: 3}
   cursorHotspot: {x: 0, y: 32}
   colorPreviewImage: {fileID: 6781219026235360766}
-  previewOffset: {x: 30, y: 30}
+  previewOffset: {x: 15, y: 15}
   updateInterval: 1
   debugMode: 1
   OnColorPicked:

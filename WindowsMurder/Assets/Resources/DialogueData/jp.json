@@ -322,7 +322,7 @@
                     "id": "1",
                     "mode": true,
                     "characterId": "me",
-                    "text": "血の色が一致していない。",
+                    "text": "このナイフには怪しい点が多いけど、ゴミ箱が自殺に使ったものには見えない。",
                     "portraitId": "default"
                 },
                 {
@@ -700,6 +700,61 @@
                     "mode": true,
                     "characterId": "notepad",
                     "text": "ん？他のファイルを調べてるの？あの『goodbye』、なんだか変なんだよね。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "400",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "ナイフの血の色は #87190E。次は遺体を確認しよう。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "401",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "遺体の血の色は #F01331。もう一度ナイフと比べてみて。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "402",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "血の色が一致しない……このナイフ、偽物かもしれない。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "410",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "",
                     "portraitId": "default"
                 }
             ]

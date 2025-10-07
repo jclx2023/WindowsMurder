@@ -322,7 +322,7 @@
                     "id": "1",
                     "mode": true,
                     "characterId": "me",
-                    "text": "The blood colors don’t match.",
+                    "text": "This knife is full of suspicious details, but it doesn’t look like something the Recycle Bin would use to kill itself.",
                     "portraitId": "default"
                 },
                 {
@@ -700,6 +700,61 @@
                     "mode": true,
                     "characterId": "notepad",
                     "text": "Hmm? Looking at other files? That ‘goodbye’ one feels off to me…",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "400",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "The blood on the knife is #87190E. Let’s check the body next.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "401",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "The blood on the body is #F01331. Now, compare it with the knife again.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "402",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "The colors don’t match—the knife might be a fake.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "410",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "",
                     "portraitId": "default"
                 }
             ]

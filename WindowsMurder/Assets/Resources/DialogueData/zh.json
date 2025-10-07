@@ -322,7 +322,7 @@
                     "id": "1",
                     "mode": true,
                     "characterId": "me",
-                    "text": "血的颜色对不上。",
+                    "text": "这把刀疑点重重，但看起来不像是回收站用来自杀的工具。",
                     "portraitId": "default"
                 },
                 {
@@ -700,6 +700,61 @@
                     "mode": true,
                     "characterId": "notepad",
                     "text": "嗯？你在看别的文件？那份‘告别’我总觉得怪怪的……",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "400",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "刀上血的颜色是#87190E，再去看看尸体上吧。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "401",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "尸体上血的颜色是#F01331，再去看看刀上吧。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "402",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "这两处血迹颜色不一致，这把刀可能是伪造的？",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "410",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "文件的EXIF…可能会有有用的信息呢",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "这里的创作者显示是Adobe PhotoshopCS2?",
                     "portraitId": "default"
                 }
             ]
