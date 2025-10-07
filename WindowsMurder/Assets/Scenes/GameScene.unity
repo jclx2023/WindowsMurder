@@ -5277,6 +5277,21 @@ MonoBehaviour:
       requiredDialogueBlocks: []
       unlocksClues:
       - knife_stat
+    - dialogueBlockFileId: 400
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 401
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 402
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
     requiredCluesForProgress:
     - clue_recyclebin
     - fake_blood
