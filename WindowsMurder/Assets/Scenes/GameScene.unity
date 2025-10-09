@@ -366,12 +366,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 55954843}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d428335f04a74d04eb3ba23c32fa022d, type: 3}
+  m_Script: {fileID: 11500000, guid: ab3b4ffc6bc0fc14ca369aa392dc36a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  blockId: 922
+  preDialogueBlockId: 5061
+  mainDialogueBlockId: 5063
+  postDialogueBlockId: 
+  requiredClues: []
+  requiredDialogueBlocks: []
+  currentStage: 0
+  debugMode: 1
 --- !u!1001 &56045095
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1371,12 +1377,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 495350481}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d428335f04a74d04eb3ba23c32fa022d, type: 3}
+  m_Script: {fileID: 11500000, guid: ab3b4ffc6bc0fc14ca369aa392dc36a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  blockId: 918
+  preDialogueBlockId: 
+  mainDialogueBlockId: 503
+  postDialogueBlockId: 
+  requiredClues: []
+  requiredDialogueBlocks: []
+  currentStage: 0
+  debugMode: 1
 --- !u!1001 &525697589
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1524,12 +1536,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 525697591}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d428335f04a74d04eb3ba23c32fa022d, type: 3}
+  m_Script: {fileID: 11500000, guid: ab3b4ffc6bc0fc14ca369aa392dc36a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  blockId: 921
+  preDialogueBlockId: 
+  mainDialogueBlockId: 507
+  postDialogueBlockId: 
+  requiredClues: []
+  requiredDialogueBlocks: []
+  currentStage: 0
+  debugMode: 1
 --- !u!1001 &548591524
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1952,12 +1970,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 609698347}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d428335f04a74d04eb3ba23c32fa022d, type: 3}
+  m_Script: {fileID: 11500000, guid: ab3b4ffc6bc0fc14ca369aa392dc36a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  blockId: 923
+  preDialogueBlockId: 
+  mainDialogueBlockId: 509
+  postDialogueBlockId: 
+  requiredClues: []
+  requiredDialogueBlocks: []
+  currentStage: 0
+  debugMode: 1
 --- !u!1 &667150922
 GameObject:
   m_ObjectHideFlags: 0
@@ -2244,12 +2268,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 776602045}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d428335f04a74d04eb3ba23c32fa022d, type: 3}
+  m_Script: {fileID: 11500000, guid: ab3b4ffc6bc0fc14ca369aa392dc36a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  blockId: 920
+  preDialogueBlockId: 
+  mainDialogueBlockId: 505
+  postDialogueBlockId: 
+  requiredClues: []
+  requiredDialogueBlocks: []
+  currentStage: 0
+  debugMode: 1
 --- !u!1001 &779161440
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2397,12 +2427,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 779161442}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d428335f04a74d04eb3ba23c32fa022d, type: 3}
+  m_Script: {fileID: 11500000, guid: ab3b4ffc6bc0fc14ca369aa392dc36a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  blockId: 917
+  preDialogueBlockId: 
+  mainDialogueBlockId: 502
+  postDialogueBlockId: 
+  requiredClues: []
+  requiredDialogueBlocks: []
+  currentStage: 0
+  debugMode: 1
 --- !u!1 &788336493
 GameObject:
   m_ObjectHideFlags: 0
@@ -2613,12 +2649,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 806504531}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d428335f04a74d04eb3ba23c32fa022d, type: 3}
+  m_Script: {fileID: 11500000, guid: ab3b4ffc6bc0fc14ca369aa392dc36a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  blockId: 919
+  preDialogueBlockId: 
+  mainDialogueBlockId: 504
+  postDialogueBlockId: 
+  requiredClues: []
+  requiredDialogueBlocks: []
+  currentStage: 0
+  debugMode: 1
 --- !u!1001 &932806536
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4019,12 +4061,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1346933966}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d428335f04a74d04eb3ba23c32fa022d, type: 3}
+  m_Script: {fileID: 11500000, guid: ab3b4ffc6bc0fc14ca369aa392dc36a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  blockId: 501
+  preDialogueBlockId: 
+  mainDialogueBlockId: 501
+  postDialogueBlockId: 
+  requiredClues: []
+  requiredDialogueBlocks: []
+  currentStage: 0
+  debugMode: 1
 --- !u!1 &1372227482
 GameObject:
   m_ObjectHideFlags: 0
@@ -5202,12 +5250,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1560176001}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d428335f04a74d04eb3ba23c32fa022d, type: 3}
+  m_Script: {fileID: 11500000, guid: ab3b4ffc6bc0fc14ca369aa392dc36a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  blockId: 908
+  preDialogueBlockId: 
+  mainDialogueBlockId: 508
+  postDialogueBlockId: 
+  requiredClues: []
+  requiredDialogueBlocks: []
+  currentStage: 0
+  debugMode: 1
 --- !u!1 &1562087815
 GameObject:
   m_ObjectHideFlags: 0
@@ -5882,12 +5936,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1877600966}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d428335f04a74d04eb3ba23c32fa022d, type: 3}
+  m_Script: {fileID: 11500000, guid: e7401842991483a40925e8521827c26d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  blockId: 001
+  introDialogueBlockId: 011
+  minesweeperPrefab: {fileID: 685683030093146904, guid: 9799eceda8381c448a4142c53f2ab148, type: 3}
+  spawnParent: {fileID: 694037108}
+  hasPlayedIntro: 0
 --- !u!1 &1909598887
 GameObject:
   m_ObjectHideFlags: 0
