@@ -291,7 +291,7 @@
                     "id": "1",
                     "mode": true,
                     "characterId": "me",
-                    "text": "これが……遺書なのか？あまりにも短すぎる。",
+                    "text": "この遺書も、なんだか怪しいね。",
                     "portraitId": "default"
                 }
             ]
@@ -303,7 +303,7 @@
                     "id": "1",
                     "mode": true,
                     "characterId": "me",
-                    "text": "アイコンはごみ箱に見えるけど……拡張子が .exe？",
+                    "text": "アイコンはごみ箱に見えるけど……",
                     "portraitId": "default"
                 },
                 {
@@ -755,6 +755,93 @@
                     "mode": true,
                     "characterId": "me",
                     "text": "作成者は Adobe Photoshop CS2 と表示されている？",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "011",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（あれ、マインスイーパーまでデスクトップに来たの？）",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "こんにちは、私はごみ箱事件を調査しています。何か情報を提供してもらえますか？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "mines",
+                    "text": "（緊張して小声で）しーっ……踏まないで！ここは地雷だらけなんだ！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "……え？ちょっと質問したいだけなんだけど。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "mines",
+                    "text": "（地面を見つめながら）このマスは安全……あっちのマスは？あっ、違う違う、絶対クリックしないで！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "……じゃあ、何か怪しいものは見ていないんだね？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "mines",
+                    "text": "（突然びくっとして）ドーン！ああ、びっくりした……自分で驚いただけだ。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "……ありがとう、他の人にも聞いてみるよ。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "9",
+                    "mode": true,
+                    "characterId": "mines",
+                    "text": "足元に気をつけて、爆発させないでね！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "10",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（なんて神経質なやつだ……）",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "420",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "ファイルサイズ、おかしくない？",
                     "portraitId": "default"
                 }
             ]

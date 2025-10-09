@@ -3088,12 +3088,36 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8973463780565502190, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
+      propertyPath: contextMenuItems.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973463780565502190, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: contextMenuItems.Array.data[0].itemId
+      value: properties
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973463780565502190, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
+      propertyPath: contextMenuItems.Array.data[1].itemId
       value: open
       objectReference: {fileID: 0}
     - target: {fileID: 8973463780565502190, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: contextMenuItems.Array.data[0].itemName
+      value: 2020
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973463780565502190, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
+      propertyPath: contextMenuItems.Array.data[1].itemName
       value: 2021
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973463780565502190, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
+      propertyPath: contextMenuItems.Array.data[0].isEnabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973463780565502190, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
+      propertyPath: contextMenuItems.Array.data[1].isEnabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973463780565502190, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
+      propertyPath: contextMenuItems.Array.data[1].useLocalizationKey
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3151,13 +3175,12 @@ MonoBehaviour:
   isEnabled: 1
   evidenceId: recyclebin
   requiredClues:
-  - clue_dark_red
-  - clue_bright_red
+  - recycle_stat
   requireAllClues: 1
   beforeDialogueBlockId: 0051
   afterDialogueBlockId: 007
   windowPrefab: {fileID: 7884548954017114481, guid: 1855663398ef3dd4e810d23e6c1b0965, type: 3}
-  propertiesWindowPrefab: {fileID: 0}
+  propertiesWindowPrefab: {fileID: 8365875696200223795, guid: 4d767dab7fe6b5f4eb67c5b6f3bc50be, type: 3}
   targetCanvas: {fileID: 0}
   allowReopenAfterComplete: 1
   enableDebugLog: 1
@@ -4974,6 +4997,7 @@ MonoBehaviour:
   evidenceId: goodbye
   requiredClues:
   - fake_goodbye
+  - goodbye_read
   requireAllClues: 1
   beforeDialogueBlockId: 0053
   afterDialogueBlockId: 006

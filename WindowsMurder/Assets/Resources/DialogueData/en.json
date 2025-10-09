@@ -291,7 +291,7 @@
                     "id": "1",
                     "mode": true,
                     "characterId": "me",
-                    "text": "Is this… his farewell note? It’s awfully short.",
+                    "text": "This farewell letter seems suspicious too.",
                     "portraitId": "default"
                 }
             ]
@@ -303,7 +303,7 @@
                     "id": "1",
                     "mode": true,
                     "characterId": "me",
-                    "text": "This icon looks like Recycle Bin, but… the extension is .exe?",
+                    "text": "This icon looks like Recycle Bin, but…",
                     "portraitId": "default"
                 },
                 {
@@ -755,6 +755,93 @@
                     "mode": true,
                     "characterId": "me",
                     "text": "It says the creator is Adobe Photoshop CS2?",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "011",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(Huh, Minesweeper is on the desktop too?)",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Hello, I’m investigating the Recycle Bin case. Can you provide any information?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "mines",
+                    "text": "(Nervously whispering) Shh—don’t step carelessly! There are mines everywhere!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "...Uh? I just wanted to ask a few questions.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "mines",
+                    "text": "(Staring at the ground) This tile is safe... that one? Ah, no no, don’t click that!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "...So you didn’t see anything suspicious?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "mines",
+                    "text": "(Suddenly startled) Boom—! Ah, false alarm... I scared myself.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "...Thank you, I’ll go ask someone else then.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "9",
+                    "mode": true,
+                    "characterId": "mines",
+                    "text": "Watch your step, don’t set me off!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "10",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(What a nervous guy...)",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "420",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Is the file size wrong?",
                     "portraitId": "default"
                 }
             ]

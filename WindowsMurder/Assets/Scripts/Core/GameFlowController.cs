@@ -369,6 +369,7 @@ public class GameFlowController : MonoBehaviour
 
         // 触发自动存档
         OnAutoSaveRequested?.Invoke();
+        GameEvents.NotifyDialogueBlockCompleted(dialogueBlockFileId);
     }
 
     /// <summary>
@@ -443,7 +444,13 @@ public class GameFlowController : MonoBehaviour
     #endregion
 
     #region 条件检查
-
+    /// <summary>
+    /// 检查当前Stage是否满足进度条件（公开接口）
+    /// </summary>
+    public bool IsStageProgressConditionMet()
+    {
+        return CheckStageProgressCondition();
+    }
     /// <summary>
     /// 检查Stage进度条件
     /// </summary>
@@ -481,43 +488,43 @@ public class GameFlowController : MonoBehaviour
     #endregion
 
     #region 公共接口
+    public void UnlockClueDelayed(string clueId, float delaySeconds)
+    {
+        LogDebug($"收到延迟解锁请求 - 线索: {clueId}, 延迟: {delaySeconds}秒");
+        StartCoroutine(DelayedUnlockCoroutine(clueId, delaySeconds));
+    }
 
-    /// <summary>
-    /// 提供外部安全访问 Stage 配置
-    /// </summary>
+    private System.Collections.IEnumerator DelayedUnlockCoroutine(string clueId, float delaySeconds)
+    {
+        // 等待指定时间
+        yield return new WaitForSeconds(delaySeconds);
+
+        // 执行解锁
+        UnlockClue(clueId);
+
+        LogDebug($"延迟解锁完成 - 线索: {clueId}");
+    }
     public IReadOnlyList<StageConfig> GetStageConfigsSafe()
     {
         return stageConfigs.AsReadOnly();
     }
 
-    /// <summary>
-    /// 提供当前 StageId
-    /// </summary>
     public string GetCurrentStageIdSafe()
     {
         return currentStageId;
     }
 
-    /// <summary>
-    /// 提供已完成的对话块列表
-    /// </summary>
     public IReadOnlyList<string> GetCompletedBlocksSafe()
     {
         return completedDialogueBlocks.AsReadOnly();
     }
 
-    /// <summary>
-    /// 【新增】缓存窗口转换数据
-    /// </summary>
     public void CacheWindowTransition(WindowTransitionData data)
     {
         cachedWindowTransition = data;
         LogDebug($"缓存窗口转换数据 - 位置: {data.windowPosition}");
     }
 
-    /// <summary>
-    /// 消费窗口转换数据（一次性）
-    /// </summary>
     public WindowTransitionData? ConsumeWindowTransition()
     {
         var data = cachedWindowTransition;

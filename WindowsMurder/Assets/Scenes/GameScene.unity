@@ -4520,6 +4520,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flowController: {fileID: 1959642072}
+  dialogueManager: {fileID: 1233270435}
   desktopIcons:
   - {fileID: 1441130485}
   - {fileID: 1675363293}
@@ -4530,7 +4531,10 @@ MonoBehaviour:
   - {fileID: 56045097}
   - {fileID: 993295738}
   targetPathId: DFilesWorks
-  dialogueBlockId: 004
+  dialogueBlock004: 004
+  dialogueBlock005: 005
+  dialogueBlock009: 009
+  nextStageId: Stage4_Desktop
   debugMode: 1
 --- !u!1 &1918228042
 GameObject:
@@ -4914,10 +4918,11 @@ MonoBehaviour:
       unlocksClues:
       - fake_goodbye
     requiredCluesForProgress:
-    - clue_recyclebin
+    - recycle_stat
     - fake_blood
-    - clue_goodbye
+    - fake_goodbye
     - knife_stat
+    - goodbye_read
     requiredDialogueBlocksForProgress:
     - 004
     - 005

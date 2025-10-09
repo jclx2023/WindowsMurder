@@ -291,7 +291,7 @@
                     "id": "1",
                     "mode": true,
                     "characterId": "me",
-                    "text": "这是他的遗书吗。也太简短了些",
+                    "text": "感觉这封遗书也很可疑",
                     "portraitId": "default"
                 }
             ]
@@ -303,7 +303,7 @@
                     "id": "1",
                     "mode": true,
                     "characterId": "me",
-                    "text": "这图标像回收站，但……扩展名是 .exe？",
+                    "text": "这图标像回收站，但……",
                     "portraitId": "default"
                 },
                 {
@@ -755,6 +755,93 @@
                     "mode": true,
                     "characterId": "me",
                     "text": "这里的创作者显示是Adobe PhotoshopCS2?",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "011",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（咦，扫雷也来桌面上了？）",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "你好，我正在调查回收站的案子，你能提供什么信息吗？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "mines",
+                    "text": "（紧张地低声）嘘——别乱踩！这里到处都是雷！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "……呃？我只是想问几个问题。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "mines",
+                    "text": "（盯着地面）这一格安全……那一格？啊，不对不对，千万别点！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "……所以你没看到什么可疑的？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "mines",
+                    "text": "（突然一惊）砰——！啊，虚惊一场，是我自己吓自己……",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "……谢谢你，那我去问别人吧。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "9",
+                    "mode": true,
+                    "characterId": "mines",
+                    "text": "小心脚下，别引爆我！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "10",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（真是个神经兮兮的家伙……）",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "420",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "这里的文件大小是出错了吗？",
                     "portraitId": "default"
                 }
             ]

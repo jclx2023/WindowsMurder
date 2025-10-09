@@ -5131,7 +5131,7 @@ MonoBehaviour:
   detailsPanel: {fileID: 5775228112233213785}
   detailsDialogueBlockId: 410
   dialogueDelay: 1
-  closeWindowOnDialogue: 0
+  closeWindowOnDialogue: 1
   generalTabButton: {fileID: 7375839577333759011}
   detailsTabButton: {fileID: 1752782217155968426}
   okButton: {fileID: 4159272155820949213}

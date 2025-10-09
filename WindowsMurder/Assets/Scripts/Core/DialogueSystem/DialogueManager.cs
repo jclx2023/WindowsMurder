@@ -249,7 +249,10 @@ public class DialogueManager : MonoBehaviour
             gameFlow.OnDialogueBlockComplete(blockId);
         }
     }
-
+    public bool IsDialogueActive()
+    {
+        return !string.IsNullOrEmpty(currentDialogueBlockId);
+    }
     /// <summary>
     /// 清除角色对话历史
     /// </summary>

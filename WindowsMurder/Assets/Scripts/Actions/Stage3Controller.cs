@@ -1,72 +1,68 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 /// <summary>
-/// Stage3流程控制器 - 管理Stage3的所有流程逻辑
+/// Stage3流程控制器
 /// </summary>
 public class Stage3Controller : MonoBehaviour
 {
+    private enum Stage3Phase
+    {
+        InitialDialogue,        // 004播放中
+        WaitingForExploration,  // 等待单击触发005
+        ExplorationDialogue,    // 005播放中
+        Exploring,              // 探索阶段
+        WaitingForFinale,       // 等待单击触发009
+        FinaleDialogue,         // 009播放中
+    }
+
     [Header("组件引用")]
     [SerializeField] private GameFlowController flowController;
+    [SerializeField] private DialogueManager dialogueManager;
 
     [Header("桌面Icons")]
-    [SerializeField] private List<GameObject> desktopIcons = new List<GameObject>();  // 桌面上的所有图标
+    [SerializeField] private List<GameObject> desktopIcons;
 
     [Header("流程配置")]
-    [SerializeField] private string targetPathId = "DFilesWorks";  // 目标导航路径
-    [SerializeField] private string dialogueBlockId = "004";       // 要触发的对话块
+    [SerializeField] private string targetPathId = "DFilesWorks";
+    [SerializeField] private string dialogueBlock004 = "004";
+    [SerializeField] private string dialogueBlock005 = "005";
+    [SerializeField] private string dialogueBlock009 = "009";
+    [SerializeField] private string nextStageId = "Stage4_Desktop";
 
     [Header("调试")]
     [SerializeField] private bool debugMode = true;
 
-    // 私有变量
     private ExplorerManager explorerManager;
-    private GameObject ieIconInExplorer;  // 运行时获取
-    private List<GameObject> explorerIcons;  // 运行时获取
+    private GameObject ieIconInExplorer;
+    private List<GameObject> explorerIcons;
+    private Stage3Phase currentPhase = Stage3Phase.InitialDialogue;
+    private bool mouseListeningEnabled = false;
     private bool flowStarted = false;
-    private bool eventSubscribed = false;  // 防止重复订阅
-
-    #region Unity生命周期
-
-    void Awake()
-    {
-        // 查找GameFlowController
-        if (flowController == null)
-        {
-            flowController = FindObjectOfType<GameFlowController>();
-            if (flowController == null)
-            {
-                LogError("未找到GameFlowController！");
-            }
-        }
-    }
 
     void OnEnable()
     {
-        // 订阅对话行事件
-        if (!eventSubscribed)
-        {
-            DialogueUI.OnLineStarted += OnDialogueLineStarted;
-            eventSubscribed = true;
-            LogDebug("已订阅对话行事件");
-        }
+        DialogueUI.OnLineStarted += OnDialogueLineStarted;
+        GameEvents.OnDialogueBlockCompleted += OnDialogueBlockCompleted;
+        flowController.OnClueUnlocked.AddListener(OnAnyClueUnlocked);
     }
 
     void OnDisable()
     {
-        // 取消事件订阅
-        if (eventSubscribed)
-        {
-            DialogueUI.OnLineStarted -= OnDialogueLineStarted;
-            eventSubscribed = false;
-            LogDebug("已取消订阅对话行事件");
-        }
+        DialogueUI.OnLineStarted -= OnDialogueLineStarted;
+        GameEvents.OnDialogueBlockCompleted -= OnDialogueBlockCompleted;
+        flowController.OnClueUnlocked.RemoveListener(OnAnyClueUnlocked);
     }
 
-    #endregion
-
-    #region 公共接口
+    void Update()
+    {
+        if (mouseListeningEnabled && Input.GetMouseButtonDown(0))
+        {
+            OnMouseClicked();
+        }
+    }
 
     /// <summary>
     /// 设置Explorer引用（由Initializer调用）
@@ -74,15 +70,10 @@ public class Stage3Controller : MonoBehaviour
     public void SetExplorerReference(ExplorerManager explorer)
     {
         explorerManager = explorer;
+        ExplorerIconGetter iconGetter = explorerManager.GetComponent<ExplorerIconGetter>();
+        ieIconInExplorer = iconGetter.GetIEIcon();
+        explorerIcons = iconGetter.GetProgramIcons();
 
-        // 获取Explorer中的icons引用
-        if (!GetExplorerIcons())
-        {
-            LogError("无法获取Explorer中的icons引用！");
-            return;
-        }
-
-        // 开始Stage3流程
         if (!flowStarted)
         {
             StartCoroutine(StartStage3Flow());
@@ -90,189 +81,90 @@ public class Stage3Controller : MonoBehaviour
         }
     }
 
-    #endregion
-
-    #region Explorer Icons获取
-
-    /// <summary>
-    /// 从ExplorerIconGetter获取icons引用
-    /// </summary>
-    private bool GetExplorerIcons()
-    {
-        // 查找ExplorerIconGetter组件
-        ExplorerIconGetter iconGetter = explorerManager.GetComponent<ExplorerIconGetter>();
-
-        // 获取icons引用
-        ieIconInExplorer = iconGetter.GetIEIcon();
-        explorerIcons = iconGetter.GetProgramIcons();
-        return true;
-    }
-
-    #endregion
-
-    #region Stage3流程
-
-    /// <summary>
-    /// 启动Stage3流程
-    /// </summary>
     private IEnumerator StartStage3Flow()
     {
-        LogDebug("开始Stage3流程");
-
-        // 等待2帧，确保ExplorerManager完成初始化
         yield return null;
         yield return null;
 
-        // 导航到Works文件夹
-        bool navigationSuccess = NavigateToWorksFolder();
+        explorerManager.NavigateToPath(targetPathId);
+        flowController.StartDialogueBlock(dialogueBlock004);
 
-        if (navigationSuccess)
-        {
-            LogDebug("导航成功，触发对话块");
-            // 触发对话块004
-            flowController.StartDialogueBlock(dialogueBlockId);
-        }
-        else
-        {
-            LogError("导航失败！无法触发对话块");
-        }
+        if (debugMode) Debug.Log("[Stage3] 开始初始对话004");
     }
 
-    /// <summary>
-    /// 导航到Works文件夹
-    /// </summary>
-    private bool NavigateToWorksFolder()
+    private void SwitchPhase(Stage3Phase newPhase)
     {
-        if (explorerManager == null)
+        currentPhase = newPhase;
+
+        switch (newPhase)
         {
-            LogError("ExplorerManager引用为空，无法导航");
-            return false;
+            case Stage3Phase.WaitingForExploration:
+            case Stage3Phase.WaitingForFinale:
+                mouseListeningEnabled = true;
+                break;
+            default:
+                mouseListeningEnabled = false;
+                break;
         }
 
-        LogDebug($"尝试导航到: {targetPathId}");
-        bool success = explorerManager.NavigateToPath(targetPathId);
-
-        if (success)
-        {
-            LogDebug($"成功导航到: {targetPathId}");
-        }
-        else
-        {
-            LogError($"导航到 {targetPathId} 失败");
-        }
-
-        return success;
+        if (debugMode) Debug.Log($"[Stage3] 阶段切换: {newPhase}");
     }
 
-    #endregion
-
-    #region 对话事件处理
-
-    /// <summary>
-    /// 对话行开始事件处理
-    /// </summary>
     private void OnDialogueLineStarted(string lineId, string characterId, string blockId, bool isPresetMode)
     {
-        // 只处理对话块004的事件
-        if (blockId != dialogueBlockId)
-        {
-            return;
-        }
+        if (blockId != dialogueBlock004) return;
 
-        // lineId == 11: IE出现
         if (lineId == "11")
-        {
-            ShowIEIcon();
-        }
-        // lineId == 13: 程序返回桌面
-        else if (lineId == "13")
-        {
-            ProgramsReturnToDesktop();
-        }
-    }
-
-    /// <summary>
-    /// 显示IE图标
-    /// </summary>
-    private void ShowIEIcon()
-    {
-        if (ieIconInExplorer != null)
         {
             ieIconInExplorer.SetActive(true);
         }
-    }
-
-    /// <summary>
-    /// 程序返回桌面
-    /// </summary>
-    private void ProgramsReturnToDesktop()
-    {
-        LogDebug("程序返回桌面：隐藏Explorer icons，显示桌面icons");
-
-        // 隐藏Explorer中的所有程序icons
-        HideExplorerIcons();
-
-        // 显示桌面上的所有icons
-        ShowDesktopIcons();
-    }
-
-    /// <summary>
-    /// 隐藏Explorer中的所有程序icons
-    /// </summary>
-    private void HideExplorerIcons()
-    {
-        // 隐藏IE
-        if (ieIconInExplorer != null)
+        else if (lineId == "13")
         {
             ieIconInExplorer.SetActive(false);
-        }
-
-        // 隐藏其他程序
-        if (explorerIcons != null)
-        {
-            foreach (var icon in explorerIcons)
-            {
-                if (icon != null)
-                {
-                    icon.SetActive(false);
-                }
-            }
+            foreach (var icon in explorerIcons) icon.SetActive(false);
+            foreach (var icon in desktopIcons) icon.SetActive(true);
         }
     }
 
-    /// <summary>
-    /// 显示桌面上的所有icons
-    /// </summary>
-    private void ShowDesktopIcons()
+    private void OnDialogueBlockCompleted(string blockId)
     {
-        if (desktopIcons != null)
+        if (blockId == dialogueBlock004 && currentPhase == Stage3Phase.InitialDialogue)
         {
-            foreach (var icon in desktopIcons)
-            {
-                if (icon != null)
-                {
-                    icon.SetActive(true);
-                }
-            }
+            SwitchPhase(Stage3Phase.WaitingForExploration);
+        }
+        else if (blockId == dialogueBlock005 && currentPhase == Stage3Phase.ExplorationDialogue)
+        {
+            SwitchPhase(Stage3Phase.Exploring);
+        }
+        else if (blockId == dialogueBlock009 && currentPhase == Stage3Phase.FinaleDialogue)
+        {
+            flowController.LoadStage(nextStageId);
         }
     }
 
-    #endregion
-
-    #region 调试工具
-
-    private void LogDebug(string message)
+    private void OnAnyClueUnlocked(string clueId)
     {
-        if (debugMode)
+        if (currentPhase != Stage3Phase.Exploring) return;
+
+        if (flowController.IsStageProgressConditionMet() && !dialogueManager.IsDialogueActive())
         {
-            Debug.Log($"[Stage3Controller] {message}");
+            SwitchPhase(Stage3Phase.WaitingForFinale);
         }
     }
 
-    private void LogError(string message)
+    private void OnMouseClicked()
     {
-        Debug.LogError($"[Stage3Controller] {message}");
-    }
+        mouseListeningEnabled = false;
 
-    #endregion
+        if (currentPhase == Stage3Phase.WaitingForExploration)
+        {
+            SwitchPhase(Stage3Phase.ExplorationDialogue);
+            flowController.StartDialogueBlock(dialogueBlock005);
+        }
+        else if (currentPhase == Stage3Phase.WaitingForFinale)
+        {
+            SwitchPhase(Stage3Phase.FinaleDialogue);
+            flowController.StartDialogueBlock(dialogueBlock009);
+        }
+    }
 }

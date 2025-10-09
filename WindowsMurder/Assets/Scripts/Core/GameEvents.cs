@@ -19,6 +19,13 @@ public static class GameEvents
     public static event Action<string> OnStageChanged;
 
     /// <summary>
+    /// 通知对话块完成
+    /// </summary>
+    public static void NotifyDialogueBlockCompleted(string blockId)
+    {
+        OnDialogueBlockCompleted?.Invoke(blockId);
+    }
+    /// <summary>
     /// 请求解锁线索（任何地方都可以调用）
     /// </summary>
     public static void RequestUnlockClue(string clueId)
