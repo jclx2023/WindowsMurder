@@ -101,11 +101,6 @@ public class DialogueManager : MonoBehaviour
 
         // 使用新的 DialogueLoader 加载对话数据
         DialogueData dialogueData = DialogueLoader.LoadBlock(fileName, blockId);
-        if (dialogueData == null)
-        {
-            Debug.LogError($"DialogueManager: 无法加载对话块 {fileName}:{blockId}");
-            return;
-        }
 
         currentDialogueFile = fileName;
         currentDialogueBlockId = blockId;
@@ -115,10 +110,6 @@ public class DialogueManager : MonoBehaviour
         if (dialogueUI != null)
         {
             dialogueUI.StartDialogue(dialogueData, fileName, blockId);
-        }
-        else
-        {
-            Debug.LogError("DialogueManager: DialogueUI 组件未找到");
         }
     }
 

@@ -12,20 +12,21 @@ public class DialogueUI : MonoBehaviour
     public Image characterPortrait;
     public TMP_InputField playerInputField;
     public Button sendButton;
+    public Button exitLLMButton;
 
     [Header("打字机效果设置")]
     public float textSpeed = 0.05f;
     public bool useTypingEffect = true;
 
     [Header("文字动画效果")]
-    public bool enableBounceEffect = true;           // 是否启用弹跳效果
-    public float bounceHeight = 8f;                   // 弹跳高度（像素）
-    public float bounceDuration = 0.3f;               // 弹跳持续时间
-    public AnimationCurve bounceCurve = AnimationCurve.EaseInOut(0, 0, 1, 1); // 弹跳曲线
+    public bool enableBounceEffect = true;
+    public float bounceHeight = 8f;
+    public float bounceDuration = 0.3f;
+    public AnimationCurve bounceCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
-    public bool enableRandomOffset = true;            // 是否启用随机偏移
-    public float randomOffsetRange = 2f;              // 随机偏移范围（像素）
-    public float offsetSmoothTime = 0.15f;            // 偏移平滑时间
+    public bool enableRandomOffset = true;
+    public float randomOffsetRange = 2f;
+    public float offsetSmoothTime = 0.15f;
 
     [Header("音效")]
     public AudioSource audioSource;
@@ -41,7 +42,38 @@ public class DialogueUI : MonoBehaviour
     public static event System.Action<string, string> OnDialogueBlockStarted;
     public static event System.Action<string, string> OnDialogueBlockEnded;
 
-    // 公共属性
+    // ===== 状态机定义 =====
+    private enum LLMState
+    {
+        Inactive,           // 不在LLM模式
+        WaitingForAI,       // 等待AI响应
+        ShowingAIText,      // 显示AI文本（打字机）
+        WaitingForInput,    // 等待用户输入
+        ProcessingInput     // 处理用户输入
+    }
+
+    private enum PresetState
+    {
+        Inactive,           // 不在预设模式
+        ShowingText,        // 显示文本（打字机）
+        WaitingForClick     // 等待点击继续
+    }
+
+    // ===== 状态变量 =====
+    private LLMState llmState = LLMState.Inactive;
+    private PresetState presetState = PresetState.Inactive;
+
+    // ===== LLM模式专用变量 =====
+    private bool isLLMTyping = false;
+    private bool aiRequestedEnd = false;
+    private string currentLLMCharacter;
+    private Coroutine llmTypingCoroutine;
+
+    // ===== 普通模式专用变量 =====
+    private bool isPresetTyping = false;
+    private Coroutine presetTypingCoroutine;
+
+    // ===== 通用变量 =====
     public DialogueLine CurrentLine
     {
         get
@@ -54,19 +86,10 @@ public class DialogueUI : MonoBehaviour
     public string CurrentLineId => CurrentLine?.id;
     public int CurrentLineIndex => currentLineIndex;
 
-    // 私有变量
     private DialogueData currentDialogue;
     private string currentDialogueFileName;
     private string currentDialogueBlockId;
     private int currentLineIndex = 0;
-    private bool isTyping = false;
-    private bool inLLMMode = false;
-    private bool waitingForPlayerInput = false;
-    private bool isProcessingLLM = false;
-    private bool aiRequestedEnd = false;
-    private bool waitingForContinue = false;
-    private string currentLLMCharacter;
-    private Coroutine typingCoroutine;
     private string fullCurrentText = "";
 
     void Start()
@@ -78,6 +101,13 @@ public class DialogueUI : MonoBehaviour
 
         if (playerInputField != null)
             playerInputField.onSubmit.AddListener(delegate { OnSendMessage(); });
+
+        // 新增：退出按钮事件
+        if (exitLLMButton != null)
+        {
+            exitLLMButton.onClick.AddListener(OnExitLLMButtonClicked);
+            exitLLMButton.gameObject.SetActive(false);  // 初始隐藏
+        }
 
         if (dialogueText != null)
         {
@@ -117,27 +147,39 @@ public class DialogueUI : MonoBehaviour
         return dialoguePanel != null && dialoguePanel.activeSelf;
     }
 
-    private enum UIState
+    // ===== LLM状态机控制 =====
+    private void SetLLMState(LLMState newState)
     {
-        ShowingText,
-        WaitingInput,
-        ProcessingAI
-    }
+        llmState = newState;
 
-    private void SetUIState(UIState state)
-    {
-        switch (state)
+        switch (newState)
         {
-            case UIState.ShowingText:
-                SetTextActive(true);
-                SetInputActive(false);
-                waitingForPlayerInput = false;
+            case LLMState.Inactive:
+                isLLMTyping = false;
+                aiRequestedEnd = false;
+                SetExitButtonActive(false);
                 break;
 
-            case UIState.WaitingInput:
+            case LLMState.WaitingForAI:
+                SetTextActive(true);
+                SetInputActive(false);
+                SetExitButtonActive(true);
+                if (dialogueText != null)
+                    dialogueText.text = waitingForAIHint;
+                break;
+
+            case LLMState.ShowingAIText:
+                SetTextActive(true);
+                SetInputActive(false);
+                SetExitButtonActive(true);
+                isLLMTyping = true;
+                break;
+
+            case LLMState.WaitingForInput:
                 SetTextActive(false);
                 SetInputActive(true);
-                waitingForPlayerInput = true;
+                SetExitButtonActive(true);
+                isLLMTyping = false;
 
                 if (playerInputField != null)
                 {
@@ -147,13 +189,37 @@ public class DialogueUI : MonoBehaviour
                 }
                 break;
 
-            case UIState.ProcessingAI:
+            case LLMState.ProcessingInput:
                 SetTextActive(true);
                 SetInputActive(false);
-                waitingForPlayerInput = false;
-
+                SetExitButtonActive(true);
                 if (dialogueText != null)
                     dialogueText.text = waitingForAIHint;
+                break;
+        }
+    }
+
+    // ===== 普通模式状态机控制 =====
+    private void SetPresetState(PresetState newState)
+    {
+        presetState = newState;
+
+        switch (newState)
+        {
+            case PresetState.Inactive:
+                isPresetTyping = false;
+                break;
+
+            case PresetState.ShowingText:
+                SetTextActive(true);
+                SetInputActive(false);
+                SetExitButtonActive(false);
+                isPresetTyping = true;
+                break;
+
+            case PresetState.WaitingForClick:
+                isPresetTyping = false;
+                // UI保持不变
                 break;
         }
     }
@@ -172,6 +238,70 @@ public class DialogueUI : MonoBehaviour
             sendButton.gameObject.SetActive(active);
     }
 
+    private void SetExitButtonActive(bool active)
+    {
+        if (exitLLMButton != null)
+            exitLLMButton.gameObject.SetActive(active);
+    }
+
+    // ===== 点击处理 =====
+    private void OnDialogueTextClicked()
+    {
+        // 根据当前模式分别处理
+        if (llmState != LLMState.Inactive)
+        {
+            HandleLLMClick();
+        }
+        else if (presetState != PresetState.Inactive)
+        {
+            HandlePresetClick();
+        }
+    }
+
+    private void HandleLLMClick()
+    {
+        // LLM模式下：不允许点击跳过或加速
+        // 点击无效果
+    }
+
+    private void HandlePresetClick()
+    {
+        switch (presetState)
+        {
+            case PresetState.ShowingText:
+                if (isPresetTyping)
+                {
+                    SkipPresetTyping();
+                }
+                break;
+
+            case PresetState.WaitingForClick:
+                currentLineIndex++;
+                ShowNextLine();
+                break;
+        }
+    }
+
+    // ===== 退出按钮处理 =====
+    private void OnExitLLMButtonClicked()
+    {
+        if (llmState == LLMState.Inactive)
+            return;
+
+        // 停止LLM打字机（如果正在播放）
+        if (llmTypingCoroutine != null)
+        {
+            StopCoroutine(llmTypingCoroutine);
+            llmTypingCoroutine = null;
+        }
+
+        if (audioSource != null)
+            audioSource.Stop();
+
+        EndLLMMode();
+    }
+
+    // ===== 对话启动 =====
     public void StartDialogue(DialogueData dialogueData, string fileName, string blockId)
     {
         if (dialogueData == null)
@@ -186,7 +316,6 @@ public class DialogueUI : MonoBehaviour
         currentDialogueFileName = fileName;
         currentDialogueBlockId = blockId;
         currentLineIndex = 0;
-        inLLMMode = false;
 
         OnDialogueBlockStarted?.Invoke(fileName, blockId);
 
@@ -215,10 +344,11 @@ public class DialogueUI : MonoBehaviour
             StartLLMMode(line);
     }
 
+    // ===== 普通模式显示 =====
     private void ShowPresetLine(DialogueLine line)
     {
-        inLLMMode = false;
-        SetUIState(UIState.ShowingText);
+        // 退出LLM模式，进入普通模式
+        SetLLMState(LLMState.Inactive);
 
         SetCharacterInfo(line.characterId, line.portraitId);
         fullCurrentText = line.text ?? "";
@@ -227,29 +357,30 @@ public class DialogueUI : MonoBehaviour
 
         if (useTypingEffect && !string.IsNullOrEmpty(fullCurrentText))
         {
-            if (typingCoroutine != null)
-                StopCoroutine(typingCoroutine);
-
-            typingCoroutine = StartCoroutine(TypeText(fullCurrentText, line.id, line.characterId, true));
+            StartPresetTyping(fullCurrentText);
         }
         else
         {
             dialogueText.text = fullCurrentText;
-            waitingForContinue = true;
+            SetPresetState(PresetState.WaitingForClick);
             OnLineCompleted?.Invoke(line.id, line.characterId, currentDialogueBlockId, true);
         }
     }
 
-    /// <summary>
-    /// 打字机效果 + 弹跳和随机偏移动画
-    /// </summary>
-    private IEnumerator TypeText(string text, string lineId = null, string characterId = null, bool isPresetMode = true)
+    private void StartPresetTyping(string text)
     {
-        isTyping = true;
-        waitingForContinue = false;
-        dialogueText.text = "";
+        if (presetTypingCoroutine != null)
+            StopCoroutine(presetTypingCoroutine);
 
-        // 播放打字音效
+        presetTypingCoroutine = StartCoroutine(PresetTypeText(text));
+    }
+
+    private IEnumerator PresetTypeText(string text)
+    {
+        SetPresetState(PresetState.ShowingText);
+        dialogueText.text = "";
+        fullCurrentText = text;
+
         if (audioSource != null && typingSound != null)
         {
             audioSource.clip = typingSound;
@@ -257,15 +388,11 @@ public class DialogueUI : MonoBehaviour
             audioSource.Play();
         }
 
-        // 逐字添加文本
         for (int i = 0; i < text.Length; i++)
         {
             dialogueText.text += text[i];
-
-            // 强制更新网格以获取新字符信息
             dialogueText.ForceMeshUpdate();
 
-            // 为新添加的字符应用动画效果
             if (enableBounceEffect || enableRandomOffset)
             {
                 StartCoroutine(AnimateCharacter(i));
@@ -274,25 +401,194 @@ public class DialogueUI : MonoBehaviour
             yield return new WaitForSeconds(textSpeed);
         }
 
-        // 停止音效
         if (audioSource != null)
             audioSource.Stop();
 
-        isTyping = false;
-        waitingForContinue = true;
+        SetPresetState(PresetState.WaitingForClick);
 
-        if (!string.IsNullOrEmpty(lineId))
+        DialogueLine currentLine = CurrentLine;
+        if (currentLine != null)
         {
-            OnLineCompleted?.Invoke(lineId, characterId ?? "", currentDialogueBlockId, isPresetMode);
+            OnLineCompleted?.Invoke(currentLine.id, currentLine.characterId, currentDialogueBlockId, true);
         }
     }
 
-    /// <summary>
-    /// 为单个字符添加弹跳和偏移动画
-    /// </summary>
+    private void SkipPresetTyping()
+    {
+        if (presetTypingCoroutine != null)
+            StopCoroutine(presetTypingCoroutine);
+
+        if (audioSource != null)
+            audioSource.Stop();
+
+        StopAllCoroutines();
+
+        dialogueText.text = fullCurrentText;
+        dialogueText.ForceMeshUpdate();
+
+        SetPresetState(PresetState.WaitingForClick);
+
+        DialogueLine currentLine = CurrentLine;
+        if (currentLine != null)
+        {
+            OnLineCompleted?.Invoke(currentLine.id, currentLine.characterId, currentDialogueBlockId, true);
+        }
+    }
+
+    // ===== LLM模式显示 =====
+    private void StartLLMMode(DialogueLine line)
+    {
+        // 退出普通模式，进入LLM模式
+        SetPresetState(PresetState.Inactive);
+        SetLLMState(LLMState.WaitingForAI);
+
+        aiRequestedEnd = false;
+        currentLLMCharacter = line.characterId;
+
+        SetCharacterInfo(line.characterId, line.portraitId);
+
+        OnLineStarted?.Invoke(line.id, line.characterId, currentDialogueBlockId, false);
+
+        DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
+        if (dialogueManager != null && dialogueManager.historyManager != null)
+        {
+            dialogueManager.historyManager.StartLLMSession(
+                line.text,
+                OnInitialLLMResponse,
+                dialogueManager
+            );
+        }
+    }
+
+    private void OnInitialLLMResponse(string response)
+    {
+        OnLLMResponse(response);
+    }
+
+    public void OnLLMResponse(string response)
+    {
+        if (llmState == LLMState.Inactive)
+            return;
+
+        if (DialogueLoader.ShouldEndByAI(response))
+        {
+            aiRequestedEnd = true;
+            response = DialogueLoader.CleanEndMarker(response);
+        }
+
+        fullCurrentText = response;
+
+        if (useTypingEffect)
+        {
+            StartLLMTyping(fullCurrentText);
+        }
+        else
+        {
+            dialogueText.text = fullCurrentText;
+            SetLLMState(LLMState.WaitingForInput);
+
+            DialogueLine currentLine = CurrentLine;
+            OnLineCompleted?.Invoke(currentLine?.id ?? "", currentLine?.characterId ?? "", currentDialogueBlockId, false);
+        }
+    }
+
+    private void StartLLMTyping(string text)
+    {
+        if (llmTypingCoroutine != null)
+            StopCoroutine(llmTypingCoroutine);
+
+        llmTypingCoroutine = StartCoroutine(LLMTypeText(text));
+    }
+
+    private IEnumerator LLMTypeText(string text)
+    {
+        SetLLMState(LLMState.ShowingAIText);
+        dialogueText.text = "";
+        fullCurrentText = text;
+
+        if (audioSource != null && typingSound != null)
+        {
+            audioSource.clip = typingSound;
+            audioSource.loop = true;
+            audioSource.Play();
+        }
+
+        for (int i = 0; i < text.Length; i++)
+        {
+            dialogueText.text += text[i];
+            dialogueText.ForceMeshUpdate();
+
+            if (enableBounceEffect || enableRandomOffset)
+            {
+                StartCoroutine(AnimateCharacter(i));
+            }
+
+            yield return new WaitForSeconds(textSpeed);
+        }
+
+        if (audioSource != null)
+            audioSource.Stop();
+
+        DialogueLine currentLine = CurrentLine;
+        OnLineCompleted?.Invoke(currentLine?.id ?? "", currentLine?.characterId ?? "", currentDialogueBlockId, false);
+
+        // 打字机完成后，自动进入输入状态（或结束）
+        if (aiRequestedEnd)
+        {
+            yield return new WaitForSeconds(1f);
+            EndLLMMode();
+        }
+        else
+        {
+            SetLLMState(LLMState.WaitingForInput);
+        }
+    }
+
+    // ===== 用户输入处理 =====
+    public void OnSendMessage()
+    {
+        if (llmState != LLMState.WaitingForInput)
+            return;
+
+        if (playerInputField == null)
+            return;
+
+        string message = playerInputField.text.Trim();
+        if (string.IsNullOrEmpty(message))
+            return;
+
+        SetLLMState(LLMState.ProcessingInput);
+
+        DialogueLine currentLine = DialogueLoader.GetLineAt(currentDialogue, currentLineIndex);
+        if (currentLine != null && DialogueLoader.ShouldEndLLMDialogue(message, currentLine.endKeywords))
+        {
+            EndLLMMode();
+            return;
+        }
+
+        DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
+
+        SetLLMState(LLMState.WaitingForAI);
+
+        dialogueManager.ProcessLLMMessage(currentLLMCharacter, message, OnLLMResponse);
+    }
+
+    private void EndLLMMode()
+    {
+        DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
+        if (dialogueManager != null && dialogueManager.historyManager != null)
+        {
+            dialogueManager.historyManager.EndLLMSession();
+        }
+
+        SetLLMState(LLMState.Inactive);
+        currentLineIndex++;
+        ShowNextLine();
+    }
+
+    // ===== 字符动画 =====
     private IEnumerator AnimateCharacter(int charIndex)
     {
-        // 生成随机偏移（如果启用）
         Vector2 randomOffset = Vector2.zero;
         if (enableRandomOffset)
         {
@@ -310,11 +606,9 @@ public class DialogueUI : MonoBehaviour
             elapsedTime += Time.deltaTime;
             float progress = Mathf.Clamp01(elapsedTime / animDuration);
 
-            // 更新网格信息
             dialogueText.ForceMeshUpdate();
             TMP_TextInfo textInfo = dialogueText.textInfo;
 
-            // 检查字符索引是否有效
             if (charIndex >= textInfo.characterCount || !textInfo.characterInfo[charIndex].isVisible)
                 yield break;
 
@@ -322,10 +616,8 @@ public class DialogueUI : MonoBehaviour
             int materialIndex = charInfo.materialReferenceIndex;
             int vertexIndex = charInfo.vertexIndex;
 
-            // 获取顶点数组
             Vector3[] vertices = textInfo.meshInfo[materialIndex].vertices;
 
-            // 计算弹跳偏移
             Vector3 bounceOffset = Vector3.zero;
             if (enableBounceEffect)
             {
@@ -334,7 +626,6 @@ public class DialogueUI : MonoBehaviour
                 bounceOffset = new Vector3(0, currentHeight, 0);
             }
 
-            // 计算随机偏移（带平滑过渡）
             Vector3 currentRandomOffset = Vector3.zero;
             if (enableRandomOffset)
             {
@@ -342,31 +633,23 @@ public class DialogueUI : MonoBehaviour
                 currentRandomOffset = randomOffset * offsetProgress;
             }
 
-            // 组合总偏移
             Vector3 totalOffset = bounceOffset + currentRandomOffset;
 
-            // 获取字符的4个顶点的原始位置
             Vector3 bottomLeft = vertices[vertexIndex + 0];
             Vector3 topLeft = vertices[vertexIndex + 1];
             Vector3 topRight = vertices[vertexIndex + 2];
             Vector3 bottomRight = vertices[vertexIndex + 3];
 
-            // 计算字符中心点
-            Vector3 center = (bottomLeft + topLeft + topRight + bottomRight) / 4f;
-
-            // 应用偏移到所有顶点
             vertices[vertexIndex + 0] = bottomLeft + totalOffset;
             vertices[vertexIndex + 1] = topLeft + totalOffset;
             vertices[vertexIndex + 2] = topRight + totalOffset;
             vertices[vertexIndex + 3] = bottomRight + totalOffset;
 
-            // 更新网格
             dialogueText.UpdateVertexData(TMP_VertexDataUpdateFlags.Vertices);
 
             yield return null;
         }
 
-        // 动画结束，确保字符回到正常位置
         dialogueText.ForceMeshUpdate();
         TMP_TextInfo finalTextInfo = dialogueText.textInfo;
 
@@ -378,58 +661,7 @@ public class DialogueUI : MonoBehaviour
         }
     }
 
-    private void OnDialogueTextClicked()
-    {
-        if (isTyping)
-        {
-            SkipTyping();
-            return;
-        }
-
-        if (inLLMMode)
-        {
-            if (aiRequestedEnd)
-            {
-                EndLLMMode();
-                return;
-            }
-
-            SetUIState(UIState.WaitingInput);
-            return;
-        }
-
-        if (waitingForContinue)
-        {
-            waitingForContinue = false;
-            currentLineIndex++;
-            ShowNextLine();
-        }
-    }
-
-    private void SkipTyping()
-    {
-        if (typingCoroutine != null)
-            StopCoroutine(typingCoroutine);
-
-        if (audioSource != null)
-            audioSource.Stop();
-
-        // 停止所有字符动画
-        StopAllCoroutines();
-
-        dialogueText.text = fullCurrentText;
-        dialogueText.ForceMeshUpdate();
-
-        isTyping = false;
-        waitingForContinue = true;
-
-        DialogueLine currentLine = CurrentLine;
-        if (currentLine != null)
-        {
-            OnLineCompleted?.Invoke(currentLine.id, currentLine.characterId, currentDialogueBlockId, currentLine.mode);
-        }
-    }
-
+    // ===== 辅助方法 =====
     private void SetCharacterInfo(string characterId, string portraitId)
     {
         if (characterNameText != null)
@@ -488,7 +720,7 @@ public class DialogueUI : MonoBehaviour
             case "controlpanel": return "控制面板";
             case "qq": return "QQ";
             case "7zip": return "7-Zip";
-            case "mine": return "扫雷";
+            case "mines": return "扫雷";
             case "xunlei": return "迅雷";
             case "ie": return "IE";
             default: return characterId;
@@ -506,7 +738,7 @@ public class DialogueUI : MonoBehaviour
             case "controlpanel": return "Control Panel";
             case "qq": return "QQ";
             case "7zip": return "7-Zip";
-            case "mine": return "Minesweeper";
+            case "mines": return "Minesweeper";
             case "xunlei": return "Xunlei";
             case "ie": return "Internet Explorer";
             default: return characterId;
@@ -524,7 +756,7 @@ public class DialogueUI : MonoBehaviour
             case "controlpanel": return "コントロールパネル";
             case "qq": return "QQ";
             case "7zip": return "7-Zip";
-            case "mine": return "Minesweeper";
+            case "mines": return "Minesweeper";
             case "xunlei": return "迅雷";
             case "ie": return "インターネットエクスプローラー";
             default: return characterId;
@@ -533,8 +765,8 @@ public class DialogueUI : MonoBehaviour
 
     private void OnDialogueEnd()
     {
-        inLLMMode = false;
-        isProcessingLLM = false;
+        SetLLMState(LLMState.Inactive);
+        SetPresetState(PresetState.Inactive);
 
         OnDialogueBlockEnded?.Invoke(currentDialogueFileName, currentDialogueBlockId);
 
@@ -562,101 +794,5 @@ public class DialogueUI : MonoBehaviour
 
         if (playerInputField != null)
             playerInputField.text = "";
-    }
-
-    private void StartLLMMode(DialogueLine line)
-    {
-        inLLMMode = true;
-        aiRequestedEnd = false;
-        currentLLMCharacter = line.characterId;
-
-        SetCharacterInfo(line.characterId, line.portraitId);
-
-        OnLineStarted?.Invoke(line.id, line.characterId, currentDialogueBlockId, false);
-
-        DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
-        if (dialogueManager != null && dialogueManager.historyManager != null)
-        {
-            SetUIState(UIState.ProcessingAI);
-
-            dialogueManager.historyManager.StartLLMSession(
-                line.text,
-                OnInitialLLMResponse,
-                dialogueManager
-            );
-        }
-    }
-
-    private void OnInitialLLMResponse(string response)
-    {
-        OnLLMResponse(response);
-    }
-
-    public void OnSendMessage()
-    {
-        if (!inLLMMode || !waitingForPlayerInput || playerInputField == null) return;
-
-        string message = playerInputField.text.Trim();
-        if (string.IsNullOrEmpty(message)) return;
-
-        SetUIState(UIState.ProcessingAI);
-        isProcessingLLM = true;
-
-        DialogueLine currentLine = DialogueLoader.GetLineAt(currentDialogue, currentLineIndex);
-        if (currentLine != null && DialogueLoader.ShouldEndLLMDialogue(message, currentLine.endKeywords))
-        {
-            EndLLMMode();
-            return;
-        }
-
-        DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
-        dialogueManager.ProcessLLMMessage(currentLLMCharacter, message, OnLLMResponse);
-    }
-
-    public void OnLLMResponse(string response)
-    {
-        if (!inLLMMode) return;
-
-        isProcessingLLM = false;
-        SetUIState(UIState.ShowingText);
-
-        if (DialogueLoader.ShouldEndByAI(response))
-        {
-            aiRequestedEnd = true;
-            response = DialogueLoader.CleanEndMarker(response);
-        }
-
-        fullCurrentText = response;
-
-        if (useTypingEffect)
-        {
-            if (typingCoroutine != null)
-                StopCoroutine(typingCoroutine);
-
-            DialogueLine currentLine = CurrentLine;
-            typingCoroutine = StartCoroutine(TypeText(fullCurrentText, currentLine?.id, currentLine?.characterId, false));
-        }
-        else
-        {
-            dialogueText.text = fullCurrentText;
-            waitingForContinue = true;
-
-            DialogueLine currentLine = CurrentLine;
-            OnLineCompleted?.Invoke(currentLine?.id ?? "", currentLine?.characterId ?? "", currentDialogueBlockId, false);
-        }
-    }
-
-    private void EndLLMMode()
-    {
-        DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
-        if (dialogueManager != null && dialogueManager.historyManager != null)
-        {
-            dialogueManager.historyManager.EndLLMSession();
-        }
-
-        inLLMMode = false;
-        isProcessingLLM = false;
-        currentLineIndex++;
-        ShowNextLine();
     }
 }
