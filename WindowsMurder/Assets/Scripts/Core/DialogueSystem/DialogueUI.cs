@@ -45,12 +45,14 @@ public class DialogueUI : MonoBehaviour
     // ===== 状态机定义 =====
     private enum LLMState
     {
-        Inactive,           // 不在LLM模式
-        WaitingForAI,       // 等待AI响应
-        ShowingAIText,      // 显示AI文本（打字机）
-        WaitingForInput,    // 等待用户输入
-        ProcessingInput     // 处理用户输入
+        Inactive,
+        WaitingForAI,
+        ShowingAIText,
+        WaitingForClick,
+        WaitingForInput,
+        ProcessingInput
     }
+
 
     private enum PresetState
     {
@@ -260,8 +262,18 @@ public class DialogueUI : MonoBehaviour
 
     private void HandleLLMClick()
     {
-        // LLM模式下：不允许点击跳过或加速
-        // 点击无效果
+        switch (llmState)
+        {
+            case LLMState.ShowingAIText:
+                break;
+
+            case LLMState.WaitingForClick:
+                SetLLMState(LLMState.WaitingForInput);
+                break;
+
+            default:
+                break;
+        }
     }
 
     private void HandlePresetClick()
@@ -540,7 +552,7 @@ public class DialogueUI : MonoBehaviour
         }
         else
         {
-            SetLLMState(LLMState.WaitingForInput);
+            SetLLMState(LLMState.WaitingForClick);
         }
     }
 

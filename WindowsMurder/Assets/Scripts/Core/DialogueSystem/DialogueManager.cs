@@ -7,14 +7,21 @@ public class DialogueManager : MonoBehaviour
 {
     [Header("组件引用")]
     public DialogueUI dialogueUI;
-    public GeminiAPI geminiAPI;
     public ConversationHistoryManager historyManager;
 
     [Header("调试")]
     public bool enableDebugLog = true;
 
+    [Header("LLM Providers")]
+    public GeminiProvider geminiProvider;
+    public OpenAIProvider openaiProvider;
+    public DeepSeekProvider deepseekProvider;
+
+    // 当前使用的Provider
+    private ILLMProvider currentProvider;
+
     // 私有变量
-    private Dictionary<string, List<string>> conversationHistory; // 每个角色的对话历史
+    private Dictionary<string, List<string>> conversationHistory;
     private string currentDialogueFile;
     private string currentDialogueBlockId;
     private bool isProcessingLLM = false;
@@ -35,13 +42,72 @@ public class DialogueManager : MonoBehaviour
         // 查找组件引用
         if (dialogueUI == null)
             dialogueUI = FindObjectOfType<DialogueUI>();
-        if (geminiAPI == null)
-            geminiAPI = FindObjectOfType<GeminiAPI>();
         if (historyManager == null)
             historyManager = FindObjectOfType<ConversationHistoryManager>();
 
+        // 初始化所有LLM Provider
+        InitializeProviders();
+
         DebugLog("DialogueManager 初始化完成");
     }
+
+    void InitializeProviders()
+    {
+        if (geminiProvider == null)
+            Debug.LogError("GeminiProvider未配置");
+        if (openaiProvider == null)
+            Debug.LogError("OpenAIProvider未配置");
+        if (deepseekProvider == null)
+            Debug.LogError("DeepSeekProvider未配置");
+
+        UpdateCurrentProvider();
+    }
+
+    /// <summary>
+    /// 更新当前使用的Provider
+    /// </summary>
+    private void UpdateCurrentProvider()
+    {
+        if (GlobalSystemManager.Instance == null)
+        {
+            Debug.LogError("GlobalSystemManager未找到，使用默认Gemini Provider");
+            currentProvider = geminiProvider;
+            return;
+        }
+
+        LLMProvider providerType = GlobalSystemManager.Instance.GetCurrentLLMProvider();
+
+        switch (providerType)
+        {
+            case LLMProvider.Gemini:
+                currentProvider = geminiProvider;
+                break;
+            case LLMProvider.GPT:
+                currentProvider = openaiProvider;
+                break;
+            case LLMProvider.DeepSeek:
+                currentProvider = deepseekProvider;
+                break;
+            default:
+                currentProvider = geminiProvider;
+                break;
+        }
+
+        DebugLog($"切换到 {currentProvider.GetProviderName()} Provider");
+    }
+
+    private void OnProviderChanged(LLMProvider newProvider)
+    {
+        UpdateCurrentProvider();
+    }
+
+    public ILLMProvider GetCurrentProvider()
+    {
+        return currentProvider;
+    }
+
+    // ==================== 对话管理 ====================
+
     public string CleanAIResponsePublic(string response)
     {
         return CleanAIResponse(response);
@@ -52,8 +118,7 @@ public class DialogueManager : MonoBehaviour
     /// </summary>
     private string GetCurrentScriptFileName()
     {
-        string fileName = "zh"; // 默认中文
-                                // 从 LanguageManager 获取当前语言
+        string fileName = "zh";
         if (LanguageManager.Instance != null)
         {
             switch (LanguageManager.Instance.currentLanguage)
@@ -78,8 +143,6 @@ public class DialogueManager : MonoBehaviour
     /// <summary>
     /// 开始指定的对话
     /// </summary>
-    /// <param name="fileName">剧本文件名</param>
-    /// <param name="blockId">对话块ID</param>
     public void StartDialogue(string blockId)
     {
         string fileName = GetCurrentScriptFileName();
@@ -87,10 +150,8 @@ public class DialogueManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 开始指定的对话 - 完整版本（保留兼容性）
+    /// 开始指定的对话 - 完整版本
     /// </summary>
-    /// <param name="fileName">剧本文件名</param>
-    /// <param name="blockId">对话块ID</param>
     public void StartDialogue(string fileName, string blockId)
     {
         if (string.IsNullOrEmpty(fileName) || string.IsNullOrEmpty(blockId))
@@ -99,14 +160,12 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        // 使用新的 DialogueLoader 加载对话数据
         DialogueData dialogueData = DialogueLoader.LoadBlock(fileName, blockId);
 
         currentDialogueFile = fileName;
         currentDialogueBlockId = blockId;
         DebugLog($"开始对话: {fileName}:{blockId}");
 
-        // 启动UI播放，传递文件名和块ID
         if (dialogueUI != null)
         {
             dialogueUI.StartDialogue(dialogueData, fileName, blockId);
@@ -134,7 +193,7 @@ public class DialogueManager : MonoBehaviour
     }
 
     /// <summary>
-    /// LLM处理协程
+    /// LLM处理协程 - 使用当前选择的Provider
     /// </summary>
     private IEnumerator ProcessLLMCoroutine(string characterId, string playerMessage, Action<string> onResponse)
     {
@@ -146,7 +205,8 @@ public class DialogueManager : MonoBehaviour
         bool responseReceived = false;
         string aiResponse = "";
 
-        yield return StartCoroutine(geminiAPI.GenerateText(
+        // 使用当前Provider（不再hardcoded使用geminiAPI）
+        yield return StartCoroutine(currentProvider.GenerateText(
             fullPrompt,
             response =>
             {
@@ -221,29 +281,27 @@ public class DialogueManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 对话块完成回调 (从DialogueUI调用)
+    /// 对话块完成回调
     /// </summary>
-    /// <param name="fileName">剧本文件名</param>
-    /// <param name="blockId">对话块ID</param>
     public void OnDialogueBlockComplete(string fileName, string blockId)
     {
         DebugLog($"对话块完成: {fileName}:{blockId}");
 
-        // 清空当前状态
         currentDialogueFile = null;
         currentDialogueBlockId = null;
 
-        // 通知 GameFlowController 对话完成
         GameFlowController gameFlow = FindObjectOfType<GameFlowController>();
         if (gameFlow != null)
         {
             gameFlow.OnDialogueBlockComplete(blockId);
         }
     }
+
     public bool IsDialogueActive()
     {
         return !string.IsNullOrEmpty(currentDialogueBlockId);
     }
+
     /// <summary>
     /// 清除角色对话历史
     /// </summary>
@@ -264,6 +322,15 @@ public class DialogueManager : MonoBehaviour
         if (enableDebugLog)
         {
             Debug.Log($"[DialogueManager] {message}");
+        }
+    }
+
+    void OnDestroy()
+    {
+        // 取消事件监听
+        if (GlobalSystemManager.Instance != null)
+        {
+            GlobalSystemManager.OnLLMProviderChanged -= OnProviderChanged;
         }
     }
 }

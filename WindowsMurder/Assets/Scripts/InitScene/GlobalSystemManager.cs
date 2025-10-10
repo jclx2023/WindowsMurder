@@ -1,8 +1,18 @@
 using UnityEngine;
 
 /// <summary>
+/// LLM引擎类型枚举
+/// </summary>
+public enum LLMProvider
+{
+    Gemini,
+    GPT,
+    DeepSeek
+}
+
+/// <summary>
 /// 全局系统管理器 - 专注于底层系统服务
-/// 提供音频、显示、语言、存档等基础服务，不管理UI交互
+/// 提供音频、显示、语言、存档、LLM引擎等基础服务，不管理UI交互
 /// </summary>
 public class GlobalSystemManager : MonoBehaviour
 {
@@ -18,7 +28,10 @@ public class GlobalSystemManager : MonoBehaviour
     public Vector2Int resolution = new Vector2Int(1920, 1080);
 
     [Header("对话系统设置")]
-    public float dialogueSpeed = 0.05f;           // 对话显示速度
+    public float dialogueSpeed = 0.05f;
+
+    [Header("LLM引擎设置")]
+    public LLMProvider currentLLMProvider = LLMProvider.Gemini;
 
     [Header("语言系统设置")]
     public string csvFileName = "Localization/LocalizationTable.csv";
@@ -35,11 +48,11 @@ public class GlobalSystemManager : MonoBehaviour
     // 系统就绪事件
     public static System.Action OnLanguageSystemReady;
     public static System.Action OnSystemInitialized;
-    public static System.Action OnDialogueSettingsChanged;  // 对话设置变更事件
+    public static System.Action OnDialogueSettingsChanged;
+    public static System.Action<LLMProvider> OnLLMProviderChanged;
 
     void Awake()
     {
-        // 单例模式
         if (Instance == null)
         {
             Instance = this;
@@ -53,35 +66,18 @@ public class GlobalSystemManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 初始化所有底层系统
-    /// </summary>
     void InitializeAllSystems()
     {
-        // 1. 首先初始化语言系统
         InitializeLanguageSystem();
-
-        // 2. 加载保存的设置
         LoadSettings();
-
-        // 3. 应用设置
         ApplySettings();
-
-        // 4. 初始化音频组件
         InitializeAudioSystem();
-
-        // 5. 初始化存档系统
         InitializeSaveSystem();
-
-        // 6. 通知其他系统初始化完成
         OnSystemInitialized?.Invoke();
 
         Debug.Log("底层系统初始化完成");
     }
 
-    /// <summary>
-    /// 初始化存档系统
-    /// </summary>
     void InitializeSaveSystem()
     {
         if (SaveManager.Instance != null)
@@ -94,9 +90,6 @@ public class GlobalSystemManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 初始化语言系统
-    /// </summary>
     void InitializeLanguageSystem()
     {
         if (LanguageManager.Instance == null)
@@ -110,15 +103,11 @@ public class GlobalSystemManager : MonoBehaviour
             langManager.enableDebugLog = enableLanguageDebug;
         }
 
-        // 监听语言切换事件
         LanguageManager.OnLanguageChanged += OnLanguageChanged;
         OnLanguageSystemReady?.Invoke();
         Debug.Log("语言系统初始化完成");
     }
 
-    /// <summary>
-    /// 初始化音频系统
-    /// </summary>
     void InitializeAudioSystem()
     {
         audioSource = GetComponent<AudioSource>();
@@ -126,9 +115,6 @@ public class GlobalSystemManager : MonoBehaviour
             audioSource = gameObject.AddComponent<AudioSource>();
     }
 
-    /// <summary>
-    /// 加载设置
-    /// </summary>
     void LoadSettings()
     {
         // 音频设置
@@ -144,12 +130,18 @@ public class GlobalSystemManager : MonoBehaviour
         // 对话系统设置
         dialogueSpeed = PlayerPrefs.GetFloat("DialogueSpeed", 0.05f);
 
-        // 语言设置 - 从PlayerPrefs加载用户偏好
+        // LLM引擎设置
+        string savedProvider = PlayerPrefs.GetString("LLMProvider", LLMProvider.Gemini.ToString());
+        if (System.Enum.TryParse<LLMProvider>(savedProvider, out LLMProvider provider))
+        {
+            currentLLMProvider = provider;
+        }
+
+        // 语言设置
         string savedLanguage = PlayerPrefs.GetString("UserLanguage", defaultLanguage.ToString());
         if (System.Enum.TryParse<SupportedLanguage>(savedLanguage, out SupportedLanguage userLang))
         {
             defaultLanguage = userLang;
-            // 如果LanguageManager已经初始化，立即设置语言
             if (LanguageManager.Instance != null)
             {
                 LanguageManager.Instance.SetLanguage(userLang);
@@ -161,21 +153,12 @@ public class GlobalSystemManager : MonoBehaviour
         currentGameProgress = PlayerPrefs.GetString("GameProgress", "");
     }
 
-    /// <summary>
-    /// 应用设置
-    /// </summary>
     void ApplySettings()
     {
-        // 应用音量设置
         AudioListener.volume = masterVolume;
-
-        // 应用显示设置
         Screen.SetResolution(resolution.x, resolution.y, isFullscreen);
     }
 
-    /// <summary>
-    /// 保存所有设置
-    /// </summary>
     public void SaveSettings()
     {
         // 保存音频设置
@@ -191,39 +174,31 @@ public class GlobalSystemManager : MonoBehaviour
         // 保存对话系统设置
         PlayerPrefs.SetFloat("DialogueSpeed", dialogueSpeed);
 
+        // 保存LLM引擎设置
+        PlayerPrefs.SetString("LLMProvider", currentLLMProvider.ToString());
+
         // 保存语言设置
         if (LanguageManager.Instance != null)
         {
             PlayerPrefs.SetString("UserLanguage", LanguageManager.Instance.currentLanguage.ToString());
         }
 
-        // 立即写入磁盘
         PlayerPrefs.Save();
-
         Debug.Log("系统设置已保存");
     }
 
     // ==================== 音频服务 ====================
 
-    /// <summary>
-    /// 设置音量
-    /// </summary>
     public void SetVolume(float master, float sfx, float music)
     {
         masterVolume = Mathf.Clamp01(master);
         sfxVolume = Mathf.Clamp01(sfx);
         musicVolume = Mathf.Clamp01(music);
-
-        // 立即应用主音量
         AudioListener.volume = masterVolume;
-
         SaveSettings();
         Debug.Log($"音量设置：主音量{masterVolume:F2}, 音效{sfxVolume:F2}, 音乐{musicVolume:F2}");
     }
 
-    /// <summary>
-    /// 播放音效
-    /// </summary>
     public void PlaySFX(AudioClip clip)
     {
         if (audioSource != null && clip != null)
@@ -234,102 +209,100 @@ public class GlobalSystemManager : MonoBehaviour
 
     // ==================== 显示服务 ====================
 
-    /// <summary>
-    /// 设置显示模式
-    /// </summary>
     public void SetDisplay(bool fullscreen, Vector2Int res)
     {
         isFullscreen = fullscreen;
         resolution = res;
-
-        // 立即应用显示设置
         Screen.SetResolution(resolution.x, resolution.y, isFullscreen);
-
         SaveSettings();
         Debug.Log($"显示设置：{resolution.x}x{resolution.y}, 全屏:{isFullscreen}");
     }
 
     // ==================== 对话系统服务 ====================
 
-    /// <summary>
-    /// 设置对话速度
-    /// </summary>
     public void SetDialogueSpeed(float speed)
     {
         dialogueSpeed = Mathf.Clamp(speed, 0.01f, 0.2f);
         SaveSettings();
-
-        // 通知对话系统设置已变更
         OnDialogueSettingsChanged?.Invoke();
-
         Debug.Log($"对话速度设置：{dialogueSpeed:F3}");
     }
 
-    // ==================== 语言服务 ====================
+    public float GetDialogueSettings()
+    {
+        return dialogueSpeed;
+    }
+
+    // ==================== LLM引擎服务 ====================
+
     /// <summary>
-    /// 获取翻译文本
+    /// 切换LLM引擎
     /// </summary>
+    public void SetLLMProvider(LLMProvider provider)
+    {
+        if (currentLLMProvider == provider)
+        {
+            Debug.Log($"LLM引擎已经是 {provider}，无需切换");
+            return;
+        }
+
+        LLMProvider oldProvider = currentLLMProvider;
+        currentLLMProvider = provider;
+        SaveSettings();
+        OnLLMProviderChanged?.Invoke(currentLLMProvider);
+        Debug.Log($"LLM引擎已切换: {oldProvider} → {currentLLMProvider}");
+    }
+
+    /// <summary>
+    /// 获取当前LLM引擎
+    /// </summary>
+    public LLMProvider GetCurrentLLMProvider()
+    {
+        return currentLLMProvider;
+    }
+
+    // ==================== 语言服务 ====================
+
     public string GetText(string key)
     {
         if (LanguageManager.Instance != null)
         {
             return LanguageManager.Instance.GetText(key);
         }
-        return key; // 降级返回Key本身
+        return key;
     }
 
-    /// <summary>
-    /// 语言切换事件处理
-    /// </summary>
     void OnLanguageChanged(SupportedLanguage newLanguage)
     {
         Debug.Log($"GlobalSystemManager: 语言切换到 {newLanguage}");
-
-        // 自动保存语言设置
         SaveSettings();
     }
 
     // ==================== 存档服务 ====================
 
-    /// <summary>
-    /// 保存游戏进度
-    /// </summary>
     public void SaveGameProgress(string progressData)
     {
         currentGameProgress = progressData;
         hasGameSave = !string.IsNullOrEmpty(progressData);
-
         PlayerPrefs.SetString("GameProgress", progressData);
         PlayerPrefs.Save();
-
         Debug.Log("游戏进度已保存");
     }
 
-    /// <summary>
-    /// 加载游戏进度
-    /// </summary>
     public string LoadGameProgress()
     {
         return PlayerPrefs.GetString("GameProgress", "");
     }
 
-    /// <summary>
-    /// 删除存档
-    /// </summary>
     public void DeleteSave()
     {
         PlayerPrefs.DeleteKey("GameProgress");
         PlayerPrefs.Save();
-
         hasGameSave = false;
         currentGameProgress = "";
-
         Debug.Log("存档已删除");
     }
 
-    /// <summary>
-    /// 检查是否有游戏存档
-    /// </summary>
     public bool HasGameSave()
     {
         return hasGameSave;
@@ -337,14 +310,9 @@ public class GlobalSystemManager : MonoBehaviour
 
     // ==================== 应用程序服务 ====================
 
-    /// <summary>
-    /// 退出游戏
-    /// </summary>
     public void QuitApplication()
     {
-        // 确保退出前保存设置
         SaveSettings();
-
         Debug.Log("应用程序即将退出");
 
 #if UNITY_EDITOR
@@ -354,17 +322,8 @@ public class GlobalSystemManager : MonoBehaviour
 #endif
     }
 
-    // ==================== 调试和状态查询 ====================
-    /// <summary>
-    /// 获取对话设置（供其他系统查询）
-    /// </summary>
-    public float GetDialogueSettings()
-    {
-        return (dialogueSpeed);
-    }
     void OnDestroy()
     {
-        // 取消事件监听
         if (LanguageManager.Instance != null)
         {
             LanguageManager.OnLanguageChanged -= OnLanguageChanged;

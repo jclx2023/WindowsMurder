@@ -183,8 +183,10 @@ GameObject:
   m_Component:
   - component: {fileID: 33348684}
   - component: {fileID: 33348683}
+  - component: {fileID: 33348686}
+  - component: {fileID: 33348685}
   m_Layer: 0
-  m_Name: Gemini
+  m_Name: API
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -219,6 +221,34 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &33348685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33348682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52f4b79164ed8df409f6fecd1df20832, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  apiKey: sk-0202d9d6e39a476392bccd6ac5e35820
+  model: deepseek-chat
+  endpoint: https://api.deepseek.com/chat/completions
+--- !u!114 &33348686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33348682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23614f897e3b31e44908118881c38c57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  modelName: gpt-5
 --- !u!1001 &55954841
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3848,9 +3878,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueUI: {fileID: 1513089403}
-  geminiAPI: {fileID: 33348683}
   historyManager: {fileID: 399506808}
   enableDebugLog: 1
+  geminiProvider: {fileID: 33348683}
+  openaiProvider: {fileID: 33348686}
+  deepseekProvider: {fileID: 33348685}
 --- !u!4 &1233270436
 Transform:
   m_ObjectHideFlags: 0

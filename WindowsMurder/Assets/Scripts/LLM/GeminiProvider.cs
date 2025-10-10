@@ -4,21 +4,23 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
+// ==================== Gemini 数据模型 ====================
+
 [Serializable]
 public class GeminiRequest
 {
-    public Content[] contents;
+    public GeminiContent[] contents;
 }
 
 [Serializable]
-public class Content
+public class GeminiContent
 {
     public string role;
-    public Part[] parts;
+    public GeminiPart[] parts;
 }
 
 [Serializable]
-public class Part
+public class GeminiPart
 {
     public string text;
 }
@@ -26,40 +28,59 @@ public class Part
 [Serializable]
 public class GeminiResponse
 {
-    public Candidate[] candidates;
+    public GeminiCandidate[] candidates;
 }
 
 [Serializable]
-public class Candidate
+public class GeminiCandidate
 {
-    public ContentResponse content;
+    public GeminiContentResponse content;
 }
 
 [Serializable]
-public class ContentResponse
+public class GeminiContentResponse
 {
-    public Part[] parts;
+    public GeminiPart[] parts;
 }
 
-public class GeminiAPI : MonoBehaviour
+// ==================== Gemini Provider ====================
+
+/// <summary>
+/// Gemini API Provider - 实现ILLMProvider接口
+/// </summary>
+public class GeminiProvider : MonoBehaviour, ILLMProvider
 {
     [Header("Gemini Settings")]
-    [SerializeField] private string apiKey = "AIzaSyDxxxx..."; // 你的 Gemini API Key
-    [SerializeField] private string model = "gemini-2.5-flash";
+    [SerializeField] private string apiKey = ""; // 在Inspector中配置
+    [SerializeField] private string model = "gemini-2.0-flash-exp";
 
     private string endpoint => $"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={apiKey}";
 
+    // 实现接口方法
+    public string GetProviderName()
+    {
+        return "Gemini";
+    }
+
+    // 实现接口方法 - 保持原有逻辑不变
     public IEnumerator GenerateText(string prompt, Action<string> onSuccess, Action<string> onError)
     {
+        // 检查API Key
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            onError?.Invoke("Gemini API Key未配置，请在Inspector中设置");
+            yield break;
+        }
+
         // 构造请求体
         var reqObj = new GeminiRequest
         {
-            contents = new Content[]
+            contents = new GeminiContent[]
             {
-                new Content
+                new GeminiContent
                 {
                     role = "user",
-                    parts = new Part[]{ new Part{ text = prompt } }
+                    parts = new GeminiPart[] { new GeminiPart { text = prompt } }
                 }
             }
         };

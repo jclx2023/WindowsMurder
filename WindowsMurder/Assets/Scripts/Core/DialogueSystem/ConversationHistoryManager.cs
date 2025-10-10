@@ -10,16 +10,13 @@ public class ConversationHistoryManager : MonoBehaviour
     public bool enableDebugLog = true;
 
     // 私有变量
-    private string currentLLMHistory = "";     // 当前LLM会话的完整对话历史
-    private bool isLLMActive = false;          // 是否正在进行LLM对话
-    private string lastPlayerInput = "";       // 缓存最后一次玩家输入
+    private string currentLLMHistory = "";
+    private bool isLLMActive = false;
+    private string lastPlayerInput = "";
 
     /// <summary>
     /// 开始新的LLM会话并发送初始prompt
     /// </summary>
-    /// <param name="initialPrompt">初始prompt（来自JSON中的text字段）</param>
-    /// <param name="onResponse">AI回复的回调</param>
-    /// <param name="dialogueManager">对话管理器引用</param>
     public void StartLLMSession(string initialPrompt, Action<string> onResponse, DialogueManager dialogueManager)
     {
         if (string.IsNullOrEmpty(initialPrompt))
@@ -48,8 +45,8 @@ public class ConversationHistoryManager : MonoBehaviour
         bool responseReceived = false;
         string aiResponse = "";
 
-        // 调用GeminiAPI
-        yield return StartCoroutine(dialogueManager.geminiAPI.GenerateText(
+        // 使用当前Provider（不再hardcoded使用geminiAPI）
+        yield return StartCoroutine(dialogueManager.GetCurrentProvider().GenerateText(
             initialPrompt,
             response =>
             {
@@ -82,7 +79,6 @@ public class ConversationHistoryManager : MonoBehaviour
     /// <summary>
     /// 添加LLM回复到历史记录
     /// </summary>
-    /// <param name="aiResponse">AI回复内容</param>
     public void AddLLMResponse(string aiResponse)
     {
         if (!isLLMActive || string.IsNullOrEmpty(aiResponse))
@@ -95,7 +91,7 @@ public class ConversationHistoryManager : MonoBehaviour
         if (!string.IsNullOrEmpty(lastPlayerInput))
         {
             currentLLMHistory += $"\n\n玩家: {lastPlayerInput}";
-            lastPlayerInput = ""; // 清空缓存
+            lastPlayerInput = "";
         }
 
         currentLLMHistory += $"\nAI: {aiResponse}";
@@ -104,10 +100,8 @@ public class ConversationHistoryManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 构建包含历史的完整prompt（用于玩家输入后的请求）
+    /// 构建包含历史的完整prompt
     /// </summary>
-    /// <param name="playerInput">玩家输入</param>
-    /// <returns>包含完整对话历史的prompt</returns>
     public string BuildPromptWithHistory(string playerInput)
     {
         if (!isLLMActive)
@@ -122,7 +116,7 @@ public class ConversationHistoryManager : MonoBehaviour
             return currentLLMHistory;
         }
 
-        // 缓存玩家输入，在收到AI回复时会用到
+        // 缓存玩家输入
         lastPlayerInput = playerInput;
 
         // 构建完整prompt
