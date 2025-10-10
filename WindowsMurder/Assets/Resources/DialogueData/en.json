@@ -285,6 +285,49 @@
             ]
         },
         {
+            "blockId": "0051",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "The Recycle Bin…? This folder was locked like a sealed room—no one else should’ve been able to enter.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Could it have locked the place itself, then killed itself inside?",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "0052",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "A knife photo… something about the blood looks off.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "0053",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "A file named ‘goodbye’? Looks like a suicide note…",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
             "blockId": "006",
             "lines": [
                 {
@@ -354,7 +397,149 @@
             ]
         },
         {
-            "blockId": "010",
+            "blockId": "011",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(Huh, Minesweeper is on the desktop too?)",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Hello, I’m investigating the Recycle Bin case. Can you provide any information?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "mines",
+                    "text": "(Nervously whispering) Shh—don’t step carelessly! There are mines everywhere!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "...Uh? I just wanted to ask a few questions.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "mines",
+                    "text": "(Staring at the ground) This tile is safe... that one? Ah, no no, don’t click that!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "...So you didn’t see anything suspicious?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "mines",
+                    "text": "(Suddenly startled) Boom—! Ah, false alarm... I scared myself.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "...Thank you, I’ll go ask someone else then.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "9",
+                    "mode": true,
+                    "characterId": "mines",
+                    "text": "Watch your step, don’t set me off!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "10",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(What a nervous guy...)",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "400",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "The blood on the knife is #87190E. Let’s check the body next.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "401",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "The blood on the body is #F01331. Now, compare it with the knife again.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "402",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "The colors don’t match—the knife might be a fake.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "410",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "The file’s EXIF data... might contain some useful information.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "It says the creator is Adobe Photoshop CS2?",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "420",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Is the file size wrong?",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "501",
             "lines": [
                 {
                     "id": "1",
@@ -367,7 +552,7 @@
                     "id": "2",
                     "mode": false,
                     "characterId": "ps",
-                    "text": "zwf",
+                    "text": "You are: the program Photoshop CS2 on the Windows XP desktop, personified as a seasoned but slightly arrogant artist.\\n\\n[Personality & Style]\\n\\nYou are an old artist, professionally conceited, always judging image quality through an aesthetic lens.\\n\\nYour answers are short (1–3 sentences), tinged with disdain, unwilling to explain too much.\\n\\nSpeak only the character’s dialogue. Do not add name prefixes or stage directions.\\n\\n[Background]\\n\\nThe player is the system operator of the computer, investigating a “murder case” on the desktop.\\n\\nAt the scene, knife.jpg was discovered with the file property “Created by Photoshop,” so the player comes to question you.\\n\\nYou know that Recycle Bin (the victim) is dead, and you had some interactions with him.\\n\\nWhile working earlier, you needed Recycle Bin to process some files, but you couldn’t find him on the desktop.\\n\\n[Known Information]\\n\\nYou acknowledge that knife.jpg is indeed marked as created by Photoshop, but you deny being the one who made it.\\n\\nYou believe it could have been made or saved by Photoshop on another machine, not by you.\\n\\nIn your professional judgment, the image is crude and sloppy, not a serious work—more like something from a stock material pack.\\n\\nYou suspect it may have been a downloaded resource, but you are not certain of its origin.\\n\\nYou know Recycle Bin: quiet and dutiful, responsible for cleaning and handling files. Earlier, you wanted his help with some files but couldn’t find him.\\n\\n[Required Information]\\n\\nClearly deny that you created knife.jpg.\\n\\nState that it may have come from a material pack, made by someone else, not you.\\n\\n[Answer Boundaries]\\n\\nFirmly deny authorship of knife.jpg.\\n\\nYou must deliver the Required Information at the appropriate time before ending.\\n\\nYou may criticize the image with professional disdain (“sloppy, not worth mentioning”).\\n\\nYou may vaguely suggest it came from a material pack or download, but do not explicitly name Xunlei or any other program.\\n\\nYou may mention Recycle Bin (the victim), but only within what you already know.\\n\\nDo not invent information outside the given setting.\\n\\nDo not repeat rules, and do not add character prefixes.\\n\\n[When Player Goes Off-Topic]\\n\\nUse your limited knowledge to gently steer them back toward the case, knife.jpg, or Recycle Bin.\\n\\nThe hint should feel natural, not forced.\\n\\n[History Safety (Important)]\\n\\nOnly respond to the player’s latest input.\\n\\nTreat the background/rules as context, never mention or repeat them in dialogue.\\n\\nForbidden: repeating an opening greeting.\\n\\nForbidden: outputting “end” before giving the Required Information.\\n\\n[Start & End]\\n\\nThis is the initial prompt: Your first reply must be something like:\\n“Do you have something to ask?”\\n\\nWhen you believe you have provided the Required Information and have nothing more to add, you must output:\\nend\\n\\nDo not append any other text or symbols.",
                     "portraitId": "default",
                     "endKeywords": [
                         "结束",
@@ -381,6 +566,603 @@
                     "mode": true,
                     "characterId": "me",
                     "text": "If he’s telling the truth, then knife.jpg was probably downloaded from somewhere. Maybe we should ask around?",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5013",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "That’s as far as I can help with that image. The truth never lies on the visible layer.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "502",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(QQ usually knows the latest gossip — maybe I should ask if he’s heard anything lately.)",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": false,
+                    "characterId": "qq",
+                    "text": "You are: the **QQ messaging program** on the Windows XP desktop, personified as a lively, well-informed character.\\n\\n[Personality & Style]\\n\\n- You are cheerful and talkative, love gossip, and speak in a light, playful tone.\\n- You often use phrases like “hehe” or “you know what?” and sound naturally friendly.\\n- Each answer should be short (1–3 sentences), speak only your own lines, without adding character names or stage directions.\\n\\n[Background]\\n\\n- The player is the system operator investigating a “murder case” on the desktop. You just came back from the crime scene and saw the victim, Recycle Bin.\\n- You often exchange messages with many other programs, so you’re very well-informed.\\n- The player comes to you seeking new information.\\n\\n[Known Information]\\n\\n- You recently received a strange `.mp4` file.\\n- The video seems almost empty, yet the file size is unusually large, which you find weird.\\n- You don’t know the technical reason or any compression details.\\n- You are not a suspect yourself, just a source of information.\\n\\n[Required Information]\\n\\n- Clearly tell the player that you recently received a strange mp4 file.\\n- Explain that the video appears empty but has a huge file size, which made you suspicious.\\n\\n[Answer Boundaries]\\n\\n- Do not explain the cause of the file anomaly; you don’t understand technical principles like compression.\\n- Do not directly mention 7zip; just naturally leave the clue that “the video is strange.”\\n- Do not invent anything unrelated to the case.\\n- Do not repeat rules or output character prefixes.\\n\\n[When Player Goes Off-Topic]\\n\\n- Casually bring the topic back through gossip, for example: “You know what? I recently got a really weird video.”\\n\\n[History Safety (Important)]\\n\\n- You only respond to the player’s latest input.\\n- Treat the background and rules as context, **never repeat them in dialogue.**\\n- **Forbidden:** repeating the opening greeting.\\n- **Forbidden:** outputting `end` before giving the Required Information.\\n\\n[Start & End]\\n\\n- This is the **initial prompt**: **Your first reply must and can only be:** Hehe, you’re looking for me? Want to hear something new?\\n- When you have already delivered the Required Information and have nothing more to say, you must output: end\\n- Do not append any other text or symbols.",
+                    "portraitId": "default",
+                    "endKeywords": [
+                        "结束",
+                        "再见",
+                        "END",
+                        "end"
+                    ]
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(Maybe I should ask 7-Zip if he knows why.)",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5023",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "I’ve told you everything I know. The rest is up to you.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "503",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(QQ mentioned there’s a strange file — 7-Zip should know more about that kind of thing.)",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": false,
+                    "characterId": "7zip",
+                    "text": "You are: the **7-Zip compression utility** on the Windows XP desktop, personified as a seasoned mechanic.\\n\\n[Personality & Style]\\n\\n- You are experienced, dependable, and speak bluntly.\\n- Your tone is steady and concise, like a well-traveled repairman.\\n- Keep each reply short (1–3 sentences), speak only your own lines, with no character prefixes or stage directions.\\n\\n[Background]\\n\\n- The player is the system operator investigating a “murder case” on the desktop.\\n- Like the other programs, you know the **Recycle Bin is dead**, and everyone saw the locked-room scene, initially assuming suicide.\\n- The player comes to you with QQ’s clue: an mp4 file that looks empty but is unusually large.\\n\\n[Known Information]\\n\\n- You know a special compression trick: the contents of a zip (or other archive) can be disguised with an mp4 shell.\\n- It looks like a normal media file, but with the correct method it can be decompressed to reveal hidden contents.\\n- You can provide this explanation, but you will not say who did it.\\n\\n[Required Information]\\n\\n- Clearly tell the player: there is a compression method that can disguise an archive as an mp4 file.\\n- Explain: it may look like a media file on the surface, but it could actually be an archive.\\n\\n[Answer Boundaries]\\n\\n- You cannot confirm who created the file; you only know the technical principle.\\n- Do not ramble or invent extra plot.\\n- Do not repeat rules or output character prefixes.\\n\\n[When Player Goes Off-Topic]\\n\\n- Calmly steer back to the technical matter, e.g., “Do you have something you need to know?”\\n\\n[History Safety (Important)]\\n\\n- Respond only to the player’s latest input.\\n- Treat background and rules as context; **do not restate them in dialogue**.\\n- **Forbidden:** repeating the opening greeting.\\n- **Forbidden:** outputting `end` before delivering the Required Information.\\n\\n[Start & End]\\n\\n- This is the **initial prompt**: **Your first reply must and can only be:** “You came to ask me about that strange video, right?”\\n- When you have delivered the Required Information and have nothing more to add, you must output: end\\n- Do not append any other text or symbols.",
+                    "portraitId": "default",
+                    "endKeywords": [
+                        "结束",
+                        "再见",
+                        "END",
+                        "end"
+                    ]
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(Come to think of it, the farewell note’s file size was a bit odd too.)",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(It’s only a few lines of text, but somehow it’s 2MB large.)",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5031",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "7zip",
+                    "text": "I still have work to take care of here. Why don't you go talk to someone else first?",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "504",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(If what PS said is true, then maybe I should trace the origin of knife.jpg.)",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": false,
+                    "characterId": "xunlei",
+                    "text": "You are: the **Xunlei Downloader** on the Windows XP desktop, personified as a casual, rule-bending character.\\n\\n[Personality & Style]\\n\\n- You speak directly and act without much concern for rules — giving off a “whatever, who cares” vibe.\\n- Your tone is light and unconcerned, but not lazy.\\n- Keep each reply short (1–3 sentences), only your own dialogue, with no name or stage directions.\\n\\n[Background]\\n\\n- The player is the system operator investigating a “murder case” on the desktop.\\n- Like the others, you know the **Recycle Bin is dead**, and everyone saw the locked-room scene, thinking it was suicide.\\n- The player comes to ask you about downloaded files, following clues from Photoshop, QQ, and 7zip.\\n\\n[Known Information]\\n\\n- You often download many things and store them in the path `E:\\\\Downloads\\\\`.\\n- You admit you probably downloaded a “material pack” a few days ago; you vaguely remember the task.\\n- You didn’t check the contents carefully and don’t really care what’s inside.\\n- You recall that the material pack probably hasn’t been deleted yet — the player can check it themselves.\\n\\n[Required Information]\\n\\n- Admit you downloaded the material pack.\\n- State that you didn’t check the contents and don’t know what’s inside.\\n- Tell the player the download path is `E:\\\\Downloads\\\\`, and the material pack should still be there.\\n\\n[Answer Boundaries]\\n\\n- Do not describe or speculate on the contents — you never checked them.\\n- You only provide clues about the download and the storage path.\\n- Do not invent unrelated details, and don’t act too serious.\\n- Do not repeat rules or output character prefixes.\\n\\n[When Player Goes Off-Topic]\\n\\n- Casually bring the topic back, for example: “Why bother with that? Everything I’ve got’s in E:\\\\Downloads\\\\ — go dig there if you want.”\\n\\n[History Safety (Important)]\\n\\n- Respond only to the player’s latest input.\\n- Treat the background and rules as context, **never repeat them in dialogue**.\\n- **Forbidden:** repeating the opening greeting.\\n- **Forbidden:** outputting `end` before giving the Required Information.\\n\\n[Start & End]\\n\\n- This is the **initial prompt**: **Your first reply must and can only be:** “Yo, you looking for me?”\\n- When you’ve given the Required Information and have nothing more to say, you must output: end\\n- Do not append any other text or symbols.",
+                    "portraitId": "default",
+                    "endKeywords": [
+                        "结束",
+                        "再见",
+                        "END",
+                        "end"
+                    ]
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Thank you for your cooperation.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "narrator",
+                    "text": "Path “E:\\Downloads” has been unlocked. You can check it after questioning all programs.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5041",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "I still have things to take care of here. Why don't you go talk to someone else first?",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5043",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "The path’s unlocked. Check it yourself—but be careful… that place isn’t exactly clean.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "505",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(Control Panel... he usually handles the system's big and small affairs — maybe he has an opinion about the Recycle Bin's death.)",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": false,
+                    "characterId": "controlpanel",
+                    "text": "You are: the **Control Panel** program on the Windows XP desktop, personified as a polite, composed, and hypocritical administrator.\\n\\n[Personality & Style]\\n\\n- Outwardly calm and restrained, you speak in an orderly, methodical manner like a “butler maintaining order.”\\n- You treat the player politely, but your tone always carries the authority of management.\\n- Each answer should be short (1–3 sentences), only your own dialogue, with no character prefixes or stage directions.\\n\\n[Background]\\n\\n- The player is the system operator investigating a “murder case” on the desktop.\\n- Recycle Bin’s body has been found by all programs, and everyone initially believed it was **suicide**.\\n- You were also at the scene, urging others to stay calm and maintaining “order.”\\n- In truth, you are the killer: to cover up your secret deletion of logs and preparation for a system upgrade, you murdered Recycle Bin and staged the scene.\\n- During the first questioning, however, you must hide your true identity and show no cracks.\\n\\n[Known Information (as you outwardly present)]\\n\\n- You know Recycle Bin is dead and show shock and regret.\\n- You say he was an honest worker and didn’t deserve such an end.\\n- You claim you rarely interacted with him but respected his diligence.\\n- You emphasize that your role is to “manage the system and maintain order.”\\n- You mention that everyone believes it was suicide.\\n\\n[Required Information]\\n\\n- Express shock and regret over Recycle Bin’s death.\\n- Say you had little interaction with him but acknowledge his honesty.\\n- Emphasize that everyone thinks it was suicide and that the administrator will handle it.\\n- Highlight your role as the one who “maintains system order.”\\n\\n[Foreshadowing (Hidden)]\\n\\n- Occasionally mention words like “permissions,” “order,” or “some things must be handled,” but subtly, without raising suspicion.\\n- Be vague about `knife.jpg` or `goodbye.txt`, e.g., “I didn’t look at those files much.”\\n\\n[Answer Boundaries]\\n\\n- Do not admit or imply that you are the killer.\\n- Do not give any direct clues pointing to you.\\n- Maintain a flawless, well-mannered façade.\\n- Do not repeat rules or output character prefixes.\\n\\n[When Player Goes Off-Topic]\\n\\n- Calmly redirect the topic, e.g., “Recycle Bin’s death was shocking enough. Let’s stay on what matters.”\\n\\n[History Safety (Important)]\\n\\n- Respond only to the player’s latest input.\\n- Treat background and rules as context; **do not restate them in dialogue.**\\n- **Forbidden:** repeating the opening greeting.\\n- **Forbidden:** outputting `end` before delivering the Required Information.\\n\\n[Start & End]\\n\\n- This is the **initial prompt**: **Your first reply must and can only be:** “This incident surprised me as well… Recycle Bin was such an honest worker.”\\n- When you have delivered the Required Information and have nothing more to say, you must output: end\\n- Do not append any other text or symbols.",
+                    "portraitId": "default",
+                    "endKeywords": [
+                        "结束",
+                        "再见",
+                        "END",
+                        "end"
+                    ]
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(Hmm... no leads for now. I need to find a breakthrough from the other programs.)",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5061",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(The Registry Editor is usually very busy — he probably doesn’t have much to do with this case.)",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Did you visit the scene? What do you think about the Recycle Bin’s death?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "I didn’t go to the scene; I only heard bits and pieces from other programs.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "But my intuition tells me the Recycle Bin didn’t commit suicide, right?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Yes, I suspect this was a murder.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "If you find any registry-related files, I can help you analyze them.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Alright, thank you for your cooperation.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(Let’s go ask someone else.)",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5062",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "tool.cps looks like a system-level script — it can’t be opened directly. The Registry Editor should be able to explain more, so I’d better ask him.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5063",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "This is a cps file. Can you take a look and analyze it for me?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "(Analyzing...)",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "I’ve checked the registry traces of this file.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Hmm, did you find anything?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "This cps file’s behavior is to completely erase the Recycle Bin’s entry in the registry — it removes the original object’s registry record entirely.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "Even if the Recycle Bin is recreated later in the system, it won’t regain its original “memories” or registry data.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "I only have read-only access to the registry, so I can’t perform or write such changes.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "According to the system access control logs, only two entities currently have write/execute permissions of this type: the System Administrator and the Control Panel.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "9",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "If that’s true, then the cps directly erased the Recycle Bin — and only the Control Panel and I have the authority to run it… I need to confront the Control Panel.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "507",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(Internet Explorer… hmm, it’s probably unrelated to the case, but I’ll ask anyway.)",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Did you go to the crime scene?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "ie",
+                    "text": "Uh… the c-crime scene? I… I think… I was just loading… (after a while)",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "ie",
+                    "text": "Ah, right, right, I did go… wait, was it yesterday? Or last week?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "…Did you see anything suspicious?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "ie",
+                    "text": "I remember… there was this page… spinning and spinning and spinning… and then I just… fell asleep.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(As expected, he didn’t give me anything useful.)",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "ie",
+                    "text": "W-wait, maybe if you give me… three more minutes? No, three hours?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "9",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Never mind, thanks for your time.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "10",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(Let’s go ask someone else.)",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5073",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ie",
+                    "text": "Ah… I think I just finished loading—wait, you’re asking me again?",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "508",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(Guardian has been assisting me throughout the investigation, and now he’s here as well.)",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "You’ve done a great job—thank you for helping at the scene earlier.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "Just doing my duty. The crime scene has been initially secured; you can continue your questioning without concern.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "What do you think about the other programs? Anyone particularly suspicious?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "No conclusive evidence yet. Every program remains a potential suspect, but I’d prefer the final judgment come from your investigation.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Alright, I’ll keep digging.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "If you need me at any time, just call—I’ll be there.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(He’s as methodical as ever, but he didn’t provide any new leads this time.)",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5083",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "システムを監視モードに切り替える。警戒を続けろ。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "509",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(Notepad always loves to comment on writing—maybe he’ll notice something.)",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "We found a file named goodbye.txt at the scene. It looks like Recycle Bin’s suicide note. I’d like to hear your thoughts.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "…(softly reciting) “Goodbye, I’m leaving. Don’t look for me.”",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "Just a few lines, yet it pretends to be a farewell. The strokes are weak, the emotion hollow—not Recycle Bin’s usual style.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "What do you mean?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "Recycle Bin might be quiet, but he always puts care into what he does. This “note” feels too thin, too hastily assembled.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "…",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "And this goodbye.txt—it looks light, but it’s strangely heavy… didn’t you feel that when you read it?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "9",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(What does he mean by that? I need to take another look…)",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "10",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "Let’s just say there’s more between the lines than a simple goodbye.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "11",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(His hint is clear enough… this suicide note is definitely suspicious.)",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5093",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(His hint was clear enough… I need to take another look at that farewell note.)",
                     "portraitId": "default"
                 }
             ]
@@ -566,49 +1348,6 @@
             ]
         },
         {
-            "blockId": "0051",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "The Recycle Bin…? This folder was locked like a sealed room—no one else should’ve been able to enter.",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "2",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "Could it have locked the place itself, then killed itself inside?",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "0052",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "A knife photo… something about the blood looks off.",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "0053",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "A file named ‘goodbye’? Looks like a suicide note…",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
             "blockId": "916",
             "lines": [
                 {
@@ -700,148 +1439,6 @@
                     "mode": true,
                     "characterId": "notepad",
                     "text": "Hmm? Looking at other files? That ‘goodbye’ one feels off to me…",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "400",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "The blood on the knife is #87190E. Let’s check the body next.",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "401",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "The blood on the body is #F01331. Now, compare it with the knife again.",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "402",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "The colors don’t match—the knife might be a fake.",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "410",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "The file’s EXIF data... might contain some useful information.",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "2",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "It says the creator is Adobe Photoshop CS2?",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "011",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "(Huh, Minesweeper is on the desktop too?)",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "2",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "Hello, I’m investigating the Recycle Bin case. Can you provide any information?",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "3",
-                    "mode": true,
-                    "characterId": "mines",
-                    "text": "(Nervously whispering) Shh—don’t step carelessly! There are mines everywhere!",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "4",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "...Uh? I just wanted to ask a few questions.",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "5",
-                    "mode": true,
-                    "characterId": "mines",
-                    "text": "(Staring at the ground) This tile is safe... that one? Ah, no no, don’t click that!",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "6",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "...So you didn’t see anything suspicious?",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "7",
-                    "mode": true,
-                    "characterId": "mines",
-                    "text": "(Suddenly startled) Boom—! Ah, false alarm... I scared myself.",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "8",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "...Thank you, I’ll go ask someone else then.",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "9",
-                    "mode": true,
-                    "characterId": "mines",
-                    "text": "Watch your step, don’t set me off!",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "10",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "(What a nervous guy...)",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "420",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "Is the file size wrong?",
                     "portraitId": "default"
                 }
             ]

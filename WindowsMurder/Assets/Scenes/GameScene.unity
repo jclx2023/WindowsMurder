@@ -313,7 +313,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -768
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1324,7 +1324,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -384
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1382,11 +1382,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  preDialogueBlockId: 
+  preDialogueBlockId: 5031
   mainDialogueBlockId: 503
   postDialogueBlockId: 
   requiredClues: []
-  requiredDialogueBlocks: []
+  requiredDialogueBlocks:
+  - 503
   currentStage: 0
   debugMode: 1
 --- !u!1001 &525697589
@@ -1483,7 +1484,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -896
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1543,7 +1544,7 @@ MonoBehaviour:
   isEnabled: 1
   preDialogueBlockId: 
   mainDialogueBlockId: 507
-  postDialogueBlockId: 
+  postDialogueBlockId: 5073
   requiredClues: []
   requiredDialogueBlocks: []
   currentStage: 0
@@ -1913,7 +1914,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 128
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1977,7 +1978,7 @@ MonoBehaviour:
   isEnabled: 1
   preDialogueBlockId: 
   mainDialogueBlockId: 509
-  postDialogueBlockId: 
+  postDialogueBlockId: 5093
   requiredClues: []
   requiredDialogueBlocks: []
   currentStage: 0
@@ -2100,7 +2101,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &694037108
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2215,7 +2216,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -640
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2273,11 +2274,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  preDialogueBlockId: 
-  mainDialogueBlockId: 505
+  preDialogueBlockId: 505
+  mainDialogueBlockId: 605
   postDialogueBlockId: 
   requiredClues: []
-  requiredDialogueBlocks: []
+  requiredDialogueBlocks:
+  - 5063
   currentStage: 0
   debugMode: 1
 --- !u!1001 &779161440
@@ -2374,7 +2376,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -256
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2434,7 +2436,7 @@ MonoBehaviour:
   isEnabled: 1
   preDialogueBlockId: 
   mainDialogueBlockId: 502
-  postDialogueBlockId: 
+  postDialogueBlockId: 5023
   requiredClues: []
   requiredDialogueBlocks: []
   currentStage: 0
@@ -2596,7 +2598,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -512
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2654,11 +2656,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  preDialogueBlockId: 
+  preDialogueBlockId: 5041
   mainDialogueBlockId: 504
   postDialogueBlockId: 
   requiredClues: []
-  requiredDialogueBlocks: []
+  requiredDialogueBlocks:
+  - 501
   currentStage: 0
   debugMode: 1
 --- !u!1001 &932806536
@@ -4008,7 +4011,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -128
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -4068,7 +4071,7 @@ MonoBehaviour:
   isEnabled: 1
   preDialogueBlockId: 
   mainDialogueBlockId: 501
-  postDialogueBlockId: 
+  postDialogueBlockId: 5013
   requiredClues: []
   requiredDialogueBlocks: []
   currentStage: 0
@@ -5171,11 +5174,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 128
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -128
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -5257,7 +5260,7 @@ MonoBehaviour:
   isEnabled: 1
   preDialogueBlockId: 
   mainDialogueBlockId: 508
-  postDialogueBlockId: 
+  postDialogueBlockId: 5083
   requiredClues: []
   requiredDialogueBlocks: []
   currentStage: 0
@@ -5853,11 +5856,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 128
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -256
       objectReference: {fileID: 0}
     - target: {fileID: 4834149053060963340, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -5879,6 +5882,10 @@ PrefabInstance:
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 2100000, guid: b6b1f65dade5cfd4c91058dc0cbe7fb3, type: 2}
+    - target: {fileID: 8973463780565502190, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
+      propertyPath: canShowContextMenu
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8973463780565502190, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: contextMenuItems.Array.data[0].itemId
       value: 2021
@@ -6456,6 +6463,111 @@ MonoBehaviour:
   - stageId: Stage4_Desktop
     dialogueBlocks:
     - dialogueBlockFileId: 010
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 011
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 501
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 5013
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 502
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 5023
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 503
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 5031
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 504
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 5041
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 5043
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 505
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 5061
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 5062
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 5063
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 507
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 5073
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 508
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 5083
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 509
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 5093
+      interactableObjectName: 
+      requiredClues: []
+      requiredDialogueBlocks: []
+      unlocksClues: []
+    - dialogueBlockFileId: 
       interactableObjectName: 
       requiredClues: []
       requiredDialogueBlocks: []

@@ -211,6 +211,7 @@ public class GameFlowController : MonoBehaviour
 
         // 触发Unity事件
         OnStageChanged?.Invoke(stageId);
+        OnAutoSaveRequested?.Invoke();
 
         LogDebug($"Stage {stageId} 加载完成");
     }

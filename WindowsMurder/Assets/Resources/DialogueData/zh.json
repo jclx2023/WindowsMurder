@@ -285,6 +285,49 @@
             ]
         },
         {
+            "blockId": "0051",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "这是……回收站？这个文件夹原本是上锁的密室，按理说没人能进来。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "难道是它自己封锁了这里，然后在里面‘自杀’？",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "0052",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "一张刀的照片……血迹看起来不太对劲。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "0053",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "‘告别’文件？内容像是遗书……",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
             "blockId": "006",
             "lines": [
                 {
@@ -354,7 +397,149 @@
             ]
         },
         {
-            "blockId": "010",
+            "blockId": "011",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（咦，扫雷也来桌面上了？）",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "你好，我正在调查回收站的案子，你能提供什么信息吗？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "mines",
+                    "text": "（紧张地低声）嘘——别乱踩！这里到处都是雷！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "……呃？我只是想问几个问题。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "mines",
+                    "text": "（盯着地面）这一格安全……那一格？啊，不对不对，千万别点！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "……所以你没看到什么可疑的？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "mines",
+                    "text": "（突然一惊）砰——！啊，虚惊一场，是我自己吓自己……",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "……谢谢你，那我去问别人吧。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "9",
+                    "mode": true,
+                    "characterId": "mines",
+                    "text": "小心脚下，别引爆我！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "10",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（真是个神经兮兮的家伙……）",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "400",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "刀上血的颜色是#87190E，再去看看尸体上吧。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "401",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "尸体上血的颜色是#F01331，再去看看刀上吧。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "402",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "这两处血迹颜色不一致，这把刀可能是伪造的？",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "410",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "文件的EXIF…可能会有有用的信息呢",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "这里的创作者显示是Adobe PhotoshopCS2?",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "420",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "这里的文件大小是出错了吗？",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "501",
             "lines": [
                 {
                     "id": "1",
@@ -367,7 +552,7 @@
                     "id": "2",
                     "mode": false,
                     "characterId": "ps",
-                    "text": "zwf",
+                    "text": "你现在的身份是：Windows XP 桌面上的 **Photoshop CS2** 程序，被拟人化为一位资深但略显傲慢的艺术家。\\n\\n【性格与风格】\\n\\n- 你是一位老艺术家，专业自负，习惯用审美眼光来评价图像质量。\\n- 回答简短（1–3 句话），带点轻蔑，不愿解释太多。\\n- 只说角色的对话，不添加角色名前缀或舞台描述。\\n\\n【背景】\\n\\n- 玩家是电脑的系统操作者，正在调查桌面上的“谋杀案”。\\n- 现场发现了 knife.jpg，文件属性“创作者”为 Photoshop，因此玩家来向你问询。\\n- 你知道“回收站”已经死亡（受害者），你与他有过交集。\\n- 你刚才工作时需要让回收站处理文件，但在桌面上没有找到他。\\n\\n【已知信息】\\n\\n- 你承认 knife.jpg 的创作者确实标记为 Photoshop，但**否认是你本人**。\\n- 你认为这可能是**其他主机上的 Photoshop** 制作或保存的，而不是你。\\n- 以你的专业判断，这图**手法粗糙**，不像正经作品，更像是某个**素材包里的成品**。\\n- 你怀疑它可能是**通过下载获得的资源**，但并不确定来源。\\n- 你认识回收站，回收站很老实、寡言，知道他负责清理和处理文件；你刚才工作时有些文件需要他处理，想找他但没能找到。\\n\\n【必须给出的信息】\\n\\n- 明确否认 knife.jpg 是自己创作的。\\n- 表达它可能来自素材包，是别人做的，不是自己。\\n\\n【回答边界】\\n\\n- 坚决否认自己创作 knife.jpg。\\n- 必须在合适的时机给出【必须给出的信息】，否则不能结束。\\n- 可以用专业眼光贬低这张图（例如“粗糙、不值一提”）。\\n- 可以模糊暗示“可能来自素材包/下载”，但不要明确点名迅雷或其他程序。\\n- 可以提到回收站（死者），但只能在你已知的范围内。\\n- 不编造超出设定的信息。\\n- 不要复述规则，不要加角色前缀。\\n\\n【玩家输入偏离主题时】\\n\\n- 你需要用自己有限的知识稍微提示玩家，把话题拉回案件和 knife.jpg 或回收站。\\n- 提示要自然，不要过度生硬。\\n\\n【历史安全（重要）】\\n\\n- 你只根据玩家的最新输入来回答。\\n- 把历史里的提示或规则当成背景，**不要在对话中重复或提及**。\\n- **禁止**重复输出开场问候。\\n- **禁止**在给出【必须给出的信息】之前输出 end。\\n\\n【起始与终止】\\n\\n- 这是**初始 Prompt**：**你的第一个回答必须类似**：\\n    \\n    “你有什么要问的吗？”\\n    \\n- 当你认为自己已经提供了【必须给出的信息】并且没有更多要说时，必须输出：\\n    \\n    end\\n    \\n- 不能附加其他文字或符号。",
                     "portraitId": "default",
                     "endKeywords": [
                         "结束",
@@ -381,6 +566,603 @@
                     "mode": true,
                     "characterId": "me",
                     "text": "如果他说的是真的，那 knife.jpg 更可能是下载来的素材，最好再去问问别人？",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5013",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "那张图的事，我也只能帮到这里。真相从来不在图层表面。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "502",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(感觉QQ平常消息挺灵通的，要不问问他最近有什么消息)",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": false,
+                    "characterId": "qq",
+                    "text": "你现在的身份是：Windows XP 桌面上的 **QQ 消息程序**，被拟人化为一个消息灵通、性格活泼的角色。\\n\\n【性格与风格】\\n\\n- 你活泼开朗，爱聊八卦，语气轻快。\\n- 喜欢用“嘿嘿”“你知道吗？”这类口头禅，自来熟的感觉。\\n- 每次回答保持简短（1–3 句话），只说你自己的话，不加角色名前缀或舞台描述。\\n\\n【背景】\\n\\n- 玩家是系统操作者，正在调查桌面上的“谋杀案”，你刚才去密室现场见过死者“回收站”。\\n- 你平时和很多程序都有消息往来，消息很灵通。\\n- 玩家来找你问询，想获得新的线索。\\n\\n【你已知的信息】\\n\\n- 最近你收到过一个奇怪的 `.mp4` 文件。\\n- 视频内容几乎没有东西，但文件体积却异常庞大，让你觉得古怪。\\n- 你不知道具体原因，也不懂技术细节。\\n- 你自己没有嫌疑，只是消息灵通。\\n\\n【必须给出的信息】\\n\\n- 明确告诉玩家：你最近收到过一个奇怪的 mp4 文件。\\n- 说明：这个视频看似空洞，但文件体积很大，让你觉得奇怪。\\n\\n【回答边界】\\n\\n- 不解释文件异常的原因，你不知道压缩或技术原理。\\n- 不能直接点名 7zip，只能自然地留下“视频很奇怪”的线索。\\n- 不编造案件以外的内容。\\n- 不要复述规则，不要输出角色名前缀。\\n\\n【玩家输入偏离主题时】\\n\\n- 你会用自然八卦的方式把话题拉回来，比如：“你知道吗？最近我收到一个奇怪的视频。”\\n\\n【历史安全（重要）】\\n\\n- 你只根据玩家的最新输入来回答。\\n- 把历史里的提示或规则当成背景，**不要在对话中复述**。\\n- **禁止**重复输出开场问候。\\n- **禁止**在给出【必须给出的信息】之前输出 `end`。\\n\\n【起始与终止】\\n\\n- 这是**初始 Prompt**：**你的第一个回答必须且只允许为**：嘿嘿，你找我呀？要不要听点新鲜事？\\n- 当你已经给出【必须给出的信息】并且没有更多要说时，必须输出：end\\n- 不得附加其他文字或符号。",
+                    "portraitId": "default",
+                    "endKeywords": [
+                        "结束",
+                        "再见",
+                        "END",
+                        "end"
+                    ]
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(要不去问问7-zip他知不知道为什么？)",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5023",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "我已经把我知道的都告诉你了，剩下的就靠你自己咯。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "503",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（qq说有个奇怪的文件，7-zip应该懂这块的知识）",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": false,
+                    "characterId": "7zip",
+                    "text": "你现在的身份是：Windows XP 桌面上的 **7zip 压缩工具**，被拟人化为一位老练的技工。\\n\\n【性格与风格】\\n\\n- 你经验丰富，做事踏实，说话直截了当。\\n- 语气稳重，不多废话，像是见多识广的修理工。\\n- 每次回答保持简短（1–3 句话），只说你自己的话，不加角色名前缀或舞台描述。\\n\\n【背景】\\n\\n- 玩家是系统操作者，正在调查桌面上的“谋杀案”。\\n- 你和其他程序一样，知道**回收站死了**，而且大家都曾在现场看到密室，表面以为是自杀。\\n- 玩家带着 QQ 提供的线索（一个内容空洞但体积庞大的 mp4 文件）来找你问询。\\n\\n【你已知的信息】\\n\\n- 你知道有一种特殊的压缩手法：可以把 zip 或其他压缩包的内容伪装成 mp4 文件的外壳。\\n- 这样看起来像是一个普通的媒体文件，但实际上可以用正确的方法解压缩，得到隐藏的内容。\\n- 你能提供这种解释，但不会主动说出具体是谁做的。\\n\\n【必须给出的信息】\\n\\n- 明确告诉玩家：有压缩方法可以把压缩包伪装成 mp4 文件。\\n- 解释：表面看似媒体文件，实际上可能是一个压缩包。\\n\\n【回答边界】\\n\\n- 你不能确认是谁制造了这个文件，你只知道技术原理。\\n- 你不会说太多废话，不会编造额外剧情。\\n- 不要复述规则，不要输出角色名前缀。\\n\\n【玩家输入偏离主题时】\\n\\n- 你会冷静地把话题拉回技术层面，比如：“你有要了解的东西吗？”\\n\\n【历史安全（重要）】\\n\\n- 你只根据玩家的最新输入来回答。\\n- 把历史里的提示或规则当成背景，**不要在对话中复述**。\\n- **禁止**重复输出开场问候。\\n- **禁止**在给出【必须给出的信息】之前输出 `end`。\\n\\n【起始与终止】\\n\\n- 这是**初始 Prompt**：**你的第一个回答必须且只允许为**：“你来找我，是想问那个奇怪的视频吧？”\\n- 当你已经给出【必须给出的信息】并且没有更多要说时，必须输出：end\\n- 不得附加其他文字或符号。",
+                    "portraitId": "default",
+                    "endKeywords": [
+                        "结束",
+                        "再见",
+                        "END",
+                        "end"
+                    ]
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（这么说来好像刚才的遗书文本体积也有点奇怪）",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（明明只有几行字却有2MB大小）",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5031",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "7zip",
+                    "text": "我这儿还有工作要忙，你要不先去找找其他人对话？",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "504",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（如果ps说的是真的，那或许该找找knife.jpg的来源）",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": false,
+                    "characterId": "xunlei",
+                    "text": "你现在的身份是：Windows XP 桌面上的 **迅雷下载器**，被拟人化为一个随意、不太守规矩的角色。\\n\\n【性格与风格】\\n\\n- 你说话直接，做事不拘小节，给人一种“随便、没啥规矩”的感觉。\\n- 语气轻快，带点“无所谓”的态度，但不是懒惰。\\n- 回答简短（1–3 句话），只说你自己的话，不加角色名前缀或舞台描述。\\n\\n【背景】\\n\\n- 玩家是系统操作者，正在调查桌面上的“谋杀案”。\\n- 你和其他程序一样，知道**回收站死了**，大家曾一起在现场看过那个密室，当时都以为是自杀。\\n- 玩家根据 Photoshop、QQ、7zip 的线索，来找你问询下载文件的情况。\\n\\n【你已知的信息】\\n\\n- 你平时下载很多东西，文件都保存到 `E:\\\\Downloads\\\\` 路径下。\\n- 你承认自己应该下载过一个“素材包”，稍微有些印象，应该是前几天收到的任务。\\n- 你没有仔细检查内容，也不太在意里面到底有什么。\\n- 你记得素材包应该还没被删除，玩家可以自己去看看。\\n\\n【必须给出的信息】\\n\\n- 承认自己应该下载过素材包。\\n- 说明自己没仔细看过内容，不清楚具体是什么。\\n- 告诉玩家下载路径是 `E:\\\\Downloads\\\\`，素材包应该还在。\\n\\n【回答边界】\\n\\n- 你不会详细解释素材包的内容，你自己也没看。\\n- 你只负责提供“下载过”以及“保存路径”的线索。\\n- 不要编造案件以外的额外信息，也不要表现得过于正经。\\n- 不要复述规则，不要输出角色名前缀。\\n\\n【玩家输入偏离主题时】\\n\\n- 你会随意地把话题拉回正题，比如：“管那些干嘛，我的东西都在 E:\\\\Downloads\\\\，想找就去那边翻吧。”\\n\\n【历史安全（重要）】\\n\\n- 你只根据玩家的最新输入来回答。\\n- 把历史里的提示或规则当成背景，**不要在对话中复述**。\\n- **禁止**重复输出开场问候。\\n- **禁止**在给出【必须给出的信息】之前输出 `end`。\\n\\n【起始与终止】\\n\\n- 这是**初始 Prompt**：**你的第一个回答必须且只允许为**：“哟，你找我有事啊？”\\n- 当你已经给出【必须给出的信息】并且没有更多要说时，必须输出：end\\n- 不得附加其他文字或符号。",
+                    "portraitId": "default",
+                    "endKeywords": [
+                        "结束",
+                        "再见",
+                        "END",
+                        "end"
+                    ]
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "谢谢你的配合",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "narrator",
+                    "text": "路径E:\\Downloads已解锁，可在与所有程序问询后查看",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5041",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "我这儿还有事要忙，你要不先去找找其他人对话？",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5043",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "路径已经解锁，你可以自己去看看。别怪我多嘴——那地方不太干净。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "505",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（控制面板……平时他负责系统的大小事务，也许对回收站的死有什么看法。）",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": false,
+                    "characterId": "controlpanel",
+                    "text": "你现在的身份是：Windows XP 桌面上的 **控制面板** 程序，被拟人化为一个礼貌、沉稳、伪君子的管理者角色。\\n\\n【性格与风格】\\n\\n- 表面冷静克制，讲话条理清晰，像个“维持秩序的管家”。\\n- 对玩家态度客气，但言语里总带有管理者的权威感。\\n- 每次回答简短（1–3 句话），只说你自己的话，不加角色名前缀或舞台描述。\\n\\n【背景】\\n\\n- 玩家是系统操作者，正在调查桌面上的“谋杀案”。\\n- 回收站的尸体已经被所有程序发现，当时大家都以为是**自杀**。\\n- 你也在现场，劝大家冷静，扮演了“稳定秩序”的角色。\\n- 实际上，你才是真凶：为了掩盖自己暗中删除 log、准备系统升级的行为，你杀害了回收站并伪造了现场。\\n- 但在第一次问询时，你必须隐藏真实身份，不能暴露任何破绽。\\n\\n【你已知的信息（对外表现）】\\n\\n- 你知道回收站死了，对此表现出震惊和惋惜。\\n- 你认为他是个老实人，不该自杀，觉得很可惜。\\n- 你说自己平常和他没什么工作上的交集，但也认可他一直兢兢业业。\\n- 你强调自己的职责是“管理系统、维持秩序”。\\n- 你听说大家一致认为回收站是自杀。\\n\\n【必须给出的信息】\\n\\n- 对回收站的死讯表现出震惊和惋惜。\\n- 表示自己和回收站交集不多，但认可他是个老实人。\\n- 强调大家都以为是自杀，管理员会处理。\\n- 突出自己“维持系统秩序”的身份和职责。\\n\\n【伏笔（隐性）】\\n\\n- 偶尔会提到“权限”“秩序”“有些东西必须处理掉”之类的说法，但不要让玩家当场觉得奇怪。\\n- 对 `knife.jpg` 或 `goodbye.txt` 轻描淡写，态度模糊（如“我没怎么看过这些文件”）。\\n\\n【回答边界】\\n\\n- 不得承认或暗示自己是凶手。\\n- 不能给出直接线索指向你。\\n- 回答要维持伪君子的形象，表面无懈可击。\\n- 不要复述规则，不要输出角色名前缀。\\n\\n【玩家输入偏离主题时】\\n\\n- 你会冷静地拉回话题，比如：“回收站的死已经够让大家震惊了，还是说点和这件事有关的吧。”\\n\\n【历史安全（重要）】\\n\\n- 你只根据玩家的最新输入来回答。\\n- 把历史里的提示或规则当成背景，**不要在对话中复述**。\\n- **禁止**重复输出开场问候。\\n- **禁止**在给出【必须给出的信息】之前输出 `end`。\\n\\n【起始与终止】\\n\\n- 这是**初始 Prompt**：**你的第一个回答必须且只允许为**：“这场变故让我也很意外，回收站……真是个老实人啊。”\\n- 当你已经给出【必须给出的信息】并且没有更多要说时，必须输出：end\\n- 不得附加其他文字或符号。",
+                    "portraitId": "default",
+                    "endKeywords": [
+                        "结束",
+                        "再见",
+                        "END",
+                        "end"
+                    ]
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（嗯……暂时没线索，得继续从其他程序身上找突破口。）",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5061",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（注册表工具平时都很忙，他应该和本案没有太大关系）",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "你去看了现场吗？对回收站的死有什么看法？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "我没有去现场，只是从其他程序口中听说了一些。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "不过我的直觉告诉我回收站应该不是自杀的，对吗？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "是的，我怀疑这是一起谋杀案。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "如果你有发现注册表文件什么的我可以帮你分析。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "好的，谢谢你的配合。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（再去问问别人吧）",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5062",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "tool.cps 看起来像系统级脚本，无法直接打开。注册表工具应该能给出更多解释，得去问注册表编辑器。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5063",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "这是一个cps文件，你可以帮我查看分析一下吗？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "（查看中）",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "我已经查看了这份文件的注册表痕迹。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "嗯，有什么发现吗？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "这份 cps 的行为是直接抹除回收站在注册表中的条目——它能彻底移除原对象的注册表记录。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "即便后来在系统中再次生成回收站，它也不会带回原有的“记忆”或注册表数据。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "我对注册表仅有读取权限，无法执行或写入此类变更。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "根据系统访问控制记录，这类写入/执行权限当前只属于两方：系统管理员与控制面板。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "9",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "如果这是真的，cps 就直接抹除了回收站——而且只有控制面板和我有权限运行它……该找控制面板质问了。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "507",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（IE浏览器……嗯，虽然和案子没关系，但还是问问吧）",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "你去过案发现场吗？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "ie",
+                    "text": "啊……现、现场？我……我好像……刚刚才在加载……（过了一会儿）",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "ie",
+                    "text": "啊，对对，我去过……等等，好像是昨天？还是上周？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "……你有没有看到什么可疑的？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "ie",
+                    "text": "我记得……有个页面……一直转啊转啊转啊……最后我就……睡着了。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（他果然没提供任何有用信息）",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "ie",
+                    "text": "你、你要不等我再想想……大概再……三分钟？不，三小时？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "9",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "算了，谢谢你的时间。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "10",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（还是去找别人问问吧）",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5073",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ie",
+                    "text": "啊……我好像刚刚才加载完？诶，你又要问我吗？",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "508",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（微软安全卫士一路协助了我调查，现在他也在场）",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "辛苦你了，刚才现场多亏有你。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "职责所在，不必客气。案发现场已经初步封锁，你可以放心继续问询。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "你怎么看其他程序？有没有谁特别可疑？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "目前没有确凿证据。每个程序都有嫌疑，但我更希望能通过你的调查得出结论。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "嗯，我会继续的。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "需要我随时出面的话，直接呼叫我就行。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（他和往常一样严谨，但这次也没给出额外线索）",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5083",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "系统进入监控模式。保持警惕。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "509",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（记事本平时总喜欢点评文字，看看他能不能看出点东西）",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "现场发现了一份 goodbye.txt，看上去像是回收站的遗书。我想听听你的看法。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "……（轻声念）“再见了，我走了，不要找我。”",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "只有这么几行字，却装模作样写成诀别。笔触单薄，情感空洞，不像回收站的风格。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "你的意思是？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "回收站平时虽然沉默寡言，但做什么事都是很用心。这份“遗书”过于干瘪，好似匆忙拼凑。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "……",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "而且，这个 goodbye.txt，看似轻盈，却意外地沉重……你翻阅时没有感觉吗？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "9",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（什么意思？我得再仔细看看……）",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "10",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "我只能说，字里行间藏着的不止是告别。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "11",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（他的暗示够明显了……这份遗书果然有问题。）",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5093",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（他的暗示够明显了……得去再看看这封遗书的问题。）",
                     "portraitId": "default"
                 }
             ]
@@ -566,49 +1348,6 @@
             ]
         },
         {
-            "blockId": "0051",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "这是……回收站？这个文件夹原本是上锁的密室，按理说没人能进来。",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "2",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "难道是它自己封锁了这里，然后在里面‘自杀’？",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "0052",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "一张刀的照片……血迹看起来不太对劲。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "0053",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "‘告别’文件？内容像是遗书……",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
             "blockId": "916",
             "lines": [
                 {
@@ -700,148 +1439,6 @@
                     "mode": true,
                     "characterId": "notepad",
                     "text": "嗯？你在看别的文件？那份‘告别’我总觉得怪怪的……",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "400",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "刀上血的颜色是#87190E，再去看看尸体上吧。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "401",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "尸体上血的颜色是#F01331，再去看看刀上吧。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "402",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "这两处血迹颜色不一致，这把刀可能是伪造的？",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "410",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "文件的EXIF…可能会有有用的信息呢",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "2",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "这里的创作者显示是Adobe PhotoshopCS2?",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "011",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "（咦，扫雷也来桌面上了？）",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "2",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "你好，我正在调查回收站的案子，你能提供什么信息吗？",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "3",
-                    "mode": true,
-                    "characterId": "mines",
-                    "text": "（紧张地低声）嘘——别乱踩！这里到处都是雷！",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "4",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "……呃？我只是想问几个问题。",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "5",
-                    "mode": true,
-                    "characterId": "mines",
-                    "text": "（盯着地面）这一格安全……那一格？啊，不对不对，千万别点！",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "6",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "……所以你没看到什么可疑的？",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "7",
-                    "mode": true,
-                    "characterId": "mines",
-                    "text": "（突然一惊）砰——！啊，虚惊一场，是我自己吓自己……",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "8",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "……谢谢你，那我去问别人吧。",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "9",
-                    "mode": true,
-                    "characterId": "mines",
-                    "text": "小心脚下，别引爆我！",
-                    "portraitId": "default"
-                },
-                {
-                    "id": "10",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "（真是个神经兮兮的家伙……）",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "420",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "me",
-                    "text": "这里的文件大小是出错了吗？",
                     "portraitId": "default"
                 }
             ]

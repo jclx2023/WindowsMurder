@@ -704,7 +704,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Normal
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -884,7 +884,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueBlockId: 420
   dialogueDelay: 0.5
-  closeWindowOnDialogue: 0
+  closeWindowOnDialogue: 1
   okButton: {fileID: 1491261180893712137}
   applyButton: {fileID: 6399300995540526200}
   cancelButton: {fileID: 1082900060297983838}
