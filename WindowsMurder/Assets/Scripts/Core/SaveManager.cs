@@ -44,9 +44,6 @@ public class SaveManager : MonoBehaviour
     private GameFlowController gameFlowController;
     private DialogueManager dialogueManager;
 
-    // 状态标记
-    private bool shouldRestoreOnLoad = false;  // 是否应该在场景加载后恢复存档
-
     #region 初始化
 
     void Awake()
@@ -117,11 +114,10 @@ public class SaveManager : MonoBehaviour
         {
             if (GlobalActionManager.Instance.IsContinueGame())
             {
-                // 继续游戏 - 恢复存档
                 LogDebug("检测到继续游戏模式，准备恢复存档");
                 if (currentSaveData != null && !string.IsNullOrEmpty(currentSaveData.stageId))
                 {
-                    StartCoroutine(RestoreGameStateCoroutine());
+                    RestoreGameState();
                 }
                 else
                 {
@@ -134,24 +130,7 @@ public class SaveManager : MonoBehaviour
                 LogDebug("检测到新游戏模式，不恢复存档");
                 currentSaveData = new SaveData();
             }
-            else
-            {
-                // 其他情况（比如直接从编辑器运行GameScene）
-                LogDebug("未检测到特定游戏模式，检查是否需要恢复存档");
-                if (shouldRestoreOnLoad && currentSaveData != null && !string.IsNullOrEmpty(currentSaveData.stageId))
-                {
-                    StartCoroutine(RestoreGameStateCoroutine());
-                }
-            }
         }
-        else
-        {
-            // GlobalActionManager不存在（可能是直接运行场景）
-            LogWarning("GlobalActionManager不存在，跳过存档恢复");
-        }
-
-        // 重置标记
-        shouldRestoreOnLoad = false;
     }
 
     /// <summary>
@@ -251,8 +230,6 @@ public class SaveManager : MonoBehaviour
             string json = PlayerPrefs.GetString(saveKey);
             currentSaveData = JsonUtility.FromJson<SaveData>(json);
 
-            // 设置标记，表示下次进入GameScene时应该恢复存档
-            shouldRestoreOnLoad = true;
 
             LogDebug($"存档加载成功 - Stage: {currentSaveData.stageId}, 保存时间: {currentSaveData.createdAt}");
             return true;
@@ -288,7 +265,6 @@ public class SaveManager : MonoBehaviour
         }
 
         currentSaveData = new SaveData();
-        shouldRestoreOnLoad = false;
 
         LogDebug("存档已删除");
     }
@@ -306,22 +282,14 @@ public class SaveManager : MonoBehaviour
     #region 游戏状态恢复
 
     /// <summary>
-    /// 恢复游戏状态（协程）
+    /// 恢复游戏状态（同步方法）
     /// </summary>
-    private System.Collections.IEnumerator RestoreGameStateCoroutine()
+    private void RestoreGameState()
     {
-        // 等待一帧，确保场景完全加载
-        yield return null;
-
-        if (gameFlowController == null)
-        {
-            LogError("无法恢复游戏状态：GameFlowController为空");
-            yield break;
-        }
 
         LogDebug("开始恢复游戏状态...");
 
-        // 恢复游戏流程状态
+        // 构建游戏流程状态
         GameFlowState flowState = new GameFlowState
         {
             currentStageId = currentSaveData.stageId,
@@ -330,7 +298,7 @@ public class SaveManager : MonoBehaviour
             completedDialogueBlocks = currentSaveData.completedDialogueBlocks ?? new List<string>()
         };
 
-        gameFlowController.RestoreState(flowState);
+        gameFlowController.RestoreState(flowState, isFromSave: true);
 
         LogDebug($"游戏状态恢复完成 - Stage: {currentSaveData.stageId}, 线索: {flowState.unlockedClues.Count}个");
     }

@@ -1,10 +1,10 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// ´°¿Ú×ª»»Êı¾İ - ÓÃÓÚ¿çStage´«µİ´°¿ÚÎ»ÖÃĞÅÏ¢
+/// çª—å£è½¬æ¢æ•°æ® - ç”¨äºè·¨Stageä¼ é€’çª—å£ä½ç½®ä¿¡æ¯
 /// </summary>
 [System.Serializable]
 public struct WindowTransitionData
@@ -18,45 +18,47 @@ public struct WindowTransitionData
 }
 
 /// <summary>
-/// ÓÎÏ·Á÷³Ì¿ØÖÆÆ÷ - ¹ÜÀíStageÇĞ»»¡¢Ìõ¼şÅĞ¶ÏºÍ½ø¶ÈÍÆ½ø
+/// æ¸¸æˆæµç¨‹æ§åˆ¶å™¨ - ç®¡ç†Stageåˆ‡æ¢ã€æ¡ä»¶åˆ¤æ–­å’Œè¿›åº¦æ¨è¿›
 /// </summary>
 public class GameFlowController : MonoBehaviour
 {
-    [Header("=== StageÅäÖÃ ===")]
+    [Header("=== Stageé…ç½® ===")]
     [SerializeField] private List<StageConfig> stageConfigs = new List<StageConfig>();
     [SerializeField] private string startingStageId = "Stage01_Desktop";
 
-    [Header("=== µ±Ç°×´Ì¬ ===")]
+    [Header("=== å½“å‰çŠ¶æ€ ===")]
     [SerializeField] private string currentStageId;
     [SerializeField] private string currentDialogueFile;
     [SerializeField] private string currentDialogueBlockId;
     [SerializeField] private List<string> unlockedClues = new List<string>();
     [SerializeField] private List<string> completedDialogueBlocks = new List<string>();
 
-    [Header("=== ×é¼şÒıÓÃ ===")]
+    [Header("=== ç»„ä»¶å¼•ç”¨ ===")]
     [SerializeField] private DialogueManager dialogueManager;
-    [SerializeField] private Transform stageContainer; // CanvasÏÂµÄStageÈİÆ÷
+    [SerializeField] private Transform stageContainer; // Canvasä¸‹çš„Stageå®¹å™¨
 
-    [Header("=== ÊÂ¼ş ===")]
+    [Header("=== äº‹ä»¶ ===")]
     public UnityEvent<string> OnStageChanged;
     public UnityEvent<string> OnClueUnlocked;
     public UnityEvent OnAutoSaveRequested;
 
-    [Header("=== ¶àÓïÑÔÉèÖÃ ===")]
-    [SerializeField] private bool useMultiLanguageScripts = true; // ÊÇ·ñÆôÓÃ¶àÓïÑÔ½Å±¾
+    [Header("=== å¤šè¯­è¨€è®¾ç½® ===")]
+    [SerializeField] private bool useMultiLanguageScripts = true; // æ˜¯å¦å¯ç”¨å¤šè¯­è¨€è„šæœ¬
 
-    [Header("=== µ÷ÊÔ ===")]
+    [Header("=== è°ƒè¯• ===")]
     [SerializeField] private bool debugMode = true;
 
-    // Ë½ÓĞ±äÁ¿
+    // ç§æœ‰å˜é‡
     private Dictionary<string, StageConfig> stageConfigDict;
     private Dictionary<string, GameObject> stageObjectDict;
     private StageConfig currentStage;
 
-    // ¡¾ĞÂÔö¡¿´°¿Ú×ª»»Êı¾İ»º´æ
+    // çª—å£è½¬æ¢æ•°æ®ç¼“å­˜
     private WindowTransitionData? cachedWindowTransition;
 
-    #region ³õÊ¼»¯
+    private bool isRestoringFromSave = false;
+
+    #region åˆå§‹åŒ–
 
     void Awake()
     {
@@ -66,41 +68,45 @@ public class GameFlowController : MonoBehaviour
 
     void OnEnable()
     {
-        // ¶©ÔÄ¾²Ì¬ÊÂ¼ş
+        // è®¢é˜…é™æ€äº‹ä»¶
         GameEvents.OnClueUnlockRequested += HandleClueUnlockRequest;
         GameEvents.OnDialogueBlockRequested += HandleDialogueBlockRequest;
         GameEvents.OnStageChangeRequested += HandleStageChangeRequest;
 
-        LogDebug("ÒÑ¶©ÔÄÓÎÏ·ÊÂ¼ş");
+        LogDebug("å·²è®¢é˜…æ¸¸æˆäº‹ä»¶");
     }
 
     void OnDisable()
     {
-        // È¡Ïû¶©ÔÄ£¬·ÀÖ¹ÄÚ´æĞ¹Â©
+        // å–æ¶ˆè®¢é˜…ï¼Œé˜²æ­¢å†…å­˜æ³„æ¼
         GameEvents.OnClueUnlockRequested -= HandleClueUnlockRequest;
         GameEvents.OnDialogueBlockRequested -= HandleDialogueBlockRequest;
         GameEvents.OnStageChangeRequested -= HandleStageChangeRequest;
 
-        LogDebug("ÒÑÈ¡Ïû¶©ÔÄÓÎÏ·ÊÂ¼ş");
+        LogDebug("å·²å–æ¶ˆè®¢é˜…æ¸¸æˆäº‹ä»¶");
     }
 
     void Start()
     {
-        // ²éÕÒDialogueManager
+        // æŸ¥æ‰¾DialogueManager
         if (dialogueManager == null)
         {
             dialogueManager = FindObjectOfType<DialogueManager>();
         }
 
-        // Èç¹ûÃ»ÓĞ´Ó´æµµ¼ÓÔØ£¬Ôò´ÓÆğÊ¼Stage¿ªÊ¼
-        if (string.IsNullOrEmpty(currentStageId))
+        if (string.IsNullOrEmpty(currentStageId) && !isRestoringFromSave)
         {
+            LogDebug("æœªæ£€æµ‹åˆ°å­˜æ¡£æ¢å¤ï¼ŒåŠ è½½èµ·å§‹Stage");
             LoadStage(startingStageId);
+        }
+        else if (isRestoringFromSave)
+        {
+            LogDebug("æ£€æµ‹åˆ°å­˜æ¡£æ¢å¤æ¨¡å¼ï¼Œè·³è¿‡è‡ªåŠ¨åŠ è½½èµ·å§‹Stage");
         }
     }
 
     /// <summary>
-    /// ³õÊ¼»¯ÅäÖÃ×Öµä
+    /// åˆå§‹åŒ–é…ç½®å­—å…¸
     /// </summary>
     private void InitializeConfigs()
     {
@@ -112,16 +118,16 @@ public class GameFlowController : MonoBehaviour
             {
                 stageConfigDict[config.stageId] = config;
 
-                // ³õÊ¼»¯¶Ô»°¿éÅäÖÃ×Öµä
+                // åˆå§‹åŒ–å¯¹è¯å—é…ç½®å­—å…¸
                 config.InitializeDictionary();
             }
         }
 
-        LogDebug($"³õÊ¼»¯ÁË {stageConfigDict.Count} ¸öStageÅäÖÃ");
+        LogDebug($"åˆå§‹åŒ–äº† {stageConfigDict.Count} ä¸ªStageé…ç½®");
     }
 
     /// <summary>
-    /// »º´æStage GameObject
+    /// ç¼“å­˜Stage GameObject
     /// </summary>
     private void CacheStageObjects()
     {
@@ -129,37 +135,31 @@ public class GameFlowController : MonoBehaviour
 
         if (stageContainer == null)
         {
-            // ³¢ÊÔ×Ô¶¯²éÕÒ
+            // å°è¯•è‡ªåŠ¨æŸ¥æ‰¾
             GameObject canvas = GameObject.Find("Canvas");
             if (canvas != null)
             {
                 stageContainer = canvas.transform;
             }
-            else
-            {
-                LogError("Î´ÕÒµ½StageÈİÆ÷£¡");
-                return;
-            }
         }
 
-        // ±éÀúËùÓĞ×Ó¶ÔÏó£¬»º´æStage¶ÔÏó
+        // éå†æ‰€æœ‰å­å¯¹è±¡ï¼Œç¼“å­˜Stageå¯¹è±¡
         foreach (Transform child in stageContainer)
         {
-            // ¼ÙÉèStage¶ÔÏóµÄÃüÃû¹æÔòÊÇ "Stage01_Desktop" ÕâÑùµÄ¸ñÊ½
             if (child.name.StartsWith("Stage"))
             {
                 stageObjectDict[child.name] = child.gameObject;
-                LogDebug($"»º´æStage¶ÔÏó: {child.name}");
+                LogDebug($"ç¼“å­˜Stageå¯¹è±¡: {child.name}");
             }
         }
     }
 
     #endregion
 
-    #region ÊÂ¼ş´¦ÀíÆ÷
+    #region äº‹ä»¶å¤„ç†å™¨
 
     /// <summary>
-    /// ´¦ÀíÏßË÷½âËøÇëÇó
+    /// å¤„ç†çº¿ç´¢è§£é”è¯·æ±‚
     /// </summary>
     private void HandleClueUnlockRequest(string clueId)
     {
@@ -167,7 +167,7 @@ public class GameFlowController : MonoBehaviour
     }
 
     /// <summary>
-    /// ´¦Àí¶Ô»°¿éÇëÇó
+    /// å¤„ç†å¯¹è¯å—è¯·æ±‚
     /// </summary>
     private void HandleDialogueBlockRequest(string blockId)
     {
@@ -175,7 +175,7 @@ public class GameFlowController : MonoBehaviour
     }
 
     /// <summary>
-    /// ´¦ÀíStageÇĞ»»ÇëÇó
+    /// å¤„ç†Stageåˆ‡æ¢è¯·æ±‚
     /// </summary>
     private void HandleStageChangeRequest(string stageId)
     {
@@ -184,40 +184,57 @@ public class GameFlowController : MonoBehaviour
 
     #endregion
 
-    #region Stage¹ÜÀí
+    #region Stageç®¡ç†
 
     /// <summary>
-    /// ¼ÓÔØÖ¸¶¨Stage
+    /// åŠ è½½æŒ‡å®šStage
     /// </summary>
-    public void LoadStage(string stageId)
+    /// <param name="stageId">Stage ID</param>
+    /// <param name="triggerAutoSave">æ˜¯å¦è§¦å‘è‡ªåŠ¨å­˜æ¡£ï¼ˆé»˜è®¤trueï¼‰</param>
+    public void LoadStage(string stageId, bool triggerAutoSave = true)
     {
-        LogDebug($"¼ÓÔØStage: {stageId}");
+        LogDebug($"åŠ è½½Stage: {stageId}, è§¦å‘å­˜æ¡£: {triggerAutoSave}");
 
-        // Òş²ØËùÓĞStage
+        // éšè—æ‰€æœ‰Stage
         foreach (var kvp in stageObjectDict)
         {
             kvp.Value.SetActive(false);
         }
 
-        // ÏÔÊ¾Ä¿±êStage
+        // æ˜¾ç¤ºç›®æ ‡Stage
+        if (!stageObjectDict.ContainsKey(stageId))
+        {
+            LogError($"æ‰¾ä¸åˆ°Stageå¯¹è±¡: {stageId}");
+            return;
+        }
+
         stageObjectDict[stageId].SetActive(true);
 
-        // ¸üĞÂµ±Ç°×´Ì¬
+        // æ›´æ–°å½“å‰çŠ¶æ€
         currentStageId = stageId;
-        currentStage = stageConfigDict[stageId];
+        currentStage = stageConfigDict.ContainsKey(stageId) ? stageConfigDict[stageId] : null;
 
-        // ³õÊ¼»¯StageÄÚµÄ¿É½»»¥¶ÔÏó
+        if (currentStage == null)
+        {
+            LogError($"æ‰¾ä¸åˆ°Stageé…ç½®: {stageId}");
+        }
+
+        // åˆå§‹åŒ–Stageå†…çš„å¯äº¤äº’å¯¹è±¡
         InitializeStageInteractables();
 
-        // ´¥·¢UnityÊÂ¼ş
+        // è§¦å‘Unityäº‹ä»¶
         OnStageChanged?.Invoke(stageId);
-        OnAutoSaveRequested?.Invoke();
 
-        LogDebug($"Stage {stageId} ¼ÓÔØÍê³É");
+        if (triggerAutoSave)
+        {
+            OnAutoSaveRequested?.Invoke();
+        }
+
+        LogDebug($"Stage {stageId} åŠ è½½å®Œæˆ");
     }
 
     /// <summary>
-    /// ³õÊ¼»¯StageÄÚµÄ¿É½»»¥¶ÔÏó
+    /// åˆå§‹åŒ–Stageå†…çš„å¯äº¤äº’å¯¹è±¡
     /// </summary>
     private void InitializeStageInteractables()
     {
@@ -225,92 +242,92 @@ public class GameFlowController : MonoBehaviour
 
         GameObject stageObj = stageObjectDict[currentStageId];
 
-        // ±éÀúËùÓĞ¶Ô»°¿éÅäÖÃ
+        // éå†æ‰€æœ‰å¯¹è¯å—é…ç½®
         foreach (var dialogueBlock in currentStage.dialogueBlocks)
         {
-            // Èç¹ûÓĞ¹ØÁªµÄGameObject£¬¸ù¾İÌõ¼şÉèÖÃÆä¼¤»î×´Ì¬
+            // å¦‚æœæœ‰å…³è”çš„GameObjectï¼Œæ ¹æ®æ¡ä»¶è®¾ç½®å…¶æ¿€æ´»çŠ¶æ€
             if (!string.IsNullOrEmpty(dialogueBlock.interactableObjectName))
             {
                 Transform interactable = stageObj.transform.Find(dialogueBlock.interactableObjectName);
                 if (interactable != null)
                 {
-                    // ¼ì²éÊÇ·ñÂú×ã½âËøÌõ¼ş
+                    // æ£€æŸ¥æ˜¯å¦æ»¡è¶³è§£é”æ¡ä»¶
                     bool canInteract = CheckDialogueBlockCondition(dialogueBlock);
                     interactable.gameObject.SetActive(canInteract);
 
-                    LogDebug($"¿É½»»¥¶ÔÏó {dialogueBlock.interactableObjectName} ×´Ì¬: {canInteract}");
+                    LogDebug($"å¯äº¤äº’å¯¹è±¡ {dialogueBlock.interactableObjectName} çŠ¶æ€: {canInteract}");
                 }
             }
         }
     }
 
     /// <summary>
-    /// ³¢ÊÔ½øÈëÏÂÒ»¸öStage
+    /// å°è¯•è¿›å…¥ä¸‹ä¸€ä¸ªStage
     /// </summary>
     public void TryProgressToNextStage()
     {
         if (currentStage == null) return;
 
-        // ¼ì²éÊÇ·ñÂú×ã½øÈëÏÂÒ»StageµÄÌõ¼ş
+        // æ£€æŸ¥æ˜¯å¦æ»¡è¶³è¿›å…¥ä¸‹ä¸€Stageçš„æ¡ä»¶
         if (CheckStageProgressCondition())
         {
             if (!string.IsNullOrEmpty(currentStage.nextStageId))
             {
-                LogDebug($"Âú×ãÌõ¼ş£¬½øÈëÏÂÒ»Stage: {currentStage.nextStageId}");
+                LogDebug($"æ»¡è¶³æ¡ä»¶ï¼Œè¿›å…¥ä¸‹ä¸€Stage: {currentStage.nextStageId}");
                 LoadStage(currentStage.nextStageId);
             }
             else
             {
-                LogDebug("ÒÑµ½´ï×îºóµÄStage");
+                LogDebug("å·²åˆ°è¾¾æœ€åçš„Stage");
             }
         }
         else
         {
-            LogDebug("²»Âú×ã½øÈëÏÂÒ»StageµÄÌõ¼ş");
+            LogDebug("ä¸æ»¡è¶³è¿›å…¥ä¸‹ä¸€Stageçš„æ¡ä»¶");
         }
     }
 
     #endregion
 
-    #region ¶Ô»°¿é¹ÜÀí
+    #region å¯¹è¯å—ç®¡ç†
 
     /// <summary>
-    /// ¿ªÊ¼¶Ô»°¿é£¨Ê¹ÓÃdialogueBlockFileId×÷Îª±êÊ¶£©
+    /// å¼€å§‹å¯¹è¯å—ï¼ˆä½¿ç”¨dialogueBlockFileIdä½œä¸ºæ ‡è¯†ï¼‰
     /// </summary>
     public void StartDialogueBlock(string dialogueBlockFileId)
     {
-        // ²éÕÒ¶Ô»°¿éÅäÖÃ
+        // æŸ¥æ‰¾å¯¹è¯å—é…ç½®
         var dialogueBlock = currentStage.GetDialogueBlock(dialogueBlockFileId);
         if (dialogueBlock == null)
         {
-            LogError($"ÕÒ²»µ½¶Ô»°¿éÅäÖÃ: {dialogueBlockFileId}");
+            LogError($"æ‰¾ä¸åˆ°å¯¹è¯å—é…ç½®: {dialogueBlockFileId}");
             return;
         }
 
-        // ¼ì²éÌõ¼ş
+        // æ£€æŸ¥æ¡ä»¶
         if (!CheckDialogueBlockCondition(dialogueBlock))
         {
-            LogDebug($"¶Ô»°¿é {dialogueBlockFileId} Ìõ¼ş²»Âú×ã");
+            LogDebug($"å¯¹è¯å— {dialogueBlockFileId} æ¡ä»¶ä¸æ»¡è¶³");
             return;
         }
 
-        // ¸ù¾İµ±Ç°ÓïÑÔÉèÖÃ¹¹½¨ÎÄ¼şÃû
+        // æ ¹æ®å½“å‰è¯­è¨€è®¾ç½®æ„å»ºæ–‡ä»¶å
         string fileName = GetCurrentScriptFileName();
 
         currentDialogueFile = fileName;
         currentDialogueBlockId = dialogueBlockFileId;
         dialogueManager.StartDialogue(dialogueBlock.dialogueBlockFileId);
-        LogDebug($"¿ªÊ¼¶Ô»°¿é: {dialogueBlockFileId} -> ÎÄ¼ş: {fileName}");
+        LogDebug($"å¼€å§‹å¯¹è¯å—: {dialogueBlockFileId} -> æ–‡ä»¶: {fileName}");
     }
 
     /// <summary>
-    /// ¸ù¾İµ±Ç°ÓïÑÔÉèÖÃ»ñÈ¡½Å±¾ÎÄ¼şÃû
+    /// æ ¹æ®å½“å‰è¯­è¨€è®¾ç½®è·å–è„šæœ¬æ–‡ä»¶å
     /// </summary>
     private string GetCurrentScriptFileName()
     {
-        string fileName = "zh"; // Ä¬ÈÏÖĞÎÄ
+        string fileName = "zh"; // é»˜è®¤ä¸­æ–‡
 
-        // ´Ó LanguageManager »ñÈ¡µ±Ç°ÓïÑÔ
+        // ä» LanguageManager è·å–å½“å‰è¯­è¨€
         if (LanguageManager.Instance != null)
         {
             switch (LanguageManager.Instance.currentLanguage)
@@ -334,21 +351,21 @@ public class GameFlowController : MonoBehaviour
     }
 
     /// <summary>
-    /// ¶Ô»°¿éÍê³ÉÊ±µ÷ÓÃ
+    /// å¯¹è¯å—å®Œæˆæ—¶è°ƒç”¨
     /// </summary>
     public void OnDialogueBlockComplete(string dialogueBlockFileId)
     {
         if (string.IsNullOrEmpty(dialogueBlockFileId)) return;
 
-        LogDebug($"¶Ô»°¿éÍê³É: {dialogueBlockFileId}");
+        LogDebug($"å¯¹è¯å—å®Œæˆ: {dialogueBlockFileId}");
 
-        // ±ê¼ÇÎªÒÑÍê³É
+        // æ ‡è®°ä¸ºå·²å®Œæˆ
         if (!completedDialogueBlocks.Contains(dialogueBlockFileId))
         {
             completedDialogueBlocks.Add(dialogueBlockFileId);
         }
 
-        // ½âËø¶ÔÓ¦ÏßË÷
+        // è§£é”å¯¹åº”çº¿ç´¢
         if (currentStage != null)
         {
             var dialogueBlock = currentStage.GetDialogueBlock(dialogueBlockFileId);
@@ -361,26 +378,26 @@ public class GameFlowController : MonoBehaviour
             }
         }
 
-        // Çå¿Õµ±Ç°¶Ô»°×´Ì¬
+        // æ¸…ç©ºå½“å‰å¯¹è¯çŠ¶æ€
         currentDialogueFile = null;
         currentDialogueBlockId = null;
 
-        // ¸üĞÂ¿É½»»¥¶ÔÏó×´Ì¬
+        // æ›´æ–°å¯äº¤äº’å¯¹è±¡çŠ¶æ€
         InitializeStageInteractables();
 
-        // ´¥·¢×Ô¶¯´æµµ
+        // è§¦å‘è‡ªåŠ¨å­˜æ¡£
         OnAutoSaveRequested?.Invoke();
         GameEvents.NotifyDialogueBlockCompleted(dialogueBlockFileId);
     }
 
     /// <summary>
-    /// ¼ì²é¶Ô»°¿éÌõ¼ş
+    /// æ£€æŸ¥å¯¹è¯å—æ¡ä»¶
     /// </summary>
     private bool CheckDialogueBlockCondition(DialogueBlockConfig dialogueBlock)
     {
         if (dialogueBlock == null) return false;
 
-        // ¼ì²é±ØĞèµÄÏßË÷
+        // æ£€æŸ¥å¿…éœ€çš„çº¿ç´¢
         if (dialogueBlock.requiredClues != null && dialogueBlock.requiredClues.Count > 0)
         {
             foreach (string clue in dialogueBlock.requiredClues)
@@ -392,7 +409,7 @@ public class GameFlowController : MonoBehaviour
             }
         }
 
-        // ¼ì²é±ØĞèµÄ¶Ô»°¿é
+        // æ£€æŸ¥å¿…éœ€çš„å¯¹è¯å—
         if (dialogueBlock.requiredDialogueBlocks != null && dialogueBlock.requiredDialogueBlocks.Count > 0)
         {
             foreach (string blockId in dialogueBlock.requiredDialogueBlocks)
@@ -409,10 +426,10 @@ public class GameFlowController : MonoBehaviour
 
     #endregion
 
-    #region ÏßË÷¹ÜÀí
+    #region çº¿ç´¢ç®¡ç†
 
     /// <summary>
-    /// ½âËøÏßË÷
+    /// è§£é”çº¿ç´¢
     /// </summary>
     public void UnlockClue(string clueId)
     {
@@ -421,21 +438,21 @@ public class GameFlowController : MonoBehaviour
         if (!unlockedClues.Contains(clueId))
         {
             unlockedClues.Add(clueId);
-            LogDebug($"½âËøÏßË÷: {clueId}");
+            LogDebug($"è§£é”çº¿ç´¢: {clueId}");
 
-            // ´¥·¢UnityÊÂ¼ş
+            // è§¦å‘Unityäº‹ä»¶
             OnClueUnlocked?.Invoke(clueId);
 
-            // ´¥·¢¾²Ì¬ÊÂ¼ş
+            // è§¦å‘é™æ€äº‹ä»¶
             GameEvents.NotifyClueUnlocked(clueId);
 
-            // ¸üĞÂ¿É½»»¥¶ÔÏó×´Ì¬
+            // æ›´æ–°å¯äº¤äº’å¯¹è±¡çŠ¶æ€
             InitializeStageInteractables();
         }
     }
 
     /// <summary>
-    /// ¼ì²éÊÇ·ñÓµÓĞÏßË÷
+    /// æ£€æŸ¥æ˜¯å¦æ‹¥æœ‰çº¿ç´¢
     /// </summary>
     public bool HasClue(string clueId)
     {
@@ -444,22 +461,24 @@ public class GameFlowController : MonoBehaviour
 
     #endregion
 
-    #region Ìõ¼ş¼ì²é
+    #region æ¡ä»¶æ£€æŸ¥
+
     /// <summary>
-    /// ¼ì²éµ±Ç°StageÊÇ·ñÂú×ã½ø¶ÈÌõ¼ş£¨¹«¿ª½Ó¿Ú£©
+    /// æ£€æŸ¥å½“å‰Stageæ˜¯å¦æ»¡è¶³è¿›åº¦æ¡ä»¶ï¼ˆå…¬å¼€æ¥å£ï¼‰
     /// </summary>
     public bool IsStageProgressConditionMet()
     {
         return CheckStageProgressCondition();
     }
+
     /// <summary>
-    /// ¼ì²éStage½ø¶ÈÌõ¼ş
+    /// æ£€æŸ¥Stageè¿›åº¦æ¡ä»¶
     /// </summary>
     private bool CheckStageProgressCondition()
     {
         if (currentStage == null) return false;
 
-        // ¼ì²é±ØĞèµÄÏßË÷
+        // æ£€æŸ¥å¿…éœ€çš„çº¿ç´¢
         if (currentStage.requiredCluesForProgress != null && currentStage.requiredCluesForProgress.Count > 0)
         {
             foreach (string clue in currentStage.requiredCluesForProgress)
@@ -471,7 +490,7 @@ public class GameFlowController : MonoBehaviour
             }
         }
 
-        // ¼ì²é±ØĞèÍê³ÉµÄ¶Ô»°¿é
+        // æ£€æŸ¥å¿…éœ€å®Œæˆçš„å¯¹è¯å—
         if (currentStage.requiredDialogueBlocksForProgress != null && currentStage.requiredDialogueBlocksForProgress.Count > 0)
         {
             foreach (string blockId in currentStage.requiredDialogueBlocksForProgress)
@@ -488,23 +507,25 @@ public class GameFlowController : MonoBehaviour
 
     #endregion
 
-    #region ¹«¹²½Ó¿Ú
+    #region å…¬å…±æ¥å£
+
     public void UnlockClueDelayed(string clueId, float delaySeconds)
     {
-        LogDebug($"ÊÕµ½ÑÓ³Ù½âËøÇëÇó - ÏßË÷: {clueId}, ÑÓ³Ù: {delaySeconds}Ãë");
+        LogDebug($"æ”¶åˆ°å»¶è¿Ÿè§£é”è¯·æ±‚ - çº¿ç´¢: {clueId}, å»¶è¿Ÿ: {delaySeconds}ç§’");
         StartCoroutine(DelayedUnlockCoroutine(clueId, delaySeconds));
     }
 
     private System.Collections.IEnumerator DelayedUnlockCoroutine(string clueId, float delaySeconds)
     {
-        // µÈ´ıÖ¸¶¨Ê±¼ä
+        // ç­‰å¾…æŒ‡å®šæ—¶é—´
         yield return new WaitForSeconds(delaySeconds);
 
-        // Ö´ĞĞ½âËø
+        // æ‰§è¡Œè§£é”
         UnlockClue(clueId);
 
-        LogDebug($"ÑÓ³Ù½âËøÍê³É - ÏßË÷: {clueId}");
+        LogDebug($"å»¶è¿Ÿè§£é”å®Œæˆ - çº¿ç´¢: {clueId}");
     }
+
     public IReadOnlyList<StageConfig> GetStageConfigsSafe()
     {
         return stageConfigs.AsReadOnly();
@@ -523,21 +544,21 @@ public class GameFlowController : MonoBehaviour
     public void CacheWindowTransition(WindowTransitionData data)
     {
         cachedWindowTransition = data;
-        LogDebug($"»º´æ´°¿Ú×ª»»Êı¾İ - Î»ÖÃ: {data.windowPosition}");
+        LogDebug($"ç¼“å­˜çª—å£è½¬æ¢æ•°æ® - ä½ç½®: {data.windowPosition}");
     }
 
     public WindowTransitionData? ConsumeWindowTransition()
     {
         var data = cachedWindowTransition;
-        cachedWindowTransition = null; // Ïû·ÑºóÇå¿Õ
+        cachedWindowTransition = null; // æ¶ˆè´¹åæ¸…ç©º
 
         if (data.HasValue)
         {
-            LogDebug($"Ïû·Ñ´°¿Ú×ª»»Êı¾İ - Î»ÖÃ: {data.Value.windowPosition}");
+            LogDebug($"æ¶ˆè´¹çª—å£è½¬æ¢æ•°æ® - ä½ç½®: {data.Value.windowPosition}");
         }
         else
         {
-            LogDebug("ÎŞ»º´æµÄ´°¿Ú×ª»»Êı¾İ");
+            LogDebug("æ— ç¼“å­˜çš„çª—å£è½¬æ¢æ•°æ®");
         }
 
         return data;
@@ -545,10 +566,10 @@ public class GameFlowController : MonoBehaviour
 
     #endregion
 
-    #region ´æµµÖ§³Ö
+    #region å­˜æ¡£æ”¯æŒ
 
     /// <summary>
-    /// »ñÈ¡µ±Ç°ÓÎÏ·×´Ì¬£¨ÓÃÓÚ´æµµ£©
+    /// è·å–å½“å‰æ¸¸æˆçŠ¶æ€ï¼ˆç”¨äºå­˜æ¡£ï¼‰
     /// </summary>
     public GameFlowState GetCurrentState()
     {
@@ -563,37 +584,40 @@ public class GameFlowController : MonoBehaviour
     }
 
     /// <summary>
-    /// »Ö¸´ÓÎÏ·×´Ì¬£¨´Ó´æµµ¼ÓÔØ£©
+    /// æ¢å¤æ¸¸æˆçŠ¶æ€ï¼ˆä»å­˜æ¡£åŠ è½½ï¼‰
     /// </summary>
-    public void RestoreState(GameFlowState state)
+    /// <param name="state">æ¸¸æˆçŠ¶æ€</param>
+    /// <param name="isFromSave">æ˜¯å¦æ¥è‡ªå­˜æ¡£æ¢å¤ï¼ˆé»˜è®¤trueï¼‰</param>
+    public void RestoreState(GameFlowState state, bool isFromSave = true)
     {
         if (state == null) return;
 
-        LogDebug("»Ö¸´ÓÎÏ·Á÷³Ì×´Ì¬");
+        isRestoringFromSave = isFromSave;
 
-        // »Ö¸´Êı¾İ
+        LogDebug($"æ¢å¤æ¸¸æˆæµç¨‹çŠ¶æ€ (ä»å­˜æ¡£: {isFromSave})");
+
+        // æ¢å¤æ•°æ®
         unlockedClues = new List<string>(state.unlockedClues ?? new List<string>());
         completedDialogueBlocks = new List<string>(state.completedDialogueBlocks ?? new List<string>());
-
-        // ¼ÓÔØStage
         if (!string.IsNullOrEmpty(state.currentStageId))
         {
-            LoadStage(state.currentStageId);
+            LoadStage(state.currentStageId, triggerAutoSave: false);
         }
 
-        // Èç¹ûÓĞÎ´Íê³ÉµÄ¶Ô»°¿é£¬»Ö¸´Ëü
+        // å¦‚æœæœ‰æœªå®Œæˆçš„å¯¹è¯å—ï¼Œæ¢å¤å®ƒ
         if (!string.IsNullOrEmpty(state.currentDialogueBlockId))
         {
             currentDialogueFile = state.currentDialogueFile;
             currentDialogueBlockId = state.currentDialogueBlockId;
 
-            LogDebug($"»Ö¸´Î´Íê³ÉµÄ¶Ô»°×´Ì¬: {currentDialogueFile}:{currentDialogueBlockId}");
+            LogDebug($"æ¢å¤æœªå®Œæˆçš„å¯¹è¯çŠ¶æ€: {currentDialogueFile}:{currentDialogueBlockId}");
         }
+        isRestoringFromSave = false;
     }
 
     #endregion
 
-    #region µ÷ÊÔ¹¤¾ß
+    #region è°ƒè¯•å·¥å…·
 
     private void LogDebug(string message)
     {
@@ -612,32 +636,32 @@ public class GameFlowController : MonoBehaviour
 }
 
 /// <summary>
-/// StageÅäÖÃ
+/// Stageé…ç½®
 /// </summary>
 [System.Serializable]
 public class StageConfig
 {
-    [Header("»ù´¡ĞÅÏ¢")]
+    [Header("åŸºç¡€ä¿¡æ¯")]
     public string stageId = "Stage01_Desktop";
 
-    [Header("¶Ô»°¿éÅäÖÃ")]
+    [Header("å¯¹è¯å—é…ç½®")]
     public List<DialogueBlockConfig> dialogueBlocks = new List<DialogueBlockConfig>();
 
-    [Header("½ø¶ÈÌõ¼ş")]
-    [Tooltip("½øÈëÏÂÒ»StageĞèÒªµÄÏßË÷")]
+    [Header("è¿›åº¦æ¡ä»¶")]
+    [Tooltip("è¿›å…¥ä¸‹ä¸€Stageéœ€è¦çš„çº¿ç´¢")]
     public List<string> requiredCluesForProgress = new List<string>();
 
-    [Tooltip("½øÈëÏÂÒ»StageĞèÒªÍê³ÉµÄ¶Ô»°¿é")]
+    [Tooltip("è¿›å…¥ä¸‹ä¸€Stageéœ€è¦å®Œæˆçš„å¯¹è¯å—")]
     public List<string> requiredDialogueBlocksForProgress = new List<string>();
 
-    [Header("Á÷³Ì¿ØÖÆ")]
+    [Header("æµç¨‹æ§åˆ¶")]
     public string nextStageId = "";
 
-    // ÄÚ²¿Ê¹ÓÃµÄ×Öµä
+    // å†…éƒ¨ä½¿ç”¨çš„å­—å…¸
     private Dictionary<string, DialogueBlockConfig> dialogueBlockDict;
 
     /// <summary>
-    /// ³õÊ¼»¯ÄÚ²¿×Öµä
+    /// åˆå§‹åŒ–å†…éƒ¨å­—å…¸
     /// </summary>
     public void InitializeDictionary()
     {
@@ -652,7 +676,7 @@ public class StageConfig
     }
 
     /// <summary>
-    /// »ñÈ¡¶Ô»°¿éÅäÖÃ
+    /// è·å–å¯¹è¯å—é…ç½®
     /// </summary>
     public DialogueBlockConfig GetDialogueBlock(string dialogueBlockFileId)
     {
@@ -671,33 +695,33 @@ public class StageConfig
 }
 
 /// <summary>
-/// ¶Ô»°¿éÅäÖÃ
+/// å¯¹è¯å—é…ç½®
 /// </summary>
 [System.Serializable]
 public class DialogueBlockConfig
 {
-    [Header("¾ç±¾ÅäÖÃ")]
-    [Tooltip("¾ç±¾ÎÄ¼şÖĞµÄ¶Ô»°¿éID")]
+    [Header("å‰§æœ¬é…ç½®")]
+    [Tooltip("å‰§æœ¬æ–‡ä»¶ä¸­çš„å¯¹è¯å—ID")]
     public string dialogueBlockFileId = "001";
 
-    [Header("½»»¥ÉèÖÃ")]
-    [Tooltip("¹ØÁªµÄ¿É½»»¥¶ÔÏóÃû³Æ£¨¿ÉÑ¡£©")]
+    [Header("äº¤äº’è®¾ç½®")]
+    [Tooltip("å…³è”çš„å¯äº¤äº’å¯¹è±¡åç§°ï¼ˆå¯é€‰ï¼‰")]
     public string interactableObjectName = "";
 
-    [Header("½âËøÌõ¼ş")]
-    [Tooltip("ĞèÒªµÄÏßË÷")]
+    [Header("è§£é”æ¡ä»¶")]
+    [Tooltip("éœ€è¦çš„çº¿ç´¢")]
     public List<string> requiredClues = new List<string>();
 
-    [Tooltip("ĞèÒªÍê³ÉµÄÆäËû¶Ô»°¿é£¨Ê¹ÓÃdialogueBlockFileId£©")]
+    [Tooltip("éœ€è¦å®Œæˆçš„å…¶ä»–å¯¹è¯å—ï¼ˆä½¿ç”¨dialogueBlockFileIdï¼‰")]
     public List<string> requiredDialogueBlocks = new List<string>();
 
-    [Header("Íê³Éºó½âËø")]
-    [Tooltip("Íê³Éºó½âËøµÄÏßË÷")]
+    [Header("å®Œæˆåè§£é”")]
+    [Tooltip("å®Œæˆåè§£é”çš„çº¿ç´¢")]
     public List<string> unlocksClues = new List<string>();
 }
 
 /// <summary>
-/// ÓÎÏ·Á÷³Ì×´Ì¬£¨ÓÃÓÚ´æµµ£©
+/// æ¸¸æˆæµç¨‹çŠ¶æ€ï¼ˆç”¨äºå­˜æ¡£ï¼‰
 /// </summary>
 [System.Serializable]
 public class GameFlowState
