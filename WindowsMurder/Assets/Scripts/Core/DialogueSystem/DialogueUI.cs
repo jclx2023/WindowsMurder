@@ -53,12 +53,11 @@ public class DialogueUI : MonoBehaviour
         ProcessingInput
     }
 
-
     private enum PresetState
     {
-        Inactive,           // 不在预设模式
-        ShowingText,        // 显示文本（打字机）
-        WaitingForClick     // 等待点击继续
+        Inactive,
+        ShowingText,
+        WaitingForClick
     }
 
     // ===== 状态变量 =====
@@ -104,11 +103,10 @@ public class DialogueUI : MonoBehaviour
         if (playerInputField != null)
             playerInputField.onSubmit.AddListener(delegate { OnSendMessage(); });
 
-        // 新增：退出按钮事件
         if (exitLLMButton != null)
         {
             exitLLMButton.onClick.AddListener(OnExitLLMButtonClicked);
-            exitLLMButton.gameObject.SetActive(false);  // 初始隐藏
+            exitLLMButton.gameObject.SetActive(false);
         }
 
         if (dialogueText != null)
@@ -221,7 +219,6 @@ public class DialogueUI : MonoBehaviour
 
             case PresetState.WaitingForClick:
                 isPresetTyping = false;
-                // UI保持不变
                 break;
         }
     }
@@ -249,7 +246,6 @@ public class DialogueUI : MonoBehaviour
     // ===== 点击处理 =====
     private void OnDialogueTextClicked()
     {
-        // 根据当前模式分别处理
         if (llmState != LLMState.Inactive)
         {
             HandleLLMClick();
@@ -300,17 +296,45 @@ public class DialogueUI : MonoBehaviour
         if (llmState == LLMState.Inactive)
             return;
 
-        // 停止LLM打字机（如果正在播放）
+        CleanupBeforeHide();
+        EndLLMMode();
+    }
+
+    // ===== 清理方法 =====
+    /// <summary>
+    /// 隐藏对话面板前的清理工作
+    /// </summary>
+    private void CleanupBeforeHide()
+    {
+        // 停止所有打字机协程
+        if (presetTypingCoroutine != null)
+        {
+            StopCoroutine(presetTypingCoroutine);
+            presetTypingCoroutine = null;
+        }
+
         if (llmTypingCoroutine != null)
         {
             StopCoroutine(llmTypingCoroutine);
             llmTypingCoroutine = null;
         }
 
+        // 停止所有动画协程
+        StopAllCoroutines();
+
+        // 停止音效
         if (audioSource != null)
             audioSource.Stop();
 
-        EndLLMMode();
+        // 重置状态
+        SetLLMState(LLMState.Inactive);
+        SetPresetState(PresetState.Inactive);
+        isLLMTyping = false;
+        isPresetTyping = false;
+
+        // 清空文本
+        if (dialogueText != null)
+            dialogueText.text = "";
     }
 
     // ===== 对话启动 =====
@@ -359,7 +383,6 @@ public class DialogueUI : MonoBehaviour
     // ===== 普通模式显示 =====
     private void ShowPresetLine(DialogueLine line)
     {
-        // 退出LLM模式，进入普通模式
         SetLLMState(LLMState.Inactive);
 
         SetCharacterInfo(line.characterId, line.portraitId);
@@ -450,7 +473,6 @@ public class DialogueUI : MonoBehaviour
     // ===== LLM模式显示 =====
     private void StartLLMMode(DialogueLine line)
     {
-        // 退出普通模式，进入LLM模式
         SetPresetState(PresetState.Inactive);
         SetLLMState(LLMState.WaitingForAI);
 
@@ -544,7 +566,6 @@ public class DialogueUI : MonoBehaviour
         DialogueLine currentLine = CurrentLine;
         OnLineCompleted?.Invoke(currentLine?.id ?? "", currentLine?.characterId ?? "", currentDialogueBlockId, false);
 
-        // 打字机完成后，自动进入输入状态（或结束）
         if (aiRequestedEnd)
         {
             yield return new WaitForSeconds(1f);
@@ -777,8 +798,7 @@ public class DialogueUI : MonoBehaviour
 
     private void OnDialogueEnd()
     {
-        SetLLMState(LLMState.Inactive);
-        SetPresetState(PresetState.Inactive);
+        CleanupBeforeHide();
 
         OnDialogueBlockEnded?.Invoke(currentDialogueFileName, currentDialogueBlockId);
 

@@ -121,47 +121,12 @@ public class ContextMenuItem
     /// </summary>
     public string GetDisplayText()
     {
-        if (!useLocalizationKey)
-        {
-            return itemName; // 直接返回文本
-        }
-
-        // 尝试通过LanguageManager翻译
-        if (LanguageManager.Instance != null)
-        {
             string translatedText = LanguageManager.Instance.GetText(itemName);
             if (!string.IsNullOrEmpty(translatedText))
             {
                 return translatedText;
             }
-        }
-
-        // 翻译失败时的降级处理
-        return GetFallbackText();
-    }
-
-    /// <summary>
-    /// 获取降级文本（翻译失败时使用）
-    /// </summary>
-    private string GetFallbackText()
-    {
-        // 可以根据Key返回默认的英文文本
-        switch (itemName)
-        {
-            case MenuKeys.OPEN: return "Open";
-            case MenuKeys.COPY: return "Copy";
-            case MenuKeys.DELETE: return "Delete";
-            case MenuKeys.PROPERTIES: return "Properties";
-            case MenuKeys.RENAME: return "Rename";
-            case MenuKeys.REFRESH: return "Refresh";
-            case MenuKeys.EDIT: return "Edit";
-            case MenuKeys.VIEW: return "View";
-            case MenuKeys.CUT: return "Cut";
-            case MenuKeys.PASTE: return "Paste";
-            case MenuKeys.RUN: return "Run";
-            case MenuKeys.TALK: return "Talk";
-            default: return itemName; // 返回Key本身
-        }
+        return null;
     }
 }
 

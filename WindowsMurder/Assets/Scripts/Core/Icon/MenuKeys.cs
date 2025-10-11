@@ -9,6 +9,7 @@ public static class MenuKeys
     public const string OPEN_WITH = "2002";     // 打开方式
     public const string EDIT = "2003";          // 编辑
     public const string VIEW = "2004";          // 查看
+    public const string UNZIP = "2005";
 
     // 编辑操作类
     public const string COPY = "2010";          // 复制
@@ -42,113 +43,4 @@ public static class MenuKeys
     public const string TALK = "2060";          // 对话
     public const string QUESTION = "2061";      // 询问
     public const string GIVE_ITEM = "2062";     // 给予物品
-}
-
-/// <summary>
-/// 菜单项创建工具类
-/// 提供便捷的本地化菜单项创建方法
-/// </summary>
-public static class MenuItemFactory
-{
-    // 文件操作
-    public static ContextMenuItem CreateOpenItem()
-    {
-        return new ContextMenuItem("open", MenuKeys.OPEN);
-    }
-
-    public static ContextMenuItem CreateEditItem()
-    {
-        return new ContextMenuItem("edit", MenuKeys.EDIT);
-    }
-
-    public static ContextMenuItem CreateViewItem()
-    {
-        return new ContextMenuItem("view", MenuKeys.VIEW);
-    }
-
-    // 编辑操作
-    public static ContextMenuItem CreateCopyItem()
-    {
-        return new ContextMenuItem("copy", MenuKeys.COPY);
-    }
-
-    public static ContextMenuItem CreateCutItem()
-    {
-        return new ContextMenuItem("cut", MenuKeys.CUT);
-    }
-
-    public static ContextMenuItem CreatePasteItem()
-    {
-        return new ContextMenuItem("paste", MenuKeys.PASTE);
-    }
-
-    public static ContextMenuItem CreateDeleteItem()
-    {
-        return new ContextMenuItem("delete", MenuKeys.DELETE);
-    }
-
-    public static ContextMenuItem CreateRenameItem()
-    {
-        return new ContextMenuItem("rename", MenuKeys.RENAME);
-    }
-
-    // 属性操作
-    public static ContextMenuItem CreatePropertiesItem()
-    {
-        return new ContextMenuItem("properties", MenuKeys.PROPERTIES);
-    }
-
-    public static ContextMenuItem CreateDetailsItem()
-    {
-        return new ContextMenuItem("details", MenuKeys.DETAILS);
-    }
-
-    // 系统工具
-    public static ContextMenuItem CreateRefreshItem()
-    {
-        return new ContextMenuItem("refresh", MenuKeys.REFRESH);
-    }
-
-    public static ContextMenuItem CreateEmptyRecycleItem()
-    {
-        return new ContextMenuItem("empty_recycle", MenuKeys.EMPTY_RECYCLE);
-    }
-
-    public static ContextMenuItem CreateRestoreItem()
-    {
-        return new ContextMenuItem("restore", MenuKeys.RESTORE);
-    }
-
-    // 程序操作
-    public static ContextMenuItem CreateRunItem()
-    {
-        return new ContextMenuItem("run", MenuKeys.RUN);
-    }
-
-    public static ContextMenuItem CreateRunAsAdminItem()
-    {
-        return new ContextMenuItem("run_admin", MenuKeys.RUN_AS_ADMIN);
-    }
-
-    // 角色交互
-    public static ContextMenuItem CreateTalkItem()
-    {
-        return new ContextMenuItem("talk", MenuKeys.TALK);
-    }
-
-    public static ContextMenuItem CreateQuestionItem()
-    {
-        return new ContextMenuItem("question", MenuKeys.QUESTION);
-    }
-
-    // 带分隔线的菜单项
-    public static ContextMenuItem CreateDeleteItemWithSeparator()
-    {
-        return new ContextMenuItem("delete", MenuKeys.DELETE, true, true);
-    }
-
-    public static ContextMenuItem CreatePropertiesItemWithSeparator()
-    {
-        return new ContextMenuItem("properties", MenuKeys.PROPERTIES, true, true);
-    }
 }

@@ -404,7 +404,8 @@ MonoBehaviour:
   preDialogueBlockId: 5061
   mainDialogueBlockId: 5063
   postDialogueBlockId: 
-  requiredClues: []
+  requiredClues:
+  - cps_found
   requiredDialogueBlocks: []
   currentStage: 0
   debugMode: 1
@@ -6590,14 +6591,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 1924795990}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40b2ae81d76f21849bd62592ee5283af, type: 3}
+  m_Script: {fileID: 11500000, guid: 1d0d4508adfa4934bb337aa00b6b9a93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   actionName: 
   isEnabled: 1
-  folderWindowPrefab: {fileID: 1296558822151280354, guid: cc637ddd572f0c34593c7ced701f246a, type: 3}
-  windowParent: {fileID: 1909598888}
+  blockedWindowPrefab: {fileID: 5452073713683005478, guid: 0f70108fe7605484ab95cc8f8abced16, type: 3}
+  folderWindowPrefab: {fileID: 1291395780363563281, guid: 27512bca98ccb4c4f98ad4c39eedd18d, type: 3}
+  windowParent: {fileID: 694037108}
   defaultPathId: root
+  requiredDialogueBlocks:
+  - 501
+  - 502
+  - 503
+  - 504
+  - 505
+  - 5061
 --- !u!1 &1959642071
 GameObject:
   m_ObjectHideFlags: 0
@@ -6785,7 +6794,8 @@ MonoBehaviour:
       interactableObjectName: 
       requiredClues: []
       requiredDialogueBlocks: []
-      unlocksClues: []
+      unlocksClues:
+      - block_503
     - dialogueBlockFileId: 5031
       interactableObjectName: 
       requiredClues: []
@@ -6795,7 +6805,8 @@ MonoBehaviour:
       interactableObjectName: 
       requiredClues: []
       requiredDialogueBlocks: []
-      unlocksClues: []
+      unlocksClues:
+      - block_504
     - dialogueBlockFileId: 5041
       interactableObjectName: 
       requiredClues: []
@@ -6856,12 +6867,14 @@ MonoBehaviour:
       requiredClues: []
       requiredDialogueBlocks: []
       unlocksClues: []
-    - dialogueBlockFileId: 
+    - dialogueBlockFileId: 601
       interactableObjectName: 
       requiredClues: []
       requiredDialogueBlocks: []
-      unlocksClues: []
-    requiredCluesForProgress: []
+      unlocksClues:
+      - knife_comp
+    requiredCluesForProgress:
+    - knife_comp
     requiredDialogueBlocksForProgress:
     - 011
     nextStageId: 6

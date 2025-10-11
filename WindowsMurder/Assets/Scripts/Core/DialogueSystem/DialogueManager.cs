@@ -26,6 +26,10 @@ public class DialogueManager : MonoBehaviour
     private string currentDialogueBlockId;
     private bool isProcessingLLM = false;
 
+    // 对话队列
+    private Queue<(string fileName, string blockId)> dialogueQueue = new Queue<(string, string)>();
+    private bool isPlayingDialogue = false;
+
     void Start()
     {
         InitializeManager();
@@ -150,7 +154,7 @@ public class DialogueManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 开始指定的对话 - 完整版本
+    /// 开始指定的对话 - 完整版本（带队列）
     /// </summary>
     public void StartDialogue(string fileName, string blockId)
     {
@@ -160,11 +164,30 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
+        // 如果当前正在播放对话，加入队列
+        if (isPlayingDialogue)
+        {
+            dialogueQueue.Enqueue((fileName, blockId));
+            DebugLog($"对话块已加入队列: {fileName}:{blockId}，队列长度: {dialogueQueue.Count}");
+            return;
+        }
+
+        // 直接播放
+        PlayDialogue(fileName, blockId);
+    }
+
+    /// <summary>
+    /// 实际播放对话
+    /// </summary>
+    private void PlayDialogue(string fileName, string blockId)
+    {
         DialogueData dialogueData = DialogueLoader.LoadBlock(fileName, blockId);
 
         currentDialogueFile = fileName;
         currentDialogueBlockId = blockId;
-        DebugLog($"开始对话: {fileName}:{blockId}");
+        isPlayingDialogue = true;
+
+        DebugLog($"开始播放对话: {fileName}:{blockId}");
 
         if (dialogueUI != null)
         {
@@ -281,7 +304,7 @@ public class DialogueManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 对话块完成回调
+    /// 对话块完成回调（带队列处理）
     /// </summary>
     public void OnDialogueBlockComplete(string fileName, string blockId)
     {
@@ -289,11 +312,20 @@ public class DialogueManager : MonoBehaviour
 
         currentDialogueFile = null;
         currentDialogueBlockId = null;
+        isPlayingDialogue = false;
 
         GameFlowController gameFlow = FindObjectOfType<GameFlowController>();
         if (gameFlow != null)
         {
             gameFlow.OnDialogueBlockComplete(blockId);
+        }
+
+        // 检查队列是否有待播放的对话
+        if (dialogueQueue.Count > 0)
+        {
+            var next = dialogueQueue.Dequeue();
+            DebugLog($"从队列播放下一个对话: {next.fileName}:{next.blockId}，剩余队列: {dialogueQueue.Count}");
+            PlayDialogue(next.fileName, next.blockId);
         }
     }
 
