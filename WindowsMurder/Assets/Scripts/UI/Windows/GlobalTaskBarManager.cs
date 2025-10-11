@@ -173,7 +173,7 @@ public class GlobalTaskBarManager : MonoBehaviour
         if (window == null) return;
 
         CreateWindowButton(window, hierarchyInfo);
-        Debug.Log($"TaskBar: 窗口激活，创建按钮 - {window.Title}");
+        //Debug.Log($"TaskBar: 窗口激活，创建按钮 - {window.Title}");
     }
 
     /// <summary>
@@ -240,7 +240,7 @@ public class GlobalTaskBarManager : MonoBehaviour
         windowButtonMap[window] = buttonObj;
         buttonWindowMap[buttonObj] = window;
 
-        Debug.Log($"TaskBar: 按钮创建成功 - {window.Title} (层级: {hierarchyInfo.containerPath})");
+        //Debug.Log($"TaskBar: 按钮创建成功 - {window.Title} (层级: {hierarchyInfo.containerPath})");
     }
 
     /// <summary>
@@ -272,7 +272,6 @@ public class GlobalTaskBarManager : MonoBehaviour
         if (buttonObj != null)
         {
             Destroy(buttonObj);
-            Debug.Log($"TaskBar: 按钮已销毁 - {window.Title}");
         }
     }
 

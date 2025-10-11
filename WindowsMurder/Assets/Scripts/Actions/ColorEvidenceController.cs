@@ -237,7 +237,7 @@ public class ColorEvidenceController : MonoBehaviour
     {
         if (debugMode)
         {
-            Debug.Log($"[ColorEvidence:] {message}");
+            //Debug.Log($"[ColorEvidence:] {message}");
         }
     }
 

@@ -357,8 +357,6 @@ public class GameFlowController : MonoBehaviour
     {
         if (string.IsNullOrEmpty(dialogueBlockFileId)) return;
 
-        LogDebug($"对话块完成: {dialogueBlockFileId}");
-
         // 标记为已完成
         if (!completedDialogueBlocks.Contains(dialogueBlockFileId))
         {

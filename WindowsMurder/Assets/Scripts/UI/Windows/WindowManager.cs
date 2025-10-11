@@ -190,7 +190,7 @@ public class WindowManager : MonoBehaviour
         OnSceneWindowsChanged?.Invoke(windowSceneName);
         OnHierarchyWindowsChanged?.Invoke(hierarchyKey);
 
-        Debug.Log($"窗口已注册: {window.Title} (场景: {windowSceneName}, 层级: {hierarchyKey})");
+        //Debug.Log($"窗口已注册: {window.Title} (场景: {windowSceneName}, 层级: {hierarchyKey})");
     }
 
     /// <summary>
@@ -236,7 +236,6 @@ public class WindowManager : MonoBehaviour
             activeWindow = activeWindows.Count > 0 ? activeWindows[activeWindows.Count - 1] : null;
         }
 
-        Debug.Log($"窗口已注销: {window.Title} (场景: {windowSceneName}, 层级: {hierarchyKey})");
     }
 
     /// <summary>

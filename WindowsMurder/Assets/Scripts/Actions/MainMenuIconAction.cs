@@ -64,27 +64,22 @@ public class MainMenuIconAction : IconAction
         switch (functionType)
         {
             case MainMenuFunction.NewGame:
-                Debug.Log("MainMenuIconAction: 执行新游戏");
                 GlobalActionManager.Instance.NewGame();
                 break;
 
             case MainMenuFunction.Continue:
-                Debug.Log("MainMenuIconAction: 执行继续游戏");
                 GlobalActionManager.Instance.Continue();
                 break;
 
             case MainMenuFunction.Language:
-                Debug.Log("MainMenuIconAction: 打开语言设置");
                 GlobalActionManager.Instance.OpenLanguageSettings();
                 break;
 
             case MainMenuFunction.Display:
-                Debug.Log("MainMenuIconAction: 打开显示设置");
                 GlobalActionManager.Instance.OpenDisplaySettings();
                 break;
 
             case MainMenuFunction.Credits:
-                Debug.Log("MainMenuIconAction: 打开制作人员名单");
                 GlobalActionManager.Instance.OpenCredits();
                 break;
 
@@ -103,7 +98,7 @@ public class MainMenuIconAction : IconAction
 
         // 可以在这里播放特定的音效
         // 或者显示loading效果等
-        Debug.Log($"MainMenuIconAction: 准备执行 {functionType}");
+        //Debug.Log($"MainMenuIconAction: 准备执行 {functionType}");
     }
 
     /// <summary>

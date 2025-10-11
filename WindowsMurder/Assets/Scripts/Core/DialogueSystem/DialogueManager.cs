@@ -311,8 +311,6 @@ public class DialogueManager : MonoBehaviour
         DebugLog($"对话块完成: {fileName}:{blockId}");
 
         currentDialogueFile = null;
-        currentDialogueBlockId = null;
-        isPlayingDialogue = false;
 
         GameFlowController gameFlow = FindObjectOfType<GameFlowController>();
         if (gameFlow != null)
@@ -320,12 +318,19 @@ public class DialogueManager : MonoBehaviour
             gameFlow.OnDialogueBlockComplete(blockId);
         }
 
-        // 检查队列是否有待播放的对话
+        // 检查队列
         if (dialogueQueue.Count > 0)
         {
+            // 有队列，播放下一个
             var next = dialogueQueue.Dequeue();
             DebugLog($"从队列播放下一个对话: {next.fileName}:{next.blockId}，剩余队列: {dialogueQueue.Count}");
             PlayDialogue(next.fileName, next.blockId);
+        }
+        else
+        {
+            currentDialogueBlockId = null;  // 现在才清空
+            isPlayingDialogue = false;
+            DebugLog("所有对话播放完毕");
         }
     }
 

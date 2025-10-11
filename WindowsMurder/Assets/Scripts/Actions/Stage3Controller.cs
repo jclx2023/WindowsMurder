@@ -140,6 +140,15 @@ public class Stage3Controller : MonoBehaviour
         {
             flowController.LoadStage(nextStageId);
         }
+
+        if (currentPhase == Stage3Phase.Exploring)
+        {
+            if (flowController.IsStageProgressConditionMet())
+            {
+                SwitchPhase(Stage3Phase.WaitingForFinale);
+                if (debugMode) Debug.Log("[Stage3] 探索完成，等待触发结局对话");
+            }
+        }
     }
 
     private void OnAnyClueUnlocked(string clueId)
@@ -154,6 +163,12 @@ public class Stage3Controller : MonoBehaviour
 
     private void OnMouseClicked()
     {
+        if (dialogueManager.IsDialogueActive())
+        {
+            if (debugMode) Debug.Log("[Stage3] 对话播放中，忽略点击");
+            return;
+        }
+
         mouseListeningEnabled = false;
 
         if (currentPhase == Stage3Phase.WaitingForExploration)
