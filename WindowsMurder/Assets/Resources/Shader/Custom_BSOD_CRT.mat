@@ -7,13 +7,12 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WiggleForPortrait
-  m_Shader: {fileID: 4800000, guid: d35c2b01cd9c77c4193e867d2f3fe5ae, type: 3}
+  m_Name: Custom_BSOD_CRT
+  m_Shader: {fileID: 4800000, guid: 833b38ec1494225469102f5613a53652, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _ENABLEJITTER_ON
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -30,14 +29,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _EnableJitter: 1
-    - _JitterSpeedX: 20
-    - _JitterSpeedY: 20
-    - _JitterStrength: 0.8
-    - _PixelResolution: 24
-    - _SpatialFreqX: 100
-    - _SpatialFreqY: 100
-    - _UsePixelSnap: 0
+    - _BlurAmount: 0.3
+    - _ChromaticAberration: 1
+    - _FlickerIntensity: 0.1
+    - _ScanlineIntensity: 0.2
+    - _TimeScale: 1
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _BlueColor: {r: 0, g: 0.19999996, b: 0.8, a: 1}
   m_BuildTextureStacks: []

@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WiggleForPortrait
+  m_Name: WiggleForBack 1
   m_Shader: {fileID: 4800000, guid: d35c2b01cd9c77c4193e867d2f3fe5ae, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -31,10 +31,10 @@ Material:
     m_Ints: []
     m_Floats:
     - _EnableJitter: 1
-    - _JitterSpeedX: 20
-    - _JitterSpeedY: 20
+    - _JitterSpeedX: 8
+    - _JitterSpeedY: 8
     - _JitterStrength: 0.8
-    - _PixelResolution: 24
+    - _PixelResolution: 4
     - _SpatialFreqX: 100
     - _SpatialFreqY: 100
     - _UsePixelSnap: 0
