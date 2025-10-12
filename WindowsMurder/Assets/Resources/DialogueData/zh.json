@@ -1249,293 +1249,12 @@
                     "characterId": "me",
                     "text": "看代码像是伪造了这个现场的工具",
                     "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "603",
-            "lines": [
+                },
                 {
                     "id": "3",
                     "mode": true,
                     "characterId": "me",
                     "text": "这样一来就能证明是谋杀而不是自杀了",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "901",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "ps",
-                    "text": "哼，终于来欣赏我的作品了吗？",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "902",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "qq",
-                    "text": "嗨嗨！管理员，今天有什么新消息吗？",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "903",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "7zip",
-                    "text": "需要我再帮你打包点什么吗？",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "904",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "xunlei",
-                    "text": "晚上好！管理员！",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "905",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "controlpanel",
-                    "text": "您今天工作顺利吗？",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "906",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "registry",
-                    "text": "你在找答案吗？注册表里什么都有。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "907",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "ie",
-                    "text": "啊……你好……",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "908",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "guardian",
-                    "text": "我已待命，随时协助调查。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "909",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "notepad",
-                    "text": "啊，你来了，又能聊点文字的故事了。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "910",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "ps",
-                    "text": "快点吧，我的素材还在里面呢。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "911",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "qq",
-                    "text": "管理员，快开啊！不开的话我都憋坏了！",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "912",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "controlpanel",
-                    "text": "看起来是权限问题，把访问改成“所有人”就能解决。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "913",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "xunlei",
-                    "text": "哎呀呀，赶紧的！我还等着里面的下载任务呢！",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "914",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "7zip",
-                    "text": "权限被锁了，解开它，我们才能继续工作。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "915",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "notepad",
-                    "text": "Works 文件夹在呼喊啊……只要你动动手，就能让它重见光明。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "916",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "ps",
-                    "text": "现在可别找我修图，你该先去看看现场。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "917",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "qq",
-                    "text": "嘿，管理员！有新线索了吗？大家都在等你破案呢。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "918",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "7zip",
-                    "text": "先解开谜团比较要紧。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "919",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "xunlei",
-                    "text": "下载什么的先放一边吧",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "920",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "controlpanel",
-                    "text": "保持冷静，先调查线索",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "921",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "ie",
-                    "text": "网络都断了，我也帮不上什么忙……",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "922",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "registry",
-                    "text": "答案都藏在这里的层层记录中，但你得先找到入口。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "923",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "notepad",
-                    "text": "嗯？你在看别的文件？那份‘告别’我总觉得怪怪的……",
                     "portraitId": "default"
                 }
             ]
@@ -1987,6 +1706,301 @@
             ]
         },
         {
+            "blockId": "800",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "您好，管理员！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "欢迎使用 Windows 控制面板。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "901",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "哼，终于来欣赏我的作品了吗？",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "902",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "嗨嗨！管理员，今天有什么新消息吗？",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "903",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "7zip",
+                    "text": "需要我再帮你打包点什么吗？",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "904",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "晚上好！管理员！",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "905",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "您今天工作顺利吗？",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "906",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "你在找答案吗？注册表里什么都有。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "907",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ie",
+                    "text": "啊……你好……",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "908",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "我已待命，随时协助调查。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "909",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "啊，你来了，又能聊点文字的故事了。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "910",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "快点吧，我的素材还在里面呢。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "911",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "管理员，快开啊！不开的话我都憋坏了！",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "912",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "看起来是权限问题，把访问改成“所有人”就能解决。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "913",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "哎呀呀，赶紧的！我还等着里面的下载任务呢！",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "914",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "7zip",
+                    "text": "权限被锁了，解开它，我们才能继续工作。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "915",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "Works 文件夹在呼喊啊……只要你动动手，就能让它重见光明。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "916",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "现在可别找我修图，你该先去看看现场。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "917",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "嘿，管理员！有新线索了吗？大家都在等你破案呢。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "918",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "7zip",
+                    "text": "先解开谜团比较要紧。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "919",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "下载什么的先放一边吧",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "920",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "保持冷静，先调查线索",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "921",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ie",
+                    "text": "网络都断了，我也帮不上什么忙……",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "922",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "答案都藏在这里的层层记录中，但你得先找到入口。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "923",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "嗯？你在看别的文件？那份‘告别’我总觉得怪怪的……",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
             "blockId": "999",
             "lines": [
                 {
@@ -2001,6 +2015,62 @@
                     "mode": true,
                     "characterId": "controlpanel",
                     "text": "进化……",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "怎么回事？！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "我怎么变模糊了？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "图层……在塌陷！数据结构……错乱！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "嘀——嘀——连接全部断线！我还在下载——！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "文字在消失……连我自己也……",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "……启动升级",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "9",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "停止！控制面板，你在做什么？！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "10",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "唯有…进化",
                     "portraitId": "default"
                 }
             ]

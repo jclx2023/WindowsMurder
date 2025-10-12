@@ -1249,293 +1249,12 @@
                     "characterId": "me",
                     "text": "Judging from the code, it appears to be a tool used to fabricate the scene.",
                     "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "603",
-            "lines": [
+                },
                 {
                     "id": "3",
                     "mode": true,
                     "characterId": "me",
                     "text": "That would prove it was murder, not suicide.",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "901",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "ps",
-                    "text": "Hmph, here to admire my work at last?",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "902",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "qq",
-                    "text": "Heyyy! Got any new gossip today?",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "903",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "7zip",
-                    "text": "Do you need me to compress anything else?",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "904",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "xunlei",
-                    "text": "Good evening! Admin!",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "905",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "controlpanel",
-                    "text": "Did your work go smoothly today?",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "906",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "registry",
-                    "text": "Looking for answers? The registry holds them all.",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "907",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "ie",
-                    "text": "Uh… heeee..llo…",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "908",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "guardian",
-                    "text": "I’m on standby to assist your investigation.",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "909",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "notepad",
-                    "text": "Ah, you’ve come. Another story in words awaits us.",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "910",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "ps",
-                    "text": "Hurry up, my materials are still in there.",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "911",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "qq",
-                    "text": "Come on, Admin! Open it already, I can’t stand the wait!",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "912",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "controlpanel",
-                    "text": "Looks like a permission issue. Change access to “Everyone” and it should work.",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "913",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "xunlei",
-                    "text": "C’mon already! I’ve got downloads waiting in there!",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "914",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "7zip",
-                    "text": "The permissions are locked. Unlock them so we can keep working.",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "915",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "notepad",
-                    "text": "The Works folder is calling… just a touch from you, and it’ll see the light again.",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "916",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "ps",
-                    "text": "Don’t ask me to edit anything now—check the scene first.",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "917",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "qq",
-                    "text": "Hey, Admin! Any new leads yet? We’re all waiting for your verdict.",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "918",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "7zip",
-                    "text": "Unpack this mystery first.",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "919",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "xunlei",
-                    "text": "Forget downloads for now",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "920",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "controlpanel",
-                    "text": "Stay calm. Focus on the evidence",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "921",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "ie",
-                    "text": "The network’s down—I can’t help much.",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "922",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "registry",
-                    "text": "The answers lie buried in the records—but first, find your way in.",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "923",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "notepad",
-                    "text": "Hmm? Looking at other files? That ‘goodbye’ one feels off to me…",
                     "portraitId": "default"
                 }
             ]
@@ -1987,6 +1706,301 @@
             ]
         },
         {
+            "blockId": "800",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Hello, Administrator!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Welcome to the Windows Control Panel.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "901",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "Hmph, here to admire my work at last?",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "902",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "Heyyy! Got any new gossip today?",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "903",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "7zip",
+                    "text": "Do you need me to compress anything else?",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "904",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "Good evening! Admin!",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "905",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Did your work go smoothly today?",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "906",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "Looking for answers? The registry holds them all.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "907",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ie",
+                    "text": "Uh… heeee..llo…",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "908",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "I’m on standby to assist your investigation.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "909",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "Ah, you’ve come. Another story in words awaits us.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "910",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "Hurry up, my materials are still in there.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "911",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "Come on, Admin! Open it already, I can’t stand the wait!",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "912",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Looks like a permission issue. Change access to “Everyone” and it should work.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "913",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "C’mon already! I’ve got downloads waiting in there!",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "914",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "7zip",
+                    "text": "The permissions are locked. Unlock them so we can keep working.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "915",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "The Works folder is calling… just a touch from you, and it’ll see the light again.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "916",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "Don’t ask me to edit anything now—check the scene first.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "917",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "Hey, Admin! Any new leads yet? We’re all waiting for your verdict.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "918",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "7zip",
+                    "text": "Unpack this mystery first.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "919",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "Forget downloads for now",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "920",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Stay calm. Focus on the evidence",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "921",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ie",
+                    "text": "The network’s down—I can’t help much.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "922",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "The answers lie buried in the records—but first, find your way in.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "923",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "Hmm? Looking at other files? That ‘goodbye’ one feels off to me…",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
             "blockId": "999",
             "lines": [
                 {
@@ -2001,6 +2015,62 @@
                     "mode": true,
                     "characterId": "controlpanel",
                     "text": "It was… evolution.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "What’s happening?!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "I’m turning blurry!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "Layers… collapsing! Data structure… corrupted!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "Beep—beep— all connections lost! I’m still downloading—!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "The text is fading… even I’m…",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "…Initiating upgrade.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "9",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Stop! Control Panel, what are you doing?!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "10",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Only… evolution.",
                     "portraitId": "default"
                 }
             ]

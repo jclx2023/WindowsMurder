@@ -87,7 +87,29 @@
 1089,Location_TMP,位置：      D:\Files\Works\,Location:   D:\Files\Works\,場所:          D:\Files\Works\
 1090,Target_TMP,目标：      目标已丢失（Target missing）,Target:     The target file could not be located,目標:  ターゲットファイルを特定できません
 1091,StartIn_TMP,起始位置：-,Start In:     -,スダットイン: -
-1093,Title_TMP,染血的回收站,Recyclebin_Blooded-stats,
-1094,WorksTItle_TMP,染血的回收站-属性,Recyclebin_Blooded,
-1095,Title_TMP,模型切换,ModelSwitcher,
-1096,Text (TMP)_TMP,确认,Confirm,
+1093,Title_TMP,染血的回收站,Recyclebin_Blooded-stats,血に染まったごみ箱 - プロパティ
+1094,WorksTItle_TMP,染血的回收站-属性,Recyclebin_Blooded,血に染まったごみ箱
+1095,Title_TMP,模型切换,ModelSwitcher,モデル切り替え
+1096,Text (TMP)_TMP,确认,Confirm,確認
+1097,Text (TMP)_TMP,请先完成问询,Please complete the inquiry first,まず問い合わせを完了してください
+2005,,解压,Extract,解凍
+1098,NameText_TMP,锤子.jpg,Hammer.jpg,Hammer.jpg
+1099,NameText_TMP,叉子.jpg,Fork.jpg,Fork.jpg
+1100,NameText_TMP,素材.zip,footage.zip,素材.zip
+2023,,以 # 方式解压,Extract by # method,#方式で解凍
+1101,Title_TMP,系统提示,System Prompt,システムメッセージ
+1102,Text (TMP)_TMP,检测到异常权限调用。\nControlPanel.exe 未响应。\n是否强制结束进程？,,
+1103,Title (1)_TMP,你要允许此程序修改系统设置吗？,Do you want to allow this program to modify system settings?,このプログラムにシステム設定の変更を許可しますか？
+1104,Text (TMP) (1)_TMP,系统正在升级至 Windows 11。,The system is upgrading to Windows 11.,システムは Windows 11 にアップグレードしています。
+1105,Text (TMP)_TMP,旧版组件将被移除。,Legacy components will be removed.,旧バージョンのコンポーネントは削除されます。
+1106,Text (TMP) (2)_TMP,是否继续？,Do you want to continue?,続行しますか？
+1107,Text (TMP)_TMP,显示更多详细信息,Show more details,詳細を表示
+1108,Text (TMP)_TMP,是,Yes,はい
+1109,Text (TMP)_TMP,否,No,いいえ
+1110,Text (TMP)_TMP,正在回收系统权限……,Reclaiming system permissions…,システム権限を回収中……
+1111,NameText_TMP,回收站,RecycleBin,ごみ箱
+1112,NameText_TMP,我的电脑,MyPC,マイ コンピュータ
+1113,NameText_TMP,迅雷,Thunder,サンダー
+1114,NameText_TMP,控制面板,Control Panel,コントロール パネル
+1115,NameText_TMP,注册表工具,Registry,レジストリ エディター
+1116,NameText_TMP,记事本,Notepad,メモ帳

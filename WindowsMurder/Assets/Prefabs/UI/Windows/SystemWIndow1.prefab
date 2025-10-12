@@ -221,6 +221,7 @@ GameObject:
   - component: {fileID: 2676132578969674047}
   - component: {fileID: 7484905603654224304}
   - component: {fileID: 6556639670573990131}
+  - component: {fileID: 1739839347709247164}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -344,6 +345,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1739839347709247164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2824795011162635109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dede7ab8aa4c29a4f9b21a796d920efa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: 1109
+  description: Text (TMP)_TMP
 --- !u!1 &4065716379603104928
 GameObject:
   m_ObjectHideFlags: 0
@@ -575,7 +590,7 @@ GameObject:
   - component: {fileID: 5936724275072730578}
   - component: {fileID: 5614105022860929791}
   - component: {fileID: 5344744275479223451}
-  - component: {fileID: 6099324444198069373}
+  - component: {fileID: 8629586691417718858}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -699,7 +714,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &6099324444198069373
+--- !u!114 &8629586691417718858
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -711,7 +726,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dede7ab8aa4c29a4f9b21a796d920efa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  localizationKey: 1102
+  localizationKey: 1105
   description: Text (TMP)_TMP
 --- !u!1 &6084497651035697550
 GameObject:
@@ -882,7 +897,7 @@ GameObject:
   - component: {fileID: 6880939406070501594}
   - component: {fileID: 4774372511946376271}
   - component: {fileID: 5776459356525053681}
-  - component: {fileID: 5255746043080444419}
+  - component: {fileID: 1932239436579052063}
   m_Layer: 5
   m_Name: Title (1)
   m_TagString: Untagged
@@ -1006,7 +1021,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &5255746043080444419
+--- !u!114 &1932239436579052063
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1018,8 +1033,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dede7ab8aa4c29a4f9b21a796d920efa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  localizationKey: 1101
-  description: Title_TMP
+  localizationKey: 1103
+  description: Title (1)_TMP
 --- !u!1 &6424060632659840225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1031,6 +1046,7 @@ GameObject:
   - component: {fileID: 2187592836178593454}
   - component: {fileID: 8510864895201658209}
   - component: {fileID: 6407506708561104098}
+  - component: {fileID: 8848356752253868786}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1154,6 +1170,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &8848356752253868786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6424060632659840225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dede7ab8aa4c29a4f9b21a796d920efa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: 1108
+  description: Text (TMP)_TMP
 --- !u!1 &6885906864749670150
 GameObject:
   m_ObjectHideFlags: 0
@@ -1165,7 +1195,7 @@ GameObject:
   - component: {fileID: 6007372533413611397}
   - component: {fileID: 4439980118682405134}
   - component: {fileID: 8640603496345797838}
-  - component: {fileID: 5632881522417297364}
+  - component: {fileID: 1256542017242624830}
   m_Layer: 5
   m_Name: Text (TMP) (1)
   m_TagString: Untagged
@@ -1291,7 +1321,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &5632881522417297364
+--- !u!114 &1256542017242624830
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1303,8 +1333,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dede7ab8aa4c29a4f9b21a796d920efa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  localizationKey: 1102
-  description: Text (TMP)_TMP
+  localizationKey: 1104
+  description: Text (TMP) (1)_TMP
 --- !u!1 &7692516456752697681
 GameObject:
   m_ObjectHideFlags: 0
@@ -1316,6 +1346,7 @@ GameObject:
   - component: {fileID: 2142802445305418863}
   - component: {fileID: 8111781675702422766}
   - component: {fileID: 4618652444447714413}
+  - component: {fileID: 977386854557477009}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1439,6 +1470,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &977386854557477009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7692516456752697681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dede7ab8aa4c29a4f9b21a796d920efa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: 1107
+  description: Text (TMP)_TMP
 --- !u!1 &8568149592766993907
 GameObject:
   m_ObjectHideFlags: 0
@@ -1599,7 +1644,7 @@ GameObject:
   - component: {fileID: 5449713000650564622}
   - component: {fileID: 7449221327558639358}
   - component: {fileID: 3147302721160961225}
-  - component: {fileID: 4031283669244241325}
+  - component: {fileID: 3323898880108257684}
   m_Layer: 5
   m_Name: Text (TMP) (2)
   m_TagString: Untagged
@@ -1725,7 +1770,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &4031283669244241325
+--- !u!114 &3323898880108257684
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1737,5 +1782,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dede7ab8aa4c29a4f9b21a796d920efa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  localizationKey: 1102
-  description: Text (TMP)_TMP
+  localizationKey: 1106
+  description: Text (TMP) (2)_TMP

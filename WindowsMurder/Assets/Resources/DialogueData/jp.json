@@ -1249,293 +1249,12 @@
                     "characterId": "me",
                     "text": "コードを見たところ、現場を偽装するためのツールのように見えます。",
                     "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "603",
-            "lines": [
+                },
                 {
                     "id": "3",
                     "mode": true,
                     "characterId": "me",
                     "text": "これで自殺ではなく殺人だと証明できるでしょう。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "901",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "ps",
-                    "text": "ふん、ようやく私の作品を鑑賞しに来たのか。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "902",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "qq",
-                    "text": "やっほー！今日は新しい噂ある？",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "903",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "7zip",
-                    "text": "また何か圧縮してほしいのか？",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "904",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "xunlei",
-                    "text": "こんばんは！管理員！",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "905",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "controlpanel",
-                    "text": "今日は仕事が順調でしたか？",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "906",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "registry",
-                    "text": "答えを探しているのか？レジストリにはすべてがある。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "907",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "ie",
-                    "text": "あぁ……こんにちは……",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "908",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "guardian",
-                    "text": "私は待機中だ。捜査をいつでも支援する。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "909",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "notepad",
-                    "text": "あぁ、来てくれたね。文字の物語をまた語ろう。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "910",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "ps",
-                    "text": "早くしてくれ、素材がまだ中にあるんだ。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "911",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "qq",
-                    "text": "管理者さん、早く開けてよ！待ちきれないんだ！",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "912",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "controlpanel",
-                    "text": "権限の問題のようだ。「全員」に設定すれば解決するはずだ。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "913",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "xunlei",
-                    "text": "おいおい、早くしてくれ！中にはダウンロードが待ってるんだ！",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "914",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "7zip",
-                    "text": "権限がロックされている。解除してくれれば作業を続けられる。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "915",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "notepad",
-                    "text": "Works フォルダが呼んでいる… あなたの一手で、再び光を浴びるだろう。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "916",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "ps",
-                    "text": "今は画像加工の時間じゃないよ。現場を先に確認して。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "917",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "qq",
-                    "text": "ねぇ管理者！新しい手がかりは見つかった？みんな結果を待ってるよ。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "918",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "7zip",
-                    "text": "この謎を解凍しよう。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "919",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "xunlei",
-                    "text": "ダウンロードは後でいい。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "920",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "controlpanel",
-                    "text": "落ち着いて",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "921",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "ie",
-                    "text": "ネットが切れてるから、今は何もできないよ。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "922",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "registry",
-                    "text": "答えはこの記録の奥にある。でも、まず入口を見つけるんだ。",
-                    "portraitId": "default"
-                }
-            ]
-        },
-        {
-            "blockId": "923",
-            "lines": [
-                {
-                    "id": "1",
-                    "mode": true,
-                    "characterId": "notepad",
-                    "text": "ん？他のファイルを調べてるの？あの『goodbye』、なんだか変なんだよね。",
                     "portraitId": "default"
                 }
             ]
@@ -1987,6 +1706,301 @@
             ]
         },
         {
+            "blockId": "800",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "管理者様、こんにちは！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Windows コントロール パネルへようこそ。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "901",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "ふん、ようやく私の作品を鑑賞しに来たのか。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "902",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "やっほー！今日は新しい噂ある？",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "903",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "7zip",
+                    "text": "また何か圧縮してほしいのか？",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "904",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "こんばんは！管理員！",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "905",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "今日は仕事が順調でしたか？",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "906",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "答えを探しているのか？レジストリにはすべてがある。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "907",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ie",
+                    "text": "あぁ……こんにちは……",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "908",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "guardian",
+                    "text": "私は待機中だ。捜査をいつでも支援する。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "909",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "あぁ、来てくれたね。文字の物語をまた語ろう。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "910",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "早くしてくれ、素材がまだ中にあるんだ。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "911",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "管理者さん、早く開けてよ！待ちきれないんだ！",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "912",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "権限の問題のようだ。「全員」に設定すれば解決するはずだ。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "913",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "おいおい、早くしてくれ！中にはダウンロードが待ってるんだ！",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "914",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "7zip",
+                    "text": "権限がロックされている。解除してくれれば作業を続けられる。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "915",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "Works フォルダが呼んでいる… あなたの一手で、再び光を浴びるだろう。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "916",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "今は画像加工の時間じゃないよ。現場を先に確認して。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "917",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "ねぇ管理者！新しい手がかりは見つかった？みんな結果を待ってるよ。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "918",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "7zip",
+                    "text": "この謎を解凍しよう。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "919",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "ダウンロードは後でいい。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "920",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "落ち着いて",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "921",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "ie",
+                    "text": "ネットが切れてるから、今は何もできないよ。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "922",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "registry",
+                    "text": "答えはこの記録の奥にある。でも、まず入口を見つけるんだ。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "923",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "ん？他のファイルを調べてるの？あの『goodbye』、なんだか変なんだよね。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
             "blockId": "999",
             "lines": [
                 {
@@ -2001,6 +2015,62 @@
                     "mode": true,
                     "characterId": "controlpanel",
                     "text": "これは——進化だ。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "な、なにが起きてる？！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "qq",
+                    "text": "ぼ、僕の姿がぼやけていく！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "ps",
+                    "text": "レイヤーが……崩壊してる！データ構造が……狂ってる！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "xunlei",
+                    "text": "ビーッ、ビーッ——全ての接続が切断された！まだダウンロード中なのに——！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "notepad",
+                    "text": "文字が消えていく……私自身までも……",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "……アップグレードを開始。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "9",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "やめろ！コントロールパネル、何をしている？！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "10",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "唯一の道は……進化だ。",
                     "portraitId": "default"
                 }
             ]

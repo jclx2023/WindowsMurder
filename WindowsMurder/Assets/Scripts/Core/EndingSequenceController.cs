@@ -37,6 +37,10 @@ public class EndingSequenceController : MonoBehaviour
     [Header("Stage配置")]
     [SerializeField] private string postEndingStageId = "Stage_PostEnding";
 
+    [Header("对话配置")]
+    [SerializeField] private string dialogueBlock999 = "999";
+    [SerializeField] private string glitchTriggerLineId = "2";
+
     [Header("时间参数")]
     [SerializeField] private float delayAfter605 = 0.5f;
     [SerializeField] private float glitchDuration = 3.0f;
@@ -49,6 +53,9 @@ public class EndingSequenceController : MonoBehaviour
     [Header("Shader参数")]
     [SerializeField] private int glitchSteps = 6;
     [SerializeField] private float jitterBoostAmount = 1.5f;
+
+    [Header("调试")]
+    [SerializeField] private bool debugMode = true;
 
     #endregion
 
@@ -76,6 +83,7 @@ public class EndingSequenceController : MonoBehaviour
     private bool hasTriggered = false;
     private bool isPlayingEnding = false;
     private bool dialogue999Completed = false;
+    private bool glitchEffectStarted = false;
 
     #endregion
 
@@ -92,11 +100,13 @@ public class EndingSequenceController : MonoBehaviour
     void OnEnable()
     {
         GameEvents.OnDialogueBlockCompleted += OnDialogueBlockCompleted;
+        DialogueUI.OnLineStarted += OnDialogueLineStarted;
     }
 
     void OnDisable()
     {
         GameEvents.OnDialogueBlockCompleted -= OnDialogueBlockCompleted;
+        DialogueUI.OnLineStarted -= OnDialogueLineStarted;
     }
 
     #endregion
@@ -128,12 +138,28 @@ public class EndingSequenceController : MonoBehaviour
                 decayRate
             ));
 
-            Debug.Log($"[Ending] {config.image.name}: {initialRes:F3} -> {config.targetResolution:F3} (rate:{decayRate:F6}, steps:{steps})");
+            if (debugMode) Debug.Log($"[Ending] {config.image.name}: {initialRes:F3} -> {config.targetResolution:F3} (rate:{decayRate:F6}, steps:{steps})");
         }
 
-        Debug.Log($"[Ending] 缓存了 {cachedMaterials.Count} 个材质");
+        if (debugMode) Debug.Log($"[Ending] 缓存了 {cachedMaterials.Count} 个材质");
     }
 
+    /// <summary>
+    /// 监听对话行开始事件
+    /// </summary>
+    private void OnDialogueLineStarted(string lineId, string characterId, string blockId, bool isPresetMode)
+    {
+        // 只处理对话块999
+        if (blockId != dialogueBlock999) return;
+
+        // 检查是否是触发失真的line
+        if (lineId == glitchTriggerLineId && !glitchEffectStarted)
+        {
+            glitchEffectStarted = true;
+            StartCoroutine(GlitchEffect());
+            if (debugMode) Debug.Log($"[Ending] 对话块{blockId}的lineId={lineId}触发失真效果");
+        }
+    }
 
     private void OnDialogueBlockCompleted(string blockId)
     {
@@ -141,9 +167,10 @@ public class EndingSequenceController : MonoBehaviour
         {
             TriggerEnding();
         }
-        else if (blockId == "999" && isPlayingEnding)
+        else if (blockId == dialogueBlock999 && isPlayingEnding)
         {
             dialogue999Completed = true;
+            if (debugMode) Debug.Log("[Ending] 对话块999完成");
         }
     }
 
@@ -161,7 +188,7 @@ public class EndingSequenceController : MonoBehaviour
 
     private IEnumerator EndingSequence()
     {
-        Debug.Log("[Ending] 开始");
+        if (debugMode) Debug.Log("[Ending] 开始");
 
         // 延迟
         yield return new WaitForSeconds(delayAfter605);
@@ -170,13 +197,19 @@ public class EndingSequenceController : MonoBehaviour
         if (endingCanvas != null)
             endingCanvas.gameObject.SetActive(true);
 
-        // 失真动画 + 对话999
-        StartCoroutine(GlitchEffect());
+        // 开始对话999（不启动失真，等待lineId=2触发）
         dialogue999Completed = false;
+        glitchEffectStarted = false;
         if (dialogueManager != null)
-            dialogueManager.StartDialogue("999");
+        {
+            dialogueManager.StartDialogue(dialogueBlock999);
+            if (debugMode) Debug.Log("[Ending] 开始对话999，等待lineId触发失真");
+        }
 
+        // 等待对话999完成
         yield return new WaitUntil(() => dialogue999Completed);
+
+        if (debugMode) Debug.Log("[Ending] 对话999结束，继续后续流程");
 
         // 系统提示1
         yield return ShowPrompt1();
@@ -206,7 +239,7 @@ public class EndingSequenceController : MonoBehaviour
         if (gameFlowController != null)
             gameFlowController.LoadStage(postEndingStageId, true);
 
-        Debug.Log("[Ending] 完成");
+        if (debugMode) Debug.Log("[Ending] 完成");
         isPlayingEnding = false;
     }
 
@@ -216,6 +249,8 @@ public class EndingSequenceController : MonoBehaviour
 
     private IEnumerator GlitchEffect()
     {
+        if (debugMode) Debug.Log("[Ending] 开始失真效果");
+
         int steps = Mathf.Max(1, glitchSteps);
         float stepInterval = glitchDuration / steps;
         const float EPS = 1e-5f;
@@ -252,8 +287,9 @@ public class EndingSequenceController : MonoBehaviour
 
             yield return new WaitForSeconds(stepInterval);
         }
-    }
 
+        if (debugMode) Debug.Log("[Ending] 失真效果完成");
+    }
 
     private void BoostJitter()
     {
@@ -263,6 +299,8 @@ public class EndingSequenceController : MonoBehaviour
             float current = data.material.GetFloat("_JitterStrength");
             data.material.SetFloat("_JitterStrength", current + jitterBoostAmount);
         }
+
+        if (debugMode) Debug.Log("[Ending] 抖动已增强");
     }
 
     private void RestoreShaders()
@@ -273,6 +311,8 @@ public class EndingSequenceController : MonoBehaviour
             data.material.SetFloat("_PixelResolution", data.initialPixelResolution);
             data.material.SetFloat("_JitterStrength", data.initialJitterStrength);
         }
+
+        if (debugMode) Debug.Log("[Ending] Shader已恢复初始状态");
     }
 
     #endregion
