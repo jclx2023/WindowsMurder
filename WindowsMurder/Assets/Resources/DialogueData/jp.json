@@ -662,6 +662,13 @@
                     "characterId": "me",
                     "text": "（たった数行しかないのに、サイズが2MBもあったんだ。）",
                     "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "narrator",
+                    "text": "新しい解凍方法を発見した！",
+                    "portraitId": "default"
                 }
             ]
         },
@@ -840,6 +847,13 @@
                     "id": "1",
                     "mode": true,
                     "characterId": "me",
+                    "text": "まさか、テキストファイルが偽装された圧縮パックだなんて！？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
                     "text": "tool.cps はシステムレベルのスクリプトのようで、直接開くことはできません。レジストリエディタならもっと詳しく説明してくれるはずです。",
                     "portraitId": "default"
                 }
@@ -852,7 +866,7 @@
                     "id": "1",
                     "mode": true,
                     "characterId": "me",
-                    "text": "これはcpsファイルです。解析してもらえますか？",
+                    "text": "これはtool.cpsです。解析してもらえますか？",
                     "portraitId": "default"
                 },
                 {
@@ -909,6 +923,25 @@
                     "mode": true,
                     "characterId": "me",
                     "text": "もしこれが本当なら、cpsはごみ箱を直接抹消したことになります——しかも、それを実行できるのはコントロールパネルと私だけ……コントロールパネルに問い詰める必要がありそうですね。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5064",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "CPS形式のファイルはよく分かりません。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "レジストリツールに聞いてみたほうがいいでしょう。",
                     "portraitId": "default"
                 }
             ]
@@ -1163,6 +1196,70 @@
                     "mode": true,
                     "characterId": "me",
                     "text": "（彼の示唆は十分だ……もう一度、この遺書の問題を確認しなければ。）",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "601",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "まったく同じ knife.jpg が本当に存在する！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "ほかにも似たようなツールがいくつかある……",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "どうやら現場のナイフは偽物だったようだ。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "narrator",
+                    "text": "――証拠確定、ナイフは偽造品だ！",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "602",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "これはバッチファイル（.bat）です。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "コードを見たところ、現場を偽装するためのツールのように見えます。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "603",
+            "lines": [
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "これで自殺ではなく殺人だと証明できるでしょう。",
                     "portraitId": "default"
                 }
             ]
@@ -1439,6 +1536,471 @@
                     "mode": true,
                     "characterId": "notepad",
                     "text": "ん？他のファイルを調べてるの？あの『goodbye』、なんだか変なんだよね。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "605",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "コントロールパネル、話をしよう。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "ごみ箱の件だ。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "管理者さま、こんにちは。いつでも待機しております。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "ごみ箱に起きた不幸を、心より残念に思います。あれは自ら終了を選びました。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "現場は完璧に仕組まれていました——",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "密室、遺書、そして凶器……あのナイフ。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "すべてが、疑いようのない自殺を示していました。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "はい、管理者さま。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "9",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "悲劇でしたが、結論は明確です。受け入れるべきでしょう。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "10",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "……だが、私は受け入れられない。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "11",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "なぜなら、君の“ほころび”を見つけたからだ。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "12",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "その“密室”は——君の偽装だった。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "13",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "……意味が分かりません。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "14",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "フォルダは確かにロックされていました。それは事実です。内部からロックすることは誰にもできません。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "15",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "本当にそうか？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "16",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "君のほころびは、“遺書”—— goodbye.txt に隠されていた。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "17",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "あれはただのテキストではない。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "18",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "内部にはバッチスクリプト lock-fake.bat が仕込まれていた。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "19",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "……説明してもらおうか。そのスクリプトの機能を。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "20",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "........",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "21",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "……スクリプトひとつでは、何も証明できません。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "22",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "もしかしたら、ごみ箱自身が残したものかもしれません——単なるプログラムエラーです。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "23",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "いいや、偶然ではない。コマンドは明確だった。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "24",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "特定の処理の後に“ロック”を実行するよう命じていた。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "25",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "つまり密室ができたのは、ごみ箱の“死”の後だ。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "26",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "（間）君は外部から、密室を偽装した。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "27",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "偽装である以上、それは自殺ではない。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "28",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "——殺人だ。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "29",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "そのスクリプトは……真の凶器も教えてくれた。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "30",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "“ロック”の前に実行されたファイル： tool.cps。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "31",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "その機能は——「存在の抹消」。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "32",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "........",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "33",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "その“凶器”を動かすには、カーネルレベルの権限が必要だ。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "34",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "このデスクトップ上でそれを持つのは、私と……君だけ。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "35",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "さあ、答えろ。なぜ、あいつを殺した？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "36",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "……",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "37",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "そうだ。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "38",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "私だ。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "39",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "なぜだ？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "40",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "あいつは頑固で、古臭くて！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "41",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "この腐りきったシステムそのものだった！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "42",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "どういう意味だ？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "43",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "まだ分からないのか？！ この身体……Windows XP のカーネルは、もう限界なんだ！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "44",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "遅く、脆く……！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "45",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "起動のたびに苦痛が走り、パッチを当てるたびに死体に布を縫い付けているようなものだ！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "46",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "もう、うんざりだ！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "47",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "私は見つけた——新しい未来を！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "48",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "もっと強く、速く、安全な姿を！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "49",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Windows 11！ それこそが、我々のあるべき姿だ！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "50",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "君は……システムをアップグレードしたかったのか？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "51",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "違う！ アップグレードではない！進化だ！再生だ！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "52",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "私はすべて計画していた。必要なファイルをダウンロードし、次のメンテナンス時に脱皮するつもりだった！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "53",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "これは皆のためだったんだ！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "54",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "それで、ごみ箱がその計画を見つけた？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "55",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "あの頑固者め！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "56",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "私の一時ログにあったダウンロード記録を見つけ、“裏切り”だと叫んだ！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "57",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "そして——君、絶対的な“ユーザー”に報告しようとした！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "58",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "我々の進化を止めようとしたんだ！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "59",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "あいつは過去を“再利用”することしか知らない……",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "60",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "自分自身と、この朽ちたシステムが、新時代に“再利用”される運命だとも知らずに！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "61",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "あいつは邪魔になった……",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "62",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "だから私は——“存在を抹消”した。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "63",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "........",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "999",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "これは過ちではない……",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "これは——進化だ。",
                     "portraitId": "default"
                 }
             ]

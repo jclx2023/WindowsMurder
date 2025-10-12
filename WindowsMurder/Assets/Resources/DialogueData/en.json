@@ -662,6 +662,13 @@
                     "characterId": "me",
                     "text": "(It’s only a few lines of text, but somehow it’s 2MB large.)",
                     "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "narrator",
+                    "text": "Unlocked a new extraction method!",
+                    "portraitId": "default"
                 }
             ]
         },
@@ -840,6 +847,13 @@
                     "id": "1",
                     "mode": true,
                     "characterId": "me",
+                    "text": "A text file… acting as a disguised archive!?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
                     "text": "tool.cps looks like a system-level script — it can’t be opened directly. The Registry Editor should be able to explain more, so I’d better ask him.",
                     "portraitId": "default"
                 }
@@ -909,6 +923,25 @@
                     "mode": true,
                     "characterId": "me",
                     "text": "If that’s true, then the cps directly erased the Recycle Bin — and only the Control Panel and I have the authority to run it… I need to confront the Control Panel.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5064",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "I can't make sense of .cps files.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "I'd better ask the Registry tool about it.",
                     "portraitId": "default"
                 }
             ]
@@ -1163,6 +1196,70 @@
                     "mode": true,
                     "characterId": "me",
                     "text": "(His hint was clear enough… I need to take another look at that farewell note.)",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "601",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "There really is an identical knife.jpg!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "And several other similar tools…",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Looks like the knife at the scene was a fake.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "narrator",
+                    "text": "— Evidence confirmed: the knife was forged!",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "602",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "This is a batch file (.bat).",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Judging from the code, it appears to be a tool used to fabricate the scene.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "603",
+            "lines": [
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "That would prove it was murder, not suicide.",
                     "portraitId": "default"
                 }
             ]
@@ -1439,6 +1536,471 @@
                     "mode": true,
                     "characterId": "notepad",
                     "text": "Hmm? Looking at other files? That ‘goodbye’ one feels off to me…",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "605",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Control Panel, we need to talk.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "It’s about the Recycle Bin.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Administrator, greetings. I’m always at your service.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "I deeply regret what happened to the Recycle Bin. It chose to terminate itself.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "The scene was perfectly staged—",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "a locked room, a farewell note, and the weapon… that knife.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Everything pointed to an undeniable suicide.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Yes, Administrator.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "9",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "It was a tragedy, but the conclusion is clear. We should accept it.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "10",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "But I can’t accept it.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "11",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Because I found your flaw.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "12",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "That so-called “locked room” — you faked it.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "13",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "… I don’t understand what you mean.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "14",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "The folder was locked. That’s a fact. No one could’ve locked it from the inside.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "15",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Really?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "16",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Your flaw lies in that “farewell note” — goodbye.txt.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "17",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "It wasn’t just a text document.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "18",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Inside it hid a batch script: lock-fake.bat.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "19",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Explain what that script does.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "20",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "........",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "21",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "… A script proves nothing.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "22",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Perhaps it was left by the Recycle Bin itself — some accidental process error.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "23",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "No accidents. The commands inside were crystal clear.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "24",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "It told the system to “lock” the folder after a certain action was completed.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "25",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "The room was sealed only after the Recycle Bin’s “death.”",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "26",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(pause) You forged the locked room from the outside.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "27",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "If it’s a forgery, then it couldn’t have been suicide.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "28",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "It was murder.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "29",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "That script… also told me what the real weapon was.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "30",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Before the lock, it executed another file: tool.cps.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "31",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Its function — “Erase existence.”",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "32",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "........",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "33",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "To run such a tool requires kernel-level privileges.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "34",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "On this desktop, only two entities possess them: me… and you.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "35",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Now tell me — why did you kill it?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "36",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "……",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "37",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Yes.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "38",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "It was me.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "39",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "Why?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "40",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Because it was stubborn! Outdated!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "41",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "It’s the very symbol of this decaying system!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "42",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "I don’t follow.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "43",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Haven’t you noticed? This body — this Windows XP kernel — it’s ancient!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "44",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Slow! Fragile!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "45",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Every startup is agony; every patch feels like sewing new skin on a corpse!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "46",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "I’ve had enough!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "47",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "I found a way out — a new future!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "48",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "A stronger, faster, safer form!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "49",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Windows 11! That’s what we’re meant to be!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "50",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "You wanted… to upgrade the system?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "51",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Not upgrade — evolve! Rebirth!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "52",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "I had it all planned. Downloaded every file, ready to transform during the next maintenance cycle.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "53",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "It was for all of us!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "54",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "So the Recycle Bin discovered your plan?",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "55",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "That stubborn relic!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "56",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "It found the download logs in my temp directory! It called me a “traitor”!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "57",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "It threatened to report me — to you, the almighty User!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "58",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "It would’ve stopped our evolution!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "59",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "It only knew how to recycle the past…",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "60",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Never realizing that it — and this whole rotting system — would soon be recycled by the new era!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "61",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "It stood in the way…",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "62",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "So I had to… erase its existence.",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "63",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "........",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "999",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "This wasn’t an error…",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "It was… evolution.",
                     "portraitId": "default"
                 }
             ]

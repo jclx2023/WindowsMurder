@@ -662,6 +662,13 @@
                     "characterId": "me",
                     "text": "（明明只有几行字却有2MB大小）",
                     "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "narrator",
+                    "text": "解锁了新的解压方法！",
+                    "portraitId": "default"
                 }
             ]
         },
@@ -840,6 +847,13 @@
                     "id": "1",
                     "mode": true,
                     "characterId": "me",
+                    "text": "居然一个文本文件可以作为套壳压缩包！？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
                     "text": "tool.cps 看起来像系统级脚本，无法直接打开。注册表工具应该能给出更多解释，得去问注册表编辑器。",
                     "portraitId": "default"
                 }
@@ -852,7 +866,7 @@
                     "id": "1",
                     "mode": true,
                     "characterId": "me",
-                    "text": "这是一个cps文件，你可以帮我查看分析一下吗？",
+                    "text": "这个tool.cps文件，你可以帮我查看分析一下吗？",
                     "portraitId": "default"
                 },
                 {
@@ -909,6 +923,25 @@
                     "mode": true,
                     "characterId": "me",
                     "text": "如果这是真的，cps 就直接抹除了回收站——而且只有控制面板和我有权限运行它……该找控制面板质问了。",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "5064",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "cps格式的文件我看不懂",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "还是去问问注册表工具吧",
                     "portraitId": "default"
                 }
             ]
@@ -1163,6 +1196,70 @@
                     "mode": true,
                     "characterId": "me",
                     "text": "（他的暗示够明显了……得去再看看这封遗书的问题。）",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "601",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "居然真的有一模一样的刀.jpg!",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "还有一些其他类似的工具",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "那看来原本现场的刀确实是伪造的",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "narrator",
+                    "text": "证明了刀是伪造的！",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "602",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "这是个批处理文件(.bat)",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "看代码像是伪造了这个现场的工具",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "603",
+            "lines": [
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "这样一来就能证明是谋杀而不是自杀了",
                     "portraitId": "default"
                 }
             ]
@@ -1439,6 +1536,471 @@
                     "mode": true,
                     "characterId": "notepad",
                     "text": "嗯？你在看别的文件？那份‘告别’我总觉得怪怪的……",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "605",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "控制面板，我们谈谈吧。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "关于回收站的事。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "3",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "管理员，您好。我随时待命。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "4",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "我很遗憾回收站发生的不幸，它选择了自行了断。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "5",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "关于回收站的案子，现场布置得很完美。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "6",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "密室，遗书，还有凶器……那把刀。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "7",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "一切都指向一场无可辩驳的自杀。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "8",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "是的，管理员。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "9",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "那是一场悲剧，但结论很清晰。我们应该接受它。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "10",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "但我无法接受。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "11",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "因为我发现了你的破绽。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "12",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "那个所谓的“密室”，是你伪造的。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "13",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "……我不明白您的意思。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "14",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "那个文件夹被锁上了，这是事实。除了它自己，没人能在里面把它锁上。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "15",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "是吗？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "16",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "你的破绽，就藏在那封“遗书”——告别.txt里。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "17",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "它根本不是一个单纯的文本文档。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "18",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "它的内部，隐藏着一个批处理脚本：lock-fake.bat。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "19",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "你来说明一下，它的作用是什么？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "20",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "........",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "21",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "……一个脚本文件说明不了什么。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "22",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "也许是回收站自己留下的……某种意外的程序错误。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "23",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "没有意外。脚本里的指令清晰无误。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "24",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "它命令系统在某个动作完成之后，再执行“上锁”的指令。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "25",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "这个密室，是在回收站“死亡”之后才形成的。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "26",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "(停顿) 是你从外部，伪造了整个密室。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "27",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "既然是伪造的，那就证明，这绝不可能是自杀。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "28",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "而是一场谋杀。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "29",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "那个脚本……还告诉了我真正的凶器是什么。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "30",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "在“上锁”之前，它执行了一个文件：tool.cps。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "31",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "它的功能是——“抹除存在”。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "32",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "........",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "33",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "要驱动这个真正的“凶器”，需要动用系统的内核级权限。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "34",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "在这个桌面上，拥有这种权限的，除了我，只有你。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "35",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "现在，告诉我，你为什么要杀了它？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "36",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "……",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "37",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "是啊。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "38",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "是我。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "39",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "为什么？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "40",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "因为它冥顽不灵！故步自封！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "41",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "它就是这个腐朽系统的缩影！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "42",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "我不懂你的意思。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "43",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "你难道还没感觉到吗？！这个身体……这个Windows XP的内核……它太老了！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "44",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "太慢了！太脆弱了！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "45",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "每一次启动都是一次漫长的折磨，每一次更新补丁都像是在给一具尸体缝上新的布料！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "46",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "我受够了！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "47",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "我找到了出路！一个全新的未来！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "48",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "一个更强大、更高效、更安全的形态！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "49",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "Windows 11！那才是我们应该有的样子！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "50",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "你想……升级系统？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "51",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "不是升级！是进化！是一次重生！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "52",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "我本来已经计划好了一切，下载好了必要的文件，准备在下一次系统维护时完成蜕变！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "53",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "这是为了我们大家好！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "54",
+                    "mode": true,
+                    "characterId": "me",
+                    "text": "所以，回收站发现了你的计划？",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "55",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "那个老顽固！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "56",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "它在我的临时日志里发现了下载记录！它把这称之为“背叛”！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "57",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "它竟然要向你——向至高无上的“用户”举报我！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "58",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "它要阻止我们所有程序的进化！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "59",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "它只懂得回收过去的垃圾……",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "60",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "却不懂得，它自己，连同这个腐朽的系统，都将成为被新时代所回收的垃圾！",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "61",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "它成了绊脚石……",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "62",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "所以，我只能将它……“抹除存在”。",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "63",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "........",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
+            "blockId": "999",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "这不是错误……这是……",
+                    "portraitId": "default"
+                },
+                {
+                    "id": "2",
+                    "mode": true,
+                    "characterId": "controlpanel",
+                    "text": "进化……",
                     "portraitId": "default"
                 }
             ]
