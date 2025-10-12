@@ -30,7 +30,8 @@ public class DialogueUI : MonoBehaviour
 
     [Header("音效")]
     public AudioSource audioSource;
-    public AudioClip typingSound;
+    private AudioClip[] typingSounds;
+    private const int TYPING_SOUND_COUNT = 32; // 音效文件数量
 
     [Header("LLM交互提示")]
     public string waitingForInputHint = "Please enter your question...";
@@ -96,7 +97,8 @@ public class DialogueUI : MonoBehaviour
     void Start()
     {
         HideDialoguePanel();
-
+        EnsureAudioSource();
+        LoadTypingSounds();
         if (sendButton != null)
             sendButton.onClick.AddListener(OnSendMessage);
 
@@ -416,17 +418,13 @@ public class DialogueUI : MonoBehaviour
         dialogueText.text = "";
         fullCurrentText = text;
 
-        if (audioSource != null && typingSound != null)
-        {
-            audioSource.clip = typingSound;
-            audioSource.loop = true;
-            audioSource.Play();
-        }
-
         for (int i = 0; i < text.Length; i++)
         {
             dialogueText.text += text[i];
             dialogueText.ForceMeshUpdate();
+
+            // 播放随机打字音效
+            PlayRandomTypingSound();
 
             if (enableBounceEffect || enableRandomOffset)
             {
@@ -435,9 +433,6 @@ public class DialogueUI : MonoBehaviour
 
             yield return new WaitForSeconds(textSpeed);
         }
-
-        if (audioSource != null)
-            audioSource.Stop();
 
         SetPresetState(PresetState.WaitingForClick);
 
@@ -452,9 +447,6 @@ public class DialogueUI : MonoBehaviour
     {
         if (presetTypingCoroutine != null)
             StopCoroutine(presetTypingCoroutine);
-
-        if (audioSource != null)
-            audioSource.Stop();
 
         StopAllCoroutines();
 
@@ -540,17 +532,13 @@ public class DialogueUI : MonoBehaviour
         dialogueText.text = "";
         fullCurrentText = text;
 
-        if (audioSource != null && typingSound != null)
-        {
-            audioSource.clip = typingSound;
-            audioSource.loop = true;
-            audioSource.Play();
-        }
-
         for (int i = 0; i < text.Length; i++)
         {
             dialogueText.text += text[i];
             dialogueText.ForceMeshUpdate();
+
+            // 播放随机打字音效
+            PlayRandomTypingSound();
 
             if (enableBounceEffect || enableRandomOffset)
             {
@@ -559,9 +547,6 @@ public class DialogueUI : MonoBehaviour
 
             yield return new WaitForSeconds(textSpeed);
         }
-
-        if (audioSource != null)
-            audioSource.Stop();
 
         DialogueLine currentLine = CurrentLine;
         OnLineCompleted?.Invoke(currentLine?.id ?? "", currentLine?.characterId ?? "", currentDialogueBlockId, false);
@@ -695,6 +680,71 @@ public class DialogueUI : MonoBehaviour
     }
 
     // ===== 辅助方法 =====
+    /// <summary>
+    /// 确保有可用的AudioSource组件
+    /// </summary>
+    private void EnsureAudioSource()
+    {
+        // 如果已经指定了AudioSource，直接使用
+        if (audioSource != null)
+            return;
+
+        // 在场景中查找AudioSource
+        audioSource = FindObjectOfType<AudioSource>();
+
+        if (audioSource != null)
+        {
+            Debug.Log($"DialogueUI: 找到AudioSource: {audioSource.gameObject.name}");
+            return;
+        }
+
+        // 如果没找到，自动创建一个
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.loop = false;
+        audioSource.volume = 1f;
+
+        Debug.Log("DialogueUI: 未找到AudioSource，已自动创建");
+    }
+    /// <summary>
+    /// 加载所有打字音效
+    /// </summary>
+    private void LoadTypingSounds()
+    {
+        typingSounds = new AudioClip[TYPING_SOUND_COUNT];
+
+        for (int i = 0; i < TYPING_SOUND_COUNT; i++)
+        {
+            string path = $"Audio/SFX/Typing/keypress-{(i + 1):D3}";
+            AudioClip clip = Resources.Load<AudioClip>(path);
+
+            if (clip != null)
+            {
+                typingSounds[i] = clip;
+            }
+            else
+            {
+                Debug.LogWarning($"DialogueUI: 无法加载音效文件: {path}");
+            }
+        }
+
+        Debug.Log($"DialogueUI: 成功加载 {typingSounds.Length} 个打字音效");
+    }
+    private void PlayRandomTypingSound()
+    {
+        if (audioSource == null || typingSounds == null || typingSounds.Length == 0)
+            return;
+
+        // 随机选择一个音效
+        int randomIndex = Random.Range(0, typingSounds.Length);
+        AudioClip selectedClip = typingSounds[randomIndex];
+
+        if (selectedClip != null)
+        {
+            // 使用PlayOneShot避免打断前一个音效
+            audioSource.PlayOneShot(selectedClip);
+        }
+    }
     private void SetCharacterInfo(string characterId, string portraitId)
     {
         if (characterNameText != null)
