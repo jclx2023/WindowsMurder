@@ -34,7 +34,7 @@ Material:
     - _JitterSpeedX: 8
     - _JitterSpeedY: 8
     - _JitterStrength: 0.8
-    - _PixelResolution: 4
+    - _PixelResolution: 500
     - _SpatialFreqX: 100
     - _SpatialFreqY: 100
     - _UsePixelSnap: 0

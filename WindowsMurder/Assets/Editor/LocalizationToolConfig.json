@@ -1,6 +1,6 @@
 {
     "xlsxPath": "Assets/Localization/LocalizationTable.xlsx",
-    "currentMaxId": 1100,
+    "currentMaxId": 1102,
     "idRangeStart": 1001,
     "idRangeEnd": 9999
 }

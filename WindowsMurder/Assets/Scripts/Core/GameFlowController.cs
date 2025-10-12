@@ -631,6 +631,49 @@ public class GameFlowController : MonoBehaviour
     }
 
     #endregion
+    [ContextMenu("⚙️ 跳转至第四幕并解锁所有线索")]
+    private void Debug_JumpToStage4_UnlockAllClues()
+    {
+
+        string targetStageId = "Stage4_Desktop";
+        // 执行跳转
+        LoadStage(targetStageId, triggerAutoSave: false);
+        Debug.Log($"[GameFlow] 已跳转至第四幕: {targetStageId}");
+
+        // 收集所有线索
+        HashSet<string> allClues = new HashSet<string>();
+        foreach (var stage in stageConfigs)
+        {
+            foreach (var block in stage.dialogueBlocks)
+            {
+                if (block.unlocksClues != null)
+                {
+                    foreach (string clue in block.unlocksClues)
+                    {
+                        if (!string.IsNullOrEmpty(clue))
+                            allClues.Add(clue);
+                    }
+                }
+
+                if (stage.requiredCluesForProgress != null)
+                {
+                    foreach (string clue in stage.requiredCluesForProgress)
+                    {
+                        if (!string.IsNullOrEmpty(clue))
+                            allClues.Add(clue);
+                    }
+                }
+            }
+        }
+
+        // 解锁所有线索
+        foreach (string clue in allClues)
+        {
+            UnlockClue(clue);
+        }
+
+        Debug.Log($"[GameFlow] 已解锁所有线索，共 {allClues.Count} 条。");
+    }
 }
 
 /// <summary>

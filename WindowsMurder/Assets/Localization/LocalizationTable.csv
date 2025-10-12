@@ -97,3 +97,5 @@
 1099,NameText_TMP,叉子.jpg,Fork.jpg,
 1100,NameText_TMP,素材.zip,footage.zip,素材.zip
 2023,,以 # 方式解压,,
+1101,Title_TMP,警告！,Warning!,
+1102,Text (TMP)_TMP,检测到异常权限调用。\nControlPanel.exe 未响应。\n是否强制结束进程？,,

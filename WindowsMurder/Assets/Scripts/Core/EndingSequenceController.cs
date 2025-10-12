@@ -358,7 +358,7 @@ public class EndingSequenceController : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             float t = Mathf.PingPong(elapsed * 4f, 1f);
-            img.color = Color.Lerp(original, Color.yellow, t);
+            img.color = Color.Lerp(original, Color.white, t);
             yield return null;
         }
 

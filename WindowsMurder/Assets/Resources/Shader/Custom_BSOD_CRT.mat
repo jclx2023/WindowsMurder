@@ -29,10 +29,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BlurAmount: 0.3
+    - _BlurAmount: 0.5
     - _ChromaticAberration: 1
-    - _FlickerIntensity: 0.1
-    - _ScanlineIntensity: 0.2
+    - _FlickerIntensity: 0.2
+    - _ScanlineIntensity: 0.3
     - _TimeScale: 1
     m_Colors:
     - _BlueColor: {r: 0, g: 0.19999996, b: 0.8, a: 1}
