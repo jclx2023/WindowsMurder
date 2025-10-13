@@ -36,6 +36,7 @@ public class EndingSequenceController : MonoBehaviour
 
     [Header("Stage配置")]
     [SerializeField] private string postEndingStageId = "Stage_PostEnding";
+    [SerializeField] private AudioClip audioClip;
 
     [Header("对话配置")]
     [SerializeField] private string dialogueBlock999 = "999";
@@ -238,6 +239,11 @@ public class EndingSequenceController : MonoBehaviour
         // 切换Stage
         if (gameFlowController != null)
             gameFlowController.LoadStage(postEndingStageId, true);
+
+        if (audioClip != null)
+        {
+            GlobalSystemManager.Instance.PlaySFX(audioClip);
+        }
 
         if (debugMode) Debug.Log("[Ending] 完成");
         isPlayingEnding = false;
