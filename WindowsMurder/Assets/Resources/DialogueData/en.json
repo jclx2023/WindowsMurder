@@ -2001,6 +2001,18 @@
             ]
         },
         {
+            "blockId": "924",
+            "lines": [
+                {
+                    "id": "1",
+                    "mode": true,
+                    "characterId": "recyclebin",
+                    "text": "Ah... Administrator, are we cleaning up a lot again today? I’m ready.",
+                    "portraitId": "default"
+                }
+            ]
+        },
+        {
             "blockId": "999",
             "lines": [
                 {

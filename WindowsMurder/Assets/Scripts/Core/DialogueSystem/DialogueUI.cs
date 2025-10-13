@@ -837,6 +837,8 @@ public class DialogueUI : MonoBehaviour
             case "xunlei": return "迅雷";
             case "ie": return "IE";
             case "notepad": return "记事本";
+            case "recycle": return "回收站";
+            case "registry": return "注册表工具";
             default: return characterId;
         }
     }
@@ -874,6 +876,8 @@ public class DialogueUI : MonoBehaviour
             case "xunlei": return "迅雷";
             case "ie": return "インターネットエクスプローラー";
             case "notepad": return "メモ帳";
+            case "recycle": return "ゴミ箱";
+            case "registry": return "レジストリ エディター";
             default: return characterId;
         }
     }
