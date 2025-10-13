@@ -523,6 +523,7 @@ MonoBehaviour:
   windowTitle: NewWindow
   windowIcon: {fileID: 0}
   canClose: 1
+  audioClip: {fileID: 0}
   windowRect: {fileID: 3044046903597876624}
   titleBarRect: {fileID: 320043157838465930}
   titleText: {fileID: 7552755676884903102}
@@ -596,6 +597,7 @@ MonoBehaviour:
   defaultPathId: root
   windowTypeName: Exploer
   showPathInTitle: 1
+  audioClip: {fileID: 8300000, guid: 8420d0365b8d5c14b95fb4ab62a6571d, type: 3}
   enableDebugLog: 1
 --- !u!1 &4023039649685878432
 GameObject:
@@ -1259,6 +1261,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Up
       objectReference: {fileID: 0}
+    - target: {fileID: 2352634783142989541, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3858513215275436620, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
       propertyPath: canShowContextMenu
       value: 0
@@ -1363,6 +1369,10 @@ PrefabInstance:
       propertyPath: m_text
       value: 7-zip
       objectReference: {fileID: 0}
+    - target: {fileID: 3439891255811791680, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3439891255811791680, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_fontColor.b
       value: 0
@@ -1596,6 +1606,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Up
       objectReference: {fileID: 0}
+    - target: {fileID: 2352634783142989541, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3858513215275436620, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
       propertyPath: canShowContextMenu
       value: 0
@@ -1700,6 +1714,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Thunder
       objectReference: {fileID: 0}
+    - target: {fileID: 3439891255811791680, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3439891255811791680, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_fontColor.b
       value: 0
@@ -1955,6 +1973,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Works
       objectReference: {fileID: 0}
+    - target: {fileID: 2352634783142989541, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3858513215275436620, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
       propertyPath: canShowContextMenu
       value: 1
@@ -2256,6 +2278,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Up
       objectReference: {fileID: 0}
+    - target: {fileID: 2352634783142989541, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3858513215275436620, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
       propertyPath: canShowContextMenu
       value: 0
@@ -2360,6 +2386,10 @@ PrefabInstance:
       propertyPath: m_text
       value: IE
       objectReference: {fileID: 0}
+    - target: {fileID: 3439891255811791680, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3439891255811791680, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_fontColor.b
       value: 0
@@ -2702,6 +2732,10 @@ PrefabInstance:
       value: ControlPanel
       objectReference: {fileID: 0}
     - target: {fileID: 3439891255811791680, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 3439891255811791680, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_fontColor.b
       value: 0
       objectReference: {fileID: 0}
@@ -2917,6 +2951,10 @@ PrefabInstance:
       value: Photoshop
       objectReference: {fileID: 0}
     - target: {fileID: 3439891255811791680, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 3439891255811791680, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_fontColor.b
       value: 0
       objectReference: {fileID: 0}
@@ -3109,6 +3147,10 @@ PrefabInstance:
       propertyPath: m_text
       value: QQ
       objectReference: {fileID: 0}
+    - target: {fileID: 3439891255811791680, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3439891255811791680, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_fontColor.b
       value: 0
@@ -3437,6 +3479,10 @@ PrefabInstance:
       value: Notepad
       objectReference: {fileID: 0}
     - target: {fileID: 3439891255811791680, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 3439891255811791680, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_fontColor.b
       value: 0
       objectReference: {fileID: 0}
@@ -3691,6 +3737,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Up
       objectReference: {fileID: 0}
+    - target: {fileID: 2352634783142989541, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3858513215275436620, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
       propertyPath: canShowContextMenu
       value: 0
@@ -3795,6 +3845,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Registry
       objectReference: {fileID: 0}
+    - target: {fileID: 3439891255811791680, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3439891255811791680, guid: e9658cd88d1e8c149aa3f19f20a37e63, type: 3}
       propertyPath: m_fontColor.b
       value: 0
@@ -4046,6 +4100,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Up
       objectReference: {fileID: 0}
+    - target: {fileID: 2352634783142989541, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3858513215275436620, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
       propertyPath: canShowContextMenu
       value: 0
@@ -4320,6 +4378,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Files
       objectReference: {fileID: 0}
+    - target: {fileID: 2352634783142989541, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3858513215275436620, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
       propertyPath: canShowContextMenu
       value: 0

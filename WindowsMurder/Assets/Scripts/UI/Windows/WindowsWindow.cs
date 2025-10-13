@@ -12,6 +12,7 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     [SerializeField] private string windowTitle = "NewWindow";
     [SerializeField] private Sprite windowIcon;
     [SerializeField] private bool canClose = true;
+    [SerializeField] private AudioClip audioClip;
 
     [Header("UI组件引用")]
     [SerializeField] public RectTransform windowRect;
@@ -56,6 +57,10 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         {
             StartCoroutine(DelayedInitialRegister());
         }
+        if (audioClip != null)
+        {
+            GlobalSystemManager.Instance.PlaySFX(audioClip);
+        }
     }
 
     void OnEnable()
@@ -84,6 +89,7 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     private void InitializeComponents()
     {
+
         parentCanvas = GetComponentInParent<Canvas>();
         if (parentCanvas != null)
         {

@@ -360,6 +360,7 @@ MonoBehaviour:
   windowTitle: Goodbye.txt
   windowIcon: {fileID: 21300000, guid: 72182374368c94545870750ba47071a6, type: 3}
   canClose: 1
+  audioClip: {fileID: 8300000, guid: 22c5437478ecea748834709e5dd332be, type: 3}
   windowRect: {fileID: 4520345315382697645}
   titleBarRect: {fileID: 8793838984619152108}
   titleText: {fileID: 7692995330736145779}

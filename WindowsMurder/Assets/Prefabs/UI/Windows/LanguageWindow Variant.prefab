@@ -473,6 +473,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Language
       objectReference: {fileID: 0}
+    - target: {fileID: 4813807776628185632, guid: ba744509865230648b7e748fda2083cf, type: 3}
+      propertyPath: audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 22c5437478ecea748834709e5dd332be, type: 3}
     - target: {fileID: 6814049060214102322, guid: ba744509865230648b7e748fda2083cf, type: 3}
       propertyPath: m_Name
       value: LanguageWindow Variant

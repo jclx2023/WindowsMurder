@@ -923,9 +923,10 @@ MonoBehaviour:
     0x00000000)
 
 '
-  lineDelay: 0.05
-  charDelay: 0.01
+  lineDelay: 0.04
+  charDelay: 0.008
   playOnEnable: 1
+  audioClip: {fileID: 8300000, guid: dba2bd818fdabf14a98f903b33c5c1cb, type: 3}
 --- !u!1 &208555156
 GameObject:
   m_ObjectHideFlags: 0
@@ -3564,7 +3565,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &712246473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3676,6 +3677,10 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: 7562195619927703879, guid: ce01aa57be5ec024ca65cf9a5ab00824, type: 2}
+    - target: {fileID: 4813807776628185632, guid: ba744509865230648b7e748fda2083cf, type: 3}
+      propertyPath: audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: da015a481bbe3d64db613e9f5b60aa67, type: 3}
     - target: {fileID: 4813807776628185632, guid: ba744509865230648b7e748fda2083cf, type: 3}
       propertyPath: windowIcon
       value: 
@@ -8389,7 +8394,6 @@ MonoBehaviour:
   randomOffsetRange: 3
   offsetSmoothTime: 0.1
   audioSource: {fileID: 0}
-  typingSound: {fileID: 0}
   waitingForInputHint: Please enter your question...
   waitingForAIHint: Thinking...
 --- !u!4 &1513089404

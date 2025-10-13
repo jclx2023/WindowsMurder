@@ -94,6 +94,7 @@ MonoBehaviour:
   windowTitle: Explorer
   windowIcon: {fileID: 21300000, guid: f9423969cefa59d49868fbe489fc1e96, type: 3}
   canClose: 1
+  audioClip: {fileID: 0}
   windowRect: {fileID: 5941143662107036703}
   titleBarRect: {fileID: 148718487118433394}
   titleText: {fileID: 9136406355566286644}
@@ -167,6 +168,7 @@ MonoBehaviour:
   defaultPathId: root
   windowTypeName: Exploer
   showPathInTitle: 1
+  audioClip: {fileID: 8300000, guid: 8420d0365b8d5c14b95fb4ab62a6571d, type: 3}
   enableDebugLog: 1
 --- !u!1 &2045416839153092862
 GameObject:
@@ -1529,6 +1531,10 @@ PrefabInstance:
       propertyPath: m_text
       value: C:\
       objectReference: {fileID: 0}
+    - target: {fileID: 2352634783142989541, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3858513215275436620, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
       propertyPath: canShowContextMenu
       value: 0
@@ -1655,6 +1661,10 @@ PrefabInstance:
       propertyPath: m_text
       value: D:\
       objectReference: {fileID: 0}
+    - target: {fileID: 2352634783142989541, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3858513215275436620, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
       propertyPath: canShowContextMenu
       value: 0
@@ -2199,6 +2209,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Works
       objectReference: {fileID: 0}
+    - target: {fileID: 2352634783142989541, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3858513215275436620, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
       propertyPath: canShowContextMenu
       value: 1
@@ -3023,6 +3037,10 @@ PrefabInstance:
       propertyPath: m_text
       value: E:\
       objectReference: {fileID: 0}
+    - target: {fileID: 2352634783142989541, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3858513215275436620, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
       propertyPath: canShowContextMenu
       value: 0
@@ -3145,6 +3163,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Up
       objectReference: {fileID: 0}
+    - target: {fileID: 2352634783142989541, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3858513215275436620, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
       propertyPath: canShowContextMenu
       value: 0
@@ -3289,6 +3311,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Files
       objectReference: {fileID: 0}
+    - target: {fileID: 2352634783142989541, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3858513215275436620, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
       propertyPath: canShowContextMenu
       value: 0
@@ -3407,6 +3433,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Up
       objectReference: {fileID: 0}
+    - target: {fileID: 2352634783142989541, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3858513215275436620, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
       propertyPath: canShowContextMenu
       value: 0
@@ -3788,6 +3818,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Files
       objectReference: {fileID: 0}
+    - target: {fileID: 2352634783142989541, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3858513215275436620, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
       propertyPath: canShowContextMenu
       value: 0
@@ -4097,6 +4131,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Up
       objectReference: {fileID: 0}
+    - target: {fileID: 2352634783142989541, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3858513215275436620, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
       propertyPath: canShowContextMenu
       value: 0
@@ -4778,6 +4816,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Up
       objectReference: {fileID: 0}
+    - target: {fileID: 2352634783142989541, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 3858513215275436620, guid: 4ee66eeb48013df4894a79afde679a62, type: 3}
       propertyPath: canShowContextMenu
       value: 0

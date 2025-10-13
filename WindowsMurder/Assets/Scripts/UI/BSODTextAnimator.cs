@@ -11,6 +11,8 @@ public class BSODTextAnimator : MonoBehaviour
     public float charDelay = 0.02f;    // µ¥×Ö·û¼ä¸ô
     public bool playOnEnable = true;
 
+    [SerializeField] private AudioClip audioClip;
+
     private TMP_Text textMesh;
 
     void Awake()
@@ -23,6 +25,10 @@ public class BSODTextAnimator : MonoBehaviour
     {
         if (playOnEnable)
             StartCoroutine(PlayText());
+        if (audioClip != null)
+        {
+            GlobalSystemManager.Instance.PlaySFX(audioClip);
+        }
     }
 
     public IEnumerator PlayText()

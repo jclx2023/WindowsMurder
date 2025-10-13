@@ -220,7 +220,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainMenuSceneName: MainMenu
-  systemLoadingDelay: 1
+  systemLoadingDelay: 2
   startupSound: {fileID: 0}
   globalSystemPrefab: {fileID: 3765048267696958847, guid: f13dae2a2dc0ca04098b10a9fea95007, type: 3}
 --- !u!4 &207453178
@@ -434,6 +434,7 @@ MonoBehaviour:
   unitSpawnInterval: 0.2
   cycleDelay: 0.3
   autoStart: 1
+  enableDebugLog: 0
 --- !u!1 &535062078
 GameObject:
   m_ObjectHideFlags: 0

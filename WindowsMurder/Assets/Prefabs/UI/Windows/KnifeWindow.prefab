@@ -94,6 +94,7 @@ MonoBehaviour:
   windowTitle: Knife.jpg
   windowIcon: {fileID: 21300000, guid: 061716a26a6c94c4e932c33ccc4b314b, type: 3}
   canClose: 1
+  audioClip: {fileID: 8300000, guid: 22c5437478ecea748834709e5dd332be, type: 3}
   windowRect: {fileID: 3818004339456260886}
   titleBarRect: {fileID: 6623484388999454679}
   titleText: {fileID: 7419636587673675971}

@@ -574,6 +574,7 @@ MonoBehaviour:
   windowTitle: Warning
   windowIcon: {fileID: 0}
   canClose: 1
+  audioClip: {fileID: 8300000, guid: da015a481bbe3d64db613e9f5b60aa67, type: 3}
   windowRect: {fileID: 8619994469255653293}
   titleBarRect: {fileID: 6973585767892751518}
   titleText: {fileID: 6688812955026683052}

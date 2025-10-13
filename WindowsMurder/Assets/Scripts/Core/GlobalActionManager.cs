@@ -19,6 +19,7 @@ public class GlobalActionManager : MonoBehaviour
     [Header("音效")]
     public AudioClip windowOpenSound;
     public AudioClip sceneTransitionSound;
+    public AudioClip audioClip;
 
     [Header("转场效果设置")]
     public float clearPixel = 500f;     // 清晰态
@@ -256,7 +257,10 @@ public class GlobalActionManager : MonoBehaviour
                 Debug.Log("GlobalActionManager: 退出前已保存游戏");
             }
         }
-
+        if (audioClip != null)
+        {
+            GlobalSystemManager.Instance.PlaySFX(audioClip);
+        }
         // 通过GlobalSystemManager退出
         if (GlobalSystemManager.Instance != null)
         {

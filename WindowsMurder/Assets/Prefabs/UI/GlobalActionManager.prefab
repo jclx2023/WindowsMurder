@@ -49,6 +49,7 @@ MonoBehaviour:
   creditsWindowPrefab: {fileID: 4167320924422068870, guid: 1bdf5fad16ac3b14f8d88b9aae293efc, type: 3}
   windowOpenSound: {fileID: 0}
   sceneTransitionSound: {fileID: 0}
+  audioClip: {fileID: 8300000, guid: 09cc63e3586ae1849a3c650591f39ad1, type: 3}
   clearPixel: 500
   blurPixel: 6
   preDuration: 0.8

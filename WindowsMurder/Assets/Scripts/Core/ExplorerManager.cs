@@ -54,7 +54,8 @@ public class ExplorerManager : MonoBehaviour
 
     [Header("窗口设置")]
     public string windowTypeName = "文件资源管理器";         // 窗口类型名称
-    public bool showPathInTitle = true;                       // 是否在标题中显示路径
+    public bool showPathInTitle = true;
+    [SerializeField] private AudioClip audioClip;
 
     [Header("调试设置")]
     public bool enableDebugLog = true;                        // 是否启用调试日志
@@ -193,6 +194,11 @@ public class ExplorerManager : MonoBehaviour
         {
             currentPath.contentContainer.SetActive(true);
             currentPath.isCurrentPath = true;
+        }
+
+        if (audioClip != null)
+        {
+            GlobalSystemManager.Instance.PlaySFX(audioClip);
         }
 
         // 更新地址栏
