@@ -31,51 +31,40 @@ public class DialogueUI : MonoBehaviour
     [Header("音效")]
     public AudioSource audioSource;
     private AudioClip[] typingSounds;
-    private const int TYPING_SOUND_COUNT = 32; // 音效文件数量
+    private const int TYPING_SOUND_COUNT = 32;
 
     [Header("LLM交互提示")]
     public string waitingForInputHint = "Please enter your question...";
     public string waitingForAIHint = "Thinking...";
 
-    // 事件系统
+    // ========== 新增：CMD模式 ==========
+    [Header("CMD模式设置")]
+    public bool enableCmdMode = false; // 是否启用CMD样式
+    public string cmdPath = "C:\\Windows\\System32>";
+    public Color cmdTextColor = new Color(0.3f, 1f, 0.3f); // 仿CMD绿色文字
+
+    // ========== 事件系统 ==========
     public static event System.Action<string, string, string, bool> OnLineStarted;
     public static event System.Action<string, string, string, bool> OnLineCompleted;
     public static event System.Action<string, string> OnDialogueBlockStarted;
     public static event System.Action<string, string> OnDialogueBlockEnded;
 
-    // ===== 状态机定义 =====
-    private enum LLMState
-    {
-        Inactive,
-        WaitingForAI,
-        ShowingAIText,
-        WaitingForClick,
-        WaitingForInput,
-        ProcessingInput
-    }
+    // ========== 状态机定义 ==========
+    private enum LLMState { Inactive, WaitingForAI, ShowingAIText, WaitingForClick, WaitingForInput, ProcessingInput }
+    private enum PresetState { Inactive, ShowingText, WaitingForClick }
 
-    private enum PresetState
-    {
-        Inactive,
-        ShowingText,
-        WaitingForClick
-    }
-
-    // ===== 状态变量 =====
+    // ========== 状态变量 ==========
     private LLMState llmState = LLMState.Inactive;
     private PresetState presetState = PresetState.Inactive;
 
-    // ===== LLM模式专用变量 =====
     private bool isLLMTyping = false;
     private bool aiRequestedEnd = false;
     private string currentLLMCharacter;
     private Coroutine llmTypingCoroutine;
 
-    // ===== 普通模式专用变量 =====
     private bool isPresetTyping = false;
     private Coroutine presetTypingCoroutine;
 
-    // ===== 通用变量 =====
     public DialogueLine CurrentLine
     {
         get
@@ -85,6 +74,7 @@ public class DialogueUI : MonoBehaviour
             return null;
         }
     }
+
     public string CurrentLineId => CurrentLine?.id;
     public int CurrentLineIndex => currentLineIndex;
 
@@ -94,16 +84,15 @@ public class DialogueUI : MonoBehaviour
     private int currentLineIndex = 0;
     private string fullCurrentText = "";
 
+    // ============================================================
     void Start()
     {
         HideDialoguePanel();
         EnsureAudioSource();
         LoadTypingSounds();
-        if (sendButton != null)
-            sendButton.onClick.AddListener(OnSendMessage);
 
-        if (playerInputField != null)
-            playerInputField.onSubmit.AddListener(delegate { OnSendMessage(); });
+        if (sendButton != null) sendButton.onClick.AddListener(OnSendMessage);
+        if (playerInputField != null) playerInputField.onSubmit.AddListener(delegate { OnSendMessage(); });
 
         if (exitLLMButton != null)
         {
@@ -134,9 +123,21 @@ public class DialogueUI : MonoBehaviour
 
     public void ShowDialoguePanel()
     {
-        if (dialoguePanel != null)
-            dialoguePanel.SetActive(true);
+        if (dialoguePanel == null) return;
+
+        dialoguePanel.SetActive(true);
+
+        if (enableCmdMode)
+        {
+
+            if (characterNameText != null)
+                characterNameText.gameObject.SetActive(false);
+
+            if (characterPortrait != null)
+                characterPortrait.gameObject.SetActive(true);
+        }
     }
+
 
     public void HideDialoguePanel()
     {
@@ -144,12 +145,10 @@ public class DialogueUI : MonoBehaviour
             dialoguePanel.SetActive(false);
     }
 
-    public bool IsDialoguePanelVisible()
-    {
-        return dialoguePanel != null && dialoguePanel.activeSelf;
-    }
+    public bool IsDialoguePanelVisible() =>
+        dialoguePanel != null && dialoguePanel.activeSelf;
 
-    // ===== LLM状态机控制 =====
+    // ========== LLM状态机 ==========
     private void SetLLMState(LLMState newState)
     {
         llmState = newState;
@@ -166,8 +165,7 @@ public class DialogueUI : MonoBehaviour
                 SetTextActive(true);
                 SetInputActive(false);
                 SetExitButtonActive(true);
-                if (dialogueText != null)
-                    dialogueText.text = waitingForAIHint;
+                if (dialogueText != null) dialogueText.text = waitingForAIHint;
                 break;
 
             case LLMState.ShowingAIText:
@@ -182,7 +180,6 @@ public class DialogueUI : MonoBehaviour
                 SetInputActive(true);
                 SetExitButtonActive(true);
                 isLLMTyping = false;
-
                 if (playerInputField != null)
                 {
                     playerInputField.text = "";
@@ -195,13 +192,11 @@ public class DialogueUI : MonoBehaviour
                 SetTextActive(true);
                 SetInputActive(false);
                 SetExitButtonActive(true);
-                if (dialogueText != null)
-                    dialogueText.text = waitingForAIHint;
+                if (dialogueText != null) dialogueText.text = waitingForAIHint;
                 break;
         }
     }
 
-    // ===== 普通模式状态机控制 =====
     private void SetPresetState(PresetState newState)
     {
         presetState = newState;
@@ -245,33 +240,17 @@ public class DialogueUI : MonoBehaviour
             exitLLMButton.gameObject.SetActive(active);
     }
 
-    // ===== 点击处理 =====
+    // ========== 点击处理 ==========
     private void OnDialogueTextClicked()
     {
-        if (llmState != LLMState.Inactive)
-        {
-            HandleLLMClick();
-        }
-        else if (presetState != PresetState.Inactive)
-        {
-            HandlePresetClick();
-        }
+        if (llmState != LLMState.Inactive) HandleLLMClick();
+        else if (presetState != PresetState.Inactive) HandlePresetClick();
     }
 
     private void HandleLLMClick()
     {
-        switch (llmState)
-        {
-            case LLMState.ShowingAIText:
-                break;
-
-            case LLMState.WaitingForClick:
-                SetLLMState(LLMState.WaitingForInput);
-                break;
-
-            default:
-                break;
-        }
+        if (llmState == LLMState.WaitingForClick)
+            SetLLMState(LLMState.WaitingForInput);
     }
 
     private void HandlePresetClick()
@@ -279,10 +258,7 @@ public class DialogueUI : MonoBehaviour
         switch (presetState)
         {
             case PresetState.ShowingText:
-                if (isPresetTyping)
-                {
-                    SkipPresetTyping();
-                }
+                if (isPresetTyping) SkipPresetTyping();
                 break;
 
             case PresetState.WaitingForClick:
@@ -292,79 +268,45 @@ public class DialogueUI : MonoBehaviour
         }
     }
 
-    // ===== 退出按钮处理 =====
     private void OnExitLLMButtonClicked()
     {
-        if (llmState == LLMState.Inactive)
-            return;
-
+        if (llmState == LLMState.Inactive) return;
         CleanupBeforeHide();
         EndLLMMode();
     }
 
-    // ===== 清理方法 =====
-    /// <summary>
-    /// 隐藏对话面板前的清理工作
-    /// </summary>
+    // ========== 清理 ==========
     private void CleanupBeforeHide()
     {
-        // 停止所有打字机协程
-        if (presetTypingCoroutine != null)
-        {
-            StopCoroutine(presetTypingCoroutine);
-            presetTypingCoroutine = null;
-        }
-
-        if (llmTypingCoroutine != null)
-        {
-            StopCoroutine(llmTypingCoroutine);
-            llmTypingCoroutine = null;
-        }
-
-        // 停止所有动画协程
+        if (presetTypingCoroutine != null) StopCoroutine(presetTypingCoroutine);
+        if (llmTypingCoroutine != null) StopCoroutine(llmTypingCoroutine);
         StopAllCoroutines();
+        if (audioSource != null) audioSource.Stop();
 
-        // 停止音效
-        if (audioSource != null)
-            audioSource.Stop();
-
-        // 重置状态
         SetLLMState(LLMState.Inactive);
         SetPresetState(PresetState.Inactive);
-        isLLMTyping = false;
-        isPresetTyping = false;
 
-        // 清空文本
-        if (dialogueText != null)
-            dialogueText.text = "";
+        if (dialogueText != null) dialogueText.text = "";
     }
 
-    // ===== 对话启动 =====
+    // ========== 对话启动 ==========
     public void StartDialogue(DialogueData dialogueData, string fileName, string blockId)
     {
-        if (dialogueData == null)
-        {
-            Debug.LogError("DialogueUI: 对话数据为空");
-            return;
-        }
+        if (dialogueData == null) return;
 
         ShowDialoguePanel();
-
         currentDialogue = dialogueData;
         currentDialogueFileName = fileName;
         currentDialogueBlockId = blockId;
         currentLineIndex = 0;
 
         OnDialogueBlockStarted?.Invoke(fileName, blockId);
-
         ClearDialogue();
         ShowNextLine();
     }
 
-    public void StartDialogue(DialogueData dialogueData)
-    {
+    public void StartDialogue(DialogueData dialogueData) =>
         StartDialogue(dialogueData, "unknown", dialogueData?.conversationId ?? "unknown");
-    }
 
     public void ShowNextLine()
     {
@@ -375,30 +317,30 @@ public class DialogueUI : MonoBehaviour
         }
 
         DialogueLine line = currentDialogue.lines[currentLineIndex];
-
-        if (line.mode)
-            ShowPresetLine(line);
-        else
-            StartLLMMode(line);
+        if (line.mode) ShowPresetLine(line);
+        else StartLLMMode(line);
     }
 
-    // ===== 普通模式显示 =====
+    // ========== 普通模式显示 ==========
     private void ShowPresetLine(DialogueLine line)
     {
         SetLLMState(LLMState.Inactive);
-
         SetCharacterInfo(line.characterId, line.portraitId);
         fullCurrentText = line.text ?? "";
 
         OnLineStarted?.Invoke(line.id, line.characterId, currentDialogueBlockId, true);
 
-        if (useTypingEffect && !string.IsNullOrEmpty(fullCurrentText))
+        if (enableCmdMode)
         {
-            StartPresetTyping(fullCurrentText);
+            string prefix = $"{cmdPath} {GetCharacterDisplayName(line.characterId)}> ";
+            dialogueText.text = prefix;
         }
+
+        if (useTypingEffect && !string.IsNullOrEmpty(fullCurrentText))
+            StartPresetTyping(fullCurrentText);
         else
         {
-            dialogueText.text = fullCurrentText;
+            dialogueText.text += fullCurrentText;
             SetPresetState(PresetState.WaitingForClick);
             OnLineCompleted?.Invoke(line.id, line.characterId, currentDialogueBlockId, true);
         }
@@ -406,95 +348,61 @@ public class DialogueUI : MonoBehaviour
 
     private void StartPresetTyping(string text)
     {
-        if (presetTypingCoroutine != null)
-            StopCoroutine(presetTypingCoroutine);
-
+        if (presetTypingCoroutine != null) StopCoroutine(presetTypingCoroutine);
         presetTypingCoroutine = StartCoroutine(PresetTypeText(text));
     }
 
     private IEnumerator PresetTypeText(string text)
     {
         SetPresetState(PresetState.ShowingText);
-        dialogueText.text = "";
+        string prefix = enableCmdMode ? $"{cmdPath} {GetCharacterDisplayName(CurrentLine.characterId)} >" : "";
+        dialogueText.text = prefix;
         fullCurrentText = text;
+        string visibleText = "";
 
         for (int i = 0; i < text.Length; i++)
         {
-            dialogueText.text += text[i];
-            dialogueText.ForceMeshUpdate();
-
-            // 播放随机打字音效
+            visibleText += text[i];
+            dialogueText.text = prefix + visibleText;
             PlayRandomTypingSound();
-
-            if (enableBounceEffect || enableRandomOffset)
-            {
-                StartCoroutine(AnimateCharacter(i));
-            }
-
             yield return new WaitForSeconds(textSpeed);
         }
 
         SetPresetState(PresetState.WaitingForClick);
-
         DialogueLine currentLine = CurrentLine;
         if (currentLine != null)
-        {
             OnLineCompleted?.Invoke(currentLine.id, currentLine.characterId, currentDialogueBlockId, true);
-        }
     }
 
     private void SkipPresetTyping()
     {
-        if (presetTypingCoroutine != null)
-            StopCoroutine(presetTypingCoroutine);
-
-        StopAllCoroutines();
-
-        dialogueText.text = fullCurrentText;
-        dialogueText.ForceMeshUpdate();
-
+        if (presetTypingCoroutine != null) StopCoroutine(presetTypingCoroutine);
+        dialogueText.text = (enableCmdMode ? $"{cmdPath} {GetCharacterDisplayName(CurrentLine.characterId)}> " : "") + fullCurrentText;
         SetPresetState(PresetState.WaitingForClick);
-
-        DialogueLine currentLine = CurrentLine;
-        if (currentLine != null)
-        {
-            OnLineCompleted?.Invoke(currentLine.id, currentLine.characterId, currentDialogueBlockId, true);
-        }
     }
 
-    // ===== LLM模式显示 =====
+    // ========== LLM模式显示 ==========
     private void StartLLMMode(DialogueLine line)
     {
         SetPresetState(PresetState.Inactive);
         SetLLMState(LLMState.WaitingForAI);
-
         aiRequestedEnd = false;
         currentLLMCharacter = line.characterId;
-
         SetCharacterInfo(line.characterId, line.portraitId);
-
         OnLineStarted?.Invoke(line.id, line.characterId, currentDialogueBlockId, false);
 
         DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
         if (dialogueManager != null && dialogueManager.historyManager != null)
         {
-            dialogueManager.historyManager.StartLLMSession(
-                line.text,
-                OnInitialLLMResponse,
-                dialogueManager
-            );
+            dialogueManager.historyManager.StartLLMSession(line.text, OnInitialLLMResponse, dialogueManager);
         }
     }
 
-    private void OnInitialLLMResponse(string response)
-    {
-        OnLLMResponse(response);
-    }
+    private void OnInitialLLMResponse(string response) => OnLLMResponse(response);
 
     public void OnLLMResponse(string response)
     {
-        if (llmState == LLMState.Inactive)
-            return;
+        if (llmState == LLMState.Inactive) return;
 
         if (DialogueLoader.ShouldEndByAI(response))
         {
@@ -503,80 +411,54 @@ public class DialogueUI : MonoBehaviour
         }
 
         fullCurrentText = response;
-
-        if (useTypingEffect)
-        {
-            StartLLMTyping(fullCurrentText);
-        }
+        if (useTypingEffect) StartLLMTyping(fullCurrentText);
         else
         {
             dialogueText.text = fullCurrentText;
             SetLLMState(LLMState.WaitingForInput);
-
-            DialogueLine currentLine = CurrentLine;
-            OnLineCompleted?.Invoke(currentLine?.id ?? "", currentLine?.characterId ?? "", currentDialogueBlockId, false);
         }
     }
 
     private void StartLLMTyping(string text)
     {
-        if (llmTypingCoroutine != null)
-            StopCoroutine(llmTypingCoroutine);
-
+        if (llmTypingCoroutine != null) StopCoroutine(llmTypingCoroutine);
         llmTypingCoroutine = StartCoroutine(LLMTypeText(text));
     }
 
     private IEnumerator LLMTypeText(string text)
     {
         SetLLMState(LLMState.ShowingAIText);
-        dialogueText.text = "";
+        string prefix = enableCmdMode ? $"{cmdPath} {GetCharacterDisplayName(currentLLMCharacter)}> " : "";
+        dialogueText.text = prefix;
         fullCurrentText = text;
+        string visibleText = "";
 
         for (int i = 0; i < text.Length; i++)
         {
-            dialogueText.text += text[i];
-            dialogueText.ForceMeshUpdate();
-
-            // 播放随机打字音效
+            visibleText += text[i];
+            dialogueText.text = prefix + visibleText;
             PlayRandomTypingSound();
-
-            if (enableBounceEffect || enableRandomOffset)
-            {
-                StartCoroutine(AnimateCharacter(i));
-            }
-
             yield return new WaitForSeconds(textSpeed);
         }
 
-        DialogueLine currentLine = CurrentLine;
-        OnLineCompleted?.Invoke(currentLine?.id ?? "", currentLine?.characterId ?? "", currentDialogueBlockId, false);
-
+        SetLLMState(aiRequestedEnd ? LLMState.Inactive : LLMState.WaitingForClick);
         if (aiRequestedEnd)
         {
             yield return new WaitForSeconds(1f);
             EndLLMMode();
         }
-        else
-        {
-            SetLLMState(LLMState.WaitingForClick);
-        }
     }
 
-    // ===== 用户输入处理 =====
+    // ========== 用户输入 ==========
     public void OnSendMessage()
     {
-        if (llmState != LLMState.WaitingForInput)
-            return;
-
-        if (playerInputField == null)
-            return;
+        if (llmState != LLMState.WaitingForInput) return;
+        if (playerInputField == null) return;
 
         string message = playerInputField.text.Trim();
-        if (string.IsNullOrEmpty(message))
-            return;
+        if (string.IsNullOrEmpty(message)) return;
 
         SetLLMState(LLMState.ProcessingInput);
-
         DialogueLine currentLine = DialogueLoader.GetLineAt(currentDialogue, currentLineIndex);
         if (currentLine != null && DialogueLoader.ShouldEndLLMDialogue(message, currentLine.endKeywords))
         {
@@ -585,9 +467,7 @@ public class DialogueUI : MonoBehaviour
         }
 
         DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
-
         SetLLMState(LLMState.WaitingForAI);
-
         dialogueManager.ProcessLLMMessage(currentLLMCharacter, message, OnLLMResponse);
     }
 
@@ -595,286 +475,146 @@ public class DialogueUI : MonoBehaviour
     {
         DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
         if (dialogueManager != null && dialogueManager.historyManager != null)
-        {
             dialogueManager.historyManager.EndLLMSession();
-        }
 
         SetLLMState(LLMState.Inactive);
         currentLineIndex++;
         ShowNextLine();
     }
 
-    // ===== 字符动画 =====
-    private IEnumerator AnimateCharacter(int charIndex)
-    {
-        Vector2 randomOffset = Vector2.zero;
-        if (enableRandomOffset)
-        {
-            randomOffset = new Vector2(
-                Random.Range(-randomOffsetRange, randomOffsetRange),
-                Random.Range(-randomOffsetRange, randomOffsetRange)
-            );
-        }
-
-        float elapsedTime = 0f;
-        float animDuration = enableBounceEffect ? bounceDuration : offsetSmoothTime;
-
-        while (elapsedTime < animDuration)
-        {
-            elapsedTime += Time.deltaTime;
-            float progress = Mathf.Clamp01(elapsedTime / animDuration);
-
-            dialogueText.ForceMeshUpdate();
-            TMP_TextInfo textInfo = dialogueText.textInfo;
-
-            if (charIndex >= textInfo.characterCount || !textInfo.characterInfo[charIndex].isVisible)
-                yield break;
-
-            TMP_CharacterInfo charInfo = textInfo.characterInfo[charIndex];
-            int materialIndex = charInfo.materialReferenceIndex;
-            int vertexIndex = charInfo.vertexIndex;
-
-            Vector3[] vertices = textInfo.meshInfo[materialIndex].vertices;
-
-            Vector3 bounceOffset = Vector3.zero;
-            if (enableBounceEffect)
-            {
-                float bounceValue = bounceCurve.Evaluate(progress);
-                float currentHeight = bounceHeight * (1 - bounceValue);
-                bounceOffset = new Vector3(0, currentHeight, 0);
-            }
-
-            Vector3 currentRandomOffset = Vector3.zero;
-            if (enableRandomOffset)
-            {
-                float offsetProgress = Mathf.SmoothStep(1f, 0f, progress);
-                currentRandomOffset = randomOffset * offsetProgress;
-            }
-
-            Vector3 totalOffset = bounceOffset + currentRandomOffset;
-
-            Vector3 bottomLeft = vertices[vertexIndex + 0];
-            Vector3 topLeft = vertices[vertexIndex + 1];
-            Vector3 topRight = vertices[vertexIndex + 2];
-            Vector3 bottomRight = vertices[vertexIndex + 3];
-
-            vertices[vertexIndex + 0] = bottomLeft + totalOffset;
-            vertices[vertexIndex + 1] = topLeft + totalOffset;
-            vertices[vertexIndex + 2] = topRight + totalOffset;
-            vertices[vertexIndex + 3] = bottomRight + totalOffset;
-
-            dialogueText.UpdateVertexData(TMP_VertexDataUpdateFlags.Vertices);
-
-            yield return null;
-        }
-
-        dialogueText.ForceMeshUpdate();
-        TMP_TextInfo finalTextInfo = dialogueText.textInfo;
-
-        if (charIndex < finalTextInfo.characterCount && finalTextInfo.characterInfo[charIndex].isVisible)
-        {
-            TMP_CharacterInfo finalCharInfo = finalTextInfo.characterInfo[charIndex];
-            int finalMaterialIndex = finalCharInfo.materialReferenceIndex;
-            dialogueText.UpdateVertexData(TMP_VertexDataUpdateFlags.Vertices);
-        }
-    }
-
-    // ===== 辅助方法 =====
-    /// <summary>
-    /// 确保有可用的AudioSource组件
-    /// </summary>
+    // ========== 辅助 ==========
     private void EnsureAudioSource()
     {
-        // 如果已经指定了AudioSource，直接使用
-        if (audioSource != null)
-            return;
-
-        // 在场景中查找AudioSource
-        audioSource = FindObjectOfType<AudioSource>();
-
-        if (audioSource != null)
-        {
-            Debug.Log($"DialogueUI: 找到AudioSource: {audioSource.gameObject.name}");
-            return;
-        }
-
-        // 如果没找到，自动创建一个
-        audioSource = gameObject.AddComponent<AudioSource>();
+        if (audioSource != null) return;
+        audioSource = FindObjectOfType<AudioSource>() ?? gameObject.AddComponent<AudioSource>();
         audioSource.playOnAwake = false;
         audioSource.loop = false;
-        audioSource.volume = 1f;
-
-        Debug.Log("DialogueUI: 未找到AudioSource，已自动创建");
     }
-    /// <summary>
-    /// 加载所有打字音效
-    /// </summary>
+
     private void LoadTypingSounds()
     {
         typingSounds = new AudioClip[TYPING_SOUND_COUNT];
-
         for (int i = 0; i < TYPING_SOUND_COUNT; i++)
         {
             string path = $"Audio/SFX/Typing/keypress-{(i + 1):D3}";
-            AudioClip clip = Resources.Load<AudioClip>(path);
-
-            if (clip != null)
-            {
-                typingSounds[i] = clip;
-            }
-            else
-            {
-                Debug.LogWarning($"DialogueUI: 无法加载音效文件: {path}");
-            }
+            typingSounds[i] = Resources.Load<AudioClip>(path);
         }
-
-        Debug.Log($"DialogueUI: 成功加载 {typingSounds.Length} 个打字音效");
     }
+
     private void PlayRandomTypingSound()
     {
-        if (audioSource == null || typingSounds == null || typingSounds.Length == 0)
-            return;
-
-        // 随机选择一个音效
+        if (audioSource == null || typingSounds == null || typingSounds.Length == 0) return;
         int randomIndex = Random.Range(0, typingSounds.Length);
         AudioClip selectedClip = typingSounds[randomIndex];
-
-        if (selectedClip != null)
-        {
-            // 使用PlayOneShot避免打断前一个音效
-            audioSource.PlayOneShot(selectedClip);
-        }
+        if (selectedClip != null) audioSource.PlayOneShot(selectedClip);
     }
+
     private void SetCharacterInfo(string characterId, string portraitId)
     {
+        // 名字：普通模式显示；CMD模式隐藏独立名字栏（名字已在前缀里）
         if (characterNameText != null)
             characterNameText.text = GetCharacterDisplayName(characterId);
 
-        if (characterPortrait != null)
+        // 头像：恢复加载与显示逻辑
+        if (characterPortrait == null) return;
+
+        // 先用 portraitId 尝试加载，不行再用 characterId 兜底
+        Sprite portrait = null;
+        if (!string.IsNullOrEmpty(portraitId))
         {
-            if (!string.IsNullOrEmpty(portraitId))
-            {
-                Sprite portrait = Resources.Load<Sprite>($"Art/Characters/{characterId}");
-                if (portrait != null)
-                {
-                    characterPortrait.sprite = portrait;
-                    characterPortrait.gameObject.SetActive(true);
-                }
-                else
-                {
-                    characterPortrait.gameObject.SetActive(false);
-                }
-            }
-            else
-            {
-                characterPortrait.gameObject.SetActive(false);
-            }
+            portrait = Resources.Load<Sprite>($"Art/Characters/{portraitId}");
+        }
+        if (portrait == null && !string.IsNullOrEmpty(characterId))
+        {
+            portrait = Resources.Load<Sprite>($"Art/Characters/{characterId}");
+        }
+
+        if (portrait != null)
+        {
+            characterPortrait.sprite = portrait;
+            characterPortrait.enabled = true;
+            characterPortrait.gameObject.SetActive(true);
+        }
+        else
+        {
+            // 没资源就隐藏，避免显示残影
+            characterPortrait.gameObject.SetActive(false);
         }
     }
+
 
     private string GetCharacterDisplayName(string characterId)
     {
-        if (LanguageManager.Instance != null)
+        switch (LanguageManager.Instance.currentLanguage)
         {
-            switch (LanguageManager.Instance.currentLanguage)
-            {
-                case SupportedLanguage.Chinese:
-                    return GetChineseCharacterName(characterId);
-                case SupportedLanguage.English:
-                    return GetEnglishCharacterName(characterId);
-                case SupportedLanguage.Japanese:
-                    return GetJapaneseCharacterName(characterId);
-                default:
-                    return GetEnglishCharacterName(characterId);
-            }
+            case SupportedLanguage.Chinese: return GetChineseCharacterName(characterId);
+            case SupportedLanguage.English: return GetEnglishCharacterName(characterId);
+            case SupportedLanguage.Japanese: return GetJapaneseCharacterName(characterId);
+            default: return GetEnglishCharacterName(characterId);
         }
-
-        return GetChineseCharacterName(characterId);
     }
 
-    private string GetChineseCharacterName(string characterId)
+    private string GetChineseCharacterName(string id) => id switch
     {
-        switch (characterId)
-        {
-            case "me": return "我";
-            case "guardian": return "安全卫士";
-            case "narrator": return "旁白";
-            case "ps": return "PhotoShop";
-            case "controlpanel": return "控制面板";
-            case "qq": return "QQ";
-            case "7zip": return "7-Zip";
-            case "mines": return "扫雷";
-            case "xunlei": return "迅雷";
-            case "ie": return "IE";
-            default: return characterId;
-        }
-    }
+        "me" => "我",
+        "guardian" => "安全卫士",
+        "narrator" => "旁白",
+        "ps" => "PhotoShop",
+        "controlpanel" => "控制面板",
+        "qq" => "QQ",
+        "7zip" => "7-Zip",
+        "mines" => "扫雷",
+        "xunlei" => "迅雷",
+        "ie" => "IE",
+        "notepad" => "记事本",
+        _ => id
+    };
 
-    private string GetEnglishCharacterName(string characterId)
+    private string GetEnglishCharacterName(string id) => id switch
     {
-        switch (characterId)
-        {
-            case "me": return "Me";
-            case "guardian": return "System Guardian";
-            case "narrator": return "Narrator";
-            case "ps": return "Photoshop";
-            case "controlpanel": return "Control Panel";
-            case "qq": return "QQ";
-            case "7zip": return "7-Zip";
-            case "mines": return "Minesweeper";
-            case "xunlei": return "Xunlei";
-            case "ie": return "Internet Explorer";
-            default: return characterId;
-        }
-    }
+        "me" => "Me",
+        "guardian" => "System Guardian",
+        "narrator" => "Narrator",
+        "ps" => "Photoshop",
+        "controlpanel" => "Control Panel",
+        "qq" => "QQ",
+        "7zip" => "7-Zip",
+        "mines" => "Minesweeper",
+        "xunlei" => "Xunlei",
+        "ie" => "Internet Explorer",
+        _ => id
+    };
 
-    private string GetJapaneseCharacterName(string characterId)
+    private string GetJapaneseCharacterName(string id) => id switch
     {
-        switch (characterId)
-        {
-            case "me": return "私";
-            case "guardian": return "システムガーディアン";
-            case "narrator": return "ナレーター";
-            case "ps": return "フォトショップ";
-            case "controlpanel": return "コントロールパネル";
-            case "qq": return "QQ";
-            case "7zip": return "7-Zip";
-            case "mines": return "Minesweeper";
-            case "xunlei": return "迅雷";
-            case "ie": return "インターネットエクスプローラー";
-            default: return characterId;
-        }
-    }
+        "me" => "私",
+        "guardian" => "システムガーディアン",
+        "narrator" => "ナレーター",
+        "ps" => "フォトショップ",
+        "controlpanel" => "コントロールパネル",
+        "qq" => "QQ",
+        "7zip" => "7-Zip",
+        "mines" => "Minesweeper",
+        "xunlei" => "迅雷",
+        "ie" => "インターネットエクスプローラー",
+        "notepad" => "メモ帳",
+        _ => id
+    };
+
 
     private void OnDialogueEnd()
     {
         CleanupBeforeHide();
-
         OnDialogueBlockEnded?.Invoke(currentDialogueFileName, currentDialogueBlockId);
-
-        DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
-        if (dialogueManager != null)
-            dialogueManager.OnDialogueBlockComplete(currentDialogueFileName, currentDialogueBlockId);
-
-        currentDialogue = null;
-        currentDialogueFileName = null;
-        currentDialogueBlockId = null;
-
+        DialogueManager dm = FindObjectOfType<DialogueManager>();
+        if (dm != null) dm.OnDialogueBlockComplete(currentDialogueFileName, currentDialogueBlockId);
         HideDialoguePanel();
     }
 
     private void ClearDialogue()
     {
-        if (dialogueText != null)
-            dialogueText.text = "";
-
-        if (characterNameText != null)
-            characterNameText.text = "";
-
-        if (characterPortrait != null)
-            characterPortrait.gameObject.SetActive(false);
-
-        if (playerInputField != null)
-            playerInputField.text = "";
+        if (dialogueText != null) dialogueText.text = "";
+        if (characterNameText != null) characterNameText.text = "";
+        if (playerInputField != null) playerInputField.text = "";
     }
 }
