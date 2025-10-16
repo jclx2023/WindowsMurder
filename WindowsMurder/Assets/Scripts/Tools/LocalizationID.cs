@@ -42,8 +42,15 @@ public class LocalizationID : MonoBehaviour
             uiText = GetComponent<Text>();
         }
 
+        // 记录初始字号
+        if (tmpText != null) _baseFontSize = tmpText.fontSize;
+        if (uiText != null) _baseFontSize = uiText.fontSize;
+
         componentsFound = true;
     }
+
+    float _baseFontSize = 20f; 
+
 
     void OnLanguageChanged(SupportedLanguage newLanguage)
     {
@@ -64,6 +71,20 @@ public class LocalizationID : MonoBehaviour
             translatedText = LanguageManager.Instance.GetText(localizationKey.ToString());
         }
 
+        switch (LanguageManager.Instance.currentLanguage)
+        {
+            case SupportedLanguage.Chinese:
+                SetFontSize(1.0f);
+                break;
+            case SupportedLanguage.English:
+                SetFontSize(0.95f);
+                break;
+            case SupportedLanguage.Japanese:
+                SetFontSize(0.9f);
+                if (tmpText != null) tmpText.enableWordWrapping = true;
+                break;
+        }
+
         // 如果翻译失败，保持原文本不变
         if (string.IsNullOrEmpty(translatedText))
         {
@@ -79,6 +100,12 @@ public class LocalizationID : MonoBehaviour
         {
             uiText.text = translatedText;
         }
+    }
+
+    void SetFontSize(float scale)
+    {
+        if (tmpText != null) tmpText.fontSize = (int)(_baseFontSize * scale);
+        if (uiText != null) uiText.fontSize = (int)(_baseFontSize * scale);
     }
 
     void OnDestroy()
