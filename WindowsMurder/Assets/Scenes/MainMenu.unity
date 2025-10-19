@@ -595,6 +595,28 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &623634527 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4633948887396393290, guid: 3d228239b34418849957c8010943724c, type: 3}
+  m_PrefabInstance: {fileID: 1767907533}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &623634528 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7681477387536357261, guid: 3d228239b34418849957c8010943724c, type: 3}
+  m_PrefabInstance: {fileID: 1767907533}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &874348847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1429,6 +1451,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2806832443723926352, guid: 3d228239b34418849957c8010943724c, type: 3}
+      propertyPath: muteIcon
+      value: 
+      objectReference: {fileID: 623634527}
+    - target: {fileID: 2806832443723926352, guid: 3d228239b34418849957c8010943724c, type: 3}
+      propertyPath: muteButton
+      value: 
+      objectReference: {fileID: 623634528}
+    - target: {fileID: 2806832443723926352, guid: 3d228239b34418849957c8010943724c, type: 3}
+      propertyPath: iconSoundOn
+      value: 
+      objectReference: {fileID: 21300000, guid: 15d3a52e85c5c1248996221318067f6b, type: 3}
+    - target: {fileID: 2806832443723926352, guid: 3d228239b34418849957c8010943724c, type: 3}
+      propertyPath: iconSoundOff
+      value: 
+      objectReference: {fileID: 21300000, guid: dcb1680fa4d235c42bcfd79b9fe1aec2, type: 3}
     - target: {fileID: 2976600551689892397, guid: 3d228239b34418849957c8010943724c, type: 3}
       propertyPath: m_Pivot.x
       value: 0

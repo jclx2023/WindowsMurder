@@ -41,6 +41,13 @@ public class GlobalTaskBarManager : MonoBehaviour
     public AudioClip menuOpenSound;
     public AudioClip menuCloseSound;
 
+    [Header("静音按钮组件")]
+    public Button muteButton;             // 喇叭按钮
+    public Image muteIcon;                // 喇叭图标
+    public Sprite iconSoundOn;            // 有声图标
+    public Sprite iconSoundOff;           // 静音图标
+
+
     [Header("ActionManager设置")]
     public GameObject globalActionManagerPrefab;
     public bool createActionManagerAtStart = true;
@@ -159,6 +166,15 @@ public class GlobalTaskBarManager : MonoBehaviour
         {
             InitializeActionManager();
         }
+
+        // 绑定静音按钮事件
+        if (muteButton != null)
+        {
+            muteButton.onClick.RemoveAllListeners();
+            muteButton.onClick.AddListener(ToggleMute);
+            UpdateMuteIcon();
+        }
+
 
         Debug.Log("全局任务栏初始化完成");
     }
@@ -530,6 +546,41 @@ public class GlobalTaskBarManager : MonoBehaviour
             CloseStartMenu();
         }
     }
+
+
+    #region 静音控制
+
+    private void ToggleMute()
+    {
+        if (GlobalSystemManager.Instance == null)
+        {
+            Debug.LogWarning("静音切换失败：GlobalSystemManager 未初始化");
+            return;
+        }
+
+        // 调用全局静音开关
+        GlobalSystemManager.Instance.ToggleMute();
+
+        // 更新图标
+        UpdateMuteIcon();
+
+        // 播放点击音效（仅当静音前是开启状态时）
+        if (!GlobalSystemManager.Instance.IsMuted())
+        {
+            PlayButtonClick();
+        }
+    }
+
+    private void UpdateMuteIcon()
+    {
+        if (GlobalSystemManager.Instance == null || muteIcon == null) return;
+
+        bool isMuted = GlobalSystemManager.Instance.IsMuted();
+        muteIcon.sprite = isMuted ? iconSoundOff : iconSoundOn;
+        muteIcon.color = isMuted ? Color.gray : Color.white;
+    }
+
+    #endregion
 
     #endregion
 }

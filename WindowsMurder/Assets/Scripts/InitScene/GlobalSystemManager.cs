@@ -1,7 +1,7 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// LLMÒıÇæÀàĞÍÃ¶¾Ù
+/// LLMå¼•æ“ç±»å‹æšä¸¾
 /// </summary>
 public enum LLMProvider
 {
@@ -11,41 +11,41 @@ public enum LLMProvider
 }
 
 /// <summary>
-/// È«¾ÖÏµÍ³¹ÜÀíÆ÷ - ×¨×¢ÓÚµ×²ãÏµÍ³·şÎñ
-/// Ìá¹©ÒôÆµ¡¢ÏÔÊ¾¡¢ÓïÑÔ¡¢´æµµ¡¢LLMÒıÇæµÈ»ù´¡·şÎñ£¬²»¹ÜÀíUI½»»¥
+/// å…¨å±€ç³»ç»Ÿç®¡ç†å™¨ - ä¸“æ³¨äºåº•å±‚ç³»ç»ŸæœåŠ¡
+/// æä¾›éŸ³é¢‘ã€æ˜¾ç¤ºã€è¯­è¨€ã€å­˜æ¡£ã€LLMå¼•æ“ç­‰åŸºç¡€æœåŠ¡ï¼Œä¸ç®¡ç†UIäº¤äº’
 /// </summary>
 public class GlobalSystemManager : MonoBehaviour
 {
     public static GlobalSystemManager Instance;
 
-    [Header("ÒôÆµÉèÖÃ")]
+    [Header("éŸ³é¢‘è®¾ç½®")]
     public float masterVolume = 1f;
     public float sfxVolume = 1f;
     public float musicVolume = 1f;
 
-    [Header("ÏÔÊ¾ÉèÖÃ")]
+    [Header("æ˜¾ç¤ºè®¾ç½®")]
     public bool isFullscreen = true;
     public Vector2Int resolution = new Vector2Int(1920, 1080);
 
-    [Header("¶Ô»°ÏµÍ³ÉèÖÃ")]
+    [Header("å¯¹è¯ç³»ç»Ÿè®¾ç½®")]
     public float dialogueSpeed = 0.05f;
 
-    [Header("LLMÒıÇæÉèÖÃ")]
-    public LLMProvider currentLLMProvider = LLMProvider.Gemini;
+    [Header("LLMå¼•æ“è®¾ç½®")]
+    public LLMProvider currentLLMProvider = LLMProvider.DeepSeek;
 
-    [Header("ÓïÑÔÏµÍ³ÉèÖÃ")]
+    [Header("è¯­è¨€ç³»ç»Ÿè®¾ç½®")]
     public string csvFileName = "Localization/LocalizationTable.csv";
-    public SupportedLanguage defaultLanguage = SupportedLanguage.Chinese;
+    public SupportedLanguage defaultLanguage = SupportedLanguage.English;
     public bool enableLanguageDebug = true;
 
-    [Header("ÓÎÏ·×´Ì¬")]
+    [Header("æ¸¸æˆçŠ¶æ€")]
     public bool hasGameSave = false;
     public string currentGameProgress = "";
 
-    // Ë½ÓĞ±äÁ¿
+    // ç§æœ‰å˜é‡
     private AudioSource audioSource;
 
-    // ÏµÍ³¾ÍĞ÷ÊÂ¼ş
+    // ç³»ç»Ÿå°±ç»ªäº‹ä»¶
     public static System.Action OnLanguageSystemReady;
     public static System.Action OnSystemInitialized;
     public static System.Action OnDialogueSettingsChanged;
@@ -75,18 +75,22 @@ public class GlobalSystemManager : MonoBehaviour
         InitializeSaveSystem();
         OnSystemInitialized?.Invoke();
 
-        Debug.Log("µ×²ãÏµÍ³³õÊ¼»¯Íê³É");
+        // è¯»å–é™éŸ³çŠ¶æ€
+        isMuted = PlayerPrefs.GetInt("IsMuted", 0) == 1;
+        AudioListener.volume = isMuted ? 0f : masterVolume;
+
+        Debug.Log("åº•å±‚ç³»ç»Ÿåˆå§‹åŒ–å®Œæˆ");
     }
 
     void InitializeSaveSystem()
     {
         if (SaveManager.Instance != null)
         {
-            Debug.Log("´æµµÏµÍ³³õÊ¼»¯Íê³É");
+            Debug.Log("å­˜æ¡£ç³»ç»Ÿåˆå§‹åŒ–å®Œæˆ");
         }
         else
         {
-            Debug.LogError("´æµµÏµÍ³³õÊ¼»¯Ê§°Ü£ºÎ´ÕÒµ½ SaveManager");
+            Debug.LogError("å­˜æ¡£ç³»ç»Ÿåˆå§‹åŒ–å¤±è´¥ï¼šæœªæ‰¾åˆ° SaveManager");
         }
     }
 
@@ -105,7 +109,7 @@ public class GlobalSystemManager : MonoBehaviour
 
         LanguageManager.OnLanguageChanged += OnLanguageChanged;
         OnLanguageSystemReady?.Invoke();
-        Debug.Log("ÓïÑÔÏµÍ³³õÊ¼»¯Íê³É");
+        Debug.Log("è¯­è¨€ç³»ç»Ÿåˆå§‹åŒ–å®Œæˆ");
     }
 
     void InitializeAudioSystem()
@@ -117,27 +121,27 @@ public class GlobalSystemManager : MonoBehaviour
 
     void LoadSettings()
     {
-        // ÒôÆµÉèÖÃ
+        // éŸ³é¢‘è®¾ç½®
         masterVolume = PlayerPrefs.GetFloat("MasterVolume", 1f);
         sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 1f);
         musicVolume = PlayerPrefs.GetFloat("MusicVolume", 1f);
 
-        // ÏÔÊ¾ÉèÖÃ
+        // æ˜¾ç¤ºè®¾ç½®
         isFullscreen = PlayerPrefs.GetInt("IsFullscreen", 1) == 1;
         resolution.x = PlayerPrefs.GetInt("ResolutionX", 1920);
         resolution.y = PlayerPrefs.GetInt("ResolutionY", 1080);
 
-        // ¶Ô»°ÏµÍ³ÉèÖÃ
+        // å¯¹è¯ç³»ç»Ÿè®¾ç½®
         dialogueSpeed = PlayerPrefs.GetFloat("DialogueSpeed", 0.05f);
 
-        // LLMÒıÇæÉèÖÃ
+        // LLMå¼•æ“è®¾ç½®
         string savedProvider = PlayerPrefs.GetString("LLMProvider", LLMProvider.Gemini.ToString());
         if (System.Enum.TryParse<LLMProvider>(savedProvider, out LLMProvider provider))
         {
             currentLLMProvider = provider;
         }
 
-        // ÓïÑÔÉèÖÃ
+        // è¯­è¨€è®¾ç½®
         string savedLanguage = PlayerPrefs.GetString("UserLanguage", defaultLanguage.ToString());
         if (System.Enum.TryParse<SupportedLanguage>(savedLanguage, out SupportedLanguage userLang))
         {
@@ -148,7 +152,7 @@ public class GlobalSystemManager : MonoBehaviour
             }
         }
 
-        // ÓÎÏ·½ø¶È
+        // æ¸¸æˆè¿›åº¦
         hasGameSave = PlayerPrefs.HasKey("GameProgress");
         currentGameProgress = PlayerPrefs.GetString("GameProgress", "");
     }
@@ -161,33 +165,33 @@ public class GlobalSystemManager : MonoBehaviour
 
     public void SaveSettings()
     {
-        // ±£´æÒôÆµÉèÖÃ
+        // ä¿å­˜éŸ³é¢‘è®¾ç½®
         PlayerPrefs.SetFloat("MasterVolume", masterVolume);
         PlayerPrefs.SetFloat("SFXVolume", sfxVolume);
         PlayerPrefs.SetFloat("MusicVolume", musicVolume);
 
-        // ±£´æÏÔÊ¾ÉèÖÃ
+        // ä¿å­˜æ˜¾ç¤ºè®¾ç½®
         PlayerPrefs.SetInt("IsFullscreen", isFullscreen ? 1 : 0);
         PlayerPrefs.SetInt("ResolutionX", resolution.x);
         PlayerPrefs.SetInt("ResolutionY", resolution.y);
 
-        // ±£´æ¶Ô»°ÏµÍ³ÉèÖÃ
+        // ä¿å­˜å¯¹è¯ç³»ç»Ÿè®¾ç½®
         PlayerPrefs.SetFloat("DialogueSpeed", dialogueSpeed);
 
-        // ±£´æLLMÒıÇæÉèÖÃ
+        // ä¿å­˜LLMå¼•æ“è®¾ç½®
         PlayerPrefs.SetString("LLMProvider", currentLLMProvider.ToString());
 
-        // ±£´æÓïÑÔÉèÖÃ
+        // ä¿å­˜è¯­è¨€è®¾ç½®
         if (LanguageManager.Instance != null)
         {
             PlayerPrefs.SetString("UserLanguage", LanguageManager.Instance.currentLanguage.ToString());
         }
 
         PlayerPrefs.Save();
-        Debug.Log("ÏµÍ³ÉèÖÃÒÑ±£´æ");
+        Debug.Log("ç³»ç»Ÿè®¾ç½®å·²ä¿å­˜");
     }
 
-    // ==================== ÒôÆµ·şÎñ ====================
+    // ==================== éŸ³é¢‘æœåŠ¡ ====================
 
     public void SetVolume(float master, float sfx, float music)
     {
@@ -196,7 +200,7 @@ public class GlobalSystemManager : MonoBehaviour
         musicVolume = Mathf.Clamp01(music);
         AudioListener.volume = masterVolume;
         SaveSettings();
-        Debug.Log($"ÒôÁ¿ÉèÖÃ£ºÖ÷ÒôÁ¿{masterVolume:F2}, ÒôĞ§{sfxVolume:F2}, ÒôÀÖ{musicVolume:F2}");
+        Debug.Log($"éŸ³é‡è®¾ç½®ï¼šä¸»éŸ³é‡{masterVolume:F2}, éŸ³æ•ˆ{sfxVolume:F2}, éŸ³ä¹{musicVolume:F2}");
     }
 
     public void PlaySFX(AudioClip clip)
@@ -207,7 +211,7 @@ public class GlobalSystemManager : MonoBehaviour
         }
     }
 
-    // ==================== ÏÔÊ¾·şÎñ ====================
+    // ==================== æ˜¾ç¤ºæœåŠ¡ ====================
 
     public void SetDisplay(bool fullscreen, Vector2Int res)
     {
@@ -215,17 +219,17 @@ public class GlobalSystemManager : MonoBehaviour
         resolution = res;
         Screen.SetResolution(resolution.x, resolution.y, isFullscreen);
         SaveSettings();
-        Debug.Log($"ÏÔÊ¾ÉèÖÃ£º{resolution.x}x{resolution.y}, È«ÆÁ:{isFullscreen}");
+        Debug.Log($"æ˜¾ç¤ºè®¾ç½®ï¼š{resolution.x}x{resolution.y}, å…¨å±:{isFullscreen}");
     }
 
-    // ==================== ¶Ô»°ÏµÍ³·şÎñ ====================
+    // ==================== å¯¹è¯ç³»ç»ŸæœåŠ¡ ====================
 
     public void SetDialogueSpeed(float speed)
     {
         dialogueSpeed = Mathf.Clamp(speed, 0.01f, 0.2f);
         SaveSettings();
         OnDialogueSettingsChanged?.Invoke();
-        Debug.Log($"¶Ô»°ËÙ¶ÈÉèÖÃ£º{dialogueSpeed:F3}");
+        Debug.Log($"å¯¹è¯é€Ÿåº¦è®¾ç½®ï¼š{dialogueSpeed:F3}");
     }
 
     public float GetDialogueSettings()
@@ -233,16 +237,16 @@ public class GlobalSystemManager : MonoBehaviour
         return dialogueSpeed;
     }
 
-    // ==================== LLMÒıÇæ·şÎñ ====================
+    // ==================== LLMå¼•æ“æœåŠ¡ ====================
 
     /// <summary>
-    /// ÇĞ»»LLMÒıÇæ
+    /// åˆ‡æ¢LLMå¼•æ“
     /// </summary>
     public void SetLLMProvider(LLMProvider provider)
     {
         if (currentLLMProvider == provider)
         {
-            Debug.Log($"LLMÒıÇæÒÑ¾­ÊÇ {provider}£¬ÎŞĞèÇĞ»»");
+            Debug.Log($"LLMå¼•æ“å·²ç»æ˜¯ {provider}ï¼Œæ— éœ€åˆ‡æ¢");
             return;
         }
 
@@ -250,18 +254,18 @@ public class GlobalSystemManager : MonoBehaviour
         currentLLMProvider = provider;
         SaveSettings();
         OnLLMProviderChanged?.Invoke(currentLLMProvider);
-        Debug.Log($"LLMÒıÇæÒÑÇĞ»»: {oldProvider} ¡ú {currentLLMProvider}");
+        Debug.Log($"LLMå¼•æ“å·²åˆ‡æ¢: {oldProvider} â†’ {currentLLMProvider}");
     }
 
     /// <summary>
-    /// »ñÈ¡µ±Ç°LLMÒıÇæ
+    /// è·å–å½“å‰LLMå¼•æ“
     /// </summary>
     public LLMProvider GetCurrentLLMProvider()
     {
         return currentLLMProvider;
     }
 
-    // ==================== ÓïÑÔ·şÎñ ====================
+    // ==================== è¯­è¨€æœåŠ¡ ====================
 
     public string GetText(string key)
     {
@@ -274,11 +278,11 @@ public class GlobalSystemManager : MonoBehaviour
 
     void OnLanguageChanged(SupportedLanguage newLanguage)
     {
-        Debug.Log($"GlobalSystemManager: ÓïÑÔÇĞ»»µ½ {newLanguage}");
+        Debug.Log($"GlobalSystemManager: è¯­è¨€åˆ‡æ¢åˆ° {newLanguage}");
         SaveSettings();
     }
 
-    // ==================== ´æµµ·şÎñ ====================
+    // ==================== å­˜æ¡£æœåŠ¡ ====================
 
     public void SaveGameProgress(string progressData)
     {
@@ -286,7 +290,7 @@ public class GlobalSystemManager : MonoBehaviour
         hasGameSave = !string.IsNullOrEmpty(progressData);
         PlayerPrefs.SetString("GameProgress", progressData);
         PlayerPrefs.Save();
-        Debug.Log("ÓÎÏ·½ø¶ÈÒÑ±£´æ");
+        Debug.Log("æ¸¸æˆè¿›åº¦å·²ä¿å­˜");
     }
 
     public string LoadGameProgress()
@@ -300,20 +304,47 @@ public class GlobalSystemManager : MonoBehaviour
         PlayerPrefs.Save();
         hasGameSave = false;
         currentGameProgress = "";
-        Debug.Log("´æµµÒÑÉ¾³ı");
+        Debug.Log("å­˜æ¡£å·²åˆ é™¤");
     }
 
     public bool HasGameSave()
     {
         return hasGameSave;
     }
+    // ==================== é™éŸ³æ§åˆ¶ ====================
 
-    // ==================== Ó¦ÓÃ³ÌĞò·şÎñ ====================
+    private bool isMuted = false;
+
+    public void ToggleMute()
+    {
+        isMuted = !isMuted;
+
+        if (isMuted)
+        {
+            AudioListener.volume = 0f;
+        }
+        else
+        {
+            AudioListener.volume = masterVolume;
+        }
+
+        PlayerPrefs.SetInt("IsMuted", isMuted ? 1 : 0);
+        PlayerPrefs.Save();
+    }
+
+    public bool IsMuted()
+    {
+        return isMuted;
+    }
+
+
+
+    // ==================== åº”ç”¨ç¨‹åºæœåŠ¡ ====================
 
     public void QuitApplication()
     {
         SaveSettings();
-        Debug.Log("Ó¦ÓÃ³ÌĞò¼´½«ÍË³ö");
+        Debug.Log("åº”ç”¨ç¨‹åºå³å°†é€€å‡º");
 
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
