@@ -2,24 +2,25 @@
 using System.Collections.Generic;
 
 /// <summary>
-/// 鎵浄娓告垙涓绘帶鍒跺櫒 - 绠€鍖栫増
+/// 扫雷游戏主控制器 - 简化版
 /// </summary>
 public class MinesweeperGame : MonoBehaviour
 {
-    [Header("娓告垙璁剧疆")]
+    [Header("游戏设置")]
     public int width = 9;
     public int height = 9;
     public int mineCount = 10;
 
-    [Header("绮剧伒绠＄悊鍣?")]
-    public MinesweeperSpriteManager spriteManager;
-    [Header("鏍煎瓙棰勫埗浣")]
+    [Header("精灵管理器")]
+    public MinesweeperSpriteManager spriteManager;  // 统一管理所有精灵
+
+    [Header("格子预制体")]
     public GameObject cellPrefab;
 
-    [Header("娓告垙瀹瑰櫒")]
+    [Header("游戏容器")]
     public Transform gameBoard;
 
-    [Header("鏍煎瓙澶у皬")]
+    [Header("格子大小")]
     public float cellSize = 16f;
 
     private MinesweeperCell[,] cells;
@@ -29,15 +30,16 @@ public class MinesweeperGame : MonoBehaviour
     private bool gameOver = false;
     private float gameTime = 0f;
 
-    // 浜嬩欢
-    public System.Action<int> OnMineCountChanged;      
-    public System.Action<int> OnTimeChanged;           
-    public System.Action<GameState> OnGameStateChanged;
+    // 事件
+    public System.Action<int> OnMineCountChanged;      // 剩余地雷数变化
+    public System.Action<int> OnTimeChanged;           // 时间变化（秒）
+    public System.Action<GameState> OnGameStateChanged; // 游戏状态变化
+
     public enum GameState
     {
-        Normal,     
-        Win,        
-        Lose        
+        Normal,     // 正常游戏中
+        Win,        // 胜利
+        Lose        // 失败
     }
 
     public GameState CurrentState { get; private set; } = GameState.Normal;
@@ -57,9 +59,11 @@ public class MinesweeperGame : MonoBehaviour
     }
 
     /// <summary>
-    /// 鍒濆鍖栨父鎴?    /// </summary>
+    /// 初始化游戏
+    /// </summary>
     public void InitializeGame()
     {
+        // 清空旧的游戏板
         if (gameBoard != null)
         {
             foreach (Transform child in gameBoard)
@@ -75,22 +79,26 @@ public class MinesweeperGame : MonoBehaviour
         gameOver = false;
         gameTime = 0f;
         CurrentState = GameState.Normal;
-        
+
+        // 创建格子
         CreateCells();
-        
+
+        // 更新UI
         OnMineCountChanged?.Invoke(mineCount);
         OnTimeChanged?.Invoke(0);
         OnGameStateChanged?.Invoke(GameState.Normal);
     }
 
     /// <summary>
-    /// 鍒涘缓鎵€鏈夋牸瀛?    /// </summary>
+    /// 创建所有格子
+    /// </summary>
     void CreateCells()
     {
+        // 确保 GameBoard 的锚点和轴心在左上角
         RectTransform boardRect = gameBoard.GetComponent<RectTransform>();
         if (boardRect != null)
         {
-            boardRect.pivot = new Vector2(0, 1);
+            boardRect.pivot = new Vector2(0, 1);  // 左上角为轴心
             boardRect.anchorMin = new Vector2(0, 1);
             boardRect.anchorMax = new Vector2(0, 1);
         }
@@ -101,6 +109,7 @@ public class MinesweeperGame : MonoBehaviour
             {
                 GameObject cellObj = Instantiate(cellPrefab, gameBoard);
 
+                // 设置位置 - 从左上角开始排列
                 RectTransform rect = cellObj.GetComponent<RectTransform>();
                 rect.anchorMin = new Vector2(0, 1);
                 rect.anchorMax = new Vector2(0, 1);
@@ -108,6 +117,7 @@ public class MinesweeperGame : MonoBehaviour
                 rect.anchoredPosition = new Vector2(x * cellSize, -y * cellSize);
                 rect.sizeDelta = new Vector2(cellSize, cellSize);
 
+                // 初始化格子
                 MinesweeperCell cell = cellObj.GetComponent<MinesweeperCell>();
                 cell.Initialize(x, y, this, spriteManager);
 
@@ -117,7 +127,7 @@ public class MinesweeperGame : MonoBehaviour
     }
 
     /// <summary>
-    /// 绗竴娆＄偣鍑绘椂鐢熸垚鍦伴浄
+    /// 第一次点击时生成地雷
     /// </summary>
     public void GenerateMines(int firstClickX, int firstClickY)
     {
@@ -125,13 +135,14 @@ public class MinesweeperGame : MonoBehaviour
 
         gameStarted = true;
 
-        // 闅忔満鏀剧疆鍦伴浄
+        // 随机放置地雷
         int minesPlaced = 0;
         while (minesPlaced < mineCount)
         {
             int x = Random.Range(0, width);
             int y = Random.Range(0, height);
 
+            // 不在第一次点击的位置及周围放置地雷
             if (Mathf.Abs(x - firstClickX) <= 1 && Mathf.Abs(y - firstClickY) <= 1)
                 continue;
 
@@ -142,9 +153,13 @@ public class MinesweeperGame : MonoBehaviour
             }
         }
 
+        // 计算每个格子周围的地雷数
         CalculateAdjacentMines();
     }
-    
+
+    /// <summary>
+    /// 计算所有格子周围的地雷数
+    /// </summary>
     void CalculateAdjacentMines()
     {
         for (int x = 0; x < width; x++)
@@ -166,7 +181,8 @@ public class MinesweeperGame : MonoBehaviour
     }
 
     /// <summary>
-    /// 鑾峰彇鐩搁偦鐨勬牸瀛?    /// </summary>
+    /// 获取相邻的格子
+    /// </summary>
     public List<MinesweeperCell> GetNeighbors(int x, int y)
     {
         List<MinesweeperCell> neighbors = new List<MinesweeperCell>();
@@ -191,7 +207,7 @@ public class MinesweeperGame : MonoBehaviour
     }
 
     /// <summary>
-    /// 缈诲紑鏍煎瓙
+    /// 翻开格子
     /// </summary>
     public void RevealCell(int x, int y)
     {
@@ -200,7 +216,7 @@ public class MinesweeperGame : MonoBehaviour
         MinesweeperCell cell = cells[x, y];
         if (cell.IsRevealed || cell.IsFlagged) return;
 
-        // 绗竴娆＄偣鍑绘椂鐢熸垚鍦伴浄
+        // 第一次点击时生成地雷
         if (!gameStarted)
         {
             GenerateMines(x, y);
@@ -208,6 +224,7 @@ public class MinesweeperGame : MonoBehaviour
 
         cell.Reveal();
 
+        // 点到地雷，游戏结束
         if (cell.IsMine)
         {
             GameOver(false);
@@ -215,7 +232,8 @@ public class MinesweeperGame : MonoBehaviour
         }
 
         remainingCells--;
-        
+
+        // 如果是空白格子，自动翻开周围
         if (cell.AdjacentMines == 0)
         {
             List<MinesweeperCell> neighbors = GetNeighbors(x, y);
@@ -228,12 +246,16 @@ public class MinesweeperGame : MonoBehaviour
             }
         }
 
+        // 检查是否胜利
         if (remainingCells == 0)
         {
             GameOver(true);
         }
     }
-    
+
+    /// <summary>
+    /// 切换旗帜状态
+    /// </summary>
     public void ToggleFlag(int x, int y)
     {
         if (gameOver) return;
@@ -254,15 +276,20 @@ public class MinesweeperGame : MonoBehaviour
 
         OnMineCountChanged?.Invoke(mineCount - flaggedCount);
     }
-    
+
+    /// <summary>
+    /// 和弦揭露 - 中键点击已翻开的数字格，自动揭露周围未标记的格子
+    /// </summary>
     public void ChordReveal(int x, int y)
     {
         if (gameOver || !gameStarted) return;
 
         MinesweeperCell cell = cells[x, y];
 
+        // 只有已翻开且有数字的格子才能使用和弦
         if (!cell.IsRevealed || cell.AdjacentMines == 0) return;
 
+        // 统计周围的旗帜数量
         List<MinesweeperCell> neighbors = GetNeighbors(x, y);
         int flagCount = 0;
 
@@ -271,9 +298,10 @@ public class MinesweeperGame : MonoBehaviour
             if (neighbor.IsFlagged) flagCount++;
         }
 
-        // 鏃楀笢鏁伴噺蹇呴』绛変簬鏁板瓧鎵嶈兘鑷姩鎻湶
+        // 旗帜数量必须等于数字才能自动揭露
         if (flagCount != cell.AdjacentMines) return;
 
+        // 揭露所有未标记的邻居
         foreach (var neighbor in neighbors)
         {
             if (!neighbor.IsRevealed && !neighbor.IsFlagged)
@@ -284,13 +312,14 @@ public class MinesweeperGame : MonoBehaviour
     }
 
     /// <summary>
-    /// 娓告垙缁撴潫
+    /// 游戏结束
     /// </summary>
     void GameOver(bool won)
     {
         gameOver = true;
         CurrentState = won ? GameState.Win : GameState.Lose;
 
+        // 显示所有地雷
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
@@ -306,7 +335,8 @@ public class MinesweeperGame : MonoBehaviour
     }
 
     /// <summary>
-    /// 閲嶆柊寮€濮嬫父鎴?    /// </summary>
+    /// 重新开始游戏
+    /// </summary>
     public void RestartGame()
     {
         InitializeGame();
