@@ -3,34 +3,44 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+/// <summary>
+/// 支持的语言枚举
+/// </summary>
 public enum SupportedLanguage
 {
-    Chinese,
-    English,
-    Japanese
+    Chinese,    // 中文
+    English,    // 英文
+    Japanese    // 日文
 }
 
+/// <summary>
+/// 简单的多语言管理器
+/// 负责加载CSV文件并提供翻译功能
+/// </summary>
 public class LanguageManager : MonoBehaviour
 {
-    [Header("锟斤拷锟斤拷锟斤拷锟斤拷")]
-    public string csvFileName = "Localization/LocalizationTable.csv";
+    [Header("配置设置")]
+    public string csvFileName = "Localization/LocalizationTable.csv"; // 相对于StreamingAssets的路径
     public SupportedLanguage currentLanguage = SupportedLanguage.Chinese;
 
-    [Header("锟斤拷锟斤拷锟斤拷锟斤拷")]
+    [Header("调试设置")]
     public bool enableDebugLog = true;
     public bool showMissingKeys = true;
 
-    // 锟斤拷锟斤拷实锟斤拷
+    // 单例实例
     public static LanguageManager Instance { get; private set; }
+
+    // 翻译数据字典 [语言][Key] = 翻译文本
     private Dictionary<SupportedLanguage, Dictionary<string, string>> translations;
-    
+
+    // 事件：语言切换时触发
     public static event Action<SupportedLanguage> OnLanguageChanged;
 
-    #region Unity锟斤拷锟斤拷锟斤拷锟斤拷
+    #region Unity生命周期
 
     void Awake()
     {
-        // 锟斤拷锟斤拷模式
+        // 单例模式
         if (Instance == null)
         {
             Instance = this;
@@ -45,22 +55,23 @@ public class LanguageManager : MonoBehaviour
 
     #endregion
 
-    #region 锟斤拷始锟斤拷
+    #region 初始化
 
     /// <summary>
-    /// 锟斤拷始锟斤拷锟斤拷锟皆癸拷锟斤拷锟斤拷
+    /// 初始化语言管理器
     /// </summary>
     void InitializeLanguageManager()
     {
         translations = new Dictionary<SupportedLanguage, Dictionary<string, string>>();
 
-        // 锟斤拷始锟斤拷每锟斤拷锟斤拷锟皆碉拷锟街碉拷
+        // 初始化每种语言的字典
         foreach (SupportedLanguage lang in Enum.GetValues(typeof(SupportedLanguage)))
         {
             translations[lang] = new Dictionary<string, string>();
         }
 
-        // 锟斤拷锟截凤拷锟斤拷锟?        LoadTranslations();
+        // 加载翻译表
+        LoadTranslations();
 
         if (enableDebugLog)
         {
@@ -70,23 +81,24 @@ public class LanguageManager : MonoBehaviour
 
     #endregion
 
-    #region CSV锟斤拷锟斤拷
+    #region CSV加载
 
     /// <summary>
-    /// 锟斤拷锟截凤拷锟斤拷锟?    /// </summary>
+    /// 加载翻译表
+    /// </summary>
     public void LoadTranslations()
     {
         string fullPath = Path.Combine(Application.streamingAssetsPath, csvFileName);
 
         if (enableDebugLog)
         {
-            Debug.Log($"LanguageManager: 锟斤拷锟皆硷拷锟截凤拷锟斤拷锟侥硷拷: {fullPath}");
+            Debug.Log($"LanguageManager: 尝试加载翻译文件: {fullPath}");
         }
 
         if (!File.Exists(fullPath))
         {
-            Debug.LogError($"LanguageManager: 锟斤拷锟斤拷锟侥硷拷锟斤拷锟斤拷锟斤拷: {fullPath}");
-            Debug.LogError($"锟斤拷确锟斤拷锟侥硷拷位锟斤拷: Assets/StreamingAssets/{csvFileName}");
+            Debug.LogError($"LanguageManager: 翻译文件不存在: {fullPath}");
+            Debug.LogError($"请确保文件位于: Assets/StreamingAssets/{csvFileName}");
             return;
         }
 
@@ -96,9 +108,11 @@ public class LanguageManager : MonoBehaviour
 
             if (lines.Length < 2)
             {
+                Debug.LogError("LanguageManager: CSV文件格式错误，至少需要标题行和一行数据");
                 return;
             }
-            
+
+            // 解析标题行，确定语言列的位置
             string[] headers = ParseCSVLine(lines[0]);
             int idIndex = -1, chineseIndex = -1, englishIndex = -1, japaneseIndex = -1;
 
@@ -116,16 +130,17 @@ public class LanguageManager : MonoBehaviour
 
             if (idIndex == -1)
             {
-                Debug.LogError("LanguageManager: CSV锟侥硷拷缺锟斤拷ID锟斤拷");
+                Debug.LogError("LanguageManager: CSV文件缺少ID列");
                 return;
             }
 
+            // 清空现有翻译
             foreach (var dict in translations.Values)
             {
                 dict.Clear();
             }
 
-            // 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+            // 解析数据行
             int loadedCount = 0;
             for (int i = 1; i < lines.Length; i++)
             {
@@ -136,7 +151,7 @@ public class LanguageManager : MonoBehaviour
 
                 string key = values[idIndex].Trim();
 
-                // 锟斤拷锟截革拷锟斤拷锟皆的凤拷锟斤拷
+                // 加载各语言的翻译
                 if (chineseIndex != -1 && chineseIndex < values.Length)
                 {
                     string chineseText = values[chineseIndex].Trim();
@@ -169,21 +184,21 @@ public class LanguageManager : MonoBehaviour
 
             if (enableDebugLog)
             {
-                Debug.Log($"LanguageManager: 锟缴癸拷锟斤拷锟斤拷 {loadedCount} 锟斤拷锟斤拷锟斤拷锟铰?");
+                Debug.Log($"LanguageManager: 成功加载 {loadedCount} 条翻译记录");
                 foreach (var lang in translations.Keys)
                 {
-                    Debug.Log($"  {lang}: {translations[lang].Count} 锟斤拷");
+                    Debug.Log($"  {lang}: {translations[lang].Count} 条");
                 }
             }
         }
         catch (Exception e)
         {
-            Debug.LogError($"LanguageManager: 锟斤拷锟截凤拷锟斤拷锟侥硷拷时锟斤拷锟斤拷: {e.Message}");
+            Debug.LogError($"LanguageManager: 加载翻译文件时出错: {e.Message}");
         }
     }
 
     /// <summary>
-    /// 锟斤拷锟斤拷CSV锟叫ｏ拷锟斤拷锟斤拷锟斤拷锟斤拷锟节的讹拷锟斤拷
+    /// 解析CSV行，处理引号内的逗号
     /// </summary>
     string[] ParseCSVLine(string line)
     {
@@ -210,16 +225,16 @@ public class LanguageManager : MonoBehaviour
             }
         }
 
-        result.Add(currentValue); // 锟斤拷锟斤拷锟斤拷一锟斤拷值
+        result.Add(currentValue); // 添加最后一个值
         return result.ToArray();
     }
 
     #endregion
 
-    #region 锟斤拷锟斤拷锟接匡拷
+    #region 公共接口
 
     /// <summary>
-    /// 锟斤拷取锟斤拷锟斤拷锟侥憋拷
+    /// 获取翻译文本
     /// </summary>
     public string GetText(string key)
     {
@@ -232,40 +247,41 @@ public class LanguageManager : MonoBehaviour
             return translations[currentLanguage][key];
         }
 
-        // 锟斤拷锟斤拷锟角帮拷锟斤拷锟矫伙拷懈锟終ey锟斤拷锟斤拷锟斤拷锟斤拷英锟斤拷锟斤拷为锟斤拷锟斤拷
+        // 如果当前语言没有该Key，尝试用英文作为备用
         if (currentLanguage != SupportedLanguage.English &&
             translations.ContainsKey(SupportedLanguage.English) &&
             translations[SupportedLanguage.English].ContainsKey(key))
         {
             if (showMissingKeys)
             {
-                Debug.LogWarning($"LanguageManager: Key '{key}' 锟斤拷 {currentLanguage} 锟斤拷缺失锟斤拷使锟斤拷英锟侥憋拷锟斤拷");
+                Debug.LogWarning($"LanguageManager: Key '{key}' 在 {currentLanguage} 中缺失，使用英文备用");
             }
             return translations[SupportedLanguage.English][key];
         }
 
+        // 如果英文也没有，尝试用中文
         if (currentLanguage != SupportedLanguage.Chinese &&
             translations.ContainsKey(SupportedLanguage.Chinese) &&
             translations[SupportedLanguage.Chinese].ContainsKey(key))
         {
             if (showMissingKeys)
             {
-                Debug.LogWarning($"LanguageManager: Key '{key}' 锟斤拷 {currentLanguage} 锟斤拷英锟斤拷锟斤拷缺失锟斤拷使锟斤拷锟斤拷锟侥憋拷锟斤拷");
+                Debug.LogWarning($"LanguageManager: Key '{key}' 在 {currentLanguage} 和英文中缺失，使用中文备用");
             }
             return translations[SupportedLanguage.Chinese][key];
         }
 
-        // 锟斤拷锟斤拷锟斤拷锟皆讹拷没锟叫革拷Key
+        // 所有语言都没有该Key
         if (showMissingKeys)
         {
-            Debug.LogWarning($"LanguageManager: Key '{key}' 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟叫讹拷缺失");
+            Debug.LogWarning($"LanguageManager: Key '{key}' 在所有语言中都缺失");
         }
 
-        return ""; // 锟斤拷锟截匡拷锟街凤拷锟斤拷锟斤拷锟矫碉拷锟矫凤拷锟斤拷锟斤拷锟斤拷锟竭硷拷
+        return ""; // 返回空字符串，让调用方处理降级逻辑
     }
 
     /// <summary>
-    /// 锟叫伙拷锟斤拷锟斤拷
+    /// 切换语言
     /// </summary>
     public void SetLanguage(SupportedLanguage newLanguage)
     {
@@ -276,25 +292,26 @@ public class LanguageManager : MonoBehaviour
 
         if (enableDebugLog)
         {
-            Debug.Log($"LanguageManager: 锟斤拷锟皆达拷 {oldLanguage} 锟叫伙拷锟斤拷 {newLanguage}");
+            Debug.Log($"LanguageManager: 语言从 {oldLanguage} 切换到 {newLanguage}");
         }
 
-        // 锟斤拷锟斤拷锟斤拷锟斤拷锟叫伙拷锟铰硷拷
+        // 触发语言切换事件
         OnLanguageChanged?.Invoke(currentLanguage);
     }
 
     /// <summary>
-    /// 锟斤拷锟铰硷拷锟截凤拷锟斤拷锟?    /// </summary>
+    /// 重新加载翻译表
+    /// </summary>
     public void ReloadTranslations()
     {
         LoadTranslations();
 
-        // 锟斤拷锟铰硷拷锟截后触凤拷锟斤拷锟斤拷锟叫伙拷锟铰硷拷锟皆革拷锟斤拷UI
+        // 重新加载后触发语言切换事件以更新UI
         OnLanguageChanged?.Invoke(currentLanguage);
     }
 
     /// <summary>
-    /// 锟斤拷取锟斤拷前锟斤拷锟皆碉拷锟斤拷锟斤拷Key
+    /// 获取当前语言的所有Key
     /// </summary>
     public List<string> GetAllKeys()
     {
