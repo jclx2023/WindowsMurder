@@ -1,73 +1,73 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
 /// <summary>
-/// Knife ÊôĞÔ´°¿Ú¿ØÖÆÆ÷ - Tab ÇĞ»» + Ê×´Î²é¿´¶Ô»°´¥·¢
+/// Knife å±æ€§çª—å£æ§åˆ¶å™¨ - Tab åˆ‡æ¢ + é¦–æ¬¡æŸ¥çœ‹å¯¹è¯è§¦å‘
 /// </summary>
 public class KnifePropertiesWindow : MonoBehaviour
 {
-    [Header("=== Tab Ãæ°åÅäÖÃ ===")]
+    [Header("=== Tab é¢æ¿é…ç½® ===")]
     [SerializeField] private GameObject generalPanel;
     [SerializeField] private GameObject detailsPanel;
 
-    [Header("=== Details Ê×´Î²é¿´¶Ô»°ÅäÖÃ ===")]
+    [Header("=== Details é¦–æ¬¡æŸ¥çœ‹å¯¹è¯é…ç½® ===")]
     [SerializeField] private string detailsDialogueBlockId = "410";
     [SerializeField] private float dialogueDelay = 1f;
-    [Tooltip("ÊÇ·ñÔÚ´ò¿ª¶Ô»°Ê±¹Ø±Õ´°¿Ú")]
+    [Tooltip("æ˜¯å¦åœ¨æ‰“å¼€å¯¹è¯æ—¶å…³é—­çª—å£")]
     [SerializeField] private bool closeWindowOnDialogue = false;
 
-    [Header("=== °´Å¥ÒıÓÃ ===")]
+    [Header("=== æŒ‰é’®å¼•ç”¨ ===")]
     [SerializeField] private Button generalTabButton;
     [SerializeField] private Button detailsTabButton;
     [SerializeField] private Button okButton;
     [SerializeField] private Button cancelButton;
     [SerializeField] private Button applyButton;
 
-    [Header("=== Tab °´Å¥ÊÓ¾õ×´Ì¬£¨¿ÉÑ¡£©===")]
+    [Header("=== Tab æŒ‰é’®è§†è§‰çŠ¶æ€ï¼ˆå¯é€‰ï¼‰===")]
     [SerializeField] private Color activeTabColor = new Color(1f, 1f, 1f, 1f);
     [SerializeField] private Color inactiveTabColor = new Color(0.8f, 0.8f, 0.8f, 0.6f);
 
-    [Header("=== µ÷ÊÔ ===")]
+    [Header("=== è°ƒè¯• ===")]
     [SerializeField] private bool debugMode = true;
 
-    // ÔËĞĞÊ±×´Ì¬
+    // è¿è¡Œæ—¶çŠ¶æ€
     private bool hasViewedDetails = false;
 
-    // ×é¼şÒıÓÃ
+    // ç»„ä»¶å¼•ç”¨
     private GameFlowController flowController;
     private WindowsWindow windowComponent;
 
-    // Tab °´Å¥µÄ Image ×é¼ş£¨ÓÃÓÚÊÓ¾õ·´À¡£©
+    // Tab æŒ‰é’®çš„ Image ç»„ä»¶ï¼ˆç”¨äºè§†è§‰åé¦ˆï¼‰
     private Image generalTabImage;
     private Image detailsTabImage;
 
-    #region ³õÊ¼»¯
+    #region åˆå§‹åŒ–
 
     void Awake()
     {
-        // »ñÈ¡×é¼şÒıÓÃ
+        // è·å–ç»„ä»¶å¼•ç”¨
         flowController = FindObjectOfType<GameFlowController>();
         windowComponent = GetComponent<WindowsWindow>();
 
-        // »ñÈ¡ Tab °´Å¥µÄ Image ×é¼ş
+        // è·å– Tab æŒ‰é’®çš„ Image ç»„ä»¶
         if (generalTabButton != null)
             generalTabImage = generalTabButton.GetComponent<Image>();
         if (detailsTabButton != null)
             detailsTabImage = detailsTabButton.GetComponent<Image>();
 
-        // °ó¶¨°´Å¥ÊÂ¼ş
+        // ç»‘å®šæŒ‰é’®äº‹ä»¶
         BindButtonEvents();
     }
 
     void Start()
     {
-        // Ä¬ÈÏÏÔÊ¾ General Ò³Ãæ
+        // é»˜è®¤æ˜¾ç¤º General é¡µé¢
         ShowGeneralTab();
     }
 
     /// <summary>
-    /// °ó¶¨ËùÓĞ°´Å¥µã»÷ÊÂ¼ş
+    /// ç»‘å®šæ‰€æœ‰æŒ‰é’®ç‚¹å‡»äº‹ä»¶
     /// </summary>
     private void BindButtonEvents()
     {
@@ -89,26 +89,26 @@ public class KnifePropertiesWindow : MonoBehaviour
 
     #endregion
 
-    #region Tab ÇĞ»»Âß¼­
+    #region Tab åˆ‡æ¢é€»è¾‘
 
     /// <summary>
-    /// µã»÷ General Tab °´Å¥
+    /// ç‚¹å‡» General Tab æŒ‰é’®
     /// </summary>
     private void OnGeneralTabClick()
     {
-        LogDebug("ÇĞ»»µ½ General Ò³Ãæ");
+        LogDebug("åˆ‡æ¢åˆ° General é¡µé¢");
         ShowGeneralTab();
     }
 
     /// <summary>
-    /// µã»÷ Details Tab °´Å¥
+    /// ç‚¹å‡» Details Tab æŒ‰é’®
     /// </summary>
     private void OnDetailsTabClick()
     {
-        LogDebug("ÇĞ»»µ½ Details Ò³Ãæ");
+        LogDebug("åˆ‡æ¢åˆ° Details é¡µé¢");
         ShowDetailsTab();
 
-        // µÚÒ»´Î²é¿´ Details Ê±´¥·¢¶Ô»°
+        // ç¬¬ä¸€æ¬¡æŸ¥çœ‹ Details æ—¶è§¦å‘å¯¹è¯
         if (!hasViewedDetails)
         {
             hasViewedDetails = true;
@@ -117,33 +117,33 @@ public class KnifePropertiesWindow : MonoBehaviour
     }
 
     /// <summary>
-    /// ÏÔÊ¾ General Ò³Ãæ£¨Í¨¹ı²ã¼¶¿ØÖÆ£©
+    /// æ˜¾ç¤º General é¡µé¢ï¼ˆé€šè¿‡å±‚çº§æ§åˆ¶ï¼‰
     /// </summary>
     private void ShowGeneralTab()
     {
         if (generalPanel != null)
         {
-            // ½« General Ãæ°åÒÆµ½×îÉÏ²ã£¨×îºóµÄ Sibling Index£©
+            // å°† General é¢æ¿ç§»åˆ°æœ€ä¸Šå±‚ï¼ˆæœ€åçš„ Sibling Indexï¼‰
             generalPanel.transform.SetAsLastSibling();
             UpdateTabButtonStates(true);
         }
     }
 
     /// <summary>
-    /// ÏÔÊ¾ Details Ò³Ãæ£¨Í¨¹ı²ã¼¶¿ØÖÆ£©
+    /// æ˜¾ç¤º Details é¡µé¢ï¼ˆé€šè¿‡å±‚çº§æ§åˆ¶ï¼‰
     /// </summary>
     private void ShowDetailsTab()
     {
         if (detailsPanel != null)
         {
-            // ½« Details Ãæ°åÒÆµ½×îÉÏ²ã£¨×îºóµÄ Sibling Index£©
+            // å°† Details é¢æ¿ç§»åˆ°æœ€ä¸Šå±‚ï¼ˆæœ€åçš„ Sibling Indexï¼‰
             detailsPanel.transform.SetAsLastSibling();
             UpdateTabButtonStates(false);
         }
     }
 
     /// <summary>
-    /// ¸üĞÂ Tab °´Å¥µÄÊÓ¾õ×´Ì¬
+    /// æ›´æ–° Tab æŒ‰é’®çš„è§†è§‰çŠ¶æ€
     /// </summary>
     private void UpdateTabButtonStates(bool isGeneralActive)
     {
@@ -157,66 +157,66 @@ public class KnifePropertiesWindow : MonoBehaviour
             detailsTabImage.color = isGeneralActive ? inactiveTabColor : activeTabColor;
         }
 
-        LogDebug($"Tab ×´Ì¬¸üĞÂ - General ¼¤»î: {isGeneralActive}");
+        LogDebug($"Tab çŠ¶æ€æ›´æ–° - General æ¿€æ´»: {isGeneralActive}");
     }
 
     #endregion
 
-    #region ¶Ô»°´¥·¢Âß¼­
+    #region å¯¹è¯è§¦å‘é€»è¾‘
 
     /// <summary>
-    /// ÑÓ³Ù²¥·Å Details ¶Ô»°¿é
+    /// å»¶è¿Ÿæ’­æ”¾ Details å¯¹è¯å—
     /// </summary>
     private IEnumerator PlayDetailsDialogueDelayed()
     {
-        LogDebug($"½«ÔÚ {dialogueDelay} Ãëºó²¥·Å¶Ô»°¿é: {detailsDialogueBlockId}");
+        LogDebug($"å°†åœ¨ {dialogueDelay} ç§’åæ’­æ”¾å¯¹è¯å—: {detailsDialogueBlockId}");
 
         yield return new WaitForSeconds(dialogueDelay);
 
-        // Ö±½Óµ÷ÓÃ GameFlowController ´¥·¢¶Ô»°¿é
+        // ç›´æ¥è°ƒç”¨ GameFlowController è§¦å‘å¯¹è¯å—
         if (flowController != null)
         {
             flowController.StartDialogueBlock(detailsDialogueBlockId);
-            LogDebug($"ÒÑ´¥·¢¶Ô»°¿é: {detailsDialogueBlockId}");
+            LogDebug($"å·²è§¦å‘å¯¹è¯å—: {detailsDialogueBlockId}");
         }
     }
 
     #endregion
 
-    #region °´Å¥ÊÂ¼ş´¦Àí
+    #region æŒ‰é’®äº‹ä»¶å¤„ç†
 
     /// <summary>
-    /// OK °´Å¥µã»÷ - ¹Ø±Õ´°¿Ú
+    /// OK æŒ‰é’®ç‚¹å‡» - å…³é—­çª—å£
     /// </summary>
     private void OnOKClick()
     {
-        LogDebug("µã»÷ OK °´Å¥");
+        LogDebug("ç‚¹å‡» OK æŒ‰é’®");
         CloseWindow();
     }
 
     /// <summary>
-    /// Cancel °´Å¥µã»÷ - ¹Ø±Õ´°¿Ú
+    /// Cancel æŒ‰é’®ç‚¹å‡» - å…³é—­çª—å£
     /// </summary>
     private void OnCancelClick()
     {
-        LogDebug("µã»÷ Cancel °´Å¥");
+        LogDebug("ç‚¹å‡» Cancel æŒ‰é’®");
         CloseWindow();
     }
 
     /// <summary>
-    /// Apply °´Å¥µã»÷ - ±£³Ö´°¿Ú´ò¿ª£¨WinXP ·ç¸ñ£©
+    /// Apply æŒ‰é’®ç‚¹å‡» - ä¿æŒçª—å£æ‰“å¼€ï¼ˆWinXP é£æ ¼ï¼‰
     /// </summary>
     private void OnApplyClick()
     {
-        LogDebug("µã»÷ Apply °´Å¥£¨ÎŞ²Ù×÷£©");
+        LogDebug("ç‚¹å‡» Apply æŒ‰é’®ï¼ˆæ— æ“ä½œï¼‰");
     }
 
     #endregion
 
-    #region ºËĞÄ¹¦ÄÜ
+    #region æ ¸å¿ƒåŠŸèƒ½
 
     /// <summary>
-    /// ¹Ø±Õ´°¿Ú
+    /// å…³é—­çª—å£
     /// </summary>
     private void CloseWindow()
     {
@@ -228,7 +228,7 @@ public class KnifePropertiesWindow : MonoBehaviour
 
     #endregion
 
-    #region µ÷ÊÔ¹¤¾ß
+    #region è°ƒè¯•å·¥å…·
 
     private void LogDebug(string message)
     {

@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,24 +6,24 @@ using UnityEngine.EventSystems;
 using TMPro;
 
 /// <summary>
-/// Í¼±êÓÒ¼ü²Ëµ¥UI×é¼ş - Ö§³Ö¶àÓïÑÔ
+/// å›¾æ ‡å³é”®èœå•UIç»„ä»¶ - æ”¯æŒå¤šè¯­è¨€
 /// </summary>
 public class IconContextMenu : MonoBehaviour
 {
-    [Header("UI×é¼şÒıÓÃ")]
+    [Header("UIç»„ä»¶å¼•ç”¨")]
     public RectTransform menuPanel;
     public Transform menuItemContainer;
     public GameObject menuItemPrefab;
     public GameObject separatorPrefab;
 
-    [Header("ÑùÊ½ÉèÖÃ")]
+    [Header("æ ·å¼è®¾ç½®")]
     public float itemHeight = 40f;
     public float separatorHeight = 3f;
     public Vector2 menuPadding = new Vector2(5f, 5f);
     public float menuMinWidth = 120f;
 
-    [Header("µ÷ÊÔ")]
-    public bool debugMode = false;  // Ä¬ÈÏ¹Ø±Õµ÷ÊÔ
+    [Header("è°ƒè¯•")]
+    public bool debugMode = false;  // é»˜è®¤å…³é—­è°ƒè¯•
 
     private List<ContextMenuItem> currentItems;
     private List<GameObject> instantiatedItems = new List<GameObject>();
@@ -32,7 +32,7 @@ public class IconContextMenu : MonoBehaviour
     private bool isVisible = false;
     private GameObject backgroundBlocker;
 
-    #region ³õÊ¼»¯
+    #region åˆå§‹åŒ–
 
     void Awake()
     {
@@ -45,13 +45,13 @@ public class IconContextMenu : MonoBehaviour
 
     #endregion
 
-    #region ¹«¹²½Ó¿Ú
+    #region å…¬å…±æ¥å£
 
     public void Show(Vector2 screenPosition, List<ContextMenuItem> items, Action<string> callback)
     {
         if (items == null || items.Count == 0)
         {
-            Debug.LogWarning("[IconContextMenu] ²Ëµ¥ÏîÁĞ±íÎª¿Õ");
+            Debug.LogWarning("[IconContextMenu] èœå•é¡¹åˆ—è¡¨ä¸ºç©º");
             return;
         }
 
@@ -86,7 +86,7 @@ public class IconContextMenu : MonoBehaviour
 
     #endregion
 
-    #region ±³¾°ÕÚÕÖ
+    #region èƒŒæ™¯é®ç½©
 
     void CreateBackgroundBlocker()
     {
@@ -111,7 +111,7 @@ public class IconContextMenu : MonoBehaviour
 
     #endregion
 
-    #region ²Ëµ¥Ïî´´½¨
+    #region èœå•é¡¹åˆ›å»º
 
     void CreateMenuItems()
     {
@@ -206,13 +206,13 @@ public class IconContextMenu : MonoBehaviour
 
     #endregion
 
-    #region ²Ëµ¥¶¨Î»
+    #region èœå•å®šä½
 
     void PositionMenu(Vector2 screenPosition)
     {
         if (menuPanel == null || parentCanvas == null)
         {
-            Debug.LogError("[IconContextMenu] menuPanel »ò parentCanvas Îª¿Õ");
+            Debug.LogError("[IconContextMenu] menuPanel æˆ– parentCanvas ä¸ºç©º");
             return;
         }
 
@@ -251,7 +251,7 @@ public class IconContextMenu : MonoBehaviour
         Vector2 offset = new Vector2(menuSize.x * 0.5f, 0f);
         Vector2 targetPosition = canvasPosition + offset;
 
-        // ±ß½ç¼ì²â
+        // è¾¹ç•Œæ£€æµ‹
         if (targetPosition.x + menuSize.x > canvasRect.xMax)
         {
             targetPosition.x = canvasPosition.x - menuSize.x;
@@ -272,7 +272,7 @@ public class IconContextMenu : MonoBehaviour
 
     #endregion
 
-    #region ÊÂ¼ş´¦Àí
+    #region äº‹ä»¶å¤„ç†
 
     void ShowMenu()
     {
@@ -284,7 +284,7 @@ public class IconContextMenu : MonoBehaviour
     {
         if (debugMode)
         {
-            Debug.Log($"[IconContextMenu] ²Ëµ¥Ïî±»µã»÷: {itemId}");
+            Debug.Log($"[IconContextMenu] èœå•é¡¹è¢«ç‚¹å‡»: {itemId}");
         }
 
         onItemSelected?.Invoke(itemId);
@@ -293,7 +293,7 @@ public class IconContextMenu : MonoBehaviour
 
     #endregion
 
-    #region ¹¤¾ß·½·¨
+    #region å·¥å…·æ–¹æ³•
 
     void ClearMenuItems()
     {

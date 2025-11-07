@@ -1,26 +1,25 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// É¨À×ÓÎÏ·Ö÷¿ØÖÆÆ÷ - ¼ò»¯°æ
+/// éµî‚¦æµ„å¨“å‘Šå™æ¶“ç»˜å¸¶é’è·ºæ«’ - ç» â‚¬é–æ «å¢—
 /// </summary>
 public class MinesweeperGame : MonoBehaviour
 {
-    [Header("ÓÎÏ·ÉèÖÃ")]
+    [Header("å¨“å‘Šå™ç’å‰§ç–†")]
     public int width = 9;
     public int height = 9;
     public int mineCount = 10;
 
-    [Header("¾«Áé¹ÜÀíÆ÷")]
-    public MinesweeperSpriteManager spriteManager;  // Í³Ò»¹ÜÀíËùÓĞ¾«Áé
-
-    [Header("¸ñ×ÓÔ¤ÖÆÌå")]
+    [Header("ç»®å‰§ä¼’ç» ï¼„æ‚Šé£?)]
+    public MinesweeperSpriteManager spriteManager;  // ç¼ç†¶ç«´ç» ï¼„æ‚Šéµâ‚¬éˆå¤Œç°¿é?
+    [Header("éç…ç“™æ£°å‹«åŸ—æµ£?)]
     public GameObject cellPrefab;
 
-    [Header("ÓÎÏ·ÈİÆ÷")]
+    [Header("å¨“å‘Šå™ç€¹ç‘°æ«’")]
     public Transform gameBoard;
 
-    [Header("¸ñ×Ó´óĞ¡")]
+    [Header("éç…ç“™æ¾¶Ñƒçš¬")]
     public float cellSize = 16f;
 
     private MinesweeperCell[,] cells;
@@ -30,16 +29,12 @@ public class MinesweeperGame : MonoBehaviour
     private bool gameOver = false;
     private float gameTime = 0f;
 
-    // ÊÂ¼ş
-    public System.Action<int> OnMineCountChanged;      // Ê£ÓàµØÀ×Êı±ä»¯
-    public System.Action<int> OnTimeChanged;           // Ê±¼ä±ä»¯£¨Ãë£©
-    public System.Action<GameState> OnGameStateChanged; // ÓÎÏ·×´Ì¬±ä»¯
-
+    // æµœå¬©æ¬¢
+    public System.Action<int> OnMineCountChanged;      // é“â•€ç¶‘é¦ä¼´æµ„éæ¿å½‰é–?    public System.Action<int> OnTimeChanged;           // éƒå •æ£¿é™æ¨ºå¯²é”›å ¢î—é”›?    public System.Action<GameState> OnGameStateChanged; // å¨“å‘Šå™é˜èˆµâ‚¬ä½¸å½‰é–?
     public enum GameState
     {
-        Normal,     // Õı³£ÓÎÏ·ÖĞ
-        Win,        // Ê¤Àû
-        Lose        // Ê§°Ü
+        Normal,     // å§ï½…çˆ¶å¨“å‘Šå™æ¶“?        Win,        // é‘³æ»ƒåŸ„
+        Lose        // æ¾¶è¾«è§¦
     }
 
     public GameState CurrentState { get; private set; } = GameState.Normal;
@@ -59,12 +54,10 @@ public class MinesweeperGame : MonoBehaviour
     }
 
     /// <summary>
-    /// ³õÊ¼»¯ÓÎÏ·
-    /// </summary>
+    /// é’æ¿†îé–æ ¨çˆ¶é´?    /// </summary>
     public void InitializeGame()
     {
-        // Çå¿Õ¾ÉµÄÓÎÏ·°å
-        if (gameBoard != null)
+        // å¨“å‘¯â”–éƒÑ…æ®‘å¨“å‘Šå™é‰?        if (gameBoard != null)
         {
             foreach (Transform child in gameBoard)
             {
@@ -80,25 +73,24 @@ public class MinesweeperGame : MonoBehaviour
         gameTime = 0f;
         CurrentState = GameState.Normal;
 
-        // ´´½¨¸ñ×Ó
+        // é’æ¶˜ç¼“éç…ç“™
         CreateCells();
 
-        // ¸üĞÂUI
+        // é‡å­˜æŸŠUI
         OnMineCountChanged?.Invoke(mineCount);
         OnTimeChanged?.Invoke(0);
         OnGameStateChanged?.Invoke(GameState.Normal);
     }
 
     /// <summary>
-    /// ´´½¨ËùÓĞ¸ñ×Ó
-    /// </summary>
+    /// é’æ¶˜ç¼“éµâ‚¬éˆå¤‹ç‰¸ç€›?    /// </summary>
     void CreateCells()
     {
-        // È·±£ GameBoard µÄÃªµãºÍÖáĞÄÔÚ×óÉÏ½Ç
+        // çº­î†»ç¹š GameBoard é¨å‹¯æ•‹éç‘°æ‹°ææ‘ç¸¾é¦ã„¥ä¹æ¶“å©…î—
         RectTransform boardRect = gameBoard.GetComponent<RectTransform>();
         if (boardRect != null)
         {
-            boardRect.pivot = new Vector2(0, 1);  // ×óÉÏ½ÇÎªÖáĞÄ
+            boardRect.pivot = new Vector2(0, 1);  // å®¸ï¸¿ç¬‚ç‘™æè´Ÿææ‘ç¸¾
             boardRect.anchorMin = new Vector2(0, 1);
             boardRect.anchorMax = new Vector2(0, 1);
         }
@@ -109,16 +101,14 @@ public class MinesweeperGame : MonoBehaviour
             {
                 GameObject cellObj = Instantiate(cellPrefab, gameBoard);
 
-                // ÉèÖÃÎ»ÖÃ - ´Ó×óÉÏ½Ç¿ªÊ¼ÅÅÁĞ
-                RectTransform rect = cellObj.GetComponent<RectTransform>();
+                // ç’å‰§ç–†æµ£å¶‡ç–† - æµ åº¡ä¹æ¶“å©…î—å¯®â‚¬æ¿®å¬«å¸“é’?                RectTransform rect = cellObj.GetComponent<RectTransform>();
                 rect.anchorMin = new Vector2(0, 1);
                 rect.anchorMax = new Vector2(0, 1);
                 rect.pivot = new Vector2(0, 1);
                 rect.anchoredPosition = new Vector2(x * cellSize, -y * cellSize);
                 rect.sizeDelta = new Vector2(cellSize, cellSize);
 
-                // ³õÊ¼»¯¸ñ×Ó
-                MinesweeperCell cell = cellObj.GetComponent<MinesweeperCell>();
+                // é’æ¿†îé–æ ¨ç‰¸ç€›?                MinesweeperCell cell = cellObj.GetComponent<MinesweeperCell>();
                 cell.Initialize(x, y, this, spriteManager);
 
                 cells[x, y] = cell;
@@ -127,7 +117,7 @@ public class MinesweeperGame : MonoBehaviour
     }
 
     /// <summary>
-    /// µÚÒ»´Îµã»÷Ê±Éú³ÉµØÀ×
+    /// ç»—îƒ¿ç«´å¨†ï¼„å£é‘ç»˜æ¤‚é¢ç†¸åšé¦ä¼´æµ„
     /// </summary>
     public void GenerateMines(int firstClickX, int firstClickY)
     {
@@ -135,15 +125,14 @@ public class MinesweeperGame : MonoBehaviour
 
         gameStarted = true;
 
-        // Ëæ»ú·ÅÖÃµØÀ×
+        // é—…å¿”æº€é€å‰§ç–†é¦ä¼´æµ„
         int minesPlaced = 0;
         while (minesPlaced < mineCount)
         {
             int x = Random.Range(0, width);
             int y = Random.Range(0, height);
 
-            // ²»ÔÚµÚÒ»´Îµã»÷µÄÎ»ÖÃ¼°ÖÜÎ§·ÅÖÃµØÀ×
-            if (Mathf.Abs(x - firstClickX) <= 1 && Mathf.Abs(y - firstClickY) <= 1)
+            // æ¶“å¶…æ¹ªç»—îƒ¿ç«´å¨†ï¼„å£é‘è¤æ®‘æµ£å¶‡ç–†é™å©‚æ‡†é¥å­˜æ–ç¼ƒî†¼æ¹´é—†?            if (Mathf.Abs(x - firstClickX) <= 1 && Mathf.Abs(y - firstClickY) <= 1)
                 continue;
 
             if (!cells[x, y].IsMine)
@@ -153,13 +142,12 @@ public class MinesweeperGame : MonoBehaviour
             }
         }
 
-        // ¼ÆËãÃ¿¸ö¸ñ×ÓÖÜÎ§µÄµØÀ×Êı
+        // ç’ï¼„ç•»å§£å¿é‡œéç…ç“™é›ã„¥æ´¿é¨å‹«æ¹´é—†é”‹æšŸ
         CalculateAdjacentMines();
     }
 
     /// <summary>
-    /// ¼ÆËãËùÓĞ¸ñ×ÓÖÜÎ§µÄµØÀ×Êı
-    /// </summary>
+    /// ç’ï¼„ç•»éµâ‚¬éˆå¤‹ç‰¸ç€›æ„¬æ‡†é¥å¯¸æ®‘é¦ä¼´æµ„é?    /// </summary>
     void CalculateAdjacentMines()
     {
         for (int x = 0; x < width; x++)
@@ -181,8 +169,7 @@ public class MinesweeperGame : MonoBehaviour
     }
 
     /// <summary>
-    /// »ñÈ¡ÏàÁÚµÄ¸ñ×Ó
-    /// </summary>
+    /// é‘¾å³°å½‡é©æå¦é¨å‹¬ç‰¸ç€›?    /// </summary>
     public List<MinesweeperCell> GetNeighbors(int x, int y)
     {
         List<MinesweeperCell> neighbors = new List<MinesweeperCell>();
@@ -207,7 +194,7 @@ public class MinesweeperGame : MonoBehaviour
     }
 
     /// <summary>
-    /// ·­¿ª¸ñ×Ó
+    /// ç¼ˆè¯²ç´‘éç…ç“™
     /// </summary>
     public void RevealCell(int x, int y)
     {
@@ -216,7 +203,7 @@ public class MinesweeperGame : MonoBehaviour
         MinesweeperCell cell = cells[x, y];
         if (cell.IsRevealed || cell.IsFlagged) return;
 
-        // µÚÒ»´Îµã»÷Ê±Éú³ÉµØÀ×
+        // ç»—îƒ¿ç«´å¨†ï¼„å£é‘ç»˜æ¤‚é¢ç†¸åšé¦ä¼´æµ„
         if (!gameStarted)
         {
             GenerateMines(x, y);
@@ -224,8 +211,7 @@ public class MinesweeperGame : MonoBehaviour
 
         cell.Reveal();
 
-        // µãµ½µØÀ×£¬ÓÎÏ·½áÊø
-        if (cell.IsMine)
+        // éç‘°åŸŒé¦ä¼´æµ„é”›å±¾çˆ¶é´å¿•ç²¨é‰?        if (cell.IsMine)
         {
             GameOver(false);
             return;
@@ -233,7 +219,7 @@ public class MinesweeperGame : MonoBehaviour
 
         remainingCells--;
 
-        // Èç¹ûÊÇ¿Õ°×¸ñ×Ó£¬×Ô¶¯·­¿ªÖÜÎ§
+        // æ¿¡å‚›ç‰é„îˆœâ”–é§èŠ¥ç‰¸ç€›æ„¶ç´é‘·î„å§©ç¼ˆè¯²ç´‘é›ã„¥æ´¿
         if (cell.AdjacentMines == 0)
         {
             List<MinesweeperCell> neighbors = GetNeighbors(x, y);
@@ -246,16 +232,14 @@ public class MinesweeperGame : MonoBehaviour
             }
         }
 
-        // ¼ì²éÊÇ·ñÊ¤Àû
-        if (remainingCells == 0)
+        // å¦«â‚¬éŒãƒ¦æ§¸éšï¹å„¨é’?        if (remainingCells == 0)
         {
             GameOver(true);
         }
     }
 
     /// <summary>
-    /// ÇĞ»»ÆìÖÄ×´Ì¬
-    /// </summary>
+    /// é’å›¨å´²éƒæ¥€ç¬¢é˜èˆµâ‚¬?    /// </summary>
     public void ToggleFlag(int x, int y)
     {
         if (gameOver) return;
@@ -278,19 +262,16 @@ public class MinesweeperGame : MonoBehaviour
     }
 
     /// <summary>
-    /// ºÍÏÒ½ÒÂ¶ - ÖĞ¼üµã»÷ÒÑ·­¿ªµÄÊı×Ö¸ñ£¬×Ô¶¯½ÒÂ¶ÖÜÎ§Î´±ê¼ÇµÄ¸ñ×Ó
-    /// </summary>
+    /// éœå±½é¸¡é»î…¢æ¹¶ - æ¶“î…¢æ•­éç‘°åš®å®¸èŒ¬ç‚•å¯®â‚¬é¨å‹¬æšŸç€›æ¥ç‰¸é”›å²ƒåšœé”ã„¦å½®é—‡æ’æ‡†é¥å­˜æ¹­éå›ªî†‡é¨å‹¬ç‰¸ç€›?    /// </summary>
     public void ChordReveal(int x, int y)
     {
         if (gameOver || !gameStarted) return;
 
         MinesweeperCell cell = cells[x, y];
 
-        // Ö»ÓĞÒÑ·­¿ªÇÒÓĞÊı×ÖµÄ¸ñ×Ó²ÅÄÜÊ¹ÓÃºÍÏÒ
-        if (!cell.IsRevealed || cell.AdjacentMines == 0) return;
+        // é™î…æ¹å®¸èŒ¬ç‚•å¯®â‚¬æ¶“æ—€æ¹éæ¿ç“§é¨å‹¬ç‰¸ç€›æ„­å¢ é‘³æˆ’å¨‡é¢ã„¥æ‹°å¯®?        if (!cell.IsRevealed || cell.AdjacentMines == 0) return;
 
-        // Í³¼ÆÖÜÎ§µÄÆìÖÄÊıÁ¿
-        List<MinesweeperCell> neighbors = GetNeighbors(x, y);
+        // ç¼ç†»î…¸é›ã„¥æ´¿é¨å‹¬æ£—ç”¯æ»„æšŸé–²?        List<MinesweeperCell> neighbors = GetNeighbors(x, y);
         int flagCount = 0;
 
         foreach (var neighbor in neighbors)
@@ -298,11 +279,10 @@ public class MinesweeperGame : MonoBehaviour
             if (neighbor.IsFlagged) flagCount++;
         }
 
-        // ÆìÖÄÊıÁ¿±ØĞëµÈÓÚÊı×Ö²ÅÄÜ×Ô¶¯½ÒÂ¶
+        // éƒæ¥€ç¬¢éä¼´å™ºè¹‡å‘´ã€ç»›å¤‰ç°¬éæ¿ç“§éµå¶ˆå…˜é‘·î„å§©é»î…¢æ¹¶
         if (flagCount != cell.AdjacentMines) return;
 
-        // ½ÒÂ¶ËùÓĞÎ´±ê¼ÇµÄÁÚ¾Ó
-        foreach (var neighbor in neighbors)
+        // é»î…¢æ¹¶éµâ‚¬éˆå¤‹æ¹­éå›ªî†‡é¨å‹¯å¦ç?        foreach (var neighbor in neighbors)
         {
             if (!neighbor.IsRevealed && !neighbor.IsFlagged)
             {
@@ -312,15 +292,14 @@ public class MinesweeperGame : MonoBehaviour
     }
 
     /// <summary>
-    /// ÓÎÏ·½áÊø
+    /// å¨“å‘Šå™ç¼æ’´æ½«
     /// </summary>
     void GameOver(bool won)
     {
         gameOver = true;
         CurrentState = won ? GameState.Win : GameState.Lose;
 
-        // ÏÔÊ¾ËùÓĞµØÀ×
-        for (int x = 0; x < width; x++)
+        // é„å‰§ãšéµâ‚¬éˆå¤Šæ¹´é—†?        for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
@@ -335,8 +314,7 @@ public class MinesweeperGame : MonoBehaviour
     }
 
     /// <summary>
-    /// ÖØĞÂ¿ªÊ¼ÓÎÏ·
-    /// </summary>
+    /// é–²å¶†æŸŠå¯®â‚¬æ¿®å¬«çˆ¶é´?    /// </summary>
     public void RestartGame()
     {
         InitializeGame();

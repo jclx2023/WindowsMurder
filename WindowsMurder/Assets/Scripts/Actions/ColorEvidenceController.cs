@@ -1,56 +1,56 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// Ä¿±êÑÕÉ«ÅäÖÃ
+/// ç›®æ ‡é¢œè‰²é…ç½®
 /// </summary>
 [System.Serializable]
 public class TargetColorConfig
 {
-    [Header("±êÊ¶")]
+    [Header("æ ‡è¯†")]
     public string colorId = "dark_red";
 
-    [Header("ÑÕÉ«ÉèÖÃ")]
+    [Header("é¢œè‰²è®¾ç½®")]
     public Color targetColor = new Color(0.545f, 0, 0); // RGB(139, 0, 0)
     [Range(0f, 0.2f)]
     public float tolerance = 0.05f;
 
-    [Header("¶Ô»°ÅäÖÃ")]
+    [Header("å¯¹è¯é…ç½®")]
     public string dialogueBlockId = "dialogue_dark_red";
 
-    [Header("ÃèÊö£¨µ÷ÊÔÓÃ£©")]
+    [Header("æè¿°ï¼ˆè°ƒè¯•ç”¨ï¼‰")]
     [TextArea(2, 3)]
-    public string description = "µ¶ÉÏµÄÉîºìÉ«Ñª¼£";
+    public string description = "åˆ€ä¸Šçš„æ·±çº¢è‰²è¡€è¿¹";
 }
 
 /// <summary>
-/// ÑÕÉ«Ö¤¾İ¿ØÖÆÆ÷ - ¹ÜÀíÈ¡É«Ö¤¾İÁ÷³Ì
+/// é¢œè‰²è¯æ®æ§åˆ¶å™¨ - ç®¡ç†å–è‰²è¯æ®æµç¨‹
 /// </summary>
 public class ColorEvidenceController : MonoBehaviour
 {
-    [Header("=== Ä¿±êÑÕÉ« ===")]
+    [Header("=== ç›®æ ‡é¢œè‰² ===")]
     [SerializeField] private List<TargetColorConfig> targetColors = new List<TargetColorConfig>();
 
-    [Header("=== Íê³ÉÅäÖÃ ===")]
+    [Header("=== å®Œæˆé…ç½® ===")]
     [SerializeField] private string completionDialogueId = "dialogue_blood_complete";
     [SerializeField] private string unlockedClueId = "evidence_fake_blood";
     [SerializeField] private bool requireAllColors = true;
 
-    [Header("=== ÒıÓÃ ===")]
+    [Header("=== å¼•ç”¨ ===")]
     [SerializeField] private GameFlowController gameFlowController;
 
-    [Header("=== ÔËĞĞÊ±×´Ì¬£¨Ö»¶Á£©===")]
+    [Header("=== è¿è¡Œæ—¶çŠ¶æ€ï¼ˆåªè¯»ï¼‰===")]
     [SerializeField] private List<string> pickedColorIdsList = new List<string>();
     [SerializeField] private bool isCompleted = false;
     [SerializeField] private int pickAttempts = 0;
 
-    [Header("=== µ÷ÊÔ ===")]
+    [Header("=== è°ƒè¯• ===")]
     [SerializeField] private bool debugMode = true;
 
-    // ÄÚ²¿×´Ì¬
+    // å†…éƒ¨çŠ¶æ€
     private HashSet<string> pickedColorIds = new HashSet<string>();
 
-    #region ÉúÃüÖÜÆÚ
+    #region ç”Ÿå‘½å‘¨æœŸ
 
     void Awake()
     {
@@ -62,13 +62,13 @@ public class ColorEvidenceController : MonoBehaviour
 
     void OnEnable()
     {
-        // ¶©ÔÄÈ«¾ÖÈ¡É«ÊÂ¼ş
+        // è®¢é˜…å…¨å±€å–è‰²äº‹ä»¶
         EyedropperTool.OnAnyColorPicked += HandleColorPicked;
     }
 
     void OnDisable()
     {
-        // È¡Ïû¶©ÔÄ
+        // å–æ¶ˆè®¢é˜…
         EyedropperTool.OnAnyColorPicked -= HandleColorPicked;
     }
 
@@ -78,44 +78,44 @@ public class ColorEvidenceController : MonoBehaviour
 
     #endregion
 
-    #region ºËĞÄÂß¼­
+    #region æ ¸å¿ƒé€»è¾‘
 
     /// <summary>
-    /// ´¦ÀíÈ¡É«ÊÂ¼ş
+    /// å¤„ç†å–è‰²äº‹ä»¶
     /// </summary>
     private void HandleColorPicked(Color pickedColor)
     {
-        // Èç¹ûÒÑÍê³É£¬ºöÂÔºóĞøÈ¡É«
+        // å¦‚æœå·²å®Œæˆï¼Œå¿½ç•¥åç»­å–è‰²
         if (isCompleted)
         {
-            LogDebug("Ö¤¾İÒÑÍê³É£¬ºöÂÔÈ¡É«");
+            LogDebug("è¯æ®å·²å®Œæˆï¼Œå¿½ç•¥å–è‰²");
             return;
         }
 
         pickAttempts++;
-        LogDebug($"ÊÕµ½È¡É«ÊÂ¼ş #{pickAttempts}: #{ColorUtility.ToHtmlStringRGB(pickedColor)}");
+        LogDebug($"æ”¶åˆ°å–è‰²äº‹ä»¶ #{pickAttempts}: #{ColorUtility.ToHtmlStringRGB(pickedColor)}");
 
-        // ±éÀúÄ¿±êÑÕÉ«£¬²éÕÒÆ¥Åä
+        // éå†ç›®æ ‡é¢œè‰²ï¼ŒæŸ¥æ‰¾åŒ¹é…
         foreach (var target in targetColors)
         {
             if (IsColorMatch(pickedColor, target.targetColor, target.tolerance))
             {
-                LogDebug($"Æ¥Åäµ½Ä¿±êÑÕÉ«: {target.colorId}");
+                LogDebug($"åŒ¹é…åˆ°ç›®æ ‡é¢œè‰²: {target.colorId}");
                 OnTargetColorPicked(target);
-                return; // Ö»Æ¥ÅäÒ»¸ö¾Í¹»ÁË
+                return; // åªåŒ¹é…ä¸€ä¸ªå°±å¤Ÿäº†
             }
         }
 
-        // Ã»ÓĞÆ¥Åäµ½ÈÎºÎÄ¿±ê
-        LogDebug("Î´Æ¥Åäµ½ÈÎºÎÄ¿±êÑÕÉ«");
+        // æ²¡æœ‰åŒ¹é…åˆ°ä»»ä½•ç›®æ ‡
+        LogDebug("æœªåŒ¹é…åˆ°ä»»ä½•ç›®æ ‡é¢œè‰²");
     }
 
     /// <summary>
-    /// ÑÕÉ«Æ¥ÅäÅĞ¶Ï
+    /// é¢œè‰²åŒ¹é…åˆ¤æ–­
     /// </summary>
     private bool IsColorMatch(Color pickedColor, Color targetColor, float tolerance)
     {
-        // ¼ÆËãÅ·ÊÏ¾àÀë
+        // è®¡ç®—æ¬§æ°è·ç¦»
         float distance = Mathf.Sqrt(
             Mathf.Pow(pickedColor.r - targetColor.r, 2) +
             Mathf.Pow(pickedColor.g - targetColor.g, 2) +
@@ -126,81 +126,81 @@ public class ColorEvidenceController : MonoBehaviour
 
         if (debugMode)
         {
-            LogDebug($"ÑÕÉ«¾àÀë: {distance:F4}, Èİ²î: {tolerance}, Æ¥Åä: {isMatch}");
+            LogDebug($"é¢œè‰²è·ç¦»: {distance:F4}, å®¹å·®: {tolerance}, åŒ¹é…: {isMatch}");
         }
 
         return isMatch;
     }
 
     /// <summary>
-    /// Ä¿±êÑÕÉ«ÃüÖĞ´¦Àí
+    /// ç›®æ ‡é¢œè‰²å‘½ä¸­å¤„ç†
     /// </summary>
     private void OnTargetColorPicked(TargetColorConfig target)
     {
-        // ¼ì²éÊÇ·ñÒÑ¾­È¡¹ı
+        // æ£€æŸ¥æ˜¯å¦å·²ç»å–è¿‡
         if (pickedColorIds.Contains(target.colorId))
         {
-            LogDebug($"ÑÕÉ« [{target.colorId}] ÒÑ¾­È¡¹ı£¬ºöÂÔ");
+            LogDebug($"é¢œè‰² [{target.colorId}] å·²ç»å–è¿‡ï¼Œå¿½ç•¥");
             return;
         }
 
-        // ¼ÇÂ¼ÒÑÈ¡µ½µÄÑÕÉ«
+        // è®°å½•å·²å–åˆ°çš„é¢œè‰²
         pickedColorIds.Add(target.colorId);
         pickedColorIdsList.Add(target.colorId);
-        LogDebug($"¼ÇÂ¼ÑÕÉ«: {target.colorId}£¬µ±Ç°ÒÑÈ¡ {pickedColorIds.Count}/{targetColors.Count}");
+        LogDebug($"è®°å½•é¢œè‰²: {target.colorId}ï¼Œå½“å‰å·²å– {pickedColorIds.Count}/{targetColors.Count}");
 
         if (CheckCompletion())
         {
-            // Íê³ÉÁË£¬Ö»²¥·ÅÍê³É¶Ô»°£¬²»²¥·Åµ¥¸öÑÕÉ«µÄ¶Ô»°
+            // å®Œæˆäº†ï¼Œåªæ’­æ”¾å®Œæˆå¯¹è¯ï¼Œä¸æ’­æ”¾å•ä¸ªé¢œè‰²çš„å¯¹è¯
             OnEvidenceCompleted();
         }
         else
         {
-            // Î´Íê³É£¬²¥·Åµ¥¸öÑÕÉ«µÄ¶Ô»°
+            // æœªå®Œæˆï¼Œæ’­æ”¾å•ä¸ªé¢œè‰²çš„å¯¹è¯
             TriggerDialogue(target.dialogueBlockId);
         }
     }
 
     /// <summary>
-    /// ¼ì²éÊÇ·ñÍê³É£¨·µ»ØÊÇ·ñÍê³É£©
+    /// æ£€æŸ¥æ˜¯å¦å®Œæˆï¼ˆè¿”å›æ˜¯å¦å®Œæˆï¼‰
     /// </summary>
     private bool CheckCompletion()
     {
         if (!requireAllColors)
         {
-            // Èç¹û²»ÒªÇóÈ«²¿È¡µ½£¬È¡µ½ÈÎÒâÒ»¸ö¾ÍËãÍê³É£¨Ôİ²»Ê¹ÓÃ£©
+            // å¦‚æœä¸è¦æ±‚å…¨éƒ¨å–åˆ°ï¼Œå–åˆ°ä»»æ„ä¸€ä¸ªå°±ç®—å®Œæˆï¼ˆæš‚ä¸ä½¿ç”¨ï¼‰
             return pickedColorIds.Count > 0;
         }
 
-        // ¼ì²éÊÇ·ñËùÓĞÄ¿±êÑÕÉ«¶¼È¡µ½ÁË
+        // æ£€æŸ¥æ˜¯å¦æ‰€æœ‰ç›®æ ‡é¢œè‰²éƒ½å–åˆ°äº†
         foreach (var target in targetColors)
         {
             if (!pickedColorIds.Contains(target.colorId))
             {
-                return false; // »¹ÓĞÎ´È¡µ½µÄ
+                return false; // è¿˜æœ‰æœªå–åˆ°çš„
             }
         }
 
-        return true; // È«²¿È¡µ½
+        return true; // å…¨éƒ¨å–åˆ°
     }
 
     /// <summary>
-    /// Ö¤¾İÍê³É´¦Àí
+    /// è¯æ®å®Œæˆå¤„ç†
     /// </summary>
     private void OnEvidenceCompleted()
     {
         if (isCompleted)
         {
-            LogDebug("Ö¤¾İÒÑ±ê¼ÇÎªÍê³É£¬Ìø¹ıÖØ¸´´¦Àí");
+            LogDebug("è¯æ®å·²æ ‡è®°ä¸ºå®Œæˆï¼Œè·³è¿‡é‡å¤å¤„ç†");
             return;
         }
 
         isCompleted = true;
 
-        // ´¥·¢Íê³É¶Ô»°
+        // è§¦å‘å®Œæˆå¯¹è¯
         TriggerDialogue(completionDialogueId);
 
-        // ½âËøÏßË÷
+        // è§£é”çº¿ç´¢
         if (!string.IsNullOrEmpty(unlockedClueId))
         {
             UnlockClue(unlockedClueId);
@@ -209,30 +209,30 @@ public class ColorEvidenceController : MonoBehaviour
 
     #endregion
 
-    #region GameFlowControllerµ÷ÓÃ
+    #region GameFlowControllerè°ƒç”¨
 
     /// <summary>
-    /// ´¥·¢¶Ô»°¿é
+    /// è§¦å‘å¯¹è¯å—
     /// </summary>
     private void TriggerDialogue(string dialogueBlockId)
     {
-        LogDebug($"´¥·¢¶Ô»°¿é: {dialogueBlockId}");
+        LogDebug($"è§¦å‘å¯¹è¯å—: {dialogueBlockId}");
         gameFlowController.StartDialogueBlock(dialogueBlockId);
     }
 
     /// <summary>
-    /// ½âËøÏßË÷
+    /// è§£é”çº¿ç´¢
     /// </summary>
     private void UnlockClue(string clueId)
     {
 
-        LogDebug($"½âËøÏßË÷: {clueId}");
+        LogDebug($"è§£é”çº¿ç´¢: {clueId}");
         gameFlowController.UnlockClue(clueId);
     }
 
     #endregion
 
-    #region µ÷ÊÔ¹¤¾ß
+    #region è°ƒè¯•å·¥å…·
     private void LogDebug(string message)
     {
         if (debugMode)

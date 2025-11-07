@@ -1,26 +1,26 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Goodbye.txt ÊôĞÔ´°¿Ú¿ØÖÆÆ÷ - µã»÷ÈÎÒâÎ»ÖÃ²¥·Å¶Ô»°
+/// Goodbye.txt å±æ€§çª—å£æ§åˆ¶å™¨ - ç‚¹å‡»ä»»æ„ä½ç½®æ’­æ”¾å¯¹è¯
 /// </summary>
 public class GoodbyeTxtPropertiesWindow : MonoBehaviour
 {
-    [Header("=== ¶Ô»°ÅäÖÃ ===")]
+    [Header("=== å¯¹è¯é…ç½® ===")]
     [SerializeField] private string dialogueBlockId = "420";
 
-    [Header("=== °´Å¥ÒıÓÃ ===")]
+    [Header("=== æŒ‰é’®å¼•ç”¨ ===")]
     [SerializeField] private Button okButton;
     [SerializeField] private Button applyButton;
     [SerializeField] private Button cancelButton;
 
-    [Header("=== µ÷ÊÔ ===")]
+    [Header("=== è°ƒè¯• ===")]
     [SerializeField] private bool debugMode = true;
 
-    // ÔËĞĞÊ±×´Ì¬
+    // è¿è¡Œæ—¶çŠ¶æ€
     private bool hasTriggeredDialogue = false;
 
-    // ×é¼şÒıÓÃ
+    // ç»„ä»¶å¼•ç”¨
     private GameFlowController flowController;
     private WindowsWindow windowComponent;
 
@@ -29,12 +29,12 @@ public class GoodbyeTxtPropertiesWindow : MonoBehaviour
         flowController = FindObjectOfType<GameFlowController>();
         windowComponent = GetComponent<WindowsWindow>();
 
-        // °ó¶¨°´Å¥ÊÂ¼ş
+        // ç»‘å®šæŒ‰é’®äº‹ä»¶
         if (okButton != null)
             okButton.onClick.AddListener(CloseWindow);
 
         if (applyButton != null)
-            applyButton.onClick.AddListener(() => LogDebug("µã»÷ Apply °´Å¥"));
+            applyButton.onClick.AddListener(() => LogDebug("ç‚¹å‡» Apply æŒ‰é’®"));
 
         if (cancelButton != null)
             cancelButton.onClick.AddListener(CloseWindow);
@@ -42,7 +42,7 @@ public class GoodbyeTxtPropertiesWindow : MonoBehaviour
 
     void Update()
     {
-        // ¼àÌıÊó±êµã»÷
+        // ç›‘å¬é¼ æ ‡ç‚¹å‡»
         if (!hasTriggeredDialogue && Input.GetMouseButtonDown(0))
         {
             PlayDialogue();
@@ -50,7 +50,7 @@ public class GoodbyeTxtPropertiesWindow : MonoBehaviour
     }
 
     /// <summary>
-    /// ²¥·Å¶Ô»°¿é
+    /// æ’­æ”¾å¯¹è¯å—
     /// </summary>
     private void PlayDialogue()
     {
@@ -59,12 +59,12 @@ public class GoodbyeTxtPropertiesWindow : MonoBehaviour
         if (flowController != null)
         {
             flowController.StartDialogueBlock(dialogueBlockId);
-            LogDebug($"ÒÑ´¥·¢¶Ô»°¿é: {dialogueBlockId}");
+            LogDebug($"å·²è§¦å‘å¯¹è¯å—: {dialogueBlockId}");
         }
     }
 
     /// <summary>
-    /// ¹Ø±Õ´°¿Ú
+    /// å…³é—­çª—å£
     /// </summary>
     private void CloseWindow()
     {

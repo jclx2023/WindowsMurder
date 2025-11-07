@@ -1,32 +1,32 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// É¨À×ÓÎÏ·UI¹ÜÀíÆ÷ - ¼«¼ò°æ
+/// æ‰«é›·æ¸¸æˆUIç®¡ç†å™¨ - æç®€ç‰ˆ
 /// </summary>
 public class MinesweeperUI : MonoBehaviour
 {
-    [Header("ÓÎÏ·ÒıÓÃ")]
+    [Header("æ¸¸æˆå¼•ç”¨")]
     public MinesweeperGame game;
     public MinesweeperSpriteManager spriteManager;
 
-    [Header("µØÀ×¼ÆÊıÆ÷£¨3Î»Êı×Ö£©")]
-    public Image mineDigit100;          // °ÙÎ»
-    public Image mineDigit10;           // Ê®Î»
-    public Image mineDigit1;            // ¸öÎ»
+    [Header("åœ°é›·è®¡æ•°å™¨ï¼ˆ3ä½æ•°å­—ï¼‰")]
+    public Image mineDigit100;          // ç™¾ä½
+    public Image mineDigit10;           // åä½
+    public Image mineDigit1;            // ä¸ªä½
 
-    [Header("Ê±¼ä¼ÆÊıÆ÷£¨3Î»Êı×Ö£©")]
-    public Image timeDigit100;          // °ÙÎ»
-    public Image timeDigit10;           // Ê®Î»
-    public Image timeDigit1;            // ¸öÎ»
+    [Header("æ—¶é—´è®¡æ•°å™¨ï¼ˆ3ä½æ•°å­—ï¼‰")]
+    public Image timeDigit100;          // ç™¾ä½
+    public Image timeDigit10;           // åä½
+    public Image timeDigit1;            // ä¸ªä½
 
-    [Header("Ğ¦Á³°´Å¥")]
-    public Button smileButton;          // Ğ¦Á³°´Å¥
-    public Image smileIcon;             // Ğ¦Á³Í¼±ê
+    [Header("ç¬‘è„¸æŒ‰é’®")]
+    public Button smileButton;          // ç¬‘è„¸æŒ‰é’®
+    public Image smileIcon;             // ç¬‘è„¸å›¾æ ‡
 
     void Start()
     {
-        // °ó¶¨ÊÂ¼ş
+        // ç»‘å®šäº‹ä»¶
         if (game != null)
         {
             game.OnMineCountChanged += UpdateMineCount;
@@ -34,20 +34,20 @@ public class MinesweeperUI : MonoBehaviour
             game.OnGameStateChanged += UpdateSmileFace;
         }
 
-        // Ğ¦Á³°´Å¥µã»÷ÖØĞÂ¿ªÊ¼
+        // ç¬‘è„¸æŒ‰é’®ç‚¹å‡»é‡æ–°å¼€å§‹
         if (smileButton != null)
         {
             smileButton.onClick.AddListener(OnSmileClick);
         }
 
-        // ³õÊ¼»¯Ğ¦Á³
+        // åˆå§‹åŒ–ç¬‘è„¸
         UpdateSmileFace(MinesweeperGame.GameState.Normal);
-        UpdateMineCount(game != null ? game.mineCount : 10);  // ÏÔÊ¾³õÊ¼µØÀ×Êı
-        UpdateTime(0);  // ÏÔÊ¾ 000
+        UpdateMineCount(game != null ? game.mineCount : 10);  // æ˜¾ç¤ºåˆå§‹åœ°é›·æ•°
+        UpdateTime(0);  // æ˜¾ç¤º 000
     }
 
     /// <summary>
-    /// ¸üĞÂµØÀ×¼ÆÊıÏÔÊ¾
+    /// æ›´æ–°åœ°é›·è®¡æ•°æ˜¾ç¤º
     /// </summary>
     void UpdateMineCount(int remainingMines)
     {
@@ -55,7 +55,7 @@ public class MinesweeperUI : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸üĞÂ¼ÆÊ±Æ÷ÏÔÊ¾
+    /// æ›´æ–°è®¡æ—¶å™¨æ˜¾ç¤º
     /// </summary>
     void UpdateTime(int seconds)
     {
@@ -63,21 +63,21 @@ public class MinesweeperUI : MonoBehaviour
     }
 
     /// <summary>
-    /// ÉèÖÃÈıÎ»Êı×ÖÏÔÊ¾£¨Í¨ÓÃ·½·¨£©
+    /// è®¾ç½®ä¸‰ä½æ•°å­—æ˜¾ç¤ºï¼ˆé€šç”¨æ–¹æ³•ï¼‰
     /// </summary>
     void SetDigitDisplay(Image digit100, Image digit10, Image digit1, int value)
     {
         if (spriteManager == null) return;
 
-        // ÏŞÖÆ·¶Î§ 0-999
+        // é™åˆ¶èŒƒå›´ 0-999
         value = Mathf.Clamp(value, 0, 999);
 
-        // ·Ö½âÎªÈıÎ»Êı×Ö
+        // åˆ†è§£ä¸ºä¸‰ä½æ•°å­—
         int hundreds = value / 100;
         int tens = (value % 100) / 10;
         int ones = value % 10;
 
-        // ÉèÖÃ¾«Áé
+        // è®¾ç½®ç²¾çµ
         if (digit100 != null)
             digit100.sprite = spriteManager.GetDigitSprite(hundreds);
 
@@ -89,7 +89,7 @@ public class MinesweeperUI : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸üĞÂĞ¦Á³±íÇé
+    /// æ›´æ–°ç¬‘è„¸è¡¨æƒ…
     /// </summary>
     void UpdateSmileFace(MinesweeperGame.GameState state)
     {
@@ -110,7 +110,7 @@ public class MinesweeperUI : MonoBehaviour
     }
 
     /// <summary>
-    /// µã»÷Ğ¦Á³ÖØĞÂ¿ªÊ¼
+    /// ç‚¹å‡»ç¬‘è„¸é‡æ–°å¼€å§‹
     /// </summary>
     void OnSmileClick()
     {
@@ -122,7 +122,7 @@ public class MinesweeperUI : MonoBehaviour
 
     void OnDestroy()
     {
-        // È¡ÏûÊÂ¼ş¼àÌı
+        // å–æ¶ˆäº‹ä»¶ç›‘å¬
         if (game != null)
         {
             game.OnMineCountChanged -= UpdateMineCount;

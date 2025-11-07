@@ -1,20 +1,20 @@
-using System.Linq;
+ï»¿using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// É¨À×ÓÎÏ·Icon½»»¥
-/// Ê×´Î²¥·Å½éÉÜ¶Ô»°ºóÆô¶¯ÓÎÏ·£¬ºóĞøÖ±½ÓÆô¶¯ÓÎÏ·£¨Ö§³Ö¶à´°¿Ú£©
+/// æ‰«é›·æ¸¸æˆIconäº¤äº’
+/// é¦–æ¬¡æ’­æ”¾ä»‹ç»å¯¹è¯åå¯åŠ¨æ¸¸æˆï¼Œåç»­ç›´æ¥å¯åŠ¨æ¸¸æˆï¼ˆæ”¯æŒå¤šçª—å£ï¼‰
 /// </summary>
 public class MinesweeperIconAction : IconAction
 {
-    [Header("=== ¶Ô»°ÅäÖÃ ===")]
+    [Header("=== å¯¹è¯é…ç½® ===")]
     [SerializeField] private string introDialogueBlockId = "011";
 
-    [Header("=== ÓÎÏ·ÅäÖÃ ===")]
+    [Header("=== æ¸¸æˆé…ç½® ===")]
     [SerializeField] private GameObject minesweeperPrefab;
     [SerializeField] private Transform spawnParent;
 
-    [Header("=== µ÷ÊÔ ===")]
+    [Header("=== è°ƒè¯• ===")]
     [SerializeField] private bool hasPlayedIntro = false;
 
     private GameFlowController flowController;
@@ -36,7 +36,7 @@ public class MinesweeperIconAction : IconAction
 
     void Start()
     {
-        // ¼ì²é½éÉÜ¶Ô»°ÊÇ·ñÒÑÍê³É
+        // æ£€æŸ¥ä»‹ç»å¯¹è¯æ˜¯å¦å·²å®Œæˆ
         if (flowController != null)
         {
             hasPlayedIntro = flowController.GetCompletedBlocksSafe().Contains(introDialogueBlockId);
@@ -47,12 +47,12 @@ public class MinesweeperIconAction : IconAction
     {
         if (hasPlayedIntro)
         {
-            // ÒÑ²¥·Å¹ı½éÉÜ£¬Ö±½ÓÆô¶¯ÓÎÏ·
+            // å·²æ’­æ”¾è¿‡ä»‹ç»ï¼Œç›´æ¥å¯åŠ¨æ¸¸æˆ
             LaunchGame();
         }
         else
         {
-            // Ê×´Î½»»¥£¬²¥·Å½éÉÜ¶Ô»°
+            // é¦–æ¬¡äº¤äº’ï¼Œæ’­æ”¾ä»‹ç»å¯¹è¯
             PlayIntroDialogue();
         }
     }
@@ -61,40 +61,40 @@ public class MinesweeperIconAction : IconAction
     {
         if (!base.CanExecute()) return false;
 
-        // ÒÑ²¥·Å½éÉÜ£º¼ì²éÊÇ·ñÓĞÔ¤ÖÆÌå
+        // å·²æ’­æ”¾ä»‹ç»ï¼šæ£€æŸ¥æ˜¯å¦æœ‰é¢„åˆ¶ä½“
         if (hasPlayedIntro)
         {
             return minesweeperPrefab != null;
         }
 
-        // Î´²¥·Å½éÉÜ£º¼ì²éÊÇ·ñÓĞ¶Ô»°¿éÅäÖÃ
+        // æœªæ’­æ”¾ä»‹ç»ï¼šæ£€æŸ¥æ˜¯å¦æœ‰å¯¹è¯å—é…ç½®
         return !string.IsNullOrEmpty(introDialogueBlockId) && flowController != null;
     }
 
     /// <summary>
-    /// ²¥·Å½éÉÜ¶Ô»°
+    /// æ’­æ”¾ä»‹ç»å¯¹è¯
     /// </summary>
     private void PlayIntroDialogue()
     {
-        Debug.Log($"[{actionName}] ²¥·Å½éÉÜ¶Ô»°: {introDialogueBlockId}");
+        Debug.Log($"[{actionName}] æ’­æ”¾ä»‹ç»å¯¹è¯: {introDialogueBlockId}");
         flowController.StartDialogueBlock(introDialogueBlockId);
     }
 
     /// <summary>
-    /// Æô¶¯É¨À×ÓÎÏ·
+    /// å¯åŠ¨æ‰«é›·æ¸¸æˆ
     /// </summary>
     private void LaunchGame()
     {
-        // È·¶¨Éú³É¸¸¼¶
+        // ç¡®å®šç”Ÿæˆçˆ¶çº§
         Transform parent = spawnParent;
 
-        // Éú³ÉÓÎÏ·ÊµÀı£¨Ö§³Ö¶à´°¿Ú£©
+        // ç”Ÿæˆæ¸¸æˆå®ä¾‹ï¼ˆæ”¯æŒå¤šçª—å£ï¼‰
         Instantiate(minesweeperPrefab, parent);
-        Debug.Log($"[{actionName}] Æô¶¯É¨À×ÓÎÏ·");
+        Debug.Log($"[{actionName}] å¯åŠ¨æ‰«é›·æ¸¸æˆ");
     }
 
     /// <summary>
-    /// ¶Ô»°Íê³É»Øµ÷
+    /// å¯¹è¯å®Œæˆå›è°ƒ
     /// </summary>
     private void OnDialogueCompleted(string blockId)
     {
@@ -102,7 +102,7 @@ public class MinesweeperIconAction : IconAction
         {
             hasPlayedIntro = true;
 
-            // ½éÉÜ¶Ô»°Íê³ÉºóÁ¢¼´Æô¶¯ÓÎÏ·
+            // ä»‹ç»å¯¹è¯å®Œæˆåç«‹å³å¯åŠ¨æ¸¸æˆ
             LaunchGame();
         }
     }

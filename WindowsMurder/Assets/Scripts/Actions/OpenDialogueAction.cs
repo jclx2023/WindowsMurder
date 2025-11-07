@@ -1,11 +1,11 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// Ë«»÷´ò¿ª¶Ô»°µÄ½»»¥ĞĞÎª
+/// åŒå‡»æ‰“å¼€å¯¹è¯çš„äº¤äº’è¡Œä¸º
 /// </summary>
 public class OpenDialogueAction : IconAction
 {
-    [Header("¶Ô»°ÉèÖÃ")]
+    [Header("å¯¹è¯è®¾ç½®")]
     public string blockId = "001";
 
     private DialogueManager dialogueManager;

@@ -1,27 +1,27 @@
-using System.Linq;
+ï»¿using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// Stage2ÎÄ¼ş¼ĞÌØÊâ½»»¥¿ØÖÆÆ÷ - ¼àÌıD:\FilesÂ·¾¶´¥·¢¶Ô»°
-/// ¸ù¾İ½âËø×´Ì¬´¥·¢²»Í¬¶Ô»°¿é
+/// Stage2æ–‡ä»¶å¤¹ç‰¹æ®Šäº¤äº’æ§åˆ¶å™¨ - ç›‘å¬D:\Filesè·¯å¾„è§¦å‘å¯¹è¯
+/// æ ¹æ®è§£é”çŠ¶æ€è§¦å‘ä¸åŒå¯¹è¯å—
 /// </summary>
 public class Stage2FilesController : MonoBehaviour
 {
-    [Header("Â·¾¶ÅäÖÃ")]
+    [Header("è·¯å¾„é…ç½®")]
     [SerializeField] private string targetPathId = "DFiles";
 
-    [Header("¶Ô»°¿éÅäÖÃ")]
+    [Header("å¯¹è¯å—é…ç½®")]
     [SerializeField] private string firstDialogueBlockId = "002";
     [SerializeField] private string unlockedDialogueBlockId = "003";
 
-    [Header("ÏßË÷ÅäÖÃ")]
+    [Header("çº¿ç´¢é…ç½®")]
     [SerializeField] private string unlockClueId = "works_folder_unlocked";
 
-    [Header("µ÷ÊÔ")]
+    [Header("è°ƒè¯•")]
     [SerializeField] private bool debugMode = true;
 
     private GameFlowController gameFlowController;
-    private ExplorerManager currentExplorer; // ×·×Ùµ±Ç°ExplorerÊµÀı
+    private ExplorerManager currentExplorer; // è¿½è¸ªå½“å‰Explorerå®ä¾‹
 
     private bool hasTriggeredFirst = false;
     private bool hasTriggeredUnlocked = false;
@@ -29,10 +29,10 @@ public class Stage2FilesController : MonoBehaviour
     void Start()
     {
         gameFlowController = FindObjectOfType<GameFlowController>();
-        // ¶©ÔÄÂ·¾¶±ä»¯ÊÂ¼ş
+        // è®¢é˜…è·¯å¾„å˜åŒ–äº‹ä»¶
         ExplorerManager.OnAnyWindowPathChanged += OnPathChanged;
 
-        // ¶©ÔÄÏßË÷½âËøÊÂ¼ş£¨ĞÂÔö£©
+        // è®¢é˜…çº¿ç´¢è§£é”äº‹ä»¶ï¼ˆæ–°å¢ï¼‰
         GameEvents.OnClueUnlocked += OnClueUnlocked;
     }
 
@@ -43,31 +43,31 @@ public class Stage2FilesController : MonoBehaviour
     }
 
     /// <summary>
-    /// Â·¾¶±ä»¯ÊÂ¼ş´¦Àí
+    /// è·¯å¾„å˜åŒ–äº‹ä»¶å¤„ç†
     /// </summary>
     private void OnPathChanged(ExplorerManager explorerInstance, string newPath)
     {
-        LogDebug($"Â·¾¶±ä»¯: {newPath}");
+        LogDebug($"è·¯å¾„å˜åŒ–: {newPath}");
 
-        // ×·×Ùµ±Ç°µÄExplorerÊµÀı
+        // è¿½è¸ªå½“å‰çš„Explorerå®ä¾‹
         if (newPath == targetPathId)
         {
             currentExplorer = explorerInstance;
-            LogDebug($"½øÈëÄ¿±êÂ·¾¶: {targetPathId}");
+            LogDebug($"è¿›å…¥ç›®æ ‡è·¯å¾„: {targetPathId}");
         }
         else if (currentExplorer == explorerInstance)
         {
-            // Àë¿ªÄ¿±êÂ·¾¶
+            // ç¦»å¼€ç›®æ ‡è·¯å¾„
             currentExplorer = null;
-            LogDebug($"Àë¿ªÄ¿±êÂ·¾¶");
+            LogDebug($"ç¦»å¼€ç›®æ ‡è·¯å¾„");
         }
 
-        // ¼ì²éÊÇ·ñÊÇÄ¿±êÂ·¾¶
+        // æ£€æŸ¥æ˜¯å¦æ˜¯ç›®æ ‡è·¯å¾„
         if (newPath != targetPathId) return;
 
         if (gameFlowController == null) return;
 
-        // ¼ì²é½âËø×´Ì¬²¢´¥·¢¶ÔÓ¦¶Ô»°
+        // æ£€æŸ¥è§£é”çŠ¶æ€å¹¶è§¦å‘å¯¹åº”å¯¹è¯
         bool isUnlocked = gameFlowController.HasClue(unlockClueId);
 
         if (isUnlocked)
@@ -81,74 +81,74 @@ public class Stage2FilesController : MonoBehaviour
     }
 
     /// <summary>
-    /// ÏßË÷½âËøÊÂ¼ş´¦Àí£¨ĞÂÔö£©
+    /// çº¿ç´¢è§£é”äº‹ä»¶å¤„ç†ï¼ˆæ–°å¢ï¼‰
     /// </summary>
     private void OnClueUnlocked(string clueId)
     {
-        // Ö»¹ØĞÄworks½âËøÊÂ¼ş
+        // åªå…³å¿ƒworksè§£é”äº‹ä»¶
         if (clueId != unlockClueId) return;
 
-        LogDebug($"¼ì²âµ½ÏßË÷½âËø: {clueId}");
+        LogDebug($"æ£€æµ‹åˆ°çº¿ç´¢è§£é”: {clueId}");
 
-        // ¼ì²éµ±Ç°ÊÇ·ñÔÚÄ¿±êÂ·¾¶
+        // æ£€æŸ¥å½“å‰æ˜¯å¦åœ¨ç›®æ ‡è·¯å¾„
         if (currentExplorer != null)
         {
-            LogDebug($"µ±Ç°ÔÚÄ¿±êÂ·¾¶£¬³¢ÊÔ´¥·¢½âËøºó¶Ô»°");
+            LogDebug($"å½“å‰åœ¨ç›®æ ‡è·¯å¾„ï¼Œå°è¯•è§¦å‘è§£é”åå¯¹è¯");
             TriggerUnlockedDialogue();
         }
         else
         {
-            LogDebug($"µ±Ç°²»ÔÚÄ¿±êÂ·¾¶£¬µÈ´ı½øÈëÊ±´¥·¢");
+            LogDebug($"å½“å‰ä¸åœ¨ç›®æ ‡è·¯å¾„ï¼Œç­‰å¾…è¿›å…¥æ—¶è§¦å‘");
         }
     }
 
     /// <summary>
-    /// ´¥·¢Ê×´Î¶Ô»°£¨Î´½âËø×´Ì¬£©
+    /// è§¦å‘é¦–æ¬¡å¯¹è¯ï¼ˆæœªè§£é”çŠ¶æ€ï¼‰
     /// </summary>
     private void TriggerFirstDialogue()
     {
         if (hasTriggeredFirst)
         {
-            LogDebug("Ê×´Î¶Ô»°ÒÑ´¥·¢¹ı");
+            LogDebug("é¦–æ¬¡å¯¹è¯å·²è§¦å‘è¿‡");
             return;
         }
 
         if (gameFlowController.GetCompletedBlocksSafe().Contains(firstDialogueBlockId))
         {
-            LogDebug($"¶Ô»°¿é {firstDialogueBlockId} ÒÑÍê³É");
+            LogDebug($"å¯¹è¯å— {firstDialogueBlockId} å·²å®Œæˆ");
             hasTriggeredFirst = true;
             return;
         }
 
-        LogDebug($"´¥·¢Ê×´Î¶Ô»°¿é: {firstDialogueBlockId}");
+        LogDebug($"è§¦å‘é¦–æ¬¡å¯¹è¯å—: {firstDialogueBlockId}");
         gameFlowController.StartDialogueBlock(firstDialogueBlockId);
         hasTriggeredFirst = true;
     }
 
     /// <summary>
-    /// ´¥·¢½âËøºó¶Ô»°
+    /// è§¦å‘è§£é”åå¯¹è¯
     /// </summary>
     private void TriggerUnlockedDialogue()
     {
         if (hasTriggeredUnlocked)
         {
-            LogDebug("½âËøºó¶Ô»°ÒÑ´¥·¢¹ı");
+            LogDebug("è§£é”åå¯¹è¯å·²è§¦å‘è¿‡");
             return;
         }
 
         if (gameFlowController.GetCompletedBlocksSafe().Contains(unlockedDialogueBlockId))
         {
-            LogDebug($"¶Ô»°¿é {unlockedDialogueBlockId} ÒÑÍê³É");
+            LogDebug($"å¯¹è¯å— {unlockedDialogueBlockId} å·²å®Œæˆ");
             hasTriggeredUnlocked = true;
             return;
         }
 
-        LogDebug($"´¥·¢½âËøºó¶Ô»°¿é: {unlockedDialogueBlockId}");
+        LogDebug($"è§¦å‘è§£é”åå¯¹è¯å—: {unlockedDialogueBlockId}");
         gameFlowController.StartDialogueBlock(unlockedDialogueBlockId);
         hasTriggeredUnlocked = true;
     }
 
-    #region µ÷ÊÔ¹¤¾ß
+    #region è°ƒè¯•å·¥å…·
 
     private void LogDebug(string message)
     {

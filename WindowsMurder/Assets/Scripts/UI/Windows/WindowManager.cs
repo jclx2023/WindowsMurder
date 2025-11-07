@@ -1,18 +1,18 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// ´°¿Ú²ã¼¶ĞÅÏ¢
+/// çª—å£å±‚çº§ä¿¡æ¯
 /// </summary>
 [System.Serializable]
 public class WindowHierarchyInfo
 {
-    public Transform parentContainer;    // ¸¸ÈİÆ÷£¨ÈçCanvas/Stage1£©
-    public string containerPath;        // ÍêÕûÂ·¾¶£¨Èç"Canvas/Stage1"£©
-    public int hierarchyLevel;          // ²ã¼¶Éî¶È
-    public string containerTag;         // ÈİÆ÷±êÇ©£¨¿ÉÓÃÓÚ·ÖÀà£©
+    public Transform parentContainer;    // çˆ¶å®¹å™¨ï¼ˆå¦‚Canvas/Stage1ï¼‰
+    public string containerPath;        // å®Œæ•´è·¯å¾„ï¼ˆå¦‚"Canvas/Stage1"ï¼‰
+    public int hierarchyLevel;          // å±‚çº§æ·±åº¦
+    public string containerTag;         // å®¹å™¨æ ‡ç­¾ï¼ˆå¯ç”¨äºåˆ†ç±»ï¼‰
 
     public WindowHierarchyInfo(Transform parent)
     {
@@ -42,32 +42,32 @@ public class WindowHierarchyInfo
 }
 
 /// <summary>
-/// ÔöÇ¿´°¿Ú¹ÜÀíÆ÷ - Ö§³Ö¿ç³¡¾°ºÍ²ã¼¶¹ÜÀí
+/// å¢å¼ºçª—å£ç®¡ç†å™¨ - æ”¯æŒè·¨åœºæ™¯å’Œå±‚çº§ç®¡ç†
 /// </summary>
 public class WindowManager : MonoBehaviour
 {
-    [Header("´°¿ÚÈİÆ÷")]
+    [Header("çª—å£å®¹å™¨")]
     [SerializeField] private Transform windowContainer;
 
-    [Header("´°¿Ú¹ÜÀíÉèÖÃ")]
+    [Header("çª—å£ç®¡ç†è®¾ç½®")]
     [SerializeField] private Vector2 defaultWindowPosition = Vector2.zero;
     [SerializeField] private Vector2 cascadeOffset = new Vector2(30f, -30f);
     [SerializeField] private bool autoArrangeNewWindows = true;
 
-    // ´°¿Ú¹ÜÀí
+    // çª—å£ç®¡ç†
     private List<WindowsWindow> activeWindows = new List<WindowsWindow>();
     private WindowsWindow activeWindow;
 
-    // ³¡¾°ºÍ²ã¼¶¹ÜÀí
+    // åœºæ™¯å’Œå±‚çº§ç®¡ç†
     private string currentSceneName;
     private Dictionary<string, List<WindowsWindow>> sceneWindows = new Dictionary<string, List<WindowsWindow>>();
     private Dictionary<string, List<WindowsWindow>> hierarchyWindows = new Dictionary<string, List<WindowsWindow>>();
     private Dictionary<WindowsWindow, WindowHierarchyInfo> windowHierarchyMap = new Dictionary<WindowsWindow, WindowHierarchyInfo>();
 
-    // µ¥Àı
+    // å•ä¾‹
     public static WindowManager Instance { get; private set; }
 
-    // ÊÂ¼ş
+    // äº‹ä»¶
     public static event System.Action<WindowsWindow, WindowHierarchyInfo> OnWindowRegistered;
     public static event System.Action<WindowsWindow, WindowHierarchyInfo> OnWindowUnregistered;
     public static event System.Action<string> OnSceneWindowsChanged;
@@ -93,85 +93,85 @@ public class WindowManager : MonoBehaviour
 
     void Start()
     {
-        // ¶©ÔÄ´°¿ÚÊÂ¼ş
+        // è®¢é˜…çª—å£äº‹ä»¶
         WindowsWindow.OnWindowClosed += OnWindowClosed;
         WindowsWindow.OnWindowSelected += OnWindowSelected;
 
-        // ¶©ÔÄ³¡¾°ÇĞ»»ÊÂ¼ş
+        // è®¢é˜…åœºæ™¯åˆ‡æ¢äº‹ä»¶
         SceneManager.sceneLoaded += OnSceneLoaded;
         SceneManager.sceneUnloaded += OnSceneUnloaded;
 
-        // ³õÊ¼»¯µ±Ç°³¡¾°µÄ´°¿ÚÁĞ±í
+        // åˆå§‹åŒ–å½“å‰åœºæ™¯çš„çª—å£åˆ—è¡¨
         if (!sceneWindows.ContainsKey(currentSceneName))
         {
             sceneWindows[currentSceneName] = new List<WindowsWindow>();
         }
 
-        Debug.Log($"WindowManager³õÊ¼»¯Íê³É£¬µ±Ç°³¡¾°: {currentSceneName}");
+        Debug.Log($"WindowManageråˆå§‹åŒ–å®Œæˆï¼Œå½“å‰åœºæ™¯: {currentSceneName}");
     }
 
     void OnDestroy()
     {
-        // È¡Ïû¶©ÔÄ
+        // å–æ¶ˆè®¢é˜…
         WindowsWindow.OnWindowClosed -= OnWindowClosed;
         WindowsWindow.OnWindowSelected -= OnWindowSelected;
         SceneManager.sceneLoaded -= OnSceneLoaded;
         SceneManager.sceneUnloaded -= OnSceneUnloaded;
     }
 
-    #region ¹«¹²·½·¨
+    #region å…¬å…±æ–¹æ³•
 
     /// <summary>
-    /// ×¢²á´°¿Úµ½¹ÜÀíÆ÷£¨´°¿Ú×Ô×¢²áÊ¹ÓÃ£©
+    /// æ³¨å†Œçª—å£åˆ°ç®¡ç†å™¨ï¼ˆçª—å£è‡ªæ³¨å†Œä½¿ç”¨ï¼‰
     /// </summary>
     public void RegisterWindow(WindowsWindow window)
     {
         if (window == null)
         {
-            Debug.LogWarning("WindowManager: ³¢ÊÔ×¢²á¿Õ´°¿Ú");
+            Debug.LogWarning("WindowManager: å°è¯•æ³¨å†Œç©ºçª—å£");
             return;
         }
 
-        // »ñÈ¡´°¿Ú²ã¼¶ĞÅÏ¢
+        // è·å–çª—å£å±‚çº§ä¿¡æ¯
         WindowHierarchyInfo hierarchyInfo = new WindowHierarchyInfo(window.transform.parent);
         RegisterWindow(window, hierarchyInfo);
     }
 
     /// <summary>
-    /// ×¢²á´°¿Úµ½¹ÜÀíÆ÷£¨´ø²ã¼¶ĞÅÏ¢£©
+    /// æ³¨å†Œçª—å£åˆ°ç®¡ç†å™¨ï¼ˆå¸¦å±‚çº§ä¿¡æ¯ï¼‰
     /// </summary>
     public void RegisterWindow(WindowsWindow window, WindowHierarchyInfo hierarchyInfo)
     {
         if (window == null)
         {
-            Debug.LogWarning("WindowManager: ³¢ÊÔ×¢²á¿Õ´°¿Ú");
+            Debug.LogWarning("WindowManager: å°è¯•æ³¨å†Œç©ºçª—å£");
             return;
         }
 
         if (activeWindows.Contains(window))
         {
-            Debug.LogWarning($"´°¿ÚÒÑ¾­×¢²á¹ı: {window.Title}");
+            Debug.LogWarning($"çª—å£å·²ç»æ³¨å†Œè¿‡: {window.Title}");
             return;
         }
 
-        // È·¶¨´°¿ÚËùÊô³¡¾°
+        // ç¡®å®šçª—å£æ‰€å±åœºæ™¯
         string windowSceneName = GetWindowSceneName(window);
 
-        // Ìí¼Óµ½×ÜÁĞ±í
+        // æ·»åŠ åˆ°æ€»åˆ—è¡¨
         activeWindows.Add(window);
         activeWindow = window;
 
-        // ±£´æ²ã¼¶ĞÅÏ¢
+        // ä¿å­˜å±‚çº§ä¿¡æ¯
         windowHierarchyMap[window] = hierarchyInfo;
 
-        // Ìí¼Óµ½³¡¾°ÁĞ±í
+        // æ·»åŠ åˆ°åœºæ™¯åˆ—è¡¨
         if (!sceneWindows.ContainsKey(windowSceneName))
         {
             sceneWindows[windowSceneName] = new List<WindowsWindow>();
         }
         sceneWindows[windowSceneName].Add(window);
 
-        // Ìí¼Óµ½²ã¼¶ÁĞ±í
+        // æ·»åŠ åˆ°å±‚çº§åˆ—è¡¨
         string hierarchyKey = hierarchyInfo.containerPath;
         if (!hierarchyWindows.ContainsKey(hierarchyKey))
         {
@@ -179,22 +179,22 @@ public class WindowManager : MonoBehaviour
         }
         hierarchyWindows[hierarchyKey].Add(window);
 
-        // ´¦Àí´°¿ÚÎ»ÖÃ£¨½öÔÚÍ¬Ò»ÈİÆ÷ÄÚ×Ô¶¯ÅÅÁĞ£©
+        // å¤„ç†çª—å£ä½ç½®ï¼ˆä»…åœ¨åŒä¸€å®¹å™¨å†…è‡ªåŠ¨æ’åˆ—ï¼‰
         if (autoArrangeNewWindows && !window.ShouldSkipAutoArrange())
         {
             ArrangeWindowInHierarchy(window, hierarchyKey);
         }
 
-        // Í¨ÖªTaskBarºÍÆäËû¼àÌıÕß
+        // é€šçŸ¥TaskBarå’Œå…¶ä»–ç›‘å¬è€…
         OnWindowRegistered?.Invoke(window, hierarchyInfo);
         OnSceneWindowsChanged?.Invoke(windowSceneName);
         OnHierarchyWindowsChanged?.Invoke(hierarchyKey);
 
-        //Debug.Log($"´°¿ÚÒÑ×¢²á: {window.Title} (³¡¾°: {windowSceneName}, ²ã¼¶: {hierarchyKey})");
+        //Debug.Log($"çª—å£å·²æ³¨å†Œ: {window.Title} (åœºæ™¯: {windowSceneName}, å±‚çº§: {hierarchyKey})");
     }
 
     /// <summary>
-    /// ÊÖ¶¯×¢Ïú´°¿Ú
+    /// æ‰‹åŠ¨æ³¨é”€çª—å£
     /// </summary>
     public void UnregisterWindow(WindowsWindow window)
     {
@@ -204,7 +204,7 @@ public class WindowManager : MonoBehaviour
         WindowHierarchyInfo hierarchyInfo = windowHierarchyMap.ContainsKey(window) ? windowHierarchyMap[window] : null;
         string hierarchyKey = hierarchyInfo?.containerPath ?? "";
 
-        // ´Ó¸÷¸öÁĞ±íÖĞÒÆ³ı
+        // ä»å„ä¸ªåˆ—è¡¨ä¸­ç§»é™¤
         activeWindows.Remove(window);
 
         if (sceneWindows.ContainsKey(windowSceneName))
@@ -222,7 +222,7 @@ public class WindowManager : MonoBehaviour
             windowHierarchyMap.Remove(window);
         }
 
-        // Í¨Öª¼àÌıÕß
+        // é€šçŸ¥ç›‘å¬è€…
         OnWindowUnregistered?.Invoke(window, hierarchyInfo);
         OnSceneWindowsChanged?.Invoke(windowSceneName);
         if (!string.IsNullOrEmpty(hierarchyKey))
@@ -230,7 +230,7 @@ public class WindowManager : MonoBehaviour
             OnHierarchyWindowsChanged?.Invoke(hierarchyKey);
         }
 
-        // Ñ¡ÔñÏÂÒ»¸ö»î¶¯´°¿Ú
+        // é€‰æ‹©ä¸‹ä¸€ä¸ªæ´»åŠ¨çª—å£
         if (activeWindow == window)
         {
             activeWindow = activeWindows.Count > 0 ? activeWindows[activeWindows.Count - 1] : null;
@@ -239,42 +239,42 @@ public class WindowManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¼¤»îÖ¸¶¨´°¿Ú£¨¹©TaskBarµ÷ÓÃ£©
+    /// æ¿€æ´»æŒ‡å®šçª—å£ï¼ˆä¾›TaskBarè°ƒç”¨ï¼‰
     /// </summary>
     public void ActivateWindow(WindowsWindow window)
     {
         if (window == null)
         {
-            Debug.LogWarning("WindowManager: ³¢ÊÔ¼¤»î¿Õ´°¿Ú");
+            Debug.LogWarning("WindowManager: å°è¯•æ¿€æ´»ç©ºçª—å£");
             return;
         }
 
         if (activeWindows.Contains(window))
         {
-            // »ñÈ¡´°¿Ú²ã¼¶ĞÅÏ¢
+            // è·å–çª—å£å±‚çº§ä¿¡æ¯
             if (windowHierarchyMap.ContainsKey(window))
             {
                 WindowHierarchyInfo hierarchyInfo = windowHierarchyMap[window];
 
-                // ÔÚÍ¬Ò»²ã¼¶ÄÚ¼¤»î´°¿Ú
+                // åœ¨åŒä¸€å±‚çº§å†…æ¿€æ´»çª—å£
                 ActivateWindowInHierarchy(window, hierarchyInfo);
             }
             else
             {
-                // ºó±¸·½°¸£ºÖ±½Ó¼¤»î
+                // åå¤‡æ–¹æ¡ˆï¼šç›´æ¥æ¿€æ´»
                 window.BringToFront();
             }
 
-            Debug.Log($"´°¿ÚÒÑ¼¤»î: {window.Title}");
+            Debug.Log($"çª—å£å·²æ¿€æ´»: {window.Title}");
         }
         else
         {
-            Debug.LogWarning($"´°¿ÚÎ´×¢²á£¬ÎŞ·¨¼¤»î: {window.Title}");
+            Debug.LogWarning($"çª—å£æœªæ³¨å†Œï¼Œæ— æ³•æ¿€æ´»: {window.Title}");
         }
     }
 
     /// <summary>
-    /// »ñÈ¡´°¿ÚµÄ²ã¼¶ĞÅÏ¢
+    /// è·å–çª—å£çš„å±‚çº§ä¿¡æ¯
     /// </summary>
     public WindowHierarchyInfo GetWindowHierarchyInfo(WindowsWindow window)
     {
@@ -283,10 +283,10 @@ public class WindowManager : MonoBehaviour
 
     #endregion
 
-    #region Ë½ÓĞ·½·¨
+    #region ç§æœ‰æ–¹æ³•
 
     /// <summary>
-    /// »ñÈ¡´°¿ÚËùÊô³¡¾°Ãû³Æ
+    /// è·å–çª—å£æ‰€å±åœºæ™¯åç§°
     /// </summary>
     private string GetWindowSceneName(WindowsWindow window)
     {
@@ -298,7 +298,7 @@ public class WindowManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ÔÚ²ã¼¶ÄÚÅÅÁĞ´°¿ÚÎ»ÖÃ
+    /// åœ¨å±‚çº§å†…æ’åˆ—çª—å£ä½ç½®
     /// </summary>
     private void ArrangeWindowInHierarchy(WindowsWindow window, string hierarchyKey)
     {
@@ -315,28 +315,28 @@ public class WindowManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ÔÚ²ã¼¶ÄÚ¼¤»î´°¿Ú
+    /// åœ¨å±‚çº§å†…æ¿€æ´»çª—å£
     /// </summary>
     private void ActivateWindowInHierarchy(WindowsWindow window, WindowHierarchyInfo hierarchyInfo)
     {
-        // ÔÚÍ¬Ò»¸¸ÈİÆ÷ÄÚ½«´°¿ÚÖÃ¶¥
+        // åœ¨åŒä¸€çˆ¶å®¹å™¨å†…å°†çª—å£ç½®é¡¶
         window.transform.SetAsLastSibling();
 
-        // µ÷ÓÃ´°¿ÚµÄ¼¤»î·½·¨
+        // è°ƒç”¨çª—å£çš„æ¿€æ´»æ–¹æ³•
         window.BringToFront();
 
-        Debug.Log($"ÔÚ²ã¼¶ '{hierarchyInfo.containerPath}' ÖĞ¼¤»î´°¿Ú: {window.Title}");
+        Debug.Log($"åœ¨å±‚çº§ '{hierarchyInfo.containerPath}' ä¸­æ¿€æ´»çª—å£: {window.Title}");
     }
 
     /// <summary>
-    /// ÇåÀíÎŞĞ§µÄ´°¿ÚÒıÓÃ
+    /// æ¸…ç†æ— æ•ˆçš„çª—å£å¼•ç”¨
     /// </summary>
     private void CleanupInvalidWindows()
     {
-        // ÇåÀí×ÜÁĞ±í
+        // æ¸…ç†æ€»åˆ—è¡¨
         activeWindows.RemoveAll(w => w == null);
 
-        // ÇåÀí³¡¾°ÁĞ±í
+        // æ¸…ç†åœºæ™¯åˆ—è¡¨
         var scenesToRemove = new List<string>();
         foreach (var kvp in sceneWindows)
         {
@@ -351,7 +351,7 @@ public class WindowManager : MonoBehaviour
             sceneWindows.Remove(scene);
         }
 
-        // ÇåÀí²ã¼¶ÁĞ±í
+        // æ¸…ç†å±‚çº§åˆ—è¡¨
         var hierarchiesToRemove = new List<string>();
         foreach (var kvp in hierarchyWindows)
         {
@@ -366,7 +366,7 @@ public class WindowManager : MonoBehaviour
             hierarchyWindows.Remove(hierarchy);
         }
 
-        // ÇåÀí²ã¼¶Ó³Éä
+        // æ¸…ç†å±‚çº§æ˜ å°„
         var keysToRemove = new List<WindowsWindow>();
         foreach (var kvp in windowHierarchyMap)
         {
@@ -380,7 +380,7 @@ public class WindowManager : MonoBehaviour
             windowHierarchyMap.Remove(key);
         }
 
-        // ¸üĞÂ»î¶¯´°¿Ú
+        // æ›´æ–°æ´»åŠ¨çª—å£
         if (activeWindow == null && activeWindows.Count > 0)
         {
             activeWindow = activeWindows[activeWindows.Count - 1];
@@ -389,7 +389,7 @@ public class WindowManager : MonoBehaviour
 
     #endregion
 
-    #region ÊÂ¼ş´¦Àí
+    #region äº‹ä»¶å¤„ç†
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -402,7 +402,7 @@ public class WindowManager : MonoBehaviour
         }
 
         StartCoroutine(DelayedCleanup());
-        Debug.Log($"³¡¾°¼ÓÔØÍê³É: {sceneName}");
+        Debug.Log($"åœºæ™¯åŠ è½½å®Œæˆ: {sceneName}");
     }
 
     private void OnSceneUnloaded(Scene scene)
@@ -422,7 +422,7 @@ public class WindowManager : MonoBehaviour
             sceneWindows.Remove(sceneName);
         }
 
-        Debug.Log($"³¡¾°Ğ¶ÔØÍê³É: {sceneName}£¬ÒÑÇåÀíÏà¹Ø´°¿Ú");
+        Debug.Log($"åœºæ™¯å¸è½½å®Œæˆ: {sceneName}ï¼Œå·²æ¸…ç†ç›¸å…³çª—å£");
     }
 
     private IEnumerator DelayedCleanup()

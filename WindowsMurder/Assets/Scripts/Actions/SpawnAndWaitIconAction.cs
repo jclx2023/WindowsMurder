@@ -1,30 +1,30 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// ¼ò»¯µÄIcon½»»¥ - ÊµÀı»¯prefab²¢¼àÌıµ¥¸öÏßË÷
-/// ÏßË÷½âËøºó×Ô¶¯´¥·¢¶Ô»°¿é
+/// ç®€åŒ–çš„Iconäº¤äº’ - å®ä¾‹åŒ–prefabå¹¶ç›‘å¬å•ä¸ªçº¿ç´¢
+/// çº¿ç´¢è§£é”åè‡ªåŠ¨è§¦å‘å¯¹è¯å—
 /// </summary>
 public class SpawnAndWaitIconAction : IconAction
 {
-    [Header("=== PrefabÅäÖÃ ===")]
+    [Header("=== Prefabé…ç½® ===")]
     public GameObject prefabToSpawn;
     public Vector2 spawnPosition = Vector2.zero;
     public Canvas targetCanvas;
 
-    [Header("=== ÏßË÷Óë¶Ô»°ÅäÖÃ ===")]
-    [Tooltip("Òª¼àÌıµÄÏßË÷ID")]
+    [Header("=== çº¿ç´¢ä¸å¯¹è¯é…ç½® ===")]
+    [Tooltip("è¦ç›‘å¬çš„çº¿ç´¢ID")]
     public string targetClueId = "clue_example";
 
-    [Tooltip("ÏßË÷½âËøºó´¥·¢µÄ¶Ô»°¿éID")]
+    [Tooltip("çº¿ç´¢è§£é”åè§¦å‘çš„å¯¹è¯å—ID")]
     public string dialogueBlockId = "602";
 
-    [Header("=== ¹¦ÄÜÑ¡Ïî ===")]
-    public bool allowMultipleSpawn = false; // ÊÇ·ñÔÊĞíÖØ¸´Éú³É
+    [Header("=== åŠŸèƒ½é€‰é¡¹ ===")]
+    public bool allowMultipleSpawn = false; // æ˜¯å¦å…è®¸é‡å¤ç”Ÿæˆ
     public bool enableDebugLog = true;
 
-    [Header("=== ×´Ì¬ÏÔÊ¾£¨ÔËĞĞÊ±Ö»¶Á£©===")]
+    [Header("=== çŠ¶æ€æ˜¾ç¤ºï¼ˆè¿è¡Œæ—¶åªè¯»ï¼‰===")]
     [SerializeField] private bool hasSpawned = false;
     [SerializeField] private bool isWaitingForClue = false;
     [SerializeField] private bool hasTriggeredDialogue = false;
@@ -33,7 +33,7 @@ public class SpawnAndWaitIconAction : IconAction
     private Canvas canvas;
     private GameObject spawnedObject;
 
-    #region UnityÉúÃüÖÜÆÚ
+    #region Unityç”Ÿå‘½å‘¨æœŸ
 
     void Start()
     {
@@ -45,32 +45,32 @@ public class SpawnAndWaitIconAction : IconAction
     void OnEnable()
     {
         GameEvents.OnClueUnlocked += HandleClueUnlocked;
-        DebugLog("ÒÑ¶©ÔÄÏßË÷½âËøÊÂ¼ş");
+        DebugLog("å·²è®¢é˜…çº¿ç´¢è§£é”äº‹ä»¶");
     }
 
     void OnDisable()
     {
         GameEvents.OnClueUnlocked -= HandleClueUnlocked;
-        DebugLog("ÒÑÈ¡Ïû¶©ÔÄÏßË÷½âËøÊÂ¼ş");
+        DebugLog("å·²å–æ¶ˆè®¢é˜…çº¿ç´¢è§£é”äº‹ä»¶");
     }
 
     #endregion
 
-    #region Canvas²éÕÒ
+    #region CanvasæŸ¥æ‰¾
 
     private void FindTargetCanvas()
     {
         if (targetCanvas != null)
         {
             canvas = targetCanvas;
-            DebugLog($"Ê¹ÓÃÖ¸¶¨Canvas: {canvas.name}");
+            DebugLog($"ä½¿ç”¨æŒ‡å®šCanvas: {canvas.name}");
             return;
         }
 
         canvas = GetComponentInParent<Canvas>();
         if (canvas != null)
         {
-            DebugLog($"´Ó¸¸¼¶ÕÒµ½Canvas: {canvas.name}");
+            DebugLog($"ä»çˆ¶çº§æ‰¾åˆ°Canvas: {canvas.name}");
             return;
         }
 
@@ -80,54 +80,54 @@ public class SpawnAndWaitIconAction : IconAction
             canvas = canvasObj.GetComponent<Canvas>();
             if (canvas != null)
             {
-                DebugLog($"Í¨¹ıTagÕÒµ½Canvas: {canvas.name}");
+                DebugLog($"é€šè¿‡Tagæ‰¾åˆ°Canvas: {canvas.name}");
                 return;
             }
         }
 
-        DebugLog("Î´ÕÒµ½Canvas£¬½«Ê¹ÓÃ³¡¾°ÖĞµÄµÚÒ»¸öCanvas");
+        DebugLog("æœªæ‰¾åˆ°Canvasï¼Œå°†ä½¿ç”¨åœºæ™¯ä¸­çš„ç¬¬ä¸€ä¸ªCanvas");
         canvas = FindObjectOfType<Canvas>();
     }
 
     #endregion
 
-    #region ³õÊ¼×´Ì¬¼ì²é
+    #region åˆå§‹çŠ¶æ€æ£€æŸ¥
 
     private void CheckInitialState()
     {
 
-        // ¼ì²éÏßË÷ÊÇ·ñÒÑ¾­½âËø
+        // æ£€æŸ¥çº¿ç´¢æ˜¯å¦å·²ç»è§£é”
         if (gameFlowController.HasClue(targetClueId))
         {
-            DebugLog($"³õÊ¼»¯Ê±·¢ÏÖÏßË÷ [{targetClueId}] ÒÑ½âËø");
+            DebugLog($"åˆå§‹åŒ–æ—¶å‘ç°çº¿ç´¢ [{targetClueId}] å·²è§£é”");
             hasTriggeredDialogue = true;
 
-            // ¼ì²é¶Ô»°ÊÇ·ñÒÑÍê³É
+            // æ£€æŸ¥å¯¹è¯æ˜¯å¦å·²å®Œæˆ
             var completedBlocks = gameFlowController.GetCompletedBlocksSafe();
             if (!completedBlocks.Contains(dialogueBlockId))
             {
-                DebugLog("¶Ô»°Î´Íê³É£¬×¼±¸´¥·¢¶Ô»°");
+                DebugLog("å¯¹è¯æœªå®Œæˆï¼Œå‡†å¤‡è§¦å‘å¯¹è¯");
                 StartCoroutine(DelayedTriggerDialogue());
             }
             else
             {
-                DebugLog("¶Ô»°ÒÑÍê³É");
+                DebugLog("å¯¹è¯å·²å®Œæˆ");
             }
         }
     }
 
     #endregion
 
-    #region Ë«»÷½»»¥
+    #region åŒå‡»äº¤äº’
 
     public override void Execute()
     {
-        DebugLog($"Execute() ±»µ÷ÓÃ");
+        DebugLog($"Execute() è¢«è°ƒç”¨");
 
-        // ¼ì²éÊÇ·ñÒÑ¾­Éú³É¹ı
+        // æ£€æŸ¥æ˜¯å¦å·²ç»ç”Ÿæˆè¿‡
         if (hasSpawned && !allowMultipleSpawn)
         {
-            DebugLog("ÒÑ¾­Éú³É¹ıprefab£¬²»ÔÊĞíÖØ¸´Éú³É");
+            DebugLog("å·²ç»ç”Ÿæˆè¿‡prefabï¼Œä¸å…è®¸é‡å¤ç”Ÿæˆ");
             return;
         }
 
@@ -146,7 +146,7 @@ public class SpawnAndWaitIconAction : IconAction
 
     #endregion
 
-    #region PrefabÉú³É
+    #region Prefabç”Ÿæˆ
 
     private void SpawnPrefab()
     {
@@ -155,65 +155,65 @@ public class SpawnAndWaitIconAction : IconAction
             canvas = FindObjectOfType<Canvas>();
             if (canvas == null)
             {
-                DebugLog("´íÎó£ºÎ´ÕÒµ½Canvas");
+                DebugLog("é”™è¯¯ï¼šæœªæ‰¾åˆ°Canvas");
                 return;
             }
         }
 
-        // ÊµÀı»¯prefab
+        // å®ä¾‹åŒ–prefab
         spawnedObject = Instantiate(prefabToSpawn, canvas.transform);
         spawnedObject.name = $"Spawned";
 
-        // ÉèÖÃÎ»ÖÃ
+        // è®¾ç½®ä½ç½®
         RectTransform rectTransform = spawnedObject.GetComponent<RectTransform>();
         if (rectTransform != null)
         {
             rectTransform.anchoredPosition = spawnPosition;
-            DebugLog($"ÒÑÉú³Éprefabµ½Î»ÖÃ: {spawnPosition}");
+            DebugLog($"å·²ç”Ÿæˆprefabåˆ°ä½ç½®: {spawnPosition}");
         }
         else
         {
             spawnedObject.transform.position = spawnPosition;
-            DebugLog($"ÒÑÉú³Éprefabµ½ÊÀ½ç×ø±ê: {spawnPosition}");
+            DebugLog($"å·²ç”Ÿæˆprefabåˆ°ä¸–ç•Œåæ ‡: {spawnPosition}");
         }
 
         hasSpawned = true;
         isWaitingForClue = true;
 
-        DebugLog($"µÈ´ıÏßË÷ [{targetClueId}] ½âËø");
+        DebugLog($"ç­‰å¾…çº¿ç´¢ [{targetClueId}] è§£é”");
     }
 
     #endregion
 
-    #region ÏßË÷¼àÌı
+    #region çº¿ç´¢ç›‘å¬
 
     private void HandleClueUnlocked(string unlockedClueId)
     {
-        // ¼ì²éÊÇ·ñÊÇÎÒÃÇÒª¼àÌıµÄÏßË÷
+        // æ£€æŸ¥æ˜¯å¦æ˜¯æˆ‘ä»¬è¦ç›‘å¬çš„çº¿ç´¢
         if (unlockedClueId != targetClueId)
         {
             return;
         }
 
-        // ¼ì²éÊÇ·ñÒÑ¾­´¥·¢¹ı¶Ô»°
+        // æ£€æŸ¥æ˜¯å¦å·²ç»è§¦å‘è¿‡å¯¹è¯
         if (hasTriggeredDialogue)
         {
-            DebugLog($"ÏßË÷ [{unlockedClueId}] ÒÑ´¦Àí¹ı£¬ºöÂÔ");
+            DebugLog($"çº¿ç´¢ [{unlockedClueId}] å·²å¤„ç†è¿‡ï¼Œå¿½ç•¥");
             return;
         }
 
-        DebugLog($"¼ì²âµ½Ä¿±êÏßË÷½âËø: {unlockedClueId}");
+        DebugLog($"æ£€æµ‹åˆ°ç›®æ ‡çº¿ç´¢è§£é”: {unlockedClueId}");
 
         isWaitingForClue = false;
         hasTriggeredDialogue = true;
 
-        // ÑÓ³Ù´¥·¢¶Ô»°£¬±ÜÃâÓëÆäËûÏµÍ³³åÍ»
+        // å»¶è¿Ÿè§¦å‘å¯¹è¯ï¼Œé¿å…ä¸å…¶ä»–ç³»ç»Ÿå†²çª
         StartCoroutine(DelayedTriggerDialogue());
     }
 
     private IEnumerator DelayedTriggerDialogue()
     {
-        // µÈ´ı¼¸Ö¡£¬È·±£ÆäËûÏµÍ³´¦ÀíÍê±Ï
+        // ç­‰å¾…å‡ å¸§ï¼Œç¡®ä¿å…¶ä»–ç³»ç»Ÿå¤„ç†å®Œæ¯•
         yield return null;
         yield return null;
         yield return null;
@@ -225,20 +225,20 @@ public class SpawnAndWaitIconAction : IconAction
     {
         if (gameFlowController == null)
         {
-            DebugLog("´íÎó£ºÎ´ÕÒµ½GameFlowController");
+            DebugLog("é”™è¯¯ï¼šæœªæ‰¾åˆ°GameFlowController");
             return;
         }
 
-        DebugLog($"´¥·¢¶Ô»°¿é: {dialogueBlockId}");
+        DebugLog($"è§¦å‘å¯¹è¯å—: {dialogueBlockId}");
         gameFlowController.StartDialogueBlock(dialogueBlockId);
     }
 
     #endregion
 
-    #region ¹«¹²·½·¨
+    #region å…¬å…±æ–¹æ³•
 
     /// <summary>
-    /// »ñÈ¡Éú³ÉµÄ¶ÔÏóÒıÓÃ
+    /// è·å–ç”Ÿæˆçš„å¯¹è±¡å¼•ç”¨
     /// </summary>
     public GameObject GetSpawnedObject()
     {
@@ -246,7 +246,7 @@ public class SpawnAndWaitIconAction : IconAction
     }
 
     /// <summary>
-    /// Ïú»ÙÉú³ÉµÄ¶ÔÏó
+    /// é”€æ¯ç”Ÿæˆçš„å¯¹è±¡
     /// </summary>
     public void DestroySpawnedObject()
     {
@@ -255,13 +255,13 @@ public class SpawnAndWaitIconAction : IconAction
             Destroy(spawnedObject);
             spawnedObject = null;
             hasSpawned = false;
-            DebugLog("ÒÑÏú»ÙÉú³ÉµÄ¶ÔÏó");
+            DebugLog("å·²é”€æ¯ç”Ÿæˆçš„å¯¹è±¡");
         }
     }
 
     #endregion
 
-    #region µ÷ÊÔ¹¤¾ß
+    #region è°ƒè¯•å·¥å…·
 
     private void DebugLog(string message)
     {

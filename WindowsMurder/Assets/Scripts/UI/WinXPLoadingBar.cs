@@ -1,42 +1,42 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Windows XP·ç¸ñµÄ¶ÁÌõ¶¯»­¿ØÖÆÆ÷
-/// Ö§³ÖÎŞÏŞÑ­»·²¥·ÅºÍÖ¸¶¨´ÎÊı²¥·Å
+/// Windows XPé£æ ¼çš„è¯»æ¡åŠ¨ç”»æ§åˆ¶å™¨
+/// æ”¯æŒæ— é™å¾ªç¯æ’­æ”¾å’ŒæŒ‡å®šæ¬¡æ•°æ’­æ”¾
 /// </summary>
 public class WinXPLoadingBar : MonoBehaviour
 {
-    #region ÅäÖÃ²ÎÊı
+    #region é…ç½®å‚æ•°
 
-    [Header("=== UnitÉèÖÃ ===")]
-    [Tooltip("UnitÔ¤ÖÆÌå")]
+    [Header("=== Unitè®¾ç½® ===")]
+    [Tooltip("Unité¢„åˆ¶ä½“")]
     public GameObject unitPrefab;
 
-    [Tooltip("UnitÈİÆ÷£¨¹ÒÔØHorizontal LayoutµÄ¸¸ÎïÌå£©")]
+    [Tooltip("Unitå®¹å™¨ï¼ˆæŒ‚è½½Horizontal Layoutçš„çˆ¶ç‰©ä½“ï¼‰")]
     public Transform unitContainer;
 
-    [Tooltip("×î´óUnitÊıÁ¿")]
+    [Tooltip("æœ€å¤§Unitæ•°é‡")]
     public int maxUnits = 10;
 
-    [Header("=== ¶¯»­²ÎÊı ===")]
-    [Tooltip("Ã¿¸öUnitÉú³ÉµÄ¼ä¸ôÊ±¼ä£¨Ãë£©")]
+    [Header("=== åŠ¨ç”»å‚æ•° ===")]
+    [Tooltip("æ¯ä¸ªUnitç”Ÿæˆçš„é—´éš”æ—¶é—´ï¼ˆç§’ï¼‰")]
     public float unitSpawnInterval = 0.2f;
 
-    [Tooltip("Ò»´ÎÑ­»·Íê³Éºó£¬Çå¿Õ²¢ÖØĞÂ¿ªÊ¼µÄÑÓ³ÙÊ±¼ä")]
+    [Tooltip("ä¸€æ¬¡å¾ªç¯å®Œæˆåï¼Œæ¸…ç©ºå¹¶é‡æ–°å¼€å§‹çš„å»¶è¿Ÿæ—¶é—´")]
     public float cycleDelay = 0.3f;
 
-    [Header("=== ×Ô¶¯²¥·Å ===")]
-    [Tooltip("Æô¶¯Ê±ÊÇ·ñ×Ô¶¯¿ªÊ¼ÎŞÏŞÑ­»·²¥·Å")]
+    [Header("=== è‡ªåŠ¨æ’­æ”¾ ===")]
+    [Tooltip("å¯åŠ¨æ—¶æ˜¯å¦è‡ªåŠ¨å¼€å§‹æ— é™å¾ªç¯æ’­æ”¾")]
     public bool autoStart = true;
 
-    [Header("=== µ÷ÊÔ ===")]
+    [Header("=== è°ƒè¯• ===")]
     [SerializeField] private bool enableDebugLog = false;
 
     #endregion
 
-    #region Ë½ÓĞ±äÁ¿
+    #region ç§æœ‰å˜é‡
 
     private List<GameObject> currentUnits = new List<GameObject>();
     private Coroutine loadingCoroutine;
@@ -44,7 +44,7 @@ public class WinXPLoadingBar : MonoBehaviour
 
     #endregion
 
-    #region UnityÉúÃüÖÜÆÚ
+    #region Unityç”Ÿå‘½å‘¨æœŸ
 
     void Start()
     {
@@ -62,16 +62,16 @@ public class WinXPLoadingBar : MonoBehaviour
 
     #endregion
 
-    #region ¹«¹²½Ó¿Ú
+    #region å…¬å…±æ¥å£
 
     /// <summary>
-    /// ¿ªÊ¼ÎŞÏŞÑ­»·²¥·Å
+    /// å¼€å§‹æ— é™å¾ªç¯æ’­æ”¾
     /// </summary>
     public void StartLoading()
     {
         if (isLoading)
         {
-            Log("ÒÑÔÚ²¥·ÅÖĞ£¬Ìø¹ıÖØ¸´Æô¶¯");
+            Log("å·²åœ¨æ’­æ”¾ä¸­ï¼Œè·³è¿‡é‡å¤å¯åŠ¨");
             return;
         }
 
@@ -83,11 +83,11 @@ public class WinXPLoadingBar : MonoBehaviour
         }
 
         loadingCoroutine = StartCoroutine(InfiniteLoadingCoroutine());
-        Log("¿ªÊ¼ÎŞÏŞÑ­»·²¥·Å");
+        Log("å¼€å§‹æ— é™å¾ªç¯æ’­æ”¾");
     }
 
     /// <summary>
-    /// Í£Ö¹²¥·Å
+    /// åœæ­¢æ’­æ”¾
     /// </summary>
     public void StopLoading()
     {
@@ -105,37 +105,37 @@ public class WinXPLoadingBar : MonoBehaviour
         }
 
         ClearAllUnits();
-        Log("Í£Ö¹²¥·Å");
+        Log("åœæ­¢æ’­æ”¾");
     }
 
     /// <summary>
-    /// ²¥·ÅÖ¸¶¨´ÎÊıµÄÑ­»·£¨ÓÃÓÚ½á¾ÖÑİ³öµÈ³¡¾°£©
+    /// æ’­æ”¾æŒ‡å®šæ¬¡æ•°çš„å¾ªç¯ï¼ˆç”¨äºç»“å±€æ¼”å‡ºç­‰åœºæ™¯ï¼‰
     /// </summary>
     public IEnumerator PlayCycles(int cycleCount)
     {
         if (isLoading)
         {
-            Log("µ±Ç°ÕıÔÚ²¥·Å£¬ÏÈÍ£Ö¹");
+            Log("å½“å‰æ­£åœ¨æ’­æ”¾ï¼Œå…ˆåœæ­¢");
             StopLoading();
         }
 
         if (cycleCount <= 0)
         {
-            LogWarning($"Ñ­»·´ÎÊı±ØĞë´óÓÚ0£¬µ±Ç°Öµ: {cycleCount}");
+            LogWarning($"å¾ªç¯æ¬¡æ•°å¿…é¡»å¤§äº0ï¼Œå½“å‰å€¼: {cycleCount}");
             yield break;
         }
 
         isLoading = true;
-        Log($"¿ªÊ¼²¥·Å {cycleCount} ´ÎÑ­»·");
+        Log($"å¼€å§‹æ’­æ”¾ {cycleCount} æ¬¡å¾ªç¯");
 
         for (int cycle = 0; cycle < cycleCount; cycle++)
         {
-            Log($"Ñ­»· {cycle + 1}/{cycleCount}");
+            Log($"å¾ªç¯ {cycle + 1}/{cycleCount}");
 
-            // ²¥·ÅÒ»´ÎÍêÕûÑ­»·
+            // æ’­æ”¾ä¸€æ¬¡å®Œæ•´å¾ªç¯
             yield return PlaySingleCycle();
 
-            // ×îºóÒ»´ÎÑ­»·²»ĞèÒªÑÓ³Ù
+            // æœ€åä¸€æ¬¡å¾ªç¯ä¸éœ€è¦å»¶è¿Ÿ
             if (cycle < cycleCount - 1)
             {
                 yield return new WaitForSeconds(cycleDelay);
@@ -144,54 +144,54 @@ public class WinXPLoadingBar : MonoBehaviour
 
         isLoading = false;
         ClearAllUnits();
-        Log($"Íê³É {cycleCount} ´ÎÑ­»·²¥·Å");
+        Log($"å®Œæˆ {cycleCount} æ¬¡å¾ªç¯æ’­æ”¾");
     }
 
     #endregion
 
-    #region ºËĞÄÂß¼­
+    #region æ ¸å¿ƒé€»è¾‘
 
     /// <summary>
-    /// ÎŞÏŞÑ­»·²¥·ÅĞ­³Ì
+    /// æ— é™å¾ªç¯æ’­æ”¾åç¨‹
     /// </summary>
     private IEnumerator InfiniteLoadingCoroutine()
     {
         while (isLoading)
         {
-            // ²¥·ÅÒ»´ÎÍêÕûÑ­»·
+            // æ’­æ”¾ä¸€æ¬¡å®Œæ•´å¾ªç¯
             yield return PlaySingleCycle();
 
-            // µÈ´ıÑ­»·ÑÓ³Ù
+            // ç­‰å¾…å¾ªç¯å»¶è¿Ÿ
             yield return new WaitForSeconds(cycleDelay);
         }
     }
 
     /// <summary>
-    /// ²¥·Åµ¥´ÎÑ­»·
+    /// æ’­æ”¾å•æ¬¡å¾ªç¯
     /// </summary>
     private IEnumerator PlaySingleCycle()
     {
-        // Éú³ÉËùÓĞUnits
+        // ç”Ÿæˆæ‰€æœ‰Units
         for (int i = 0; i < maxUnits; i++)
         {
-            if (!isLoading) yield break; // Èç¹û±»Í£Ö¹£¬Á¢¼´ÍË³ö
+            if (!isLoading) yield break; // å¦‚æœè¢«åœæ­¢ï¼Œç«‹å³é€€å‡º
 
             SpawnUnit();
             yield return new WaitForSeconds(unitSpawnInterval);
         }
 
-        // Çå¿ÕËùÓĞUnits
+        // æ¸…ç©ºæ‰€æœ‰Units
         ClearAllUnits();
     }
 
     /// <summary>
-    /// Éú³ÉÒ»¸öUnit
+    /// ç”Ÿæˆä¸€ä¸ªUnit
     /// </summary>
     private void SpawnUnit()
     {
         if (unitPrefab == null || unitContainer == null)
         {
-            LogWarning("unitPrefab»òunitContainerÎ´ÉèÖÃ");
+            LogWarning("unitPrefabæˆ–unitContaineræœªè®¾ç½®");
             return;
         }
 
@@ -200,7 +200,7 @@ public class WinXPLoadingBar : MonoBehaviour
     }
 
     /// <summary>
-    /// Çå¿ÕËùÓĞÒÑÉú³ÉµÄUnits
+    /// æ¸…ç©ºæ‰€æœ‰å·²ç”Ÿæˆçš„Units
     /// </summary>
     private void ClearAllUnits()
     {
@@ -217,7 +217,7 @@ public class WinXPLoadingBar : MonoBehaviour
 
     #endregion
 
-    #region ÈÕÖ¾¹¤¾ß
+    #region æ—¥å¿—å·¥å…·
 
     private void Log(string message)
     {

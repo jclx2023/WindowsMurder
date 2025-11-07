@@ -1,36 +1,36 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using TMPro;
 
 /// <summary>
-/// ³õÊ¼»¯Î±ÔìµÄ bat ÎÄ¼ş´°¿ÚÄÚÈİ
+/// åˆå§‹åŒ–ä¼ªé€ çš„ bat æ–‡ä»¶çª—å£å†…å®¹
 /// </summary>
 public class BatWindowInitializer : MonoBehaviour
 {
     [Header("Reference")]
-    public TMP_InputField inputField; // Ö÷ÎÄ±¾¿ò
+    public TMP_InputField inputField; // ä¸»æ–‡æœ¬æ¡†
 
     private void Start()
     {
 
-        // ÉèÖÃÎ±ÔìµÄÅú´¦ÀíÄÚÈİ£¨´¿ĞğÊÂÎ±´úÂë£©
+        // è®¾ç½®ä¼ªé€ çš„æ‰¹å¤„ç†å†…å®¹ï¼ˆçº¯å™äº‹ä¼ªä»£ç ï¼‰
         inputField.text = GetFakeBatContent();
     }
 
     /// <summary>
-    /// ·µ»ØÎ±ÔìµÄ BAT ÎÄ¼şÎ±´úÂë£¨´¿ĞğÊÂ¡¢²»¿ÉÖ´ĞĞ£©
+    /// è¿”å›ä¼ªé€ çš„ BAT æ–‡ä»¶ä¼ªä»£ç ï¼ˆçº¯å™äº‹ã€ä¸å¯æ‰§è¡Œï¼‰
     /// </summary>
     private string GetFakeBatContent()
     {
         return
 @"@echo off
 REM ============================================
-REM  WindowsMurder ¡ª 'Merge & Seal' utility (F I C T I O N A L)
+REM  WindowsMurder â€” 'Merge & Seal' utility (F I C T I O N A L)
 REM  NOTE: THIS FILE IS PURELY NARRATIVE PSEUDOCODE.
 REM  IT IS NOT REAL, IT WILL NOT RUN, AND MUST NOT BE USED FOR REAL SYSTEM ACTIONS.
 REM ============================================
 
 :: ---------- meta ----------
-echo [*] Merge&Seal v1.4 ¡ª narrative build
+echo [*] Merge&Seal v1.4 â€” narrative build
 echo [*] Mode: pack -> shell -> deploy (SIMULATED)
 echo.
 

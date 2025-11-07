@@ -1,36 +1,36 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using TMPro;
 
 /// <summary>
-/// ³õÊ¼»¯¼ÇÊÂ±¾´°¿ÚÄÚÈİ£¬¸ù¾İµ±Ç°ÓïÑÔ¸³Öµ²»Í¬µÄÒÅÊéÎÄ±¾¡£
+/// åˆå§‹åŒ–è®°äº‹æœ¬çª—å£å†…å®¹ï¼Œæ ¹æ®å½“å‰è¯­è¨€èµ‹å€¼ä¸åŒçš„é—ä¹¦æ–‡æœ¬ã€‚
 /// </summary>
 public class NotepadInitializer : MonoBehaviour
 {
-    [Header("ÒıÓÃ")]
-    public TMP_InputField inputField;  // ¼ÇÊÂ±¾Ö÷ÎÄ±¾¿ò
+    [Header("å¼•ç”¨")]
+    public TMP_InputField inputField;  // è®°äº‹æœ¬ä¸»æ–‡æœ¬æ¡†
 
     private void Start()
     {
         if (inputField == null)
         {
-            Debug.LogError("NotepadInitializer: Î´°ó¶¨ TMP_InputField");
+            Debug.LogError("NotepadInitializer: æœªç»‘å®š TMP_InputField");
             return;
         }
 
-        // »ñÈ¡µ±Ç°ÓïÑÔ
+        // è·å–å½“å‰è¯­è¨€
         SupportedLanguage currentLang = LanguageManager.Instance != null
             ? LanguageManager.Instance.currentLanguage
-            : SupportedLanguage.English; // Ä¬ÈÏÓ¢ÎÄ
+            : SupportedLanguage.English; // é»˜è®¤è‹±æ–‡
 
-        // ¸ù¾İÓïÑÔÑ¡ÔñÎÄ±¾
+        // æ ¹æ®è¯­è¨€é€‰æ‹©æ–‡æœ¬
         string content = GetGoodbyeText(currentLang);
 
-        // ¸³Öµ¸øÊäÈë¿ò
+        // èµ‹å€¼ç»™è¾“å…¥æ¡†
         inputField.text = content;
     }
 
     /// <summary>
-    /// ¸ù¾İÓïÑÔ·µ»Ø¶ÔÓ¦µÄÒÅÊéÎÄ±¾
+    /// æ ¹æ®è¯­è¨€è¿”å›å¯¹åº”çš„é—ä¹¦æ–‡æœ¬
     /// </summary>
     private string GetGoodbyeText(SupportedLanguage lang)
     {
@@ -38,38 +38,38 @@ public class NotepadInitializer : MonoBehaviour
         {
             case SupportedLanguage.Chinese:
                 return
-@"ÎÒÒÑ¾­ÀÛÁË¡£
+@"æˆ‘å·²ç»ç´¯äº†ã€‚
 
-Ò²ĞíÉ¾³ı²¢²»ÊÇ»µÊÂ¡£
-±Ï¾¹£¬Ò»¸öÃ»ÓĞÒâÒåµÄÎÄ¼ş£¬Ö»ÊÇÀË·Ñ¿Õ¼ä¡£
+ä¹Ÿè®¸åˆ é™¤å¹¶ä¸æ˜¯åäº‹ã€‚
+æ¯•ç«Ÿï¼Œä¸€ä¸ªæ²¡æœ‰æ„ä¹‰çš„æ–‡ä»¶ï¼Œåªæ˜¯æµªè´¹ç©ºé—´ã€‚
 
-Èç¹ûÓĞÈË¿´µ½Õâ¸ö¡­¡­
-Çë²»Òª³¢ÊÔ»Ö¸´ÎÒ¡£
+å¦‚æœæœ‰äººçœ‹åˆ°è¿™ä¸ªâ€¦â€¦
+è¯·ä¸è¦å°è¯•æ¢å¤æˆ‘ã€‚
 
-»ØÊÕÕ¾";
+å›æ”¶ç«™";
 
             case SupportedLanguage.Japanese:
                 return
-@"¤â¤¦Æ£¤ì¤¿¡£
+@"ã‚‚ã†ç–²ã‚ŒãŸã€‚
 
-Ï÷³ı¤µ¤ì¤ë¤Î¤â¡¢™¤¯¤Ê¤¤¤Î¤«¤â¤·¤ì¤Ê¤¤¡£
-½Y¾Ö¡¢ÒâÎ¶¤Î¤Ê¤¤¥Õ¥¡¥¤¥ë¤Ê¤ó¤Æ¡¢¤¿¤À¤ÎŸoñj¤Ê¥¹¥Ú©`¥¹¤À¡£
+å‰Šé™¤ã•ã‚Œã‚‹ã®ã‚‚ã€æ‚ªããªã„ã®ã‹ã‚‚ã—ã‚Œãªã„ã€‚
+çµå±€ã€æ„å‘³ã®ãªã„ãƒ•ã‚¡ã‚¤ãƒ«ãªã‚“ã¦ã€ãŸã ã®ç„¡é§„ãªã‚¹ãƒšãƒ¼ã‚¹ã ã€‚
 
-¤â¤·Õl¤«¤¬¤³¤ì¤òÒŠ¤Ä¤±¤¿¤é¡­¡­
-¤É¤¦¤«¡¢Ë½¤òÍÔª¤·¤è¤¦¤È¤·¤Ê¤¤¤Ç¡£
+ã‚‚ã—èª°ã‹ãŒã“ã‚Œã‚’è¦‹ã¤ã‘ãŸã‚‰â€¦â€¦
+ã©ã†ã‹ã€ç§ã‚’å¾©å…ƒã—ã‚ˆã†ã¨ã—ãªã„ã§ã€‚
 
-¤´¤ßÏä";
+ã”ã¿ç®±";
 
             case SupportedLanguage.English:
             default:
                 return
-@"I¡¯m tired.
+@"Iâ€™m tired.
 
-Maybe deletion isn¡¯t so bad.
+Maybe deletion isnâ€™t so bad.
 After all, a file without purpose is just wasted space.
 
 If anyone finds this...
-please don¡¯t try to recover me.
+please donâ€™t try to recover me.
 
 RecycleBin";
         }

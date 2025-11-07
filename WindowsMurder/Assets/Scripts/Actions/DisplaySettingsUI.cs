@@ -1,27 +1,27 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
-/// DisplayÉèÖÃ´°¿ÚUI¿ØÖÆÆ÷
-/// ×¨ÃÅ¿ØÖÆÈ«ÆÁÇĞ»»ºÍ¶Ô»°ËÙ¶ÈÉèÖÃ£¬°üº¬Ô¤ÀÀ¹¦ÄÜ
+/// Displayè®¾ç½®çª—å£UIæ§åˆ¶å™¨
+/// ä¸“é—¨æ§åˆ¶å…¨å±åˆ‡æ¢å’Œå¯¹è¯é€Ÿåº¦è®¾ç½®ï¼ŒåŒ…å«é¢„è§ˆåŠŸèƒ½
 /// </summary>
 public class DisplaySettingsUI : MonoBehaviour
 {
-    [Header("UI×é¼ş")]
-    public Toggle fullscreenToggle;                    // È«ÆÁÇĞ»»
-    public Slider dialogueSpeedSlider;                 // ¶Ô»°ËÙ¶È»¬Ìõ
-    public TextMeshProUGUI previewText;                // Ô¤ÀÀÎÄ±¾ÏÔÊ¾
+    [Header("UIç»„ä»¶")]
+    public Toggle fullscreenToggle;                    // å…¨å±åˆ‡æ¢
+    public Slider dialogueSpeedSlider;                 // å¯¹è¯é€Ÿåº¦æ»‘æ¡
+    public TextMeshProUGUI previewText;                // é¢„è§ˆæ–‡æœ¬æ˜¾ç¤º
 
-    [Header("¶Ô»°ËÙ¶ÈÉèÖÃ")]
-    public float minSpeed = 0.01f;                     // ×îĞ¡ËÙ¶È£¨×î¿ì£©
-    public float maxSpeed = 0.15f;                     // ×î´óËÙ¶È£¨×îÂı£©
+    [Header("å¯¹è¯é€Ÿåº¦è®¾ç½®")]
+    public float minSpeed = 0.01f;                     // æœ€å°é€Ÿåº¦ï¼ˆæœ€å¿«ï¼‰
+    public float maxSpeed = 0.15f;                     // æœ€å¤§é€Ÿåº¦ï¼ˆæœ€æ…¢ï¼‰
 
-    [Header("Ô¤ÀÀÉèÖÃ")]
-    public string previewSampleText = "ÕâÊÇÒ»¶ÎÓÃÓÚÔ¤ÀÀ¶Ô»°ÏÔÊ¾ËÙ¶ÈµÄÊ¾ÀıÎÄ±¾¡£";
+    [Header("é¢„è§ˆè®¾ç½®")]
+    public string previewSampleText = "è¿™æ˜¯ä¸€æ®µç”¨äºé¢„è§ˆå¯¹è¯æ˜¾ç¤ºé€Ÿåº¦çš„ç¤ºä¾‹æ–‡æœ¬ã€‚";
 
-    // Ë½ÓĞ±äÁ¿
+    // ç§æœ‰å˜é‡
     private Coroutine previewCoroutine;
     private bool isInitializing = false;
 
@@ -34,7 +34,7 @@ public class DisplaySettingsUI : MonoBehaviour
     }
 
     /// <summary>
-    /// ³õÊ¼»¯×é¼ş
+    /// åˆå§‹åŒ–ç»„ä»¶
     /// </summary>
     void InitializeComponents()
     {
@@ -46,19 +46,19 @@ public class DisplaySettingsUI : MonoBehaviour
     }
 
     /// <summary>
-    /// ¼ÓÔØµ±Ç°ÉèÖÃ
+    /// åŠ è½½å½“å‰è®¾ç½®
     /// </summary>
     void LoadCurrentSettings()
     {
         if (GlobalSystemManager.Instance == null)
         {
-            Debug.LogWarning("DisplaySettingsUI: GlobalSystemManagerÎ´³õÊ¼»¯");
+            Debug.LogWarning("DisplaySettingsUI: GlobalSystemManageræœªåˆå§‹åŒ–");
             return;
         }
 
         isInitializing = true;
 
-        // ´ÓGlobalSystemManager¶ÁÈ¡ÉèÖÃ
+        // ä»GlobalSystemManagerè¯»å–è®¾ç½®
         if (dialogueSpeedSlider != null)
             dialogueSpeedSlider.value = GlobalSystemManager.Instance.dialogueSpeed;
 
@@ -68,7 +68,7 @@ public class DisplaySettingsUI : MonoBehaviour
     }
 
     /// <summary>
-    /// ÉèÖÃÊÂ¼ş¼àÌıÆ÷
+    /// è®¾ç½®äº‹ä»¶ç›‘å¬å™¨
     /// </summary>
     void SetupEventListeners()
     {
@@ -78,7 +78,7 @@ public class DisplaySettingsUI : MonoBehaviour
         if (dialogueSpeedSlider != null)
             dialogueSpeedSlider.onValueChanged.AddListener(OnDialogueSpeedChanged);
 
-        // ¼àÌıÔ¤ÀÀÃæ°åµã»÷ÖØÆôÔ¤ÀÀ
+        // ç›‘å¬é¢„è§ˆé¢æ¿ç‚¹å‡»é‡å¯é¢„è§ˆ
         if (previewText != null)
         {
             Button previewButton = previewText.gameObject.GetComponent<Button>();
@@ -92,7 +92,7 @@ public class DisplaySettingsUI : MonoBehaviour
     }
 
     /// <summary>
-    /// È«ÆÁÇĞ»»ÊÂ¼ş
+    /// å…¨å±åˆ‡æ¢äº‹ä»¶
     /// </summary>
     void OnFullscreenToggleChanged(bool isFullscreen)
     {
@@ -105,7 +105,7 @@ public class DisplaySettingsUI : MonoBehaviour
     }
 
     /// <summary>
-    /// ¶Ô»°ËÙ¶È±ä»¯ÊÂ¼ş
+    /// å¯¹è¯é€Ÿåº¦å˜åŒ–äº‹ä»¶
     /// </summary>
     void OnDialogueSpeedChanged(float speed)
     {
@@ -116,13 +116,13 @@ public class DisplaySettingsUI : MonoBehaviour
             GlobalSystemManager.Instance.dialogueSpeed = speed;
             GlobalSystemManager.Instance.SaveSettings();
         }
-        StartPreview(); // ÖØĞÂ¿ªÊ¼Ô¤ÀÀ
+        StartPreview(); // é‡æ–°å¼€å§‹é¢„è§ˆ
     }
 
-    #region Ô¤ÀÀ¹¦ÄÜ
+    #region é¢„è§ˆåŠŸèƒ½
 
     /// <summary>
-    /// ¿ªÊ¼Ô¤ÀÀ
+    /// å¼€å§‹é¢„è§ˆ
     /// </summary>
     void StartPreview()
     {
@@ -133,7 +133,7 @@ public class DisplaySettingsUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Í£Ö¹Ô¤ÀÀ
+    /// åœæ­¢é¢„è§ˆ
     /// </summary>
     void StopPreview()
     {
@@ -145,7 +145,7 @@ public class DisplaySettingsUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Ô¤ÀÀ´ò×Ö»úĞ§¹ûĞ­³Ì
+    /// é¢„è§ˆæ‰“å­—æœºæ•ˆæœåç¨‹
     /// </summary>
     IEnumerator PreviewTypingEffect()
     {
@@ -154,14 +154,14 @@ public class DisplaySettingsUI : MonoBehaviour
         previewText.text = "";
         float currentSpeed = dialogueSpeedSlider != null ? dialogueSpeedSlider.value : 0.05f;
 
-        // Öğ×ÖÏÔÊ¾
+        // é€å­—æ˜¾ç¤º
         foreach (char c in previewSampleText.ToCharArray())
         {
             previewText.text += c;
             yield return new WaitForSeconds(currentSpeed);
         }
 
-        // µÈ´ıÒ»¶ÎÊ±¼äºóÖØĞÂ¿ªÊ¼
+        // ç­‰å¾…ä¸€æ®µæ—¶é—´åé‡æ–°å¼€å§‹
         yield return new WaitForSeconds(1.5f);
         if (gameObject.activeInHierarchy)
             StartPreview();
@@ -169,11 +169,11 @@ public class DisplaySettingsUI : MonoBehaviour
 
     #endregion
 
-    #region ÉúÃüÖÜÆÚ
+    #region ç”Ÿå‘½å‘¨æœŸ
 
     void OnEnable()
     {
-        // ´°¿ÚÏÔÊ¾Ê±Ë¢ĞÂÉèÖÃ²¢¿ªÊ¼Ô¤ÀÀ
+        // çª—å£æ˜¾ç¤ºæ—¶åˆ·æ–°è®¾ç½®å¹¶å¼€å§‹é¢„è§ˆ
         if (!isInitializing)
         {
             LoadCurrentSettings();
@@ -188,7 +188,7 @@ public class DisplaySettingsUI : MonoBehaviour
 
     void OnDestroy()
     {
-        // ÇåÀíÊÂ¼ş¼àÌıÆ÷
+        // æ¸…ç†äº‹ä»¶ç›‘å¬å™¨
         if (fullscreenToggle != null)
             fullscreenToggle.onValueChanged.RemoveListener(OnFullscreenToggleChanged);
 

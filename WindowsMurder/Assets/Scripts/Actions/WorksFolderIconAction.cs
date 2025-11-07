@@ -1,30 +1,30 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// WorksÎÄ¼ş¼ĞÍ¼±ê×¨ÓÃ½»»¥ĞĞÎª
-/// ´¦Àí£º½âËøÇ°ÌáÊ¾¡¢½âËøºóÍÆ½øStage¡¢ÓÒ¼üÊôĞÔ´°¿Ú¡¢ËøÍ¼±ê¹ÜÀí
+/// Worksæ–‡ä»¶å¤¹å›¾æ ‡ä¸“ç”¨äº¤äº’è¡Œä¸º
+/// å¤„ç†ï¼šè§£é”å‰æç¤ºã€è§£é”åæ¨è¿›Stageã€å³é”®å±æ€§çª—å£ã€é”å›¾æ ‡ç®¡ç†
 /// </summary>
 public class WorksFolderIconAction : IconAction
 {
-    [Header("½âËøÅäÖÃ")]
+    [Header("è§£é”é…ç½®")]
     [SerializeField] private string clueId = "works_folder_unlocked";
-    [SerializeField] private GameObject lockIconObject;  // Ö±½ÓÒıÓÃËøÍ¼±ê¶ÔÏó
+    [SerializeField] private GameObject lockIconObject;  // ç›´æ¥å¼•ç”¨é”å›¾æ ‡å¯¹è±¡
 
-    [Header("´°¿ÚÔ¤ÖÆÌå")]
+    [Header("çª—å£é¢„åˆ¶ä½“")]
     [SerializeField] private GameObject lockedMessagePrefab;
     [SerializeField] private GameObject propertiesWindowPrefab;
 
-    [Header("´°¿ÚÈİÆ÷")]
+    [Header("çª—å£å®¹å™¨")]
     [SerializeField] private Transform windowContainer;
 
-    [Header("µ÷ÊÔ")]
+    [Header("è°ƒè¯•")]
     [SerializeField] private bool debugMode = true;
 
-    // ×é¼şÒıÓÃ
+    // ç»„ä»¶å¼•ç”¨
     private GameFlowController flowController;
     private InteractableIcon iconComponent;
 
-    #region ³õÊ¼»¯
+    #region åˆå§‹åŒ–
 
     void Awake()
     {
@@ -34,16 +34,16 @@ public class WorksFolderIconAction : IconAction
 
     void OnEnable()
     {
-        // ¼ì²é³õÊ¼½âËø×´Ì¬
+        // æ£€æŸ¥åˆå§‹è§£é”çŠ¶æ€
         CheckInitialUnlockStatus();
 
-        // ¶©ÔÄÓÒ¼ü²Ëµ¥ÊÂ¼ş
+        // è®¢é˜…å³é”®èœå•äº‹ä»¶
         InteractableIcon.OnContextMenuItemClicked += OnContextMenuItemClicked;
 
-        // ¶©ÔÄÏßË÷½âËøÊÂ¼ş
+        // è®¢é˜…çº¿ç´¢è§£é”äº‹ä»¶
         GameEvents.OnClueUnlocked += OnClueUnlocked;
 
-        LogDebug("ÒÑ¶©ÔÄÊÂ¼ş");
+        LogDebug("å·²è®¢é˜…äº‹ä»¶");
     }
 
     void OnDisable()
@@ -51,28 +51,28 @@ public class WorksFolderIconAction : IconAction
         InteractableIcon.OnContextMenuItemClicked -= OnContextMenuItemClicked;
         GameEvents.OnClueUnlocked -= OnClueUnlocked;
 
-        LogDebug("ÒÑÈ¡Ïû¶©ÔÄÊÂ¼ş");
+        LogDebug("å·²å–æ¶ˆè®¢é˜…äº‹ä»¶");
     }
 
     /// <summary>
-    /// ¼ì²é³õÊ¼½âËø×´Ì¬
+    /// æ£€æŸ¥åˆå§‹è§£é”çŠ¶æ€
     /// </summary>
     private void CheckInitialUnlockStatus()
     {
         if (flowController != null && IsUnlocked())
         {
             HideLockIcon();
-            LogDebug("³õÊ¼×´Ì¬£ºÒÑ½âËø");
+            LogDebug("åˆå§‹çŠ¶æ€ï¼šå·²è§£é”");
         }
     }
 
     #endregion
 
-    #region Ë«»÷½»»¥
+    #region åŒå‡»äº¤äº’
 
     public override void Execute()
     {
-        LogDebug("Ë«»÷ Works ÎÄ¼ş¼Ğ");
+        LogDebug("åŒå‡» Works æ–‡ä»¶å¤¹");
 
         if (IsUnlocked())
         {
@@ -85,7 +85,7 @@ public class WorksFolderIconAction : IconAction
     }
 
     /// <summary>
-    /// ¼ì²éÊÇ·ñÒÑ½âËø
+    /// æ£€æŸ¥æ˜¯å¦å·²è§£é”
     /// </summary>
     private bool IsUnlocked()
     {
@@ -94,11 +94,11 @@ public class WorksFolderIconAction : IconAction
     }
 
     /// <summary>
-    /// ÍÆ½øµ½ÏÂÒ»Stage
+    /// æ¨è¿›åˆ°ä¸‹ä¸€Stage
     /// </summary>
     private void ProgressToNextStage()
     {
-        LogDebug("³¢ÊÔÍÆ½øµ½ÏÂÒ»Stage");
+        LogDebug("å°è¯•æ¨è¿›åˆ°ä¸‹ä¸€Stage");
 
         ExplorerManager explorer = GetComponentInParent<ExplorerManager>();
         if (explorer != null)
@@ -111,7 +111,7 @@ public class WorksFolderIconAction : IconAction
                 WindowTransitionData transitionData = new WindowTransitionData(position);
                 flowController.CacheWindowTransition(transitionData);
 
-                LogDebug($"ÒÑ»º´æ´°¿ÚÎ»ÖÃ: {position}");
+                LogDebug($"å·²ç¼“å­˜çª—å£ä½ç½®: {position}");
             }
         }
 
@@ -119,17 +119,17 @@ public class WorksFolderIconAction : IconAction
     }
 
     /// <summary>
-    /// ÏÔÊ¾Ëø¶¨ÌáÊ¾µ¯´°
+    /// æ˜¾ç¤ºé”å®šæç¤ºå¼¹çª—
     /// </summary>
     private void ShowLockedMessage()
     {
         GameObject messageWindow = Instantiate(lockedMessagePrefab, windowContainer);
-        LogDebug("ÒÑÏÔÊ¾Ëø¶¨ÌáÊ¾µ¯´°");
+        LogDebug("å·²æ˜¾ç¤ºé”å®šæç¤ºå¼¹çª—");
     }
 
     #endregion
 
-    #region ÓÒ¼ü²Ëµ¥
+    #region å³é”®èœå•
 
     private void OnContextMenuItemClicked(InteractableIcon icon, string itemId)
     {
@@ -147,44 +147,44 @@ public class WorksFolderIconAction : IconAction
     private void ShowPropertiesWindow()
     {
         GameObject propertiesWindow = Instantiate(propertiesWindowPrefab, windowContainer);
-        LogDebug("ÒÑÉú³ÉÊôĞÔ´°¿Ú");
+        LogDebug("å·²ç”Ÿæˆå±æ€§çª—å£");
     }
 
     #endregion
 
-    #region ½âËø×´Ì¬¹ÜÀí
+    #region è§£é”çŠ¶æ€ç®¡ç†
 
     /// <summary>
-    /// ÏßË÷½âËøÊÂ¼ş´¦Àí
+    /// çº¿ç´¢è§£é”äº‹ä»¶å¤„ç†
     /// </summary>
     private void OnClueUnlocked(string unlockedClueId)
     {
         if (unlockedClueId == clueId)
         {
             HideLockIcon();
-            LogDebug($"WorksÎÄ¼ş¼ĞÒÑ½âËø£¬ÏßË÷ID: {clueId}");
+            LogDebug($"Worksæ–‡ä»¶å¤¹å·²è§£é”ï¼Œçº¿ç´¢ID: {clueId}");
         }
     }
 
     /// <summary>
-    /// Òş²ØËøÍ¼±ê
+    /// éšè—é”å›¾æ ‡
     /// </summary>
     private void HideLockIcon()
     {
         if (lockIconObject != null)
         {
             lockIconObject.SetActive(false);
-            LogDebug($"ËøÍ¼±êÒÑÒş²Ø: {lockIconObject.name}");
+            LogDebug($"é”å›¾æ ‡å·²éšè—: {lockIconObject.name}");
         }
         else
         {
-            LogDebug("¾¯¸æ£º³¢ÊÔÒş²ØËøÍ¼±ê£¬µ«¶ÔÏóÒıÓÃÎª¿Õ£¡");
+            LogDebug("è­¦å‘Šï¼šå°è¯•éšè—é”å›¾æ ‡ï¼Œä½†å¯¹è±¡å¼•ç”¨ä¸ºç©ºï¼");
         }
     }
 
     #endregion
 
-    #region µ÷ÊÔ¹¤¾ß
+    #region è°ƒè¯•å·¥å…·
 
     private void LogDebug(string message)
     {

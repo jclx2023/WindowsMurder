@@ -1,15 +1,15 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
 
 public class DialogueManager : MonoBehaviour
 {
-    [Header("×é¼şÒıÓÃ")]
+    [Header("ç»„ä»¶å¼•ç”¨")]
     public DialogueUI dialogueUI;
     public ConversationHistoryManager historyManager;
 
-    [Header("µ÷ÊÔ")]
+    [Header("è°ƒè¯•")]
     public bool enableDebugLog = true;
 
     [Header("LLM Providers")]
@@ -17,16 +17,16 @@ public class DialogueManager : MonoBehaviour
     public OpenAIProvider openaiProvider;
     public DeepSeekProvider deepseekProvider;
 
-    // µ±Ç°Ê¹ÓÃµÄProvider
+    // å½“å‰ä½¿ç”¨çš„Provider
     private ILLMProvider currentProvider;
 
-    // Ë½ÓĞ±äÁ¿
+    // ç§æœ‰å˜é‡
     private Dictionary<string, List<string>> conversationHistory;
     private string currentDialogueFile;
     private string currentDialogueBlockId;
     private bool isProcessingLLM = false;
 
-    // ¶Ô»°¶ÓÁĞ
+    // å¯¹è¯é˜Ÿåˆ—
     private Queue<(string fileName, string blockId)> dialogueQueue = new Queue<(string, string)>();
     private bool isPlayingDialogue = false;
 
@@ -36,45 +36,45 @@ public class DialogueManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ³õÊ¼»¯¹ÜÀíÆ÷
+    /// åˆå§‹åŒ–ç®¡ç†å™¨
     /// </summary>
     private void InitializeManager()
     {
-        // ³õÊ¼»¯Êı¾İ½á¹¹
+        // åˆå§‹åŒ–æ•°æ®ç»“æ„
         conversationHistory = new Dictionary<string, List<string>>();
 
-        // ²éÕÒ×é¼şÒıÓÃ
+        // æŸ¥æ‰¾ç»„ä»¶å¼•ç”¨
         if (dialogueUI == null)
             dialogueUI = FindObjectOfType<DialogueUI>();
         if (historyManager == null)
             historyManager = FindObjectOfType<ConversationHistoryManager>();
 
-        // ³õÊ¼»¯ËùÓĞLLM Provider
+        // åˆå§‹åŒ–æ‰€æœ‰LLM Provider
         InitializeProviders();
 
-        DebugLog("DialogueManager ³õÊ¼»¯Íê³É");
+        DebugLog("DialogueManager åˆå§‹åŒ–å®Œæˆ");
     }
 
     void InitializeProviders()
     {
         if (geminiProvider == null)
-            Debug.LogError("GeminiProviderÎ´ÅäÖÃ");
+            Debug.LogError("GeminiProvideræœªé…ç½®");
         if (openaiProvider == null)
-            Debug.LogError("OpenAIProviderÎ´ÅäÖÃ");
+            Debug.LogError("OpenAIProvideræœªé…ç½®");
         if (deepseekProvider == null)
-            Debug.LogError("DeepSeekProviderÎ´ÅäÖÃ");
+            Debug.LogError("DeepSeekProvideræœªé…ç½®");
 
         UpdateCurrentProvider();
     }
 
     /// <summary>
-    /// ¸üĞÂµ±Ç°Ê¹ÓÃµÄProvider
+    /// æ›´æ–°å½“å‰ä½¿ç”¨çš„Provider
     /// </summary>
     private void UpdateCurrentProvider()
     {
         if (GlobalSystemManager.Instance == null)
         {
-            Debug.LogError("GlobalSystemManagerÎ´ÕÒµ½£¬Ê¹ÓÃÄ¬ÈÏGemini Provider");
+            Debug.LogError("GlobalSystemManageræœªæ‰¾åˆ°ï¼Œä½¿ç”¨é»˜è®¤Gemini Provider");
             currentProvider = geminiProvider;
             return;
         }
@@ -97,7 +97,7 @@ public class DialogueManager : MonoBehaviour
                 break;
         }
 
-        DebugLog($"ÇĞ»»µ½ {currentProvider.GetProviderName()} Provider");
+        DebugLog($"åˆ‡æ¢åˆ° {currentProvider.GetProviderName()} Provider");
     }
 
     private void OnProviderChanged(LLMProvider newProvider)
@@ -110,7 +110,7 @@ public class DialogueManager : MonoBehaviour
         return currentProvider;
     }
 
-    // ==================== ¶Ô»°¹ÜÀí ====================
+    // ==================== å¯¹è¯ç®¡ç† ====================
 
     public string CleanAIResponsePublic(string response)
     {
@@ -118,7 +118,7 @@ public class DialogueManager : MonoBehaviour
     }
 
     /// <summary>
-    /// »ñÈ¡µ±Ç°ÓïÑÔ¶ÔÓ¦µÄ¾ç±¾ÎÄ¼şÃû
+    /// è·å–å½“å‰è¯­è¨€å¯¹åº”çš„å‰§æœ¬æ–‡ä»¶å
     /// </summary>
     private string GetCurrentScriptFileName()
     {
@@ -145,7 +145,7 @@ public class DialogueManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¿ªÊ¼Ö¸¶¨µÄ¶Ô»°
+    /// å¼€å§‹æŒ‡å®šçš„å¯¹è¯
     /// </summary>
     public void StartDialogue(string blockId)
     {
@@ -154,30 +154,30 @@ public class DialogueManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¿ªÊ¼Ö¸¶¨µÄ¶Ô»° - ÍêÕû°æ±¾£¨´ø¶ÓÁĞ£©
+    /// å¼€å§‹æŒ‡å®šçš„å¯¹è¯ - å®Œæ•´ç‰ˆæœ¬ï¼ˆå¸¦é˜Ÿåˆ—ï¼‰
     /// </summary>
     public void StartDialogue(string fileName, string blockId)
     {
         if (string.IsNullOrEmpty(fileName) || string.IsNullOrEmpty(blockId))
         {
-            Debug.LogError($"DialogueManager: fileName »ò blockId ²»ÄÜÎª¿Õ (fileName: {fileName}, blockId: {blockId})");
+            Debug.LogError($"DialogueManager: fileName æˆ– blockId ä¸èƒ½ä¸ºç©º (fileName: {fileName}, blockId: {blockId})");
             return;
         }
 
-        // Èç¹ûµ±Ç°ÕıÔÚ²¥·Å¶Ô»°£¬¼ÓÈë¶ÓÁĞ
+        // å¦‚æœå½“å‰æ­£åœ¨æ’­æ”¾å¯¹è¯ï¼ŒåŠ å…¥é˜Ÿåˆ—
         if (isPlayingDialogue)
         {
             dialogueQueue.Enqueue((fileName, blockId));
-            DebugLog($"¶Ô»°¿éÒÑ¼ÓÈë¶ÓÁĞ: {fileName}:{blockId}£¬¶ÓÁĞ³¤¶È: {dialogueQueue.Count}");
+            DebugLog($"å¯¹è¯å—å·²åŠ å…¥é˜Ÿåˆ—: {fileName}:{blockId}ï¼Œé˜Ÿåˆ—é•¿åº¦: {dialogueQueue.Count}");
             return;
         }
 
-        // Ö±½Ó²¥·Å
+        // ç›´æ¥æ’­æ”¾
         PlayDialogue(fileName, blockId);
     }
 
     /// <summary>
-    /// Êµ¼Ê²¥·Å¶Ô»°
+    /// å®é™…æ’­æ”¾å¯¹è¯
     /// </summary>
     private void PlayDialogue(string fileName, string blockId)
     {
@@ -187,7 +187,7 @@ public class DialogueManager : MonoBehaviour
         currentDialogueBlockId = blockId;
         isPlayingDialogue = true;
 
-        DebugLog($"¿ªÊ¼²¥·Å¶Ô»°: {fileName}:{blockId}");
+        DebugLog($"å¼€å§‹æ’­æ”¾å¯¹è¯: {fileName}:{blockId}");
 
         if (dialogueUI != null)
         {
@@ -199,36 +199,36 @@ public class DialogueManager : MonoBehaviour
     {
         if (isProcessingLLM)
         {
-            DebugLog("ÕıÔÚ´¦ÀíÆäËûLLMÇëÇó£¬Ìø¹ı");
-            onResponse?.Invoke("ÏµÍ³·±Ã¦£¬ÇëÉÔºóÔÙÊÔ...");
+            DebugLog("æ­£åœ¨å¤„ç†å…¶ä»–LLMè¯·æ±‚ï¼Œè·³è¿‡");
+            onResponse?.Invoke("ç³»ç»Ÿç¹å¿™ï¼Œè¯·ç¨åå†è¯•...");
             return;
         }
 
         if (string.IsNullOrEmpty(playerMessage))
         {
-            onResponse?.Invoke("ÊäÈë´íÎó...");
+            onResponse?.Invoke("è¾“å…¥é”™è¯¯...");
             return;
         }
 
-        DebugLog($"´¦ÀíLLMÏûÏ¢: {characterId} <- {playerMessage}");
+        DebugLog($"å¤„ç†LLMæ¶ˆæ¯: {characterId} <- {playerMessage}");
 
         StartCoroutine(ProcessLLMCoroutine(characterId, playerMessage, onResponse));
     }
 
     /// <summary>
-    /// LLM´¦ÀíĞ­³Ì - Ê¹ÓÃµ±Ç°Ñ¡ÔñµÄProvider
+    /// LLMå¤„ç†åç¨‹ - ä½¿ç”¨å½“å‰é€‰æ‹©çš„Provider
     /// </summary>
     private IEnumerator ProcessLLMCoroutine(string characterId, string playerMessage, Action<string> onResponse)
     {
         isProcessingLLM = true;
 
-        // Ê¹ÓÃHistoryManager¹¹½¨°üº¬ÀúÊ·µÄprompt
+        // ä½¿ç”¨HistoryManageræ„å»ºåŒ…å«å†å²çš„prompt
         string fullPrompt = historyManager.BuildPromptWithHistory(playerMessage);
 
         bool responseReceived = false;
         string aiResponse = "";
 
-        // Ê¹ÓÃµ±Ç°Provider£¨²»ÔÙhardcodedÊ¹ÓÃgeminiAPI£©
+        // ä½¿ç”¨å½“å‰Providerï¼ˆä¸å†hardcodedä½¿ç”¨geminiAPIï¼‰
         yield return StartCoroutine(currentProvider.GenerateText(
             fullPrompt,
             response =>
@@ -240,7 +240,7 @@ public class DialogueManager : MonoBehaviour
             {
                 aiResponse = GetErrorResponse(characterId);
                 responseReceived = true;
-                DebugLog($"AIÇëÇóÊ§°Ü: {error}");
+                DebugLog($"AIè¯·æ±‚å¤±è´¥: {error}");
             }
         ));
 
@@ -249,17 +249,17 @@ public class DialogueManager : MonoBehaviour
             yield return null;
         }
 
-        // ½«AI»Ø¸´Ìí¼Óµ½ÀúÊ·¹ÜÀíÆ÷
+        // å°†AIå›å¤æ·»åŠ åˆ°å†å²ç®¡ç†å™¨
         historyManager.AddLLMResponse(aiResponse);
 
         onResponse?.Invoke(aiResponse);
         isProcessingLLM = false;
 
-        DebugLog($"LLMÏìÓ¦Íê³É: {aiResponse.Substring(0, Mathf.Min(30, aiResponse.Length))}...");
+        DebugLog($"LLMå“åº”å®Œæˆ: {aiResponse.Substring(0, Mathf.Min(30, aiResponse.Length))}...");
     }
 
     /// <summary>
-    /// ÇåÀíAIÏìÓ¦
+    /// æ¸…ç†AIå“åº”
     /// </summary>
     private string CleanAIResponse(string response)
     {
@@ -270,13 +270,13 @@ public class DialogueManager : MonoBehaviour
 
         string cleaned = response.Trim();
 
-        // ÒÆ³ı¿ÉÄÜµÄÒıºÅ
+        // ç§»é™¤å¯èƒ½çš„å¼•å·
         if (cleaned.StartsWith("\"") && cleaned.EndsWith("\""))
         {
             cleaned = cleaned.Substring(1, cleaned.Length - 2);
         }
 
-        // ³¤¶ÈÏŞÖÆ
+        // é•¿åº¦é™åˆ¶
         if (cleaned.Length > 300)
         {
             cleaned = cleaned.Substring(0, 297) + "...";
@@ -286,29 +286,29 @@ public class DialogueManager : MonoBehaviour
     }
 
     /// <summary>
-    /// »ñÈ¡´íÎóÏìÓ¦
+    /// è·å–é”™è¯¯å“åº”
     /// </summary>
     private string GetErrorResponse(string characterId)
     {
         switch (characterId)
         {
             case "RecycleBin":
-                return "ÏµÍ³´íÎó...ÎÒµÄÊı¾İ³öÏÖÁËÎÊÌâ...";
+                return "ç³»ç»Ÿé”™è¯¯...æˆ‘çš„æ•°æ®å‡ºç°äº†é—®é¢˜...";
             case "TaskManager":
-                return "Á¬½Ó³¬Ê±...ÇëÉÔºóÖØÊÔ...";
+                return "è¿æ¥è¶…æ—¶...è¯·ç¨åé‡è¯•...";
             case "ControlPanel":
-                return "·ÃÎÊ±»¾Ü¾ø...È¨ÏŞ²»×ã...";
+                return "è®¿é—®è¢«æ‹’ç»...æƒé™ä¸è¶³...";
             default:
-                return "ÏµÍ³¹ÊÕÏ...ÎŞ·¨ÏìÓ¦...";
+                return "ç³»ç»Ÿæ•…éšœ...æ— æ³•å“åº”...";
         }
     }
 
     /// <summary>
-    /// ¶Ô»°¿éÍê³É»Øµ÷£¨´ø¶ÓÁĞ´¦Àí£©
+    /// å¯¹è¯å—å®Œæˆå›è°ƒï¼ˆå¸¦é˜Ÿåˆ—å¤„ç†ï¼‰
     /// </summary>
     public void OnDialogueBlockComplete(string fileName, string blockId)
     {
-        DebugLog($"¶Ô»°¿éÍê³É: {fileName}:{blockId}");
+        DebugLog($"å¯¹è¯å—å®Œæˆ: {fileName}:{blockId}");
 
         currentDialogueFile = null;
 
@@ -318,19 +318,19 @@ public class DialogueManager : MonoBehaviour
             gameFlow.OnDialogueBlockComplete(blockId);
         }
 
-        // ¼ì²é¶ÓÁĞ
+        // æ£€æŸ¥é˜Ÿåˆ—
         if (dialogueQueue.Count > 0)
         {
-            // ÓĞ¶ÓÁĞ£¬²¥·ÅÏÂÒ»¸ö
+            // æœ‰é˜Ÿåˆ—ï¼Œæ’­æ”¾ä¸‹ä¸€ä¸ª
             var next = dialogueQueue.Dequeue();
-            DebugLog($"´Ó¶ÓÁĞ²¥·ÅÏÂÒ»¸ö¶Ô»°: {next.fileName}:{next.blockId}£¬Ê£Óà¶ÓÁĞ: {dialogueQueue.Count}");
+            DebugLog($"ä»é˜Ÿåˆ—æ’­æ”¾ä¸‹ä¸€ä¸ªå¯¹è¯: {next.fileName}:{next.blockId}ï¼Œå‰©ä½™é˜Ÿåˆ—: {dialogueQueue.Count}");
             PlayDialogue(next.fileName, next.blockId);
         }
         else
         {
-            currentDialogueBlockId = null;  // ÏÖÔÚ²ÅÇå¿Õ
+            currentDialogueBlockId = null;  // ç°åœ¨æ‰æ¸…ç©º
             isPlayingDialogue = false;
-            DebugLog("ËùÓĞ¶Ô»°²¥·ÅÍê±Ï");
+            DebugLog("æ‰€æœ‰å¯¹è¯æ’­æ”¾å®Œæ¯•");
         }
     }
 
@@ -340,19 +340,19 @@ public class DialogueManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Çå³ı½ÇÉ«¶Ô»°ÀúÊ·
+    /// æ¸…é™¤è§’è‰²å¯¹è¯å†å²
     /// </summary>
     public void ClearCharacterHistory(string characterId)
     {
         if (conversationHistory.ContainsKey(characterId))
         {
             conversationHistory[characterId].Clear();
-            DebugLog($"Çå³ıÁË {characterId} µÄ¶Ô»°ÀúÊ·");
+            DebugLog($"æ¸…é™¤äº† {characterId} çš„å¯¹è¯å†å²");
         }
     }
 
     /// <summary>
-    /// µ÷ÊÔÈÕÖ¾
+    /// è°ƒè¯•æ—¥å¿—
     /// </summary>
     private void DebugLog(string message)
     {
@@ -364,7 +364,7 @@ public class DialogueManager : MonoBehaviour
 
     void OnDestroy()
     {
-        // È¡ÏûÊÂ¼ş¼àÌı
+        // å–æ¶ˆäº‹ä»¶ç›‘å¬
         if (GlobalSystemManager.Instance != null)
         {
             GlobalSystemManager.OnLLMProviderChanged -= OnProviderChanged;

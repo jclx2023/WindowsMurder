@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,22 +7,22 @@ using UnityEngine.EventSystems;
 using TMPro;
 
 /// <summary>
-/// Icon½»»¥ĞĞÎª»ùÀà
-/// ËùÓĞ¾ßÌåµÄicon½»»¥¶¼¼Ì³Ğ×ÔÕâ¸öÀà
+/// Iconäº¤äº’è¡Œä¸ºåŸºç±»
+/// æ‰€æœ‰å…·ä½“çš„iconäº¤äº’éƒ½ç»§æ‰¿è‡ªè¿™ä¸ªç±»
 /// </summary>
 public abstract class IconAction : MonoBehaviour
 {
-    [Header("»ù´¡ÉèÖÃ")]
-    public string actionName;           // ½»»¥ĞĞÎªÃû³Æ£¨ÓÃÓÚµ÷ÊÔ£©
-    public bool isEnabled = true;       // ÊÇ·ñÆôÓÃ½»»¥
+    [Header("åŸºç¡€è®¾ç½®")]
+    public string actionName;           // äº¤äº’è¡Œä¸ºåç§°ï¼ˆç”¨äºè°ƒè¯•ï¼‰
+    public bool isEnabled = true;       // æ˜¯å¦å¯ç”¨äº¤äº’
 
     /// <summary>
-    /// Ö´ĞĞ½»»¥ĞĞÎª - ×ÓÀà±ØĞëÊµÏÖ
+    /// æ‰§è¡Œäº¤äº’è¡Œä¸º - å­ç±»å¿…é¡»å®ç°
     /// </summary>
     public abstract void Execute();
 
     /// <summary>
-    /// ¼ì²éÊÇ·ñ¿ÉÒÔÖ´ĞĞ½»»¥£¨¿ÉÑ¡ÖØĞ´£©
+    /// æ£€æŸ¥æ˜¯å¦å¯ä»¥æ‰§è¡Œäº¤äº’ï¼ˆå¯é€‰é‡å†™ï¼‰
     /// </summary>
     public virtual bool CanExecute()
     {
@@ -30,29 +30,29 @@ public abstract class IconAction : MonoBehaviour
     }
 
     /// <summary>
-    /// ½»»¥Ö´ĞĞÇ°µÄ»Øµ÷£¨¿ÉÑ¡ÖØĞ´£©
+    /// äº¤äº’æ‰§è¡Œå‰çš„å›è°ƒï¼ˆå¯é€‰é‡å†™ï¼‰
     /// </summary>
     protected virtual void OnBeforeExecute()
     {
-        // ¿ÉÒÔÔÚÕâÀï²¥·ÅÍ¨ÓÃÒôĞ§¡¢ÏÔÊ¾·´À¡µÈ
+        // å¯ä»¥åœ¨è¿™é‡Œæ’­æ”¾é€šç”¨éŸ³æ•ˆã€æ˜¾ç¤ºåé¦ˆç­‰
     }
 
     /// <summary>
-    /// ½»»¥Ö´ĞĞºóµÄ»Øµ÷£¨¿ÉÑ¡ÖØĞ´£©
+    /// äº¤äº’æ‰§è¡Œåçš„å›è°ƒï¼ˆå¯é€‰é‡å†™ï¼‰
     /// </summary>
     protected virtual void OnAfterExecute()
     {
-        // ¿ÉÒÔÔÚÕâÀï¼ÇÂ¼ÈÕÖ¾¡¢¸üĞÂ×´Ì¬µÈ
+        // å¯ä»¥åœ¨è¿™é‡Œè®°å½•æ—¥å¿—ã€æ›´æ–°çŠ¶æ€ç­‰
     }
 
     /// <summary>
-    /// Ö´ĞĞ½»»¥µÄÍêÕûÁ÷³Ì
+    /// æ‰§è¡Œäº¤äº’çš„å®Œæ•´æµç¨‹
     /// </summary>
     public void TryExecute()
     {
         if (!CanExecute())
         {
-            Debug.Log($"IconAction: {actionName} ÎŞ·¨Ö´ĞĞ");
+            Debug.Log($"IconAction: {actionName} æ— æ³•æ‰§è¡Œ");
             return;
         }
 
@@ -63,25 +63,25 @@ public abstract class IconAction : MonoBehaviour
 }
 
 /// <summary>
-/// ÓÒ¼ü²Ëµ¥ÏîÊı¾İ - Ö§³Ö¶àÓïÑÔKeyÄ£Ê½
+/// å³é”®èœå•é¡¹æ•°æ® - æ”¯æŒå¤šè¯­è¨€Keyæ¨¡å¼
 /// </summary>
 [Serializable]
 public class ContextMenuItem
 {
-    [Header("»ù´¡ÉèÖÃ")]
-    public string itemId;           // ²Ëµ¥ÏîID£¬ÓÃÓÚÊ¶±ğµã»÷µÄÊÇÄÄ¸öÑ¡Ïî
-    public bool isEnabled = true;   // ÊÇ·ñ¿ÉÓÃ
-    public bool showSeparator;      // ÔÚ´ËÏîºóÏÔÊ¾·Ö¸ôÏß
+    [Header("åŸºç¡€è®¾ç½®")]
+    public string itemId;           // èœå•é¡¹IDï¼Œç”¨äºè¯†åˆ«ç‚¹å‡»çš„æ˜¯å“ªä¸ªé€‰é¡¹
+    public bool isEnabled = true;   // æ˜¯å¦å¯ç”¨
+    public bool showSeparator;      // åœ¨æ­¤é¡¹åæ˜¾ç¤ºåˆ†éš”çº¿
 
-    [Header("¶àÓïÑÔÉèÖÃ")]
-    public bool useLocalizationKey = true;  // ÊÇ·ñÊ¹ÓÃ±¾µØ»¯Key
-    public string itemName;         // ÏÔÊ¾Ãû³Æ£ºKeyÄ£Ê½Ê±´æ´¢±¾µØ»¯Key£¬Ö±½ÓÄ£Ê½Ê±´æ´¢ÏÔÊ¾ÎÄ±¾
+    [Header("å¤šè¯­è¨€è®¾ç½®")]
+    public bool useLocalizationKey = true;  // æ˜¯å¦ä½¿ç”¨æœ¬åœ°åŒ–Key
+    public string itemName;         // æ˜¾ç¤ºåç§°ï¼šKeyæ¨¡å¼æ—¶å­˜å‚¨æœ¬åœ°åŒ–Keyï¼Œç›´æ¥æ¨¡å¼æ—¶å­˜å‚¨æ˜¾ç¤ºæ–‡æœ¬
 
-    [Header("µ÷ÊÔĞÅÏ¢")]
-    [SerializeField] private string previewText; // InspectorÖĞÏÔÊ¾µÄÔ¤ÀÀÎÄ±¾£¨ÔËĞĞÊ±ºöÂÔ£©
+    [Header("è°ƒè¯•ä¿¡æ¯")]
+    [SerializeField] private string previewText; // Inspectorä¸­æ˜¾ç¤ºçš„é¢„è§ˆæ–‡æœ¬ï¼ˆè¿è¡Œæ—¶å¿½ç•¥ï¼‰
 
     /// <summary>
-    /// ¹¹Ôìº¯Êı - ±¾µØ»¯KeyÄ£Ê½£¨ÍÆ¼ö£©
+    /// æ„é€ å‡½æ•° - æœ¬åœ°åŒ–Keyæ¨¡å¼ï¼ˆæ¨èï¼‰
     /// </summary>
     public ContextMenuItem(string id, string localizationKey, bool enabled = true, bool separator = false)
     {
@@ -93,7 +93,7 @@ public class ContextMenuItem
     }
 
     /// <summary>
-    /// ¹¹Ôìº¯Êı - Ö±½ÓÎÄ±¾Ä£Ê½£¨¼æÈİ¾É´úÂë£©
+    /// æ„é€ å‡½æ•° - ç›´æ¥æ–‡æœ¬æ¨¡å¼ï¼ˆå…¼å®¹æ—§ä»£ç ï¼‰
     /// </summary>
     public static ContextMenuItem CreateDirectText(string id, string displayText, bool enabled = true, bool separator = false)
     {
@@ -107,7 +107,7 @@ public class ContextMenuItem
     }
 
     /// <summary>
-    /// Ä¬ÈÏ¹¹Ôìº¯Êı£¨ÓÃÓÚInspector£©
+    /// é»˜è®¤æ„é€ å‡½æ•°ï¼ˆç”¨äºInspectorï¼‰
     /// </summary>
     public ContextMenuItem()
     {
@@ -117,7 +117,7 @@ public class ContextMenuItem
     }
 
     /// <summary>
-    /// »ñÈ¡ÏÔÊ¾ÎÄ±¾ - Ö§³ÖÔËĞĞÊ±·­Òë
+    /// è·å–æ˜¾ç¤ºæ–‡æœ¬ - æ”¯æŒè¿è¡Œæ—¶ç¿»è¯‘
     /// </summary>
     public string GetDisplayText()
     {
@@ -131,51 +131,51 @@ public class ContextMenuItem
 }
 
 /// <summary>
-/// ¿É½»»¥×ÀÃæÍ¼±ê»ù´¡×é¼ş
-/// Ö§³ÖË«»÷½»»¥ºÍÓÒ¼ü²Ëµ¥£¬¼¯³ÉÁË½»»¥ĞĞÎª¹ÜÀí
+/// å¯äº¤äº’æ¡Œé¢å›¾æ ‡åŸºç¡€ç»„ä»¶
+/// æ”¯æŒåŒå‡»äº¤äº’å’Œå³é”®èœå•ï¼Œé›†æˆäº†äº¤äº’è¡Œä¸ºç®¡ç†
 /// </summary>
 public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    [Header("UI×é¼şÒıÓÃ")]
-    public Image iconImage;         // Í¼±êÍ¼Æ¬×é¼ş
-    public TextMeshProUGUI nameText;           // Ãû³ÆÎÄ±¾×é¼ş
-    public GameObject selectionHighlight;  // Ñ¡ÖĞ¸ßÁÁĞ§¹û
+    [Header("UIç»„ä»¶å¼•ç”¨")]
+    public Image iconImage;         // å›¾æ ‡å›¾ç‰‡ç»„ä»¶
+    public TextMeshProUGUI nameText;           // åç§°æ–‡æœ¬ç»„ä»¶
+    public GameObject selectionHighlight;  // é€‰ä¸­é«˜äº®æ•ˆæœ
 
-    [Header("ÓÒ¼ü²Ëµ¥")]
-    public bool canShowContextMenu = true;     // ÊÇ·ñ¿ÉÒÔÏÔÊ¾ÓÒ¼ü²Ëµ¥
+    [Header("å³é”®èœå•")]
+    public bool canShowContextMenu = true;     // æ˜¯å¦å¯ä»¥æ˜¾ç¤ºå³é”®èœå•
     public List<ContextMenuItem> contextMenuItems = new List<ContextMenuItem>();
-    public GameObject contextMenuPrefab;       // ÓÒ¼ü²Ëµ¥Ô¤ÖÆÌåÒıÓÃ
+    public GameObject contextMenuPrefab;       // å³é”®èœå•é¢„åˆ¶ä½“å¼•ç”¨
 
-    [Header("×´Ì¬ÉèÖÃ")]
-    public bool isLocked = false;              // ÊÇ·ñËø¶¨£¨ÎŞ·¨½»»¥£©
-    public bool isCorrupted = false;           // ÊÇ·ñËğ»µ×´Ì¬
-    public bool isHidden = false;              // ÊÇ·ñÒş²Ø×´Ì¬
+    [Header("çŠ¶æ€è®¾ç½®")]
+    public bool isLocked = false;              // æ˜¯å¦é”å®šï¼ˆæ— æ³•äº¤äº’ï¼‰
+    public bool isCorrupted = false;           // æ˜¯å¦æŸåçŠ¶æ€
+    public bool isHidden = false;              // æ˜¯å¦éšè—çŠ¶æ€
 
-    // ½»»¥ÉèÖÃ - Ó²±àÂë³£Á¿
+    // äº¤äº’è®¾ç½® - ç¡¬ç¼–ç å¸¸é‡
     private const float DOUBLE_CLICK_THRESHOLD = 0.5f;
     private const bool SHOW_TOOLTIP = true;
 
-    // ÊÂ¼şÎ¯ÍĞ
+    // äº‹ä»¶å§”æ‰˜
     public static event Action<InteractableIcon> OnIconSelected;
     public static event Action<InteractableIcon> OnIconDoubleClicked;
     public static event Action<InteractableIcon, string> OnContextMenuItemClicked;
     public static event Action<InteractableIcon> OnIconHovered;
 
-    // Ë½ÓĞ±äÁ¿
+    // ç§æœ‰å˜é‡
     private bool isSelected = false;
     private float lastClickTime = 0f;
     private IconContextMenu activeContextMenu;
     private Coroutine tooltipCoroutine;
 
-    // ¾²Ì¬¹ÜÀí
+    // é™æ€ç®¡ç†
     public static InteractableIcon CurrentSelectedIcon { get; private set; }
     public static List<InteractableIcon> AllIcons { get; private set; } = new List<InteractableIcon>();
 
-    #region UnityÉúÃüÖÜÆÚ
+    #region Unityç”Ÿå‘½å‘¨æœŸ
 
     void Start()
     {
-        // Ó¦ÓÃ³õÊ¼×´Ì¬Ğ§¹û
+        // åº”ç”¨åˆå§‹çŠ¶æ€æ•ˆæœ
         ApplyVisualState();
     }
 
@@ -187,7 +187,7 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
     void OnDisable()
     {
-        // ÇåÀíËùÓĞ×´Ì¬
+        // æ¸…ç†æ‰€æœ‰çŠ¶æ€
         CleanupState();
 
         AllIcons.Remove(this);
@@ -206,38 +206,38 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
     #endregion
 
-    #region ×´Ì¬ÇåÀí
+    #region çŠ¶æ€æ¸…ç†
 
     /// <summary>
-    /// ÇåÀíiconµÄËùÓĞ½»»¥×´Ì¬£¨ÔÚ½ûÓÃ»òÏú»ÙÊ±µ÷ÓÃ£©
+    /// æ¸…ç†iconçš„æ‰€æœ‰äº¤äº’çŠ¶æ€ï¼ˆåœ¨ç¦ç”¨æˆ–é”€æ¯æ—¶è°ƒç”¨ï¼‰
     /// </summary>
     private void CleanupState()
     {
-        // Í£Ö¹ËùÓĞĞ­³Ì
+        // åœæ­¢æ‰€æœ‰åç¨‹
         if (tooltipCoroutine != null)
         {
             StopCoroutine(tooltipCoroutine);
             tooltipCoroutine = null;
         }
 
-        // Òş²Ø¸ßÁÁĞ§¹û
+        // éšè—é«˜äº®æ•ˆæœ
         if (selectionHighlight != null)
         {
             selectionHighlight.SetActive(false);
         }
 
-        // ÖØÖÃÑ¡ÖĞ×´Ì¬
+        // é‡ç½®é€‰ä¸­çŠ¶æ€
         isSelected = false;
 
-        // Òş²ØÓÒ¼ü²Ëµ¥
+        // éšè—å³é”®èœå•
         HideContextMenu();
 
-        //Debug.Log($"InteractableIcon: {name} ÒÑÇåÀí×´Ì¬");
+        //Debug.Log($"InteractableIcon: {name} å·²æ¸…ç†çŠ¶æ€");
     }
 
     #endregion
 
-    #region Êó±ê½»»¥ÊÂ¼ş
+    #region é¼ æ ‡äº¤äº’äº‹ä»¶
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -257,10 +257,10 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
     {
         if (isLocked) return;
 
-        // ´¥·¢ĞüÍ£ÊÂ¼ş
+        // è§¦å‘æ‚¬åœäº‹ä»¶
         OnIconHovered?.Invoke(this);
 
-        // ÏÔÊ¾ĞüÍ£Ğ§¹û
+        // æ˜¾ç¤ºæ‚¬åœæ•ˆæœ
         if (selectionHighlight != null && !isSelected)
         {
             selectionHighlight.SetActive(true);
@@ -269,7 +269,7 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        // Òş²ØĞüÍ£Ğ§¹û
+        // éšè—æ‚¬åœæ•ˆæœ
         if (selectionHighlight != null && !isSelected)
         {
             selectionHighlight.SetActive(false);
@@ -278,7 +278,7 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
     #endregion
 
-    #region ½»»¥´¦Àí
+    #region äº¤äº’å¤„ç†
 
     void HandleLeftClick()
     {
@@ -287,12 +287,12 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
         if (isDoubleClick)
         {
-            // Ë«»÷´¦Àí
+            // åŒå‡»å¤„ç†
             HandleDoubleClick();
         }
         else
         {
-            // µ¥»÷´¦Àí - Ñ¡ÖĞÍ¼±ê
+            // å•å‡»å¤„ç† - é€‰ä¸­å›¾æ ‡
             SelectIcon();
         }
 
@@ -301,33 +301,33 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
     void HandleRightClick(PointerEventData eventData)
     {
-        // ¼ì²éÊÇ·ñÔÊĞíÏÔÊ¾ÓÒ¼ü²Ëµ¥
+        // æ£€æŸ¥æ˜¯å¦å…è®¸æ˜¾ç¤ºå³é”®èœå•
         if (!canShowContextMenu)
         {
-            Debug.Log($"InteractableIcon: {name} ²»Ö§³ÖÓÒ¼ü²Ëµ¥");
+            Debug.Log($"InteractableIcon: {name} ä¸æ”¯æŒå³é”®èœå•");
             return;
         }
 
-        // ¼ì²éÊÇ·ñÓĞ²Ëµ¥Ïî
+        // æ£€æŸ¥æ˜¯å¦æœ‰èœå•é¡¹
         if (contextMenuItems.Count == 0)
         {
-            Debug.Log($"InteractableIcon: {name} Ã»ÓĞÅäÖÃÓÒ¼ü²Ëµ¥Ïî");
+            Debug.Log($"InteractableIcon: {name} æ²¡æœ‰é…ç½®å³é”®èœå•é¡¹");
             return;
         }
 
-        // ÏÈÑ¡ÖĞÍ¼±ê
+        // å…ˆé€‰ä¸­å›¾æ ‡
         SelectIcon();
 
-        // ÏÔÊ¾ÓÒ¼ü²Ëµ¥
+        // æ˜¾ç¤ºå³é”®èœå•
         ShowContextMenu(eventData.position);
     }
 
     void HandleDoubleClick()
     {
-        // Ë«»÷Ê±ÇåÀíĞüÍ£Ğ§¹û£¨·ÀÖ¹½»»¥ºóĞüÍ£Ğ§¹û²ĞÁô£©
+        // åŒå‡»æ—¶æ¸…ç†æ‚¬åœæ•ˆæœï¼ˆé˜²æ­¢äº¤äº’åæ‚¬åœæ•ˆæœæ®‹ç•™ï¼‰
         CleanupHoverEffect();
 
-        // Ö´ĞĞ½»»¥ĞĞÎª
+        // æ‰§è¡Œäº¤äº’è¡Œä¸º
         HandleIconInteraction();
     }
     private void CleanupHoverEffect()
@@ -338,33 +338,33 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
         }
     }
     /// <summary>
-    /// ´¦ÀíiconµÄË«»÷½»»¥ - ¼¯³ÉµÄ½»»¥¹ÜÀíÂß¼­
+    /// å¤„ç†iconçš„åŒå‡»äº¤äº’ - é›†æˆçš„äº¤äº’ç®¡ç†é€»è¾‘
     /// </summary>
     private void HandleIconInteraction()
     {
-        // ²éÕÒiconÉÏµÄ½»»¥ĞĞÎª×é¼ş
+        // æŸ¥æ‰¾iconä¸Šçš„äº¤äº’è¡Œä¸ºç»„ä»¶
         IconAction iconAction = GetComponent<IconAction>();
 
         if (iconAction != null)
         {
-            Debug.Log($"InteractableIcon: Ö´ĞĞ {name} µÄ½»»¥ĞĞÎª");
+            Debug.Log($"InteractableIcon: æ‰§è¡Œ {name} çš„äº¤äº’è¡Œä¸º");
             iconAction.TryExecute();
         }
     }
 
     #endregion
 
-    #region Ñ¡ÖĞ×´Ì¬¹ÜÀí
+    #region é€‰ä¸­çŠ¶æ€ç®¡ç†
 
     public void SelectIcon()
     {
-        // È¡ÏûÆäËûÍ¼±êµÄÑ¡ÖĞ×´Ì¬
+        // å–æ¶ˆå…¶ä»–å›¾æ ‡çš„é€‰ä¸­çŠ¶æ€
         if (CurrentSelectedIcon != null && CurrentSelectedIcon != this)
         {
             CurrentSelectedIcon.DeselectIcon();
         }
 
-        // ÉèÖÃµ±Ç°Í¼±êÎªÑ¡ÖĞ×´Ì¬
+        // è®¾ç½®å½“å‰å›¾æ ‡ä¸ºé€‰ä¸­çŠ¶æ€
         isSelected = true;
         CurrentSelectedIcon = this;
 
@@ -392,14 +392,14 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
     #endregion
 
-    #region ÓÒ¼ü²Ëµ¥
+    #region å³é”®èœå•
 
     void ShowContextMenu(Vector2 screenPosition)
     {
-        // Òş²ØÒÑ´æÔÚµÄ²Ëµ¥
+        // éšè—å·²å­˜åœ¨çš„èœå•
         HideContextMenu();
 
-        // ´´½¨ĞÂµÄÓÒ¼ü²Ëµ¥
+        // åˆ›å»ºæ–°çš„å³é”®èœå•
         if (contextMenuPrefab != null)
         {
             GameObject menuObject = Instantiate(contextMenuPrefab, GetComponentInParent<Canvas>().transform);
@@ -424,20 +424,20 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
 
     void OnContextMenuItemSelected(string itemId)
     {
-        // Ö»´¥·¢¾²Ì¬ÊÂ¼ş£¬ÈÃÆäËûÏµÍ³´¦ÀíÓÒ¼ü²Ëµ¥Âß¼­
+        // åªè§¦å‘é™æ€äº‹ä»¶ï¼Œè®©å…¶ä»–ç³»ç»Ÿå¤„ç†å³é”®èœå•é€»è¾‘
         OnContextMenuItemClicked?.Invoke(this, itemId);
-        Debug.Log($"InteractableIcon: {name} Ñ¡ÔñÁË²Ëµ¥Ïî {itemId}");
+        Debug.Log($"InteractableIcon: {name} é€‰æ‹©äº†èœå•é¡¹ {itemId}");
     }
 
     #endregion
 
-    #region ×´Ì¬¹ÜÀí
+    #region çŠ¶æ€ç®¡ç†
 
     void ApplyVisualState()
     {
         if (iconImage == null) return;
 
-        // ÏÈ±£Áôµ±Ç° alpha
+        // å…ˆä¿ç•™å½“å‰ alpha
         float currentAlpha = iconImage.color.a;
         Color iconColor = new Color(1f, 1f, 1f, currentAlpha);
 
@@ -451,7 +451,7 @@ public class InteractableIcon : MonoBehaviour, IPointerClickHandler, IPointerEnt
         }
         else if (isHidden)
         {
-            iconColor = new Color(1f, 1f, 1f, 0.5f); // °ëÍ¸Ã÷
+            iconColor = new Color(1f, 1f, 1f, 0.5f); // åŠé€æ˜
         }
 
         iconImage.color = iconColor;

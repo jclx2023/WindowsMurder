@@ -1,47 +1,47 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 
 /// <summary>
-/// Windows·ç¸ñ»ù´¡´°¿Ú×é¼ş - Ö§³Ö¶¯Ì¬±êÌâºÍ¼¤»î×´Ì¬¹ÜÀí
+/// Windowsé£æ ¼åŸºç¡€çª—å£ç»„ä»¶ - æ”¯æŒåŠ¨æ€æ ‡é¢˜å’Œæ¿€æ´»çŠ¶æ€ç®¡ç†
 /// </summary>
 public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerDownHandler
 {
-    [Header("´°¿ÚÉèÖÃ")]
+    [Header("çª—å£è®¾ç½®")]
     [SerializeField] private string windowTitle = "NewWindow";
     [SerializeField] private Sprite windowIcon;
     [SerializeField] private bool canClose = true;
     [SerializeField] private AudioClip audioClip;
 
-    [Header("UI×é¼şÒıÓÃ")]
+    [Header("UIç»„ä»¶å¼•ç”¨")]
     [SerializeField] public RectTransform windowRect;
     [SerializeField] private RectTransform titleBarRect;
     [SerializeField] private TMP_Text titleText;
     [SerializeField] private Image iconImage;
     [SerializeField] private Button closeButton;
 
-    // ÍÏ×§Ïà¹Ø
+    // æ‹–æ‹½ç›¸å…³
     private Vector2 lastMousePosition;
     private bool isDragging = false;
     private Canvas parentCanvas;
     private RectTransform canvasRect;
 
-    // ³õÊ¼»¯±ê¼Ç
+    // åˆå§‹åŒ–æ ‡è®°
     private bool isInitialized = false;
     private bool isRegistered = false;
 
-    // Íâ²¿Î»ÖÃÉèÖÃ
+    // å¤–éƒ¨ä½ç½®è®¾ç½®
     private Vector2? externalInitialPosition = null;
     private bool hasAppliedExternalPosition = false;
     private bool skipAutoArrange = false;
 
-    // ÊÂ¼ş
+    // äº‹ä»¶
     public static event System.Action<WindowsWindow> OnWindowClosed;
     public static event System.Action<WindowsWindow> OnWindowSelected;
     public static event System.Action<WindowsWindow> OnWindowTitleChanged;
 
-    // ÊôĞÔ
+    // å±æ€§
     public string Title => titleText != null ? titleText.text : windowTitle;
 
     void Awake()
@@ -85,7 +85,7 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
         CleanupEventListeners();
     }
 
-    #region ³õÊ¼»¯
+    #region åˆå§‹åŒ–
 
     private void InitializeComponents()
     {
@@ -135,10 +135,10 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     #endregion
 
-    #region Íâ²¿Î»ÖÃÉèÖÃ
+    #region å¤–éƒ¨ä½ç½®è®¾ç½®
 
     /// <summary>
-    /// ÉèÖÃÍâ²¿³õÊ¼Î»ÖÃ£¨±ØĞëÔÚAwakeÖ®ºó¡¢StartÖ®Ç°µ÷ÓÃ£©
+    /// è®¾ç½®å¤–éƒ¨åˆå§‹ä½ç½®ï¼ˆå¿…é¡»åœ¨Awakeä¹‹åã€Startä¹‹å‰è°ƒç”¨ï¼‰
     /// </summary>
     public void SetExternalInitialPosition(Vector2 position)
     {
@@ -154,7 +154,7 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
     }
 
     /// <summary>
-    /// ¼ì²éÊÇ·ñÓ¦¸ÃÌø¹ı×Ô¶¯ÅÅÁĞ£¨¹© WindowManager µ÷ÓÃ£©
+    /// æ£€æŸ¥æ˜¯å¦åº”è¯¥è·³è¿‡è‡ªåŠ¨æ’åˆ—ï¼ˆä¾› WindowManager è°ƒç”¨ï¼‰
     /// </summary>
     public bool ShouldSkipAutoArrange()
     {
@@ -163,7 +163,7 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     #endregion
 
-    #region ´°¿Ú¹ÜÀíÆ÷×¢²á
+    #region çª—å£ç®¡ç†å™¨æ³¨å†Œ
 
     private System.Collections.IEnumerator DelayedInitialRegister()
     {
@@ -219,7 +219,7 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     #endregion
 
-    #region ±êÌâ¹ÜÀí
+    #region æ ‡é¢˜ç®¡ç†
 
     private void OnLanguageChanged(SupportedLanguage newLanguage)
     {
@@ -234,7 +234,7 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     #endregion
 
-    #region ¹«¹²·½·¨
+    #region å…¬å…±æ–¹æ³•
 
     public void CloseWindow()
     {
@@ -250,7 +250,7 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     #endregion
 
-    #region ÍÏ×§¹¦ÄÜ
+    #region æ‹–æ‹½åŠŸèƒ½
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -291,7 +291,7 @@ public class WindowsWindow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEn
 
     #endregion
 
-    #region Ë½ÓĞ·½·¨
+    #region ç§æœ‰æ–¹æ³•
 
     private void UpdateDisplay()
     {

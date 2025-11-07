@@ -1,56 +1,56 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// È«¾Ö¹¦ÄÜ¹ÜÀíÆ÷ - ÕûºÏ×ª³¡Ğ§¹ûºÍÒµÎñÂß¼­´¦Àí
-/// ÓÉGlobalTaskBarManager¹ÜÀí£¬´¦ÀíÓÃ»§²Ù×÷µÄ¾ßÌåÒµÎñÁ÷³Ì
+/// å…¨å±€åŠŸèƒ½ç®¡ç†å™¨ - æ•´åˆè½¬åœºæ•ˆæœå’Œä¸šåŠ¡é€»è¾‘å¤„ç†
+/// ç”±GlobalTaskBarManagerç®¡ç†ï¼Œå¤„ç†ç”¨æˆ·æ“ä½œçš„å…·ä½“ä¸šåŠ¡æµç¨‹
 /// </summary>
 public class GlobalActionManager : MonoBehaviour
 {
     public static GlobalActionManager Instance;
 
-    [Header("´°¿ÚÔ¤ÉèÌå")]
+    [Header("çª—å£é¢„è®¾ä½“")]
     public GameObject languageSettingsPrefab;
     public GameObject displaySettingsPrefab;
     public GameObject creditsWindowPrefab;
 
-    [Header("ÒôĞ§")]
+    [Header("éŸ³æ•ˆ")]
     public AudioClip windowOpenSound;
     public AudioClip sceneTransitionSound;
     public AudioClip audioClip;
 
-    [Header("×ª³¡Ğ§¹ûÉèÖÃ")]
-    public float clearPixel = 500f;     // ÇåÎúÌ¬
-    public float blurPixel = 6f;        // Ä£ºıÌ¬£¨ÏñËØ»¯³Ì¶È£¬ÊıÖµÔ½Ğ¡Ô½ºı£©
-    public float preDuration = 0.5f;   // Àë³¡Ç°±äºıÊ±³¤
-    public float postDuration = 0.55f;  // Èë³¡ºó±äÇåÎúÊ±³¤
-    public float jitterDuring = 0.9f;   // ¹ı¶ÉÖĞ¶¶¶¯Ç¿¶È
-    public float jitterClear = 0.9f;    // ÎÈ¶¨ºó¶¶¶¯Ç¿¶È
+    [Header("è½¬åœºæ•ˆæœè®¾ç½®")]
+    public float clearPixel = 500f;     // æ¸…æ™°æ€
+    public float blurPixel = 6f;        // æ¨¡ç³Šæ€ï¼ˆåƒç´ åŒ–ç¨‹åº¦ï¼Œæ•°å€¼è¶Šå°è¶Šç³Šï¼‰
+    public float preDuration = 0.5f;   // ç¦»åœºå‰å˜ç³Šæ—¶é•¿
+    public float postDuration = 0.55f;  // å…¥åœºåå˜æ¸…æ™°æ—¶é•¿
+    public float jitterDuring = 0.9f;   // è¿‡æ¸¡ä¸­æŠ–åŠ¨å¼ºåº¦
+    public float jitterClear = 0.9f;    // ç¨³å®šåæŠ–åŠ¨å¼ºåº¦
     public AnimationCurve ease = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
-    // ÔËĞĞÊ±Ğ¯´øµ½ĞÂ³¡¾°µÄ³õÊ¼Öµ£¨±£Ö¤ÎŞ·ì£©
+    // è¿è¡Œæ—¶æºå¸¦åˆ°æ–°åœºæ™¯çš„åˆå§‹å€¼ï¼ˆä¿è¯æ— ç¼ï¼‰
     private float carryPixel;
     private float carryJitter;
     private bool postSceneReady;
-    private Material postSceneMat; // ĞÂ³¡¾°ÕÒµ½µÄ²ÄÖÊ
+    private Material postSceneMat; // æ–°åœºæ™¯æ‰¾åˆ°çš„æè´¨
 
-    // ±ê¼ÇÊÇ·ñÊÇĞÂÓÎÏ·»¹ÊÇ¼ÌĞøÓÎÏ·
+    // æ ‡è®°æ˜¯å¦æ˜¯æ–°æ¸¸æˆè¿˜æ˜¯ç»§ç»­æ¸¸æˆ
     private bool isNewGame = false;
     private bool isContinueGame = false;
 
     void Awake()
     {
-        // ¼ì²éÊÇ·ñ±»TaskBar¹ÜÀí
+        // æ£€æŸ¥æ˜¯å¦è¢«TaskBarç®¡ç†
         if (GlobalTaskBarManager.Instance == null)
         {
-            Debug.LogError("GlobalActionManager: Ó¦¸ÃÓÉGlobalTaskBarManager´´½¨ºÍ¹ÜÀí£¡");
+            Debug.LogError("GlobalActionManager: åº”è¯¥ç”±GlobalTaskBarManageråˆ›å»ºå’Œç®¡ç†ï¼");
             Destroy(gameObject);
             return;
         }
 
-        // µ¥ÀıÄ£Ê½
+        // å•ä¾‹æ¨¡å¼
         if (Instance == null)
         {
             Instance = this;
@@ -63,22 +63,22 @@ public class GlobalActionManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ³õÊ¼»¯¹ÜÀíÆ÷£¨ÓÉGlobalTaskBarManagerµ÷ÓÃ£©
+    /// åˆå§‹åŒ–ç®¡ç†å™¨ï¼ˆç”±GlobalTaskBarManagerè°ƒç”¨ï¼‰
     /// </summary>
     public void InitializeManager()
     {
 
-        // È·±£SaveManager´æÔÚ
+        // ç¡®ä¿SaveManagerå­˜åœ¨
         if (SaveManager.Instance == null)
         {
-            Debug.LogWarning("GlobalActionManager: SaveManagerÎ´³õÊ¼»¯£¬³¢ÊÔ´´½¨");
+            Debug.LogWarning("GlobalActionManager: SaveManageræœªåˆå§‹åŒ–ï¼Œå°è¯•åˆ›å»º");
             GameObject saveManagerObj = new GameObject("SaveManager");
             saveManagerObj.AddComponent<SaveManager>();
         }
     }
 
     /// <summary>
-    /// ²¥·ÅÒôĞ§ - Î¯ÍĞ¸øGlobalSystemManager
+    /// æ’­æ”¾éŸ³æ•ˆ - å§”æ‰˜ç»™GlobalSystemManager
     /// </summary>
     void PlaySound(AudioClip clip)
     {
@@ -89,46 +89,46 @@ public class GlobalActionManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ´´½¨´°¿ÚµÄÍ¨ÓÃ·½·¨
+    /// åˆ›å»ºçª—å£çš„é€šç”¨æ–¹æ³•
     /// </summary>
     GameObject CreateWindow(GameObject windowPrefab)
     {
-        // ²éÕÒµ±Ç°³¡¾°µÄCanvas
+        // æŸ¥æ‰¾å½“å‰åœºæ™¯çš„Canvas
         Canvas canvas = FindObjectOfType<Canvas>();
         if (canvas == null)
         {
-            Debug.LogError("GlobalActionManager: ÕÒ²»µ½Canvas£¬ÎŞ·¨´´½¨´°¿Ú");
+            Debug.LogError("GlobalActionManager: æ‰¾ä¸åˆ°Canvasï¼Œæ— æ³•åˆ›å»ºçª—å£");
             return null;
         }
 
-        // ´´½¨´°¿Ú
+        // åˆ›å»ºçª—å£
         GameObject window = Instantiate(windowPrefab, canvas.transform);
         PlaySound(windowOpenSound);
 
-        Debug.Log($"GlobalActionManager: ´´½¨ÁË´°¿Ú");
+        Debug.Log($"GlobalActionManager: åˆ›å»ºäº†çª—å£");
         return window;
     }
 
-    // ==================== È«¾Ö¹¦ÄÜ½Ó¿Ú ====================
+    // ==================== å…¨å±€åŠŸèƒ½æ¥å£ ====================
 
     /// <summary>
-    /// ·µ»ØÖ÷²Ëµ¥
+    /// è¿”å›ä¸»èœå•
     /// </summary>
     public void BackToMainMenu()
     {
-        Debug.Log("GlobalActionManager: ·µ»ØÖ÷²Ëµ¥");
+        Debug.Log("GlobalActionManager: è¿”å›ä¸»èœå•");
 
-        // Èç¹ûÔÚÓÎÏ·³¡¾°£¬ÏÈ±£´æ½ø¶È
+        // å¦‚æœåœ¨æ¸¸æˆåœºæ™¯ï¼Œå…ˆä¿å­˜è¿›åº¦
         if (SceneManager.GetActiveScene().name == "GameScene")
         {
             if (SaveManager.Instance != null)
             {
                 SaveManager.Instance.SaveGame();
-                Debug.Log("GlobalActionManager: ÒÑ±£´æµ±Ç°ÓÎÏ·½ø¶È");
+                Debug.Log("GlobalActionManager: å·²ä¿å­˜å½“å‰æ¸¸æˆè¿›åº¦");
             }
         }
 
-        // ÖØÖÃ±ê¼Ç
+        // é‡ç½®æ ‡è®°
         isNewGame = false;
         isContinueGame = false;
 
@@ -137,26 +137,26 @@ public class GlobalActionManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¿ªÊ¼ĞÂÓÎÏ·
+    /// å¼€å§‹æ–°æ¸¸æˆ
     /// </summary>
     public void NewGame()
     {
-        Debug.Log("GlobalActionManager: ¿ªÊ¼ĞÂÓÎÏ·");
+        Debug.Log("GlobalActionManager: å¼€å§‹æ–°æ¸¸æˆ");
 
-        // É¾³ı¾É´æµµ
+        // åˆ é™¤æ—§å­˜æ¡£
         if (SaveManager.Instance != null)
         {
             SaveManager.Instance.DeleteSave();
-            Debug.Log("GlobalActionManager: ÒÑÉ¾³ı¾É´æµµ");
+            Debug.Log("GlobalActionManager: å·²åˆ é™¤æ—§å­˜æ¡£");
         }
 
-        // Í¬Ê±Í¨¹ıGlobalSystemManagerÉ¾³ı£¨±£³Ö¼æÈİ£©
+        // åŒæ—¶é€šè¿‡GlobalSystemManageråˆ é™¤ï¼ˆä¿æŒå…¼å®¹ï¼‰
         if (GlobalSystemManager.Instance != null)
         {
             GlobalSystemManager.Instance.DeleteSave();
         }
 
-        // ÉèÖÃ±ê¼Ç
+        // è®¾ç½®æ ‡è®°
         isNewGame = true;
         isContinueGame = false;
 
@@ -165,19 +165,19 @@ public class GlobalActionManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¼ÌĞøÓÎÏ·
+    /// ç»§ç»­æ¸¸æˆ
     /// </summary>
     public void Continue()
     {
-        // ¼ì²éÊÇ·ñÓĞ´æµµ
+        // æ£€æŸ¥æ˜¯å¦æœ‰å­˜æ¡£
         bool hasSave = false;
 
-        // ÓÅÏÈÊ¹ÓÃSaveManager¼ì²é
+        // ä¼˜å…ˆä½¿ç”¨SaveManageræ£€æŸ¥
         if (SaveManager.Instance != null)
         {
             hasSave = SaveManager.Instance.HasSaveData();
         }
-        // ±¸ÓÃ£ºÍ¨¹ıGlobalSystemManager¼ì²é
+        // å¤‡ç”¨ï¼šé€šè¿‡GlobalSystemManageræ£€æŸ¥
         else if (GlobalSystemManager.Instance != null)
         {
             hasSave = GlobalSystemManager.Instance.HasGameSave();
@@ -185,28 +185,28 @@ public class GlobalActionManager : MonoBehaviour
 
         if (!hasSave)
         {
-            Debug.LogWarning("GlobalActionManager: ÎŞ·¨¼ÌĞøÓÎÏ·£¬Ã»ÓĞÕÒµ½´æµµ");
-            // TODO: ¿ÉÒÔÔÚÕâÀïÏÔÊ¾ÌáÊ¾´°¿Ú
+            Debug.LogWarning("GlobalActionManager: æ— æ³•ç»§ç»­æ¸¸æˆï¼Œæ²¡æœ‰æ‰¾åˆ°å­˜æ¡£");
+            // TODO: å¯ä»¥åœ¨è¿™é‡Œæ˜¾ç¤ºæç¤ºçª—å£
             return;
         }
 
-        Debug.Log("GlobalActionManager: ¼ÌĞøÓÎÏ·");
+        Debug.Log("GlobalActionManager: ç»§ç»­æ¸¸æˆ");
 
-        // ¼ÓÔØ´æµµÊı¾İ
+        // åŠ è½½å­˜æ¡£æ•°æ®
         if (SaveManager.Instance != null)
         {
             if (SaveManager.Instance.LoadGame())
             {
-                Debug.Log("GlobalActionManager: ´æµµÊı¾İÒÑ¼ÓÔØµ½ÄÚ´æ");
+                Debug.Log("GlobalActionManager: å­˜æ¡£æ•°æ®å·²åŠ è½½åˆ°å†…å­˜");
             }
             else
             {
-                Debug.LogError("GlobalActionManager: ¼ÓÔØ´æµµÊ§°Ü");
+                Debug.LogError("GlobalActionManager: åŠ è½½å­˜æ¡£å¤±è´¥");
                 return;
             }
         }
 
-        // ÉèÖÃ±ê¼Ç
+        // è®¾ç½®æ ‡è®°
         isNewGame = false;
         isContinueGame = true;
 
@@ -215,60 +215,60 @@ public class GlobalActionManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ´ò¿ªÓïÑÔÉèÖÃ
+    /// æ‰“å¼€è¯­è¨€è®¾ç½®
     /// </summary>
     public void OpenLanguageSettings()
     {
-        Debug.Log("GlobalActionManager: ´ò¿ªÓïÑÔÉèÖÃ");
+        Debug.Log("GlobalActionManager: æ‰“å¼€è¯­è¨€è®¾ç½®");
         CreateWindow(languageSettingsPrefab);
     }
 
     /// <summary>
-    /// ´ò¿ªÏÔÊ¾ÉèÖÃ
+    /// æ‰“å¼€æ˜¾ç¤ºè®¾ç½®
     /// </summary>
     public void OpenDisplaySettings()
     {
-        Debug.Log("GlobalActionManager: ´ò¿ªÏÔÊ¾ÉèÖÃ");
+        Debug.Log("GlobalActionManager: æ‰“å¼€æ˜¾ç¤ºè®¾ç½®");
         CreateWindow(displaySettingsPrefab);
     }
 
     /// <summary>
-    /// ´ò¿ªÖÆ×÷ÈËÔ±Ãûµ¥
+    /// æ‰“å¼€åˆ¶ä½œäººå‘˜åå•
     /// </summary>
     public void OpenCredits()
     {
-        Debug.Log("GlobalActionManager: ´ò¿ªÖÆ×÷ÈËÔ±Ãûµ¥");
+        Debug.Log("GlobalActionManager: æ‰“å¼€åˆ¶ä½œäººå‘˜åå•");
         CreateWindow(creditsWindowPrefab);
     }
 
     /// <summary>
-    /// ¹Ø»ú/ÍË³öÓÎÏ·
+    /// å…³æœº/é€€å‡ºæ¸¸æˆ
     /// </summary>
     public void Shutdown()
     {
-        Debug.Log("GlobalActionManager: ÍË³öÓÎÏ·");
+        Debug.Log("GlobalActionManager: é€€å‡ºæ¸¸æˆ");
 
-        // ÍË³öÇ°±£´æÓÎÏ·£¨Èç¹ûÔÚÓÎÏ·³¡¾°£©
+        // é€€å‡ºå‰ä¿å­˜æ¸¸æˆï¼ˆå¦‚æœåœ¨æ¸¸æˆåœºæ™¯ï¼‰
         if (SceneManager.GetActiveScene().name == "GameScene")
         {
             if (SaveManager.Instance != null)
             {
                 SaveManager.Instance.SaveGame();
-                Debug.Log("GlobalActionManager: ÍË³öÇ°ÒÑ±£´æÓÎÏ·");
+                Debug.Log("GlobalActionManager: é€€å‡ºå‰å·²ä¿å­˜æ¸¸æˆ");
             }
         }
         if (audioClip != null)
         {
             GlobalSystemManager.Instance.PlaySFX(audioClip);
         }
-        // Í¨¹ıGlobalSystemManagerÍË³ö
+        // é€šè¿‡GlobalSystemManageré€€å‡º
         if (GlobalSystemManager.Instance != null)
         {
             GlobalSystemManager.Instance.QuitApplication();
         }
         else
         {
-            // ±¸ÓÃÍË³ö·½·¨
+            // å¤‡ç”¨é€€å‡ºæ–¹æ³•
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
 #else
@@ -277,19 +277,19 @@ public class GlobalActionManager : MonoBehaviour
         }
     }
 
-    // ==================== ×´Ì¬²éÑ¯½Ó¿Ú ====================
+    // ==================== çŠ¶æ€æŸ¥è¯¢æ¥å£ ====================
 
     /// <summary>
-    /// ¼ì²éÊÇ·ñÓĞÓÎÏ·´æµµ
+    /// æ£€æŸ¥æ˜¯å¦æœ‰æ¸¸æˆå­˜æ¡£
     /// </summary>
     public bool HasGameSave()
     {
-        // ÓÅÏÈÊ¹ÓÃSaveManager
+        // ä¼˜å…ˆä½¿ç”¨SaveManager
         if (SaveManager.Instance != null)
         {
             return SaveManager.Instance.HasSaveData();
         }
-        // ±¸ÓÃ£ºÊ¹ÓÃGlobalSystemManager
+        // å¤‡ç”¨ï¼šä½¿ç”¨GlobalSystemManager
         else if (GlobalSystemManager.Instance != null)
         {
             return GlobalSystemManager.Instance.HasGameSave();
@@ -298,15 +298,15 @@ public class GlobalActionManager : MonoBehaviour
     }
 
     /// <summary>
-    /// »ñÈ¡µ±Ç°ÓÎÏ·Ä£Ê½£¨ĞÂÓÎÏ·/¼ÌĞøÓÎÏ·£©
+    /// è·å–å½“å‰æ¸¸æˆæ¨¡å¼ï¼ˆæ–°æ¸¸æˆ/ç»§ç»­æ¸¸æˆï¼‰
     /// </summary>
     public bool IsNewGame() { return isNewGame; }
     public bool IsContinueGame() { return isContinueGame; }
 
-    // ==================== ×ª³¡Ğ§¹ûÏµÍ³ ====================
+    // ==================== è½¬åœºæ•ˆæœç³»ç»Ÿ ====================
 
     /// <summary>
-    /// ´ø×ª³¡Ğ§¹ûµÄ³¡¾°ÇĞ»»
+    /// å¸¦è½¬åœºæ•ˆæœçš„åœºæ™¯åˆ‡æ¢
     /// </summary>
     public void SwitchSceneWithEffect(string sceneName)
     {
@@ -315,15 +315,15 @@ public class GlobalActionManager : MonoBehaviour
 
     private IEnumerator SceneTransitionCoroutine(string sceneName)
     {
-        Debug.Log($"GlobalActionManager: ¿ªÊ¼×ª³¡ÇĞ»»µ½ {sceneName}");
+        Debug.Log($"GlobalActionManager: å¼€å§‹è½¬åœºåˆ‡æ¢åˆ° {sceneName}");
 
-        // 1) Àë¿ª³¡¾°Ç°£ºÕÒµ½µ±Ç°³¡¾°µÄ MainMenuBack ²¢°ÑËü´ÓÇåÎú¡úÄ£ºı
+        // 1) ç¦»å¼€åœºæ™¯å‰ï¼šæ‰¾åˆ°å½“å‰åœºæ™¯çš„ MainMenuBack å¹¶æŠŠå®ƒä»æ¸…æ™°â†’æ¨¡ç³Š
         Material curMat = FindMainMenuBackMaterial();
 
         float startPixel = GetFloatSafe(curMat, "_PixelResolution", clearPixel);
         float startJitter = GetFloatSafe(curMat, "_JitterStrength", jitterClear);
 
-        // Ô¤¹ı¶É£ºÇåÎú ¡ú Ä£ºı
+        // é¢„è¿‡æ¸¡ï¼šæ¸…æ™° â†’ æ¨¡ç³Š
         yield return AnimateTwoFloats(
             curMat,
             "_PixelResolution", startPixel, blurPixel,
@@ -331,7 +331,7 @@ public class GlobalActionManager : MonoBehaviour
             preDuration, ease
         );
 
-        // 2) Òì²½¼ÓÔØĞÂ³¡¾°£¬×¼±¸°ÑĞÂ³¡¾°µÄ MainMenuBack ³õÊ¼»¯Îª"Ä£ºıÌ¬"
+        // 2) å¼‚æ­¥åŠ è½½æ–°åœºæ™¯ï¼Œå‡†å¤‡æŠŠæ–°åœºæ™¯çš„ MainMenuBack åˆå§‹åŒ–ä¸º"æ¨¡ç³Šæ€"
         carryPixel = blurPixel;
         carryJitter = jitterDuring;
         postSceneReady = false;
@@ -341,19 +341,19 @@ public class GlobalActionManager : MonoBehaviour
 
         var async = SceneManager.LoadSceneAsync(sceneName);
         async.allowSceneActivation = false;
-        while (async.progress < 0.9f) // µÈ´ı¼ÓÔØÍêÈ«£¨Unity µÄ 0.9 ±íÊ¾ÒÑÍê³É£¬´ı¼¤»î£©
+        while (async.progress < 0.9f) // ç­‰å¾…åŠ è½½å®Œå…¨ï¼ˆUnity çš„ 0.9 è¡¨ç¤ºå·²å®Œæˆï¼Œå¾…æ¿€æ´»ï¼‰
             yield return null;
 
-        // ÔÊĞí³¡¾°¼¤»î£¬¼¤»îºó»áÁ¢¿Ì´¥·¢ sceneLoaded »Øµ÷
+        // å…è®¸åœºæ™¯æ¿€æ´»ï¼Œæ¿€æ´»åä¼šç«‹åˆ»è§¦å‘ sceneLoaded å›è°ƒ
         async.allowSceneActivation = true;
 
-        // µÈ´ıÎÒÃÇÔÚ»Øµ÷Àï°ÑĞÂ³¡¾°µÄ MainMenuBack ³õÊ¼»¯ºÃ
+        // ç­‰å¾…æˆ‘ä»¬åœ¨å›è°ƒé‡ŒæŠŠæ–°åœºæ™¯çš„ MainMenuBack åˆå§‹åŒ–å¥½
         while (!postSceneReady)
             yield return null;
 
         SceneManager.sceneLoaded -= OnSceneLoadedSetInitial;
 
-        // 3) Èë³¡ºó£º°ÑĞÂ³¡¾°µÄ MainMenuBack ´ÓÄ£ºı¡úÇåÎú
+        // 3) å…¥åœºåï¼šæŠŠæ–°åœºæ™¯çš„ MainMenuBack ä»æ¨¡ç³Šâ†’æ¸…æ™°
         if (postSceneMat != null)
         {
             yield return AnimateTwoFloats(
@@ -363,21 +363,21 @@ public class GlobalActionManager : MonoBehaviour
                 postDuration, ease
             );
 
-            // È·±£×îÖÕ×´Ì¬ÕıÈ·ÉèÖÃ
+            // ç¡®ä¿æœ€ç»ˆçŠ¶æ€æ­£ç¡®è®¾ç½®
             postSceneMat.SetFloat("_PixelResolution", clearPixel);
             postSceneMat.SetFloat("_JitterStrength", jitterClear);
-            Debug.Log($"×ª³¡Íê³É£¬×îÖÕ×´Ì¬: PixelResolution={clearPixel}, JitterStrength={jitterClear}");
+            Debug.Log($"è½¬åœºå®Œæˆï¼Œæœ€ç»ˆçŠ¶æ€: PixelResolution={clearPixel}, JitterStrength={jitterClear}");
         }
 
-        // 4) ³¡¾°ÇĞ»»Íê³ÉºóµÄ¶îÍâ´¦Àí
+        // 4) åœºæ™¯åˆ‡æ¢å®Œæˆåçš„é¢å¤–å¤„ç†
         if (sceneName == "GameScene")
         {
-            // Í¨ÖªSaveManager³¡¾°ÒÑ¼ÓÔØÍê³É
-            // SaveManager»áÔÚOnSceneLoadedÖĞ×Ô¶¯´¦Àí»Ö¸´Âß¼­
-            Debug.Log($"GlobalActionManager: GameScene¼ÓÔØÍê³É£¬Ä£Ê½: ĞÂÓÎÏ·={isNewGame}, ¼ÌĞø={isContinueGame}");
+            // é€šçŸ¥SaveManageråœºæ™¯å·²åŠ è½½å®Œæˆ
+            // SaveManagerä¼šåœ¨OnSceneLoadedä¸­è‡ªåŠ¨å¤„ç†æ¢å¤é€»è¾‘
+            Debug.Log($"GlobalActionManager: GameSceneåŠ è½½å®Œæˆï¼Œæ¨¡å¼: æ–°æ¸¸æˆ={isNewGame}, ç»§ç»­={isContinueGame}");
         }
 
-        // ³¡¾°ÇĞ»»Íê³ÉºóÖØÖÃ±ê¼Ç
+        // åœºæ™¯åˆ‡æ¢å®Œæˆåé‡ç½®æ ‡è®°
         if (sceneName == "MainMenu")
         {
             isNewGame = false;
@@ -385,7 +385,7 @@ public class GlobalActionManager : MonoBehaviour
         }
     }
 
-    // ÔÚĞÂ³¡¾°¼¤»îÊ±µ÷ÓÃ£ºÏÈÕÒµ½ MainMenuBack ²¢°Ñ²ÄÖÊÖ±½ÓÉèÎª"Ä£ºıÆğµã"£¬±ÜÃâÒ»Ö¡ÉÁÇåÎú
+    // åœ¨æ–°åœºæ™¯æ¿€æ´»æ—¶è°ƒç”¨ï¼šå…ˆæ‰¾åˆ° MainMenuBack å¹¶æŠŠæè´¨ç›´æ¥è®¾ä¸º"æ¨¡ç³Šèµ·ç‚¹"ï¼Œé¿å…ä¸€å¸§é—ªæ¸…æ™°
     private void OnSceneLoadedSetInitial(Scene scene, LoadSceneMode mode)
     {
         var mat = FindMainMenuBackMaterial();
@@ -398,18 +398,18 @@ public class GlobalActionManager : MonoBehaviour
         postSceneReady = true;
     }
 
-    // ==================== ×ª³¡Ğ§¹û¹¤¾ß·½·¨ ====================
+    // ==================== è½¬åœºæ•ˆæœå·¥å…·æ–¹æ³• ====================
 
     private Material FindMainMenuBackMaterial()
     {
-        // ÏÈÓÃ GameObject.Find£¨Ö»ÕÒ¼¤»î¶ÔÏó£©
+        // å…ˆç”¨ GameObject.Findï¼ˆåªæ‰¾æ¿€æ´»å¯¹è±¡ï¼‰
         GameObject go = GameObject.Find("MainMenuBack");
         Image img = null;
 
         if (go != null) img = go.GetComponent<Image>();
 
-        // È·±£Îªµ±Ç°¶ÔÏó´´½¨¶ÀÁ¢ÊµÀı£¬±ÜÃâ¸Äµ½ sharedMaterial
-        //£¨Ö»ÔÚĞèÒª¿ØÖÆ¶¯»­µÄ¶ÔÏóÉÏÕâÑù×ö£©
+        // ç¡®ä¿ä¸ºå½“å‰å¯¹è±¡åˆ›å»ºç‹¬ç«‹å®ä¾‹ï¼Œé¿å…æ”¹åˆ° sharedMaterial
+        //ï¼ˆåªåœ¨éœ€è¦æ§åˆ¶åŠ¨ç”»çš„å¯¹è±¡ä¸Šè¿™æ ·åšï¼‰
         img.material = new Material(img.material);
         return img.material;
     }
@@ -433,7 +433,7 @@ public class GlobalActionManager : MonoBehaviour
             yield return null;
         }
 
-        // È·±£×îÖÕÖµ¾«È·ÉèÖÃ
+        // ç¡®ä¿æœ€ç»ˆå€¼ç²¾ç¡®è®¾ç½®
         mat.SetFloat(propA, toA);
         mat.SetFloat(propB, toB);
     }

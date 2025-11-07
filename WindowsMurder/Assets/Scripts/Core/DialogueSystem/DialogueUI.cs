@@ -1,11 +1,11 @@
-using System.Collections;
+ï»¿using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class DialogueUI : MonoBehaviour
 {
-    [Header("UI×é¼ş")]
+    [Header("UIç»„ä»¶")]
     public GameObject dialoguePanel;
     public TextMeshProUGUI characterNameText;
     public TextMeshProUGUI dialogueText;
@@ -14,11 +14,11 @@ public class DialogueUI : MonoBehaviour
     public Button sendButton;
     public Button exitLLMButton;
 
-    [Header("´ò×Ö»úĞ§¹ûÉèÖÃ")]
+    [Header("æ‰“å­—æœºæ•ˆæœè®¾ç½®")]
     public float textSpeed = 0.05f;
     public bool useTypingEffect = true;
 
-    [Header("ÎÄ×Ö¶¯»­Ğ§¹û")]
+    [Header("æ–‡å­—åŠ¨ç”»æ•ˆæœ")]
     public bool enableBounceEffect = true;
     public float bounceHeight = 8f;
     public float bounceDuration = 0.3f;
@@ -28,28 +28,28 @@ public class DialogueUI : MonoBehaviour
     public float randomOffsetRange = 2f;
     public float offsetSmoothTime = 0.15f;
 
-    [Header("ÒôĞ§")]
+    [Header("éŸ³æ•ˆ")]
     public AudioSource audioSource;
     private AudioClip[] typingSounds;
-    private const int TYPING_SOUND_COUNT = 32; // ÒôĞ§ÎÄ¼şÊıÁ¿
+    private const int TYPING_SOUND_COUNT = 32; // éŸ³æ•ˆæ–‡ä»¶æ•°é‡
 
-    [Header("LLM½»»¥ÌáÊ¾")]
+    [Header("LLMäº¤äº’æç¤º")]
     public string waitingForInputHint = "Please enter your question...";
     public string waitingForAIHint = "Thinking...";
 
-    // ========== ĞÂÔö£ºCMDÄ£Ê½ ==========
-    [Header("CMDÄ£Ê½ÉèÖÃ")]
-    public bool enableCmdMode = false; // ÊÇ·ñÆôÓÃCMDÑùÊ½
+    // ========== æ–°å¢ï¼šCMDæ¨¡å¼ ==========
+    [Header("CMDæ¨¡å¼è®¾ç½®")]
+    public bool enableCmdMode = false; // æ˜¯å¦å¯ç”¨CMDæ ·å¼
     public string cmdPath = "C:\\Windows\\System32>";
-    public Color cmdTextColor = new Color(0.3f, 1f, 0.3f); // ·ÂCMDÂÌÉ«ÎÄ×Ö
+    public Color cmdTextColor = new Color(0.3f, 1f, 0.3f); // ä»¿CMDç»¿è‰²æ–‡å­—
 
-    // ÊÂ¼şÏµÍ³
+    // äº‹ä»¶ç³»ç»Ÿ
     public static event System.Action<string, string, string, bool> OnLineStarted;
     public static event System.Action<string, string, string, bool> OnLineCompleted;
     public static event System.Action<string, string> OnDialogueBlockStarted;
     public static event System.Action<string, string> OnDialogueBlockEnded;
 
-    // ===== ×´Ì¬»ú¶¨Òå =====
+    // ===== çŠ¶æ€æœºå®šä¹‰ =====
     private enum LLMState
     {
         Inactive,
@@ -67,21 +67,21 @@ public class DialogueUI : MonoBehaviour
         WaitingForClick
     }
 
-    // ===== ×´Ì¬±äÁ¿ =====
+    // ===== çŠ¶æ€å˜é‡ =====
     private LLMState llmState = LLMState.Inactive;
     private PresetState presetState = PresetState.Inactive;
 
-    // ===== LLMÄ£Ê½×¨ÓÃ±äÁ¿ =====
+    // ===== LLMæ¨¡å¼ä¸“ç”¨å˜é‡ =====
     private bool isLLMTyping = false;
     private bool aiRequestedEnd = false;
     private string currentLLMCharacter;
     private Coroutine llmTypingCoroutine;
 
-    // ===== ÆÕÍ¨Ä£Ê½×¨ÓÃ±äÁ¿ =====
+    // ===== æ™®é€šæ¨¡å¼ä¸“ç”¨å˜é‡ =====
     private bool isPresetTyping = false;
     private Coroutine presetTypingCoroutine;
 
-    // ===== Í¨ÓÃ±äÁ¿ =====
+    // ===== é€šç”¨å˜é‡ =====
     public DialogueLine CurrentLine
     {
         get
@@ -138,7 +138,7 @@ public class DialogueUI : MonoBehaviour
         textSpeed = settings;
     }
 
-    // ¡¾ĞŞ¸Äµã 1¡¿£º¼ÓÈë CMD Ä£Ê½ÏÂ UI ×é¼şµÄÒş²Ø/ÏÔÊ¾Âß¼­
+    // ã€ä¿®æ”¹ç‚¹ 1ã€‘ï¼šåŠ å…¥ CMD æ¨¡å¼ä¸‹ UI ç»„ä»¶çš„éšè—/æ˜¾ç¤ºé€»è¾‘
     public void ShowDialoguePanel()
     {
         if (dialoguePanel == null) return;
@@ -146,17 +146,17 @@ public class DialogueUI : MonoBehaviour
 
         if (enableCmdMode)
         {
-            // CMD Ä£Ê½ÏÂ£¬Òş²Ø¶ÀÁ¢µÄÃû×ÖÀ¸
+            // CMD æ¨¡å¼ä¸‹ï¼Œéšè—ç‹¬ç«‹çš„åå­—æ 
             if (characterNameText != null)
                 characterNameText.gameObject.SetActive(false);
 
-            // È·±£Í·Ïñ±»¼¤»î (Ô­°æ SetCharacterInfo »á´¦ÀíÍ¼Æ¬¼ÓÔØºÍÏÔÊ¾£¬ÕâÀïÖ»×ö¼æÈİ)
+            // ç¡®ä¿å¤´åƒè¢«æ¿€æ´» (åŸç‰ˆ SetCharacterInfo ä¼šå¤„ç†å›¾ç‰‡åŠ è½½å’Œæ˜¾ç¤ºï¼Œè¿™é‡Œåªåšå…¼å®¹)
             if (characterPortrait != null)
                 characterPortrait.gameObject.SetActive(true);
         }
         else
         {
-            // ·Ç CMD Ä£Ê½ÏÂ£¬È·±£Ãû×ÖÀ¸¿É¼û
+            // é CMD æ¨¡å¼ä¸‹ï¼Œç¡®ä¿åå­—æ å¯è§
             if (characterNameText != null)
                 characterNameText.gameObject.SetActive(true);
         }
@@ -173,7 +173,7 @@ public class DialogueUI : MonoBehaviour
         return dialoguePanel != null && dialoguePanel.activeSelf;
     }
 
-    // ===== LLM×´Ì¬»ú¿ØÖÆ (ÓëÔ­°æÒ»ÖÂ) =====
+    // ===== LLMçŠ¶æ€æœºæ§åˆ¶ (ä¸åŸç‰ˆä¸€è‡´) =====
     private void SetLLMState(LLMState newState)
     {
         llmState = newState;
@@ -202,7 +202,7 @@ public class DialogueUI : MonoBehaviour
                 break;
 
             case LLMState.WaitingForClick:
-                // Ô­°æÂß¼­£º½öµÈ´ıµã»÷
+                // åŸç‰ˆé€»è¾‘ï¼šä»…ç­‰å¾…ç‚¹å‡»
                 break;
 
             case LLMState.WaitingForInput:
@@ -229,7 +229,7 @@ public class DialogueUI : MonoBehaviour
         }
     }
 
-    // ===== ÆÕÍ¨Ä£Ê½×´Ì¬»ú¿ØÖÆ (ÓëÔ­°æÒ»ÖÂ) =====
+    // ===== æ™®é€šæ¨¡å¼çŠ¶æ€æœºæ§åˆ¶ (ä¸åŸç‰ˆä¸€è‡´) =====
     private void SetPresetState(PresetState newState)
     {
         presetState = newState;
@@ -273,7 +273,7 @@ public class DialogueUI : MonoBehaviour
             exitLLMButton.gameObject.SetActive(active);
     }
 
-    // ===== µã»÷´¦Àí (ÓëÔ­°æÒ»ÖÂ) =====
+    // ===== ç‚¹å‡»å¤„ç† (ä¸åŸç‰ˆä¸€è‡´) =====
     private void OnDialogueTextClicked()
     {
         if (llmState != LLMState.Inactive)
@@ -320,7 +320,7 @@ public class DialogueUI : MonoBehaviour
         }
     }
 
-    // ===== ÍË³ö°´Å¥´¦Àí (ÓëÔ­°æÒ»ÖÂ) =====
+    // ===== é€€å‡ºæŒ‰é’®å¤„ç† (ä¸åŸç‰ˆä¸€è‡´) =====
     private void OnExitLLMButtonClicked()
     {
         if (llmState == LLMState.Inactive)
@@ -330,7 +330,7 @@ public class DialogueUI : MonoBehaviour
         EndLLMMode();
     }
 
-    // ===== ÇåÀí·½·¨ (ÓëÔ­°æÒ»ÖÂ) =====
+    // ===== æ¸…ç†æ–¹æ³• (ä¸åŸç‰ˆä¸€è‡´) =====
     private void CleanupBeforeHide()
     {
         if (presetTypingCoroutine != null)
@@ -359,12 +359,12 @@ public class DialogueUI : MonoBehaviour
             dialogueText.text = "";
     }
 
-    // ===== ¶Ô»°Æô¶¯ (ÓëÔ­°æÒ»ÖÂ) =====
+    // ===== å¯¹è¯å¯åŠ¨ (ä¸åŸç‰ˆä¸€è‡´) =====
     public void StartDialogue(DialogueData dialogueData, string fileName, string blockId)
     {
         if (dialogueData == null)
         {
-            Debug.LogError("DialogueUI: ¶Ô»°Êı¾İÎª¿Õ");
+            Debug.LogError("DialogueUI: å¯¹è¯æ•°æ®ä¸ºç©º");
             return;
         }
 
@@ -402,7 +402,7 @@ public class DialogueUI : MonoBehaviour
             StartLLMMode(line);
     }
 
-    // ===== ÆÕÍ¨Ä£Ê½ÏÔÊ¾ (¼ÓÈë CMD Ç°×ºÂß¼­) =====
+    // ===== æ™®é€šæ¨¡å¼æ˜¾ç¤º (åŠ å…¥ CMD å‰ç¼€é€»è¾‘) =====
     private void ShowPresetLine(DialogueLine line)
     {
         SetLLMState(LLMState.Inactive);
@@ -412,7 +412,7 @@ public class DialogueUI : MonoBehaviour
 
         OnLineStarted?.Invoke(line.id, line.characterId, currentDialogueBlockId, true);
 
-        // ¼ÆËã CMD Ä£Ê½Ç°×º
+        // è®¡ç®— CMD æ¨¡å¼å‰ç¼€
         string prefix = enableCmdMode ? $"{cmdPath} {GetCharacterDisplayName(line.characterId)}> " : "";
 
         if (useTypingEffect && !string.IsNullOrEmpty(fullCurrentText))
@@ -421,7 +421,7 @@ public class DialogueUI : MonoBehaviour
         }
         else
         {
-            dialogueText.text = prefix + fullCurrentText; // ¡¾ĞŞ¸Äµã 2a¡¿£º·Ç´ò×Ö»úÊ±¼ÓÈëÇ°×º
+            dialogueText.text = prefix + fullCurrentText; // ã€ä¿®æ”¹ç‚¹ 2aã€‘ï¼šéæ‰“å­—æœºæ—¶åŠ å…¥å‰ç¼€
             SetPresetState(PresetState.WaitingForClick);
             OnLineCompleted?.Invoke(line.id, line.characterId, currentDialogueBlockId, true);
         }
@@ -435,14 +435,14 @@ public class DialogueUI : MonoBehaviour
         presetTypingCoroutine = StartCoroutine(PresetTypeText(text));
     }
 
-    // ¡¾ĞŞ¸Äµã 2b¡¿£º´ò×Ö»úĞ­³ÌÖĞ¼ÓÈë CMD Ç°×ºÂß¼­
+    // ã€ä¿®æ”¹ç‚¹ 2bã€‘ï¼šæ‰“å­—æœºåç¨‹ä¸­åŠ å…¥ CMD å‰ç¼€é€»è¾‘
     private IEnumerator PresetTypeText(string text)
     {
         SetPresetState(PresetState.ShowingText);
 
-        // ¼ÆËã CMD Ä£Ê½Ç°×º
+        // è®¡ç®— CMD æ¨¡å¼å‰ç¼€
         string prefix = enableCmdMode ? $"{cmdPath} {GetCharacterDisplayName(CurrentLine.characterId)}> " : "";
-        dialogueText.text = prefix; // ³õÊ¼»¯ÎÄ±¾ÎªÇ°×º
+        dialogueText.text = prefix; // åˆå§‹åŒ–æ–‡æœ¬ä¸ºå‰ç¼€
 
         fullCurrentText = text;
 
@@ -455,7 +455,7 @@ public class DialogueUI : MonoBehaviour
 
             if (enableBounceEffect || enableRandomOffset)
             {
-                // ×¢Òâ£º×Ö·ûË÷ÒıĞèÒª¼ÓÉÏÇ°×ºµÄ³¤¶È
+                // æ³¨æ„ï¼šå­—ç¬¦ç´¢å¼•éœ€è¦åŠ ä¸Šå‰ç¼€çš„é•¿åº¦
                 StartCoroutine(AnimateCharacter(i + prefix.Length));
             }
 
@@ -471,7 +471,7 @@ public class DialogueUI : MonoBehaviour
         }
     }
 
-    // ¡¾ĞŞ¸Äµã 2c¡¿£ºÌø¹ı´ò×Ö»úÊ±¼ÓÈë CMD Ç°×ºÂß¼­
+    // ã€ä¿®æ”¹ç‚¹ 2cã€‘ï¼šè·³è¿‡æ‰“å­—æœºæ—¶åŠ å…¥ CMD å‰ç¼€é€»è¾‘
     private void SkipPresetTyping()
     {
         if (presetTypingCoroutine != null)
@@ -480,7 +480,7 @@ public class DialogueUI : MonoBehaviour
         StopAllCoroutines();
 
         string prefix = enableCmdMode ? $"{cmdPath} {GetCharacterDisplayName(CurrentLine.characterId)}> " : "";
-        dialogueText.text = prefix + fullCurrentText; // ¼ÓÈëÇ°×º
+        dialogueText.text = prefix + fullCurrentText; // åŠ å…¥å‰ç¼€
         dialogueText.ForceMeshUpdate();
 
         SetPresetState(PresetState.WaitingForClick);
@@ -492,7 +492,7 @@ public class DialogueUI : MonoBehaviour
         }
     }
 
-    // ===== LLMÄ£Ê½ÏÔÊ¾ (¼ÓÈë CMD Ç°×ºÂß¼­) =====
+    // ===== LLMæ¨¡å¼æ˜¾ç¤º (åŠ å…¥ CMD å‰ç¼€é€»è¾‘) =====
     private void StartLLMMode(DialogueLine line)
     {
         SetPresetState(PresetState.Inactive);
@@ -534,7 +534,7 @@ public class DialogueUI : MonoBehaviour
 
         fullCurrentText = response;
 
-        // ¼ÆËã CMD Ä£Ê½Ç°×º
+        // è®¡ç®— CMD æ¨¡å¼å‰ç¼€
         string prefix = enableCmdMode ? $"{cmdPath} {GetCharacterDisplayName(currentLLMCharacter)}> " : "";
 
         if (useTypingEffect)
@@ -543,7 +543,7 @@ public class DialogueUI : MonoBehaviour
         }
         else
         {
-            dialogueText.text = prefix + fullCurrentText; // ¡¾ĞŞ¸Äµã 3a¡¿£º·Ç´ò×Ö»úÊ±¼ÓÈëÇ°×º
+            dialogueText.text = prefix + fullCurrentText; // ã€ä¿®æ”¹ç‚¹ 3aã€‘ï¼šéæ‰“å­—æœºæ—¶åŠ å…¥å‰ç¼€
             SetLLMState(LLMState.WaitingForInput);
 
             DialogueLine currentLine = CurrentLine;
@@ -559,14 +559,14 @@ public class DialogueUI : MonoBehaviour
         llmTypingCoroutine = StartCoroutine(LLMTypeText(text));
     }
 
-    // ¡¾ĞŞ¸Äµã 3b¡¿£ºLLM ´ò×Ö»úĞ­³ÌÖĞ¼ÓÈë CMD Ç°×ºÂß¼­
+    // ã€ä¿®æ”¹ç‚¹ 3bã€‘ï¼šLLM æ‰“å­—æœºåç¨‹ä¸­åŠ å…¥ CMD å‰ç¼€é€»è¾‘
     private IEnumerator LLMTypeText(string text)
     {
         SetLLMState(LLMState.ShowingAIText);
 
-        // ¼ÆËã CMD Ä£Ê½Ç°×º
+        // è®¡ç®— CMD æ¨¡å¼å‰ç¼€
         string prefix = enableCmdMode ? $"{cmdPath} {GetCharacterDisplayName(currentLLMCharacter)}> " : "";
-        dialogueText.text = prefix; // ³õÊ¼»¯ÎÄ±¾ÎªÇ°×º
+        dialogueText.text = prefix; // åˆå§‹åŒ–æ–‡æœ¬ä¸ºå‰ç¼€
 
         fullCurrentText = text;
 
@@ -579,7 +579,7 @@ public class DialogueUI : MonoBehaviour
 
             if (enableBounceEffect || enableRandomOffset)
             {
-                // ×¢Òâ£º×Ö·ûË÷ÒıĞèÒª¼ÓÉÏÇ°×ºµÄ³¤¶È
+                // æ³¨æ„ï¼šå­—ç¬¦ç´¢å¼•éœ€è¦åŠ ä¸Šå‰ç¼€çš„é•¿åº¦
                 StartCoroutine(AnimateCharacter(i + prefix.Length));
             }
 
@@ -600,7 +600,7 @@ public class DialogueUI : MonoBehaviour
         }
     }
 
-    // ===== ÓÃ»§ÊäÈë´¦Àí (ÓëÔ­°æÒ»ÖÂ) =====
+    // ===== ç”¨æˆ·è¾“å…¥å¤„ç† (ä¸åŸç‰ˆä¸€è‡´) =====
     public void OnSendMessage()
     {
         if (llmState != LLMState.WaitingForInput)
@@ -642,7 +642,7 @@ public class DialogueUI : MonoBehaviour
         ShowNextLine();
     }
 
-    // ===== ×Ö·û¶¯»­ (ÓëÔ­°æÒ»ÖÂ) =====
+    // ===== å­—ç¬¦åŠ¨ç”» (ä¸åŸç‰ˆä¸€è‡´) =====
     private IEnumerator AnimateCharacter(int charIndex)
     {
         Vector2 randomOffset = Vector2.zero;
@@ -717,7 +717,7 @@ public class DialogueUI : MonoBehaviour
         }
     }
 
-    // ===== ¸¨Öú·½·¨ (ÓëÔ­°æÒ»ÖÂ) =====
+    // ===== è¾…åŠ©æ–¹æ³• (ä¸åŸç‰ˆä¸€è‡´) =====
     private void EnsureAudioSource()
     {
         if (audioSource != null)
@@ -727,7 +727,7 @@ public class DialogueUI : MonoBehaviour
 
         if (audioSource != null)
         {
-            Debug.Log($"DialogueUI: ÕÒµ½AudioSource: {audioSource.gameObject.name}");
+            Debug.Log($"DialogueUI: æ‰¾åˆ°AudioSource: {audioSource.gameObject.name}");
             return;
         }
 
@@ -736,7 +736,7 @@ public class DialogueUI : MonoBehaviour
         audioSource.loop = false;
         audioSource.volume = 1f;
 
-        Debug.Log("DialogueUI: Î´ÕÒµ½AudioSource£¬ÒÑ×Ô¶¯´´½¨");
+        Debug.Log("DialogueUI: æœªæ‰¾åˆ°AudioSourceï¼Œå·²è‡ªåŠ¨åˆ›å»º");
     }
 
     private void LoadTypingSounds()
@@ -754,11 +754,11 @@ public class DialogueUI : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning($"DialogueUI: ÎŞ·¨¼ÓÔØÒôĞ§ÎÄ¼ş: {path}");
+                Debug.LogWarning($"DialogueUI: æ— æ³•åŠ è½½éŸ³æ•ˆæ–‡ä»¶: {path}");
             }
         }
 
-        Debug.Log($"DialogueUI: ³É¹¦¼ÓÔØ {typingSounds.Length} ¸ö´ò×ÖÒôĞ§");
+        Debug.Log($"DialogueUI: æˆåŠŸåŠ è½½ {typingSounds.Length} ä¸ªæ‰“å­—éŸ³æ•ˆ");
     }
 
     private void PlayRandomTypingSound()
@@ -826,19 +826,19 @@ public class DialogueUI : MonoBehaviour
     {
         switch (characterId)
         {
-            case "me": return "ÎÒ";
-            case "guardian": return "°²È«ÎÀÊ¿";
-            case "narrator": return "ÅÔ°×";
+            case "me": return "æˆ‘";
+            case "guardian": return "å®‰å…¨å«å£«";
+            case "narrator": return "æ—ç™½";
             case "ps": return "PhotoShop";
-            case "controlpanel": return "¿ØÖÆÃæ°å";
+            case "controlpanel": return "æ§åˆ¶é¢æ¿";
             case "qq": return "QQ";
             case "7zip": return "7-Zip";
-            case "mines": return "É¨À×";
-            case "xunlei": return "Ñ¸À×";
+            case "mines": return "æ‰«é›·";
+            case "xunlei": return "è¿…é›·";
             case "ie": return "IE";
-            case "notepad": return "¼ÇÊÂ±¾";
-            case "recycle": return "»ØÊÕÕ¾";
-            case "registry": return "×¢²á±í¹¤¾ß";
+            case "notepad": return "è®°äº‹æœ¬";
+            case "recycle": return "å›æ”¶ç«™";
+            case "registry": return "æ³¨å†Œè¡¨å·¥å…·";
             default: return characterId;
         }
     }
@@ -865,19 +865,19 @@ public class DialogueUI : MonoBehaviour
     {
         switch (characterId)
         {
-            case "me": return "Ë½";
-            case "guardian": return "¥·¥¹¥Æ¥à¥¬©`¥Ç¥£¥¢¥ó";
-            case "narrator": return "¥Ê¥ì©`¥¿©`";
-            case "ps": return "¥Õ¥©¥È¥·¥ç¥Ã¥×";
-            case "controlpanel": return "¥³¥ó¥È¥í©`¥ë¥Ñ¥Í¥ë";
+            case "me": return "ç§";
+            case "guardian": return "ã‚·ã‚¹ãƒ†ãƒ ã‚¬ãƒ¼ãƒ‡ã‚£ã‚¢ãƒ³";
+            case "narrator": return "ãƒŠãƒ¬ãƒ¼ã‚¿ãƒ¼";
+            case "ps": return "ãƒ•ã‚©ãƒˆã‚·ãƒ§ãƒƒãƒ—";
+            case "controlpanel": return "ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ãƒ‘ãƒãƒ«";
             case "qq": return "QQ";
             case "7zip": return "7-Zip";
             case "mines": return "Minesweeper";
-            case "xunlei": return "Ñ¸À×";
-            case "ie": return "¥¤¥ó¥¿©`¥Í¥Ã¥È¥¨¥¯¥¹¥×¥í©`¥é©`";
-            case "notepad": return "¥á¥â¤";
-            case "recycle": return "¥´¥ßÏä";
-            case "registry": return "¥ì¥¸¥¹¥È¥ê ¥¨¥Ç¥£¥¿©`";
+            case "xunlei": return "è¿…é›·";
+            case "ie": return "ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆã‚¨ã‚¯ã‚¹ãƒ—ãƒ­ãƒ¼ãƒ©ãƒ¼";
+            case "notepad": return "ãƒ¡ãƒ¢å¸³";
+            case "recycle": return "ã‚´ãƒŸç®±";
+            case "registry": return "ãƒ¬ã‚¸ã‚¹ãƒˆãƒª ã‚¨ãƒ‡ã‚£ã‚¿ãƒ¼";
             default: return characterId;
         }
     }

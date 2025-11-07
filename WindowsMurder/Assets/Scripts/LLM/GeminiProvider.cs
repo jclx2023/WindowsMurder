@@ -1,10 +1,10 @@
-using System;
+锘縰sing System;
 using System.Collections;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-// ==================== Gemini 数据模型 ====================
+// ==================== Gemini 鏁版嵁妯″瀷 ====================
 
 [Serializable]
 public class GeminiRequest
@@ -46,33 +46,27 @@ public class GeminiContentResponse
 // ==================== Gemini Provider ====================
 
 /// <summary>
-/// Gemini API Provider - 实现ILLMProvider接口
+/// Gemini API Provider - 瀹炵幇ILLMProvider鎺ュ彛
 /// </summary>
 public class GeminiProvider : MonoBehaviour, ILLMProvider
 {
     [Header("Gemini Settings")]
-    [SerializeField] private string apiKey = ""; // 在Inspector中配置
+    [SerializeField] private string apiKey = "";
     [SerializeField] private string model = "gemini-2.0-flash-exp";
 
     private string endpoint => $"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={apiKey}";
 
-    // 实现接口方法
+    // 瀹炵幇鎺ュ彛鏂规硶
     public string GetProviderName()
     {
         return "Gemini";
     }
 
-    // 实现接口方法 - 保持原有逻辑不变
+    // 瀹炵幇鎺ュ彛鏂规硶 - 淇濇寔鍘熸湁閫昏緫涓嶅彉
     public IEnumerator GenerateText(string prompt, Action<string> onSuccess, Action<string> onError)
     {
-        // 检查API Key
-        if (string.IsNullOrEmpty(apiKey))
-        {
-            onError?.Invoke("Gemini API Key未配置，请在Inspector中设置");
-            yield break;
-        }
 
-        // 构造请求体
+        // 鏋勯�犺姹備綋
         var reqObj = new GeminiRequest
         {
             contents = new GeminiContent[]
@@ -108,12 +102,12 @@ public class GeminiProvider : MonoBehaviour, ILLMProvider
                     }
                     else
                     {
-                        onError?.Invoke("响应解析失败: " + req.downloadHandler.text);
+                        onError?.Invoke("鍝嶅簲瑙ｆ瀽澶辫触: " + req.downloadHandler.text);
                     }
                 }
                 catch (Exception e)
                 {
-                    onError?.Invoke("JSON 解析异常: " + e.Message);
+                    onError?.Invoke("JSON 瑙ｆ瀽寮傚父: " + e.Message);
                 }
             }
             else

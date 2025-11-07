@@ -1,14 +1,14 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 
 /// <summary>
-/// LLMÒıÇæÇĞ»»´°¿ÚUI¿ØÖÆÆ÷
+/// LLMå¼•æ“åˆ‡æ¢çª—å£UIæ§åˆ¶å™¨
 /// </summary>
 public class LLMSwitcherUI : MonoBehaviour
 {
-    [Header("UI×é¼ş")]
+    [Header("UIç»„ä»¶")]
     public TMP_Dropdown providerDropdown;
     public Button confirmButton;
 
@@ -21,15 +21,15 @@ public class LLMSwitcherUI : MonoBehaviour
     }
 
     /// <summary>
-    /// ³õÊ¼»¯ÏÂÀ­¿òÑ¡Ïî
+    /// åˆå§‹åŒ–ä¸‹æ‹‰æ¡†é€‰é¡¹
     /// </summary>
     void InitializeDropdown()
     {
 
-        // Çå¿ÕÏÖÓĞÑ¡Ïî
+        // æ¸…ç©ºç°æœ‰é€‰é¡¹
         providerDropdown.ClearOptions();
 
-        // Ìí¼ÓËùÓĞLLMÒıÇæÑ¡Ïî
+        // æ·»åŠ æ‰€æœ‰LLMå¼•æ“é€‰é¡¹
         List<string> options = new List<string>
         {
             "Gemini",
@@ -39,12 +39,12 @@ public class LLMSwitcherUI : MonoBehaviour
 
         providerDropdown.AddOptions(options);
 
-        // Í¬²½µ±Ç°Ñ¡Ôñ
+        // åŒæ­¥å½“å‰é€‰æ‹©
         SyncCurrentSelection();
     }
 
     /// <summary>
-    /// Í¬²½µ±Ç°Ñ¡Ôñ£¨´ÓGlobalSystemManager¶ÁÈ¡£©
+    /// åŒæ­¥å½“å‰é€‰æ‹©ï¼ˆä»GlobalSystemManagerè¯»å–ï¼‰
     /// </summary>
     void SyncCurrentSelection()
     {
@@ -53,25 +53,25 @@ public class LLMSwitcherUI : MonoBehaviour
 
         LLMProvider currentProvider = GlobalSystemManager.Instance.GetCurrentLLMProvider();
 
-        // ½«Ã¶¾ÙÖµ×ª»»ÎªdropdownË÷Òı
+        // å°†æšä¸¾å€¼è½¬æ¢ä¸ºdropdownç´¢å¼•
         int index = (int)currentProvider;
         providerDropdown.value = index;
     }
 
     /// <summary>
-    /// È·ÈÏ°´Å¥µã»÷ÊÂ¼ş
+    /// ç¡®è®¤æŒ‰é’®ç‚¹å‡»äº‹ä»¶
     /// </summary>
     void OnConfirmClicked()
     {
 
-        // »ñÈ¡Ñ¡ÔñµÄÒıÇæ
+        // è·å–é€‰æ‹©çš„å¼•æ“
         int selectedIndex = providerDropdown.value;
         LLMProvider selectedProvider = (LLMProvider)selectedIndex;
 
-        // Í¨ÖªGlobalSystemManagerÇĞ»»
+        // é€šçŸ¥GlobalSystemManageråˆ‡æ¢
         GlobalSystemManager.Instance.SetLLMProvider(selectedProvider);
 
-        Debug.Log($"LLMÒıÇæÒÑÇĞ»»µ½: {selectedProvider}");
+        Debug.Log($"LLMå¼•æ“å·²åˆ‡æ¢åˆ°: {selectedProvider}");
     }
 
     void OnDestroy()

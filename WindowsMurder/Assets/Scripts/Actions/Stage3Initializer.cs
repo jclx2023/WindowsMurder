@@ -1,128 +1,128 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// Stage3³õÊ¼»¯Æ÷ - ¸ºÔğStage3¼¤»îÊ±´´½¨Explorer´°¿Ú²¢Ó¦ÓÃ´°¿Ú×ª»»Êı¾İ
+/// Stage3åˆå§‹åŒ–å™¨ - è´Ÿè´£Stage3æ¿€æ´»æ—¶åˆ›å»ºExplorerçª—å£å¹¶åº”ç”¨çª—å£è½¬æ¢æ•°æ®
 /// </summary>
 public class Stage3Initializer : MonoBehaviour
 {
-    [Header("×é¼şÒıÓÃ")]
+    [Header("ç»„ä»¶å¼•ç”¨")]
     [SerializeField] private GameFlowController flowController;
-    [SerializeField] private Transform canvasTransform;  // ´°¿ÚÉú³ÉµÄCanvas
+    [SerializeField] private Transform canvasTransform;  // çª—å£ç”Ÿæˆçš„Canvas
 
-    [Header("Ô¤ÖÆÌåÅäÖÃ")]
-    [SerializeField] private GameObject explorerStage3Prefab;  // Stage3×¨ÓÃµÄExplorerÔ¤ÖÆÌå
+    [Header("é¢„åˆ¶ä½“é…ç½®")]
+    [SerializeField] private GameObject explorerStage3Prefab;  // Stage3ä¸“ç”¨çš„Exploreré¢„åˆ¶ä½“
 
-    [Header("Ä¬ÈÏÅäÖÃ")]
-    [SerializeField] private Vector2 defaultWindowPosition = Vector2.zero;  // ÎŞ»º´æÊı¾İÊ±µÄÄ¬ÈÏÎ»ÖÃ
+    [Header("é»˜è®¤é…ç½®")]
+    [SerializeField] private Vector2 defaultWindowPosition = Vector2.zero;  // æ— ç¼“å­˜æ•°æ®æ—¶çš„é»˜è®¤ä½ç½®
 
-    [Header("µ÷ÊÔ")]
+    [Header("è°ƒè¯•")]
     [SerializeField] private bool debugMode = true;
 
-    // ·ÀÖ¹ÖØ¸´³õÊ¼»¯
+    // é˜²æ­¢é‡å¤åˆå§‹åŒ–
     private bool hasInitialized = false;
 
-    // ControllerÒıÓÃ
+    // Controllerå¼•ç”¨
     private Stage3Controller stage3Controller;
 
-    #region UnityÉúÃüÖÜÆÚ
+    #region Unityç”Ÿå‘½å‘¨æœŸ
 
     void Awake()
     {
-        // ²éÕÒGameFlowController£¨Èç¹ûÎ´ÔÚInspectorÖĞÉèÖÃ£©
+        // æŸ¥æ‰¾GameFlowControllerï¼ˆå¦‚æœæœªåœ¨Inspectorä¸­è®¾ç½®ï¼‰
         if (flowController == null)
         {
             flowController = FindObjectOfType<GameFlowController>();
             if (flowController == null)
             {
-                LogError("Î´ÕÒµ½GameFlowController£¡");
+                LogError("æœªæ‰¾åˆ°GameFlowControllerï¼");
             }
         }
 
-        // ²éÕÒStage3Controller
+        // æŸ¥æ‰¾Stage3Controller
         stage3Controller = GetComponent<Stage3Controller>();
     }
 
     void OnEnable()
     {
-        // ·ÀÖ¹ÖØ¸´³õÊ¼»¯
+        // é˜²æ­¢é‡å¤åˆå§‹åŒ–
         if (hasInitialized)
         {
-            LogDebug("ÒÑ¾­³õÊ¼»¯¹ı£¬Ìø¹ı");
+            LogDebug("å·²ç»åˆå§‹åŒ–è¿‡ï¼Œè·³è¿‡");
             return;
         }
 
-        // Ö´ĞĞ³õÊ¼»¯
+        // æ‰§è¡Œåˆå§‹åŒ–
         InitializeStage3();
         hasInitialized = true;
     }
 
     #endregion
 
-    #region ³õÊ¼»¯Âß¼­
+    #region åˆå§‹åŒ–é€»è¾‘
 
     /// <summary>
-    /// ³õÊ¼»¯Stage3 - ´´½¨Explorer´°¿Ú
+    /// åˆå§‹åŒ–Stage3 - åˆ›å»ºExplorerçª—å£
     /// </summary>
     private void InitializeStage3()
     {
-        LogDebug("¿ªÊ¼³õÊ¼»¯Stage3");
+        LogDebug("å¼€å§‹åˆå§‹åŒ–Stage3");
 
-        // ´ÓGameFlowControllerÏû·Ñ´°¿Ú×ª»»Êı¾İ
+        // ä»GameFlowControlleræ¶ˆè´¹çª—å£è½¬æ¢æ•°æ®
         WindowTransitionData? transitionData = flowController.ConsumeWindowTransition();
 
-        // È·¶¨´°¿ÚÎ»ÖÃ
+        // ç¡®å®šçª—å£ä½ç½®
         Vector2 windowPosition;
         if (transitionData.HasValue)
         {
             windowPosition = transitionData.Value.windowPosition;
-            LogDebug($"Ê¹ÓÃ»º´æµÄ´°¿ÚÎ»ÖÃ: {windowPosition}");
+            LogDebug($"ä½¿ç”¨ç¼“å­˜çš„çª—å£ä½ç½®: {windowPosition}");
         }
         else
         {
             windowPosition = defaultWindowPosition;
-            LogDebug($"ÎŞ»º´æÊı¾İ£¬Ê¹ÓÃÄ¬ÈÏÎ»ÖÃ: {windowPosition}");
+            LogDebug($"æ— ç¼“å­˜æ•°æ®ï¼Œä½¿ç”¨é»˜è®¤ä½ç½®: {windowPosition}");
         }
 
-        // ÊµÀı»¯Explorer´°¿Ú²¢»ñÈ¡ÒıÓÃ
+        // å®ä¾‹åŒ–Explorerçª—å£å¹¶è·å–å¼•ç”¨
         ExplorerManager explorerManager = CreateExplorerWindow(windowPosition);
 
-        // ½«ExplorerÒıÓÃ´«µİ¸øController
+        // å°†Explorerå¼•ç”¨ä¼ é€’ç»™Controller
         if (stage3Controller != null && explorerManager != null)
         {
             stage3Controller.SetExplorerReference(explorerManager);
         }
 
-        LogDebug("Stage3³õÊ¼»¯Íê³É");
+        LogDebug("Stage3åˆå§‹åŒ–å®Œæˆ");
     }
 
     /// <summary>
-    /// ´´½¨Explorer´°¿Ú²¢ÉèÖÃÎ»ÖÃ
+    /// åˆ›å»ºExplorerçª—å£å¹¶è®¾ç½®ä½ç½®
     /// </summary>
     private ExplorerManager CreateExplorerWindow(Vector2 position)
     {
         GameObject explorerWindow = Instantiate(explorerStage3Prefab, canvasTransform);
 
-        // Á¢¼´ÉèÖÃÍâ²¿Î»ÖÃ£¨ÔÚStartÖ®Ç°£©
+        // ç«‹å³è®¾ç½®å¤–éƒ¨ä½ç½®ï¼ˆåœ¨Startä¹‹å‰ï¼‰
         WindowsWindow window = explorerWindow.GetComponent<WindowsWindow>();
         if (window != null)
         {
             window.SetExternalInitialPosition(position);
-            LogDebug($"ÒÑÏòWindowsWindow´«µİ³õÊ¼Î»ÖÃ: {position}");
+            LogDebug($"å·²å‘WindowsWindowä¼ é€’åˆå§‹ä½ç½®: {position}");
         }
 
         ExplorerManager explorerManager = explorerWindow.GetComponent<ExplorerManager>();
 
         explorerWindow.transform.SetAsLastSibling();
 
-        LogDebug($"Explorer´°¿ÚÒÑ´´½¨");
+        LogDebug($"Explorerçª—å£å·²åˆ›å»º");
 
         return explorerManager;
     }
 
     #endregion
 
-    #region µ÷ÊÔ¹¤¾ß
+    #region è°ƒè¯•å·¥å…·
 
     private void LogDebug(string message)
     {

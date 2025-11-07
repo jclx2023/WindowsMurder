@@ -1,75 +1,75 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// ´°¿Ú¹Ø±ÕÊ±½âËøÏßË÷×é¼ş
-/// ¹ÒÔØÔÚĞèÒªÔÚ¹Ø±ÕÊ±½âËøÏßË÷µÄ´°¿ÚGameObjectÉÏ
+/// çª—å£å…³é—­æ—¶è§£é”çº¿ç´¢ç»„ä»¶
+/// æŒ‚è½½åœ¨éœ€è¦åœ¨å…³é—­æ—¶è§£é”çº¿ç´¢çš„çª—å£GameObjectä¸Š
 /// </summary>
 [RequireComponent(typeof(WindowsWindow))]
 public class ClueUnlockerOnWindowClose : MonoBehaviour
 {
-    [Header("ÏßË÷ÅäÖÃ")]
-    [Tooltip("´°¿Ú¹Ø±ÕºóÒª½âËøµÄÏßË÷ID")]
+    [Header("çº¿ç´¢é…ç½®")]
+    [Tooltip("çª—å£å…³é—­åè¦è§£é”çš„çº¿ç´¢ID")]
     [SerializeField] private string clueIdToUnlock = "";
 
-    [Header("ÑÓ³ÙÉèÖÃ")]
-    [Tooltip("´°¿Ú¹Ø±ÕºóµÈ´ıµÄÊ±¼ä£¨Ãë£©£¬È·±£´°¿ÚÍêÈ«Ïú»Ù")]
+    [Header("å»¶è¿Ÿè®¾ç½®")]
+    [Tooltip("çª—å£å…³é—­åç­‰å¾…çš„æ—¶é—´ï¼ˆç§’ï¼‰ï¼Œç¡®ä¿çª—å£å®Œå…¨é”€æ¯")]
     [SerializeField] private float delayAfterClose = 0.1f;
 
-    [Header("µ÷ÊÔ")]
+    [Header("è°ƒè¯•")]
     [SerializeField] private bool debugMode = true;
 
-    // »º´æµÄ×é¼şÒıÓÃ
+    // ç¼“å­˜çš„ç»„ä»¶å¼•ç”¨
     private WindowsWindow cachedWindow;
     private GameFlowController gameFlowController;
 
     void Awake()
     {
-        // »º´æ´°¿Ú×é¼ş
+        // ç¼“å­˜çª—å£ç»„ä»¶
         cachedWindow = GetComponent<WindowsWindow>();
     }
 
     void Start()
     {
-        // ²éÕÒ GameFlowController
+        // æŸ¥æ‰¾ GameFlowController
         gameFlowController = FindObjectOfType<GameFlowController>();
     }
 
     void OnEnable()
     {
-        // ¶©ÔÄ´°¿Ú¹Ø±ÕÊÂ¼ş
+        // è®¢é˜…çª—å£å…³é—­äº‹ä»¶
         WindowsWindow.OnWindowClosed += OnWindowClosedHandler;
     }
 
     void OnDisable()
     {
-        // È¡Ïû¶©ÔÄ£¬·ÀÖ¹ÄÚ´æĞ¹Â©
+        // å–æ¶ˆè®¢é˜…ï¼Œé˜²æ­¢å†…å­˜æ³„æ¼
         WindowsWindow.OnWindowClosed -= OnWindowClosedHandler;
     }
 
     /// <summary>
-    /// ´°¿Ú¹Ø±ÕÊÂ¼ş´¦ÀíÆ÷
+    /// çª—å£å…³é—­äº‹ä»¶å¤„ç†å™¨
     /// </summary>
     private void OnWindowClosedHandler(WindowsWindow closedWindow)
     {
-        // ¼ì²éÊÇ·ñÊÇµ±Ç°´°¿Ú
+        // æ£€æŸ¥æ˜¯å¦æ˜¯å½“å‰çª—å£
         if (closedWindow != cachedWindow)
         {
             return;
         }
 
-        LogDebug($"´°¿Ú¼´½«¹Ø±Õ£¬×¼±¸ÑÓ³Ù½âËøÏßË÷: {clueIdToUnlock}");
+        LogDebug($"çª—å£å³å°†å…³é—­ï¼Œå‡†å¤‡å»¶è¿Ÿè§£é”çº¿ç´¢: {clueIdToUnlock}");
 
-        // ÑéÖ¤ GameFlowController ÈÔÈ»´æÔÚ
+        // éªŒè¯ GameFlowController ä»ç„¶å­˜åœ¨
         if (gameFlowController == null)
         {
-            // ¶ş´Î²éÕÒ
+            // äºŒæ¬¡æŸ¥æ‰¾
             gameFlowController = FindObjectOfType<GameFlowController>();
         }
 
         gameFlowController.UnlockClueDelayed(clueIdToUnlock, delayAfterClose);
     }
 
-    #region µ÷ÊÔ¹¤¾ß
+    #region è°ƒè¯•å·¥å…·
 
     private void LogDebug(string message)
     {

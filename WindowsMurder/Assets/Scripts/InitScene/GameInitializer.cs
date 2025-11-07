@@ -1,156 +1,156 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
 /// <summary>
-/// ÓÎÏ·³õÊ¼»¯Æ÷ - ÓÎÏ·Æô¶¯µÄµÚÒ»¸ö³¡¾°
-/// ¸ºÔğ´´½¨È«¾ÖÏµÍ³¡¢Ìø×ªÖ÷²Ëµ¥
+/// æ¸¸æˆåˆå§‹åŒ–å™¨ - æ¸¸æˆå¯åŠ¨çš„ç¬¬ä¸€ä¸ªåœºæ™¯
+/// è´Ÿè´£åˆ›å»ºå…¨å±€ç³»ç»Ÿã€è·³è½¬ä¸»èœå•
 /// </summary>
 public class GameInitializer : MonoBehaviour
 {
-    [Header("³¡¾°ÉèÖÃ")]
+    [Header("åœºæ™¯è®¾ç½®")]
     public string mainMenuSceneName = "MainMenu";
 
-    [Header("ÏµÍ³¼ÓÔØ")]
-    public float systemLoadingDelay = 1f; // µÈ´ıÈ«¾ÖÏµÍ³¼ÓÔØÍê³ÉµÄÑÓ³Ù
+    [Header("ç³»ç»ŸåŠ è½½")]
+    public float systemLoadingDelay = 1f; // ç­‰å¾…å…¨å±€ç³»ç»ŸåŠ è½½å®Œæˆçš„å»¶è¿Ÿ
 
-    [Header("ÒôĞ§")]
+    [Header("éŸ³æ•ˆ")]
     public AudioClip startupSound;
 
-    [Header("È«¾ÖÏµÍ³")]
-    public GameObject globalSystemPrefab; // È«¾ÖÏµÍ³Ô¤ÖÆÌå
+    [Header("å…¨å±€ç³»ç»Ÿ")]
+    public GameObject globalSystemPrefab; // å…¨å±€ç³»ç»Ÿé¢„åˆ¶ä½“
 
-    // Ë½ÓĞ±äÁ¿
+    // ç§æœ‰å˜é‡
     private AudioSource audioSource;
 
     void Start()
     {
-        // »ñÈ¡ÒôÆµ×é¼ş
+        // è·å–éŸ³é¢‘ç»„ä»¶
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
             audioSource = gameObject.AddComponent<AudioSource>();
 
-        // ¿ªÊ¼³õÊ¼»¯Á÷³Ì
+        // å¼€å§‹åˆå§‹åŒ–æµç¨‹
         StartCoroutine(InitializationSequence());
     }
 
     /// <summary>
-    /// ÍêÕûµÄ³õÊ¼»¯ĞòÁĞ
+    /// å®Œæ•´çš„åˆå§‹åŒ–åºåˆ—
     /// </summary>
     IEnumerator InitializationSequence()
     {
-        Debug.Log("ÓÎÏ·³õÊ¼»¯¿ªÊ¼...");
+        Debug.Log("æ¸¸æˆåˆå§‹åŒ–å¼€å§‹...");
 
-        // 1. ²¥·Å¿ª»úÒôĞ§
+        // 1. æ’­æ”¾å¼€æœºéŸ³æ•ˆ
         PlayStartupSound();
 
-        // 2. ´´½¨È«¾ÖÏµÍ³
+        // 2. åˆ›å»ºå…¨å±€ç³»ç»Ÿ
         CreateGlobalSystem();
 
-        // 3. µÈ´ıÈ«¾ÖÏµÍ³ÍêÈ«¼ÓÔØ
+        // 3. ç­‰å¾…å…¨å±€ç³»ç»Ÿå®Œå…¨åŠ è½½
         yield return StartCoroutine(WaitForSystemReady());
 
-        // 4. Ìø×ªµ½Ö÷²Ëµ¥
+        // 4. è·³è½¬åˆ°ä¸»èœå•
         yield return StartCoroutine(TransitionToMainMenu());
     }
 
     /// <summary>
-    /// ²¥·Å¿ª»úÒôĞ§
+    /// æ’­æ”¾å¼€æœºéŸ³æ•ˆ
     /// </summary>
     void PlayStartupSound()
     {
         if (startupSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(startupSound);
-            Debug.Log("²¥·ÅWindowsÆô¶¯ÒôĞ§");
+            Debug.Log("æ’­æ”¾Windowså¯åŠ¨éŸ³æ•ˆ");
         }
     }
 
     /// <summary>
-    /// ´´½¨È«¾ÖÏµÍ³
+    /// åˆ›å»ºå…¨å±€ç³»ç»Ÿ
     /// </summary>
     void CreateGlobalSystem()
     {
-        Debug.Log("¿ªÊ¼´´½¨È«¾ÖÏµÍ³...");
+        Debug.Log("å¼€å§‹åˆ›å»ºå…¨å±€ç³»ç»Ÿ...");
 
         GameObject globalSystem = null;
         if (globalSystemPrefab != null)
         {
             globalSystem = Instantiate(globalSystemPrefab);
-            globalSystem.name = "GlobalSystemManager"; // È¥µô(Clone)ºó×º
-            Debug.Log("´ÓÔ¤ÖÆÌå´´½¨È«¾ÖÏµÍ³");
+            globalSystem.name = "GlobalSystemManager"; // å»æ‰(Clone)åç¼€
+            Debug.Log("ä»é¢„åˆ¶ä½“åˆ›å»ºå…¨å±€ç³»ç»Ÿ");
         }
 
-        // ÉèÖÃÎª¿ç³¡¾°²»Ïú»Ù
+        // è®¾ç½®ä¸ºè·¨åœºæ™¯ä¸é”€æ¯
         if (globalSystem != null)
         {
             DontDestroyOnLoad(globalSystem);
-            //Debug.Log("È«¾ÖÏµÍ³´´½¨³É¹¦£¬ÒÑÉèÖÃÎªDontDestroyOnLoad");
+            //Debug.Log("å…¨å±€ç³»ç»Ÿåˆ›å»ºæˆåŠŸï¼Œå·²è®¾ç½®ä¸ºDontDestroyOnLoad");
         }
         else
         {
-            Debug.LogError("È«¾ÖÏµÍ³´´½¨Ê§°Ü£¡");
+            Debug.LogError("å…¨å±€ç³»ç»Ÿåˆ›å»ºå¤±è´¥ï¼");
         }
     }
 
     /// <summary>
-    /// µÈ´ıÈ«¾ÖÏµÍ³×¼±¸¾ÍĞ÷
+    /// ç­‰å¾…å…¨å±€ç³»ç»Ÿå‡†å¤‡å°±ç»ª
     /// </summary>
     IEnumerator WaitForSystemReady()
     {
-        //Debug.Log("µÈ´ıÈ«¾ÖÏµÍ³³õÊ¼»¯Íê³É...");
+        //Debug.Log("ç­‰å¾…å…¨å±€ç³»ç»Ÿåˆå§‹åŒ–å®Œæˆ...");
 
-        // µÈ´ı¹Ì¶¨Ê±¼ä£¬È·±£GlobalSystemManagerµÄAwakeºÍStartÍê³É
+        // ç­‰å¾…å›ºå®šæ—¶é—´ï¼Œç¡®ä¿GlobalSystemManagerçš„Awakeå’ŒStartå®Œæˆ
         yield return new WaitForSeconds(systemLoadingDelay);
 
-        // ¼ì²éGlobalSystemManagerÊÇ·ñ´æÔÚ²¢³õÊ¼»¯Íê³É
+        // æ£€æŸ¥GlobalSystemManageræ˜¯å¦å­˜åœ¨å¹¶åˆå§‹åŒ–å®Œæˆ
         GlobalSystemManager globalManager = FindObjectOfType<GlobalSystemManager>();
 
         if (globalManager != null && GlobalSystemManager.Instance != null)
         {
-            //Debug.Log("È«¾ÖÏµÍ³³õÊ¼»¯Íê³É");
+            //Debug.Log("å…¨å±€ç³»ç»Ÿåˆå§‹åŒ–å®Œæˆ");
         }
         else
         {
-            Debug.LogWarning("È«¾ÖÏµÍ³¿ÉÄÜÎ´ÕıÈ·³õÊ¼»¯");
+            Debug.LogWarning("å…¨å±€ç³»ç»Ÿå¯èƒ½æœªæ­£ç¡®åˆå§‹åŒ–");
         }
 
-        // ¶îÍâµÄ°²È«ÑÓ³Ù
+        // é¢å¤–çš„å®‰å…¨å»¶è¿Ÿ
         yield return new WaitForSeconds(0.3f);
     }
 
     /// <summary>
-    /// Ìø×ªµ½Ö÷²Ëµ¥³¡¾°
+    /// è·³è½¬åˆ°ä¸»èœå•åœºæ™¯
     /// </summary>
     IEnumerator TransitionToMainMenu()
     {
-        // ¶ÌÔİÑÓ³Ù£¬Ä£ÄâÕæÊµµÄÏµÍ³ÏìÓ¦Ê±¼ä
+        // çŸ­æš‚å»¶è¿Ÿï¼Œæ¨¡æ‹ŸçœŸå®çš„ç³»ç»Ÿå“åº”æ—¶é—´
         yield return new WaitForSeconds(0.5f);
 
-        // ¼ÓÔØÖ÷²Ëµ¥³¡¾°
-        Debug.Log($"¼ÓÔØ³¡¾°: {mainMenuSceneName}");
+        // åŠ è½½ä¸»èœå•åœºæ™¯
+        Debug.Log($"åŠ è½½åœºæ™¯: {mainMenuSceneName}");
         SceneManager.LoadScene(mainMenuSceneName);
     }
 
     /// <summary>
-    /// Ó¦ÓÃ³ÌĞòÔİÍ£Ê±µÄ´¦Àí£¨¿ÉÑ¡£©
+    /// åº”ç”¨ç¨‹åºæš‚åœæ—¶çš„å¤„ç†ï¼ˆå¯é€‰ï¼‰
     /// </summary>
     void OnApplicationPause(bool pauseStatus)
     {
         if (pauseStatus)
         {
-            Debug.Log("ÓÎÏ·³õÊ¼»¯¹ı³ÌÖĞÓ¦ÓÃÔİÍ£");
+            Debug.Log("æ¸¸æˆåˆå§‹åŒ–è¿‡ç¨‹ä¸­åº”ç”¨æš‚åœ");
         }
     }
 
     /// <summary>
-    /// Ó¦ÓÃ³ÌĞò½¹µã±ä»¯Ê±µÄ´¦Àí£¨¿ÉÑ¡£©
+    /// åº”ç”¨ç¨‹åºç„¦ç‚¹å˜åŒ–æ—¶çš„å¤„ç†ï¼ˆå¯é€‰ï¼‰
     /// </summary>
     void OnApplicationFocus(bool hasFocus)
     {
         if (!hasFocus)
         {
-            Debug.Log("ÓÎÏ·³õÊ¼»¯¹ı³ÌÖĞÊ§È¥½¹µã");
+            Debug.Log("æ¸¸æˆåˆå§‹åŒ–è¿‡ç¨‹ä¸­å¤±å»ç„¦ç‚¹");
         }
     }
 }

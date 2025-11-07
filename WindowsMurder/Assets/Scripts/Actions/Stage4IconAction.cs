@@ -1,72 +1,72 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// ¶Ô»°½×¶ÎÃ¶¾Ù
+/// å¯¹è¯é˜¶æ®µæšä¸¾
 /// </summary>
 public enum DialogueStage
 {
-    Locked,      // ÉĞÎ´Âú×ã·ÃÎÊÌõ¼ş
-    Active,      // ¿ÉÕı³£¶Ô»°
-    Completed    // ÒÑÍê³ÉÖ÷Òª¶Ô»°
+    Locked,      // å°šæœªæ»¡è¶³è®¿é—®æ¡ä»¶
+    Active,      // å¯æ­£å¸¸å¯¹è¯
+    Completed    // å·²å®Œæˆä¸»è¦å¯¹è¯
 }
 
 /// <summary>
-/// Stage4×¨ÓÃµÄIcon½»»¥»ùÀà
-/// Ö§³ÖÇ°ÖÃ¡¢Ö÷Òª¡¢ºóĞøÈı½×¶Î¶Ô»°¹ÜÀí
+/// Stage4ä¸“ç”¨çš„Iconäº¤äº’åŸºç±»
+/// æ”¯æŒå‰ç½®ã€ä¸»è¦ã€åç»­ä¸‰é˜¶æ®µå¯¹è¯ç®¡ç†
 /// </summary>
 public class Stage4IconAction : IconAction
 {
-    [Header("=== Stage4 ¶Ô»°ÅäÖÃ ===")]
-    [Tooltip("Ç°ÖÃ¶Ô»°¿éID£¨Ìõ¼ş²»Âú×ãÊ±²¥·Å£¬¿ÉÑ¡£©")]
+    [Header("=== Stage4 å¯¹è¯é…ç½® ===")]
+    [Tooltip("å‰ç½®å¯¹è¯å—IDï¼ˆæ¡ä»¶ä¸æ»¡è¶³æ—¶æ’­æ”¾ï¼Œå¯é€‰ï¼‰")]
     [SerializeField] private string preDialogueBlockId = "";
     [SerializeField] private string mainDialogueBlockId = "";
     [SerializeField] private string postDialogueBlockId = "";
 
-    [Header("=== ½âËøÌõ¼ş ===")]
+    [Header("=== è§£é”æ¡ä»¶ ===")]
     [SerializeField] private List<string> requiredClues = new List<string>();
 
     [SerializeField] private List<string> requiredDialogueBlocks = new List<string>();
 
-    [Header("=== µ÷ÊÔĞÅÏ¢ ===")]
+    [Header("=== è°ƒè¯•ä¿¡æ¯ ===")]
     [SerializeField] private DialogueStage currentStage;
     [SerializeField] private bool debugMode = true;
 
-    // »º´æµÄÒıÓÃ
+    // ç¼“å­˜çš„å¼•ç”¨
     private GameFlowController flowController;
 
-    #region ³õÊ¼»¯
+    #region åˆå§‹åŒ–
 
     protected virtual void Awake()
     {
-        // »º´æGameFlowController
+        // ç¼“å­˜GameFlowController
         flowController = FindObjectOfType<GameFlowController>();
     }
 
     protected virtual void OnEnable()
     {
-        // ¶©ÔÄ¶Ô»°Íê³ÉÊÂ¼ş£¬×Ô¶¯¸üĞÂ×´Ì¬
+        // è®¢é˜…å¯¹è¯å®Œæˆäº‹ä»¶ï¼Œè‡ªåŠ¨æ›´æ–°çŠ¶æ€
         GameEvents.OnDialogueBlockCompleted += OnDialogueBlockCompleted;
     }
 
     protected virtual void OnDisable()
     {
-        // È¡Ïû¶©ÔÄ
+        // å–æ¶ˆè®¢é˜…
         GameEvents.OnDialogueBlockCompleted -= OnDialogueBlockCompleted;
     }
 
     #endregion
 
-    #region IconActionÊµÏÖ
+    #region IconActionå®ç°
 
     public override void Execute()
     {
 
-        // ¸üĞÂµ±Ç°×´Ì¬
+        // æ›´æ–°å½“å‰çŠ¶æ€
         currentStage = GetCurrentDialogueStage();
 
-        // ¸ù¾İ×´Ì¬²¥·Å¶ÔÓ¦¶Ô»°
+        // æ ¹æ®çŠ¶æ€æ’­æ”¾å¯¹åº”å¯¹è¯
         PlayDialogueByStage();
     }
 
@@ -75,10 +75,10 @@ public class Stage4IconAction : IconAction
         if (!base.CanExecute()) return false;
         if (flowController == null) return false;
 
-        // ¸üĞÂ×´Ì¬ÓÃÓÚÅĞ¶Ï
+        // æ›´æ–°çŠ¶æ€ç”¨äºåˆ¤æ–­
         currentStage = GetCurrentDialogueStage();
 
-        // ¸ù¾İ×´Ì¬ÅĞ¶ÏÊÇ·ñÓĞ¿É²¥·ÅµÄ¶Ô»°
+        // æ ¹æ®çŠ¶æ€åˆ¤æ–­æ˜¯å¦æœ‰å¯æ’­æ”¾çš„å¯¹è¯
         switch (currentStage)
         {
             case DialogueStage.Locked:
@@ -97,48 +97,48 @@ public class Stage4IconAction : IconAction
 
     #endregion
 
-    #region ×´Ì¬ÅĞ¶Ï
+    #region çŠ¶æ€åˆ¤æ–­
 
     /// <summary>
-    /// »ñÈ¡µ±Ç°¶Ô»°½×¶Î
+    /// è·å–å½“å‰å¯¹è¯é˜¶æ®µ
     /// </summary>
     private DialogueStage GetCurrentDialogueStage()
     {
-        // ¼ì²éÖ÷¶Ô»°ÊÇ·ñÒÑÍê³É
+        // æ£€æŸ¥ä¸»å¯¹è¯æ˜¯å¦å·²å®Œæˆ
         if (IsDialogueBlockCompleted(mainDialogueBlockId))
         {
             return DialogueStage.Completed;
         }
 
-        // ¼ì²éÊÇ·ñÂú×ã½âËøÌõ¼ş
+        // æ£€æŸ¥æ˜¯å¦æ»¡è¶³è§£é”æ¡ä»¶
         if (CheckLockedConditions())
         {
             return DialogueStage.Locked;
         }
 
-        // Ìõ¼şÂú×ãÇÒÎ´Íê³É
+        // æ¡ä»¶æ»¡è¶³ä¸”æœªå®Œæˆ
         return DialogueStage.Active;
     }
 
     /// <summary>
-    /// ¼ì²éÊÇ·ñ´¦ÓÚËø¶¨×´Ì¬£¨Ç°ÖÃÌõ¼ş²»Âú×ã£©
+    /// æ£€æŸ¥æ˜¯å¦å¤„äºé”å®šçŠ¶æ€ï¼ˆå‰ç½®æ¡ä»¶ä¸æ»¡è¶³ï¼‰
     /// </summary>
     private bool CheckLockedConditions()
     {
-        // ¼ì²é±ØĞèµÄÏßË÷
+        // æ£€æŸ¥å¿…éœ€çš„çº¿ç´¢
         if (requiredClues != null && requiredClues.Count > 0)
         {
             foreach (string clueId in requiredClues)
             {
                 if (!flowController.HasClue(clueId))
                 {
-                    LogDebug($"È±ÉÙ±ØĞèÏßË÷: {clueId}");
-                    return true; // Ìõ¼ş²»Âú×ã£¬±£³ÖËø¶¨
+                    LogDebug($"ç¼ºå°‘å¿…éœ€çº¿ç´¢: {clueId}");
+                    return true; // æ¡ä»¶ä¸æ»¡è¶³ï¼Œä¿æŒé”å®š
                 }
             }
         }
 
-        // ¼ì²é±ØĞèµÄÇ°ÖÃ¶Ô»°¿é
+        // æ£€æŸ¥å¿…éœ€çš„å‰ç½®å¯¹è¯å—
         if (requiredDialogueBlocks != null && requiredDialogueBlocks.Count > 0)
         {
             var completedBlocks = flowController.GetCompletedBlocksSafe();
@@ -147,17 +147,17 @@ public class Stage4IconAction : IconAction
             {
                 if (!completedBlocks.Contains(blockId))
                 {
-                    LogDebug($"È±ÉÙ±ØĞè¶Ô»°¿é: {blockId}");
-                    return true; // Ìõ¼ş²»Âú×ã£¬±£³ÖËø¶¨
+                    LogDebug($"ç¼ºå°‘å¿…éœ€å¯¹è¯å—: {blockId}");
+                    return true; // æ¡ä»¶ä¸æ»¡è¶³ï¼Œä¿æŒé”å®š
                 }
             }
         }
 
-        return false; // ËùÓĞÌõ¼şÂú×ã
+        return false; // æ‰€æœ‰æ¡ä»¶æ»¡è¶³
     }
 
     /// <summary>
-    /// ¼ì²é¶Ô»°¿éÊÇ·ñÒÑÍê³É
+    /// æ£€æŸ¥å¯¹è¯å—æ˜¯å¦å·²å®Œæˆ
     /// </summary>
     private bool IsDialogueBlockCompleted(string blockId)
     {
@@ -169,10 +169,10 @@ public class Stage4IconAction : IconAction
 
     #endregion
 
-    #region ¶Ô»°²¥·Å
+    #region å¯¹è¯æ’­æ”¾
 
     /// <summary>
-    /// ¸ù¾İµ±Ç°½×¶Î²¥·Å¶ÔÓ¦¶Ô»°
+    /// æ ¹æ®å½“å‰é˜¶æ®µæ’­æ”¾å¯¹åº”å¯¹è¯
     /// </summary>
     private void PlayDialogueByStage()
     {
@@ -182,80 +182,80 @@ public class Stage4IconAction : IconAction
         {
             case DialogueStage.Locked:
                 dialogueBlockId = preDialogueBlockId;
-                LogDebug("³¢ÊÔ²¥·ÅÇ°ÖÃ¶Ô»°");
+                LogDebug("å°è¯•æ’­æ”¾å‰ç½®å¯¹è¯");
                 break;
 
             case DialogueStage.Active:
                 dialogueBlockId = mainDialogueBlockId;
-                LogDebug("²¥·ÅÖ÷Òª¶Ô»°");
+                LogDebug("æ’­æ”¾ä¸»è¦å¯¹è¯");
                 break;
 
             case DialogueStage.Completed:
                 dialogueBlockId = postDialogueBlockId;
-                LogDebug("²¥·ÅºóĞø¶Ô»°");
+                LogDebug("æ’­æ”¾åç»­å¯¹è¯");
                 break;
         }
 
-        // Èç¹û¶Ô»°¿éIDÎª¿Õ£¬Ôò²»ÔÊĞí·ÃÎÊ
+        // å¦‚æœå¯¹è¯å—IDä¸ºç©ºï¼Œåˆ™ä¸å…è®¸è®¿é—®
         if (string.IsNullOrEmpty(dialogueBlockId))
         {
-            LogDebug($"{currentStage}½×¶ÎÃ»ÓĞÅäÖÃ¶Ô»°¿é£¬ÎŞ·¨·ÃÎÊ");
+            LogDebug($"{currentStage}é˜¶æ®µæ²¡æœ‰é…ç½®å¯¹è¯å—ï¼Œæ— æ³•è®¿é—®");
             ShowNoDialogueHint();
             return;
         }
 
-        // ²¥·Å¶Ô»°
+        // æ’­æ”¾å¯¹è¯
         PlayDialogue(dialogueBlockId);
     }
 
     /// <summary>
-    /// ²¥·ÅÖ¸¶¨µÄ¶Ô»°¿é
+    /// æ’­æ”¾æŒ‡å®šçš„å¯¹è¯å—
     /// </summary>
     protected virtual void PlayDialogue(string dialogueBlockId)
     {
         if (string.IsNullOrEmpty(dialogueBlockId))
         {
-            LogError("¶Ô»°¿éIDÎª¿Õ£¡");
+            LogError("å¯¹è¯å—IDä¸ºç©ºï¼");
             return;
         }
 
-        LogDebug($"¿ªÊ¼²¥·Å¶Ô»°¿é: {dialogueBlockId}");
+        LogDebug($"å¼€å§‹æ’­æ”¾å¯¹è¯å—: {dialogueBlockId}");
 
-        // Í¨¹ıGameFlowController¿ªÆô¶Ô»°
+        // é€šè¿‡GameFlowControllerå¼€å¯å¯¹è¯
         flowController.StartDialogueBlock(dialogueBlockId);
     }
 
     /// <summary>
-    /// ÏÔÊ¾"ÎŞ¶Ô»°"ÌáÊ¾£¨¿É±»×ÓÀàÖØĞ´À´ÊµÏÖÌØÊâĞ§¹û£©
+    /// æ˜¾ç¤º"æ— å¯¹è¯"æç¤ºï¼ˆå¯è¢«å­ç±»é‡å†™æ¥å®ç°ç‰¹æ®Šæ•ˆæœï¼‰
     /// </summary>
     protected virtual void ShowNoDialogueHint()
     {
-        LogDebug("¸Ã½×¶ÎÃ»ÓĞ¶Ô»°ÄÚÈİ");
+        LogDebug("è¯¥é˜¶æ®µæ²¡æœ‰å¯¹è¯å†…å®¹");
     }
     #endregion
 
-    #region ÊÂ¼ş»Øµ÷
+    #region äº‹ä»¶å›è°ƒ
 
     /// <summary>
-    /// ¶Ô»°¿éÍê³ÉÊ±µÄ»Øµ÷
+    /// å¯¹è¯å—å®Œæˆæ—¶çš„å›è°ƒ
     /// </summary>
     private void OnDialogueBlockCompleted(string completedBlockId)
     {
-        // ¼ì²éÊÇ·ñÊÇµ±Ç°iconÏà¹ØµÄ¶Ô»°¿é
+        // æ£€æŸ¥æ˜¯å¦æ˜¯å½“å‰iconç›¸å…³çš„å¯¹è¯å—
         if (completedBlockId == mainDialogueBlockId)
         {
-            LogDebug($"Ö÷Òª¶Ô»°¿é {completedBlockId} ÒÑÍê³É");
+            LogDebug($"ä¸»è¦å¯¹è¯å— {completedBlockId} å·²å®Œæˆ");
 
-            // ¸üĞÂ×´Ì¬
+            // æ›´æ–°çŠ¶æ€
             currentStage = DialogueStage.Completed;
 
-            // ´¥·¢Íê³É»Øµ÷£¨¹©×ÓÀàÀ©Õ¹£©
+            // è§¦å‘å®Œæˆå›è°ƒï¼ˆä¾›å­ç±»æ‰©å±•ï¼‰
             OnMainDialogueCompleted();
         }
     }
 
     /// <summary>
-    /// Ö÷Òª¶Ô»°Íê³ÉÊ±µÄ»Øµ÷£¨¹©×ÓÀàÖØĞ´£©
+    /// ä¸»è¦å¯¹è¯å®Œæˆæ—¶çš„å›è°ƒï¼ˆä¾›å­ç±»é‡å†™ï¼‰
     /// </summary>
     protected virtual void OnMainDialogueCompleted()
     {
@@ -263,7 +263,7 @@ public class Stage4IconAction : IconAction
 
     #endregion
 
-    #region µ÷ÊÔ¹¤¾ß
+    #region è°ƒè¯•å·¥å…·
 
     private void LogDebug(string message)
     {

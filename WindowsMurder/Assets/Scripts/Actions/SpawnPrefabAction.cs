@@ -1,25 +1,25 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// Ë«»÷ºóÔÚÖ¸¶¨²ã¼¶Éú³ÉPrefabµÄĞĞÎª
+/// åŒå‡»ååœ¨æŒ‡å®šå±‚çº§ç”ŸæˆPrefabçš„è¡Œä¸º
 /// </summary>
 public class SpawnPrefabAction : IconAction
 {
-    [Header("Éú³ÉÉèÖÃ")]
-    public GameObject prefabToSpawn;       // ÒªÉú³ÉµÄÔ¤ÖÆÌå
-    public Transform parentTransform;      // Éú³ÉµÄ¸¸¼¶£¨¿ÉÎª¿Õ£©
-    public Vector3 spawnPosition;          // Éú³ÉµÄÎ»ÖÃ£¨Ïà¶ÔÓÚ¸¸¼¶£©
+    [Header("ç”Ÿæˆè®¾ç½®")]
+    public GameObject prefabToSpawn;       // è¦ç”Ÿæˆçš„é¢„åˆ¶ä½“
+    public Transform parentTransform;      // ç”Ÿæˆçš„çˆ¶çº§ï¼ˆå¯ä¸ºç©ºï¼‰
+    public Vector3 spawnPosition;          // ç”Ÿæˆçš„ä½ç½®ï¼ˆç›¸å¯¹äºçˆ¶çº§ï¼‰
 
-    [Header("¿ÉÑ¡Ğ§¹û")]
-    public bool destroyIfExists = false;   // ÈôÒÑ´æÔÚÍ¬Ãû¶ÔÏóÊÇ·ñÏú»Ù¾ÉµÄ
-    public string instanceName = "";       // Éú³É¶ÔÏóÃüÃû£¨Îª¿ÕÔòÓÃprefabÃû£©
+    [Header("å¯é€‰æ•ˆæœ")]
+    public bool destroyIfExists = false;   // è‹¥å·²å­˜åœ¨åŒåå¯¹è±¡æ˜¯å¦é”€æ¯æ—§çš„
+    public string instanceName = "";       // ç”Ÿæˆå¯¹è±¡å‘½åï¼ˆä¸ºç©ºåˆ™ç”¨prefabåï¼‰
 
     private GameObject spawnedInstance;
 
     public override void Execute()
     {
 
-        // ÈôÒÑ´æÔÚÊµÀı
+        // è‹¥å·²å­˜åœ¨å®ä¾‹
         if (spawnedInstance != null)
         {
             if (destroyIfExists)
@@ -28,16 +28,16 @@ public class SpawnPrefabAction : IconAction
             }
             else
             {
-                Debug.Log($"{name}: ÒÑÉú³É¶ÔÏó {spawnedInstance.name}");
+                Debug.Log($"{name}: å·²ç”Ÿæˆå¯¹è±¡ {spawnedInstance.name}");
                 return;
             }
         }
 
-        // Ö´ĞĞÉú³É
+        // æ‰§è¡Œç”Ÿæˆ
         spawnedInstance = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity, parentTransform);
         if (!string.IsNullOrEmpty(instanceName))
             spawnedInstance.name = instanceName;
 
-        Debug.Log($"{name}: ÒÑÉú³ÉPrefab {spawnedInstance.name} ÓÚ {spawnPosition}");
+        Debug.Log($"{name}: å·²ç”ŸæˆPrefab {spawnedInstance.name} äº {spawnPosition}");
     }
 }

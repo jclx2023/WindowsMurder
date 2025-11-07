@@ -1,26 +1,26 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
 /// <summary>
-/// Stage4ÎÒµÄµçÄÔÍ¼±ê½»»¥ĞĞÎª - ¸ù¾İ¶Ô»°¿éÍê³ÉÇé¿öÉú³É²»Í¬´°¿Ú
+/// Stage4æˆ‘çš„ç”µè„‘å›¾æ ‡äº¤äº’è¡Œä¸º - æ ¹æ®å¯¹è¯å—å®Œæˆæƒ…å†µç”Ÿæˆä¸åŒçª—å£
 /// </summary>
 public class Stage4MyPCAction : IconAction
 {
-    [Header("´°¿ÚÅäÖÃ")]
-    public GameObject blockedWindowPrefab;     // Î´Íê³ÉÌõ¼şÊ±µÄ´°¿Ú
-    public GameObject folderWindowPrefab;      // ÎÄ¼ş¼Ğ´°¿ÚÔ¤ÖÆÌå
-    public Transform windowParent;             // ´°¿ÚÉú³ÉµÄ¸¸¶ÔÏó
-    public string defaultPathId = "root";      // Ä¬ÈÏ´ò¿ªÂ·¾¶
+    [Header("çª—å£é…ç½®")]
+    public GameObject blockedWindowPrefab;     // æœªå®Œæˆæ¡ä»¶æ—¶çš„çª—å£
+    public GameObject folderWindowPrefab;      // æ–‡ä»¶å¤¹çª—å£é¢„åˆ¶ä½“
+    public Transform windowParent;             // çª—å£ç”Ÿæˆçš„çˆ¶å¯¹è±¡
+    public string defaultPathId = "root";      // é»˜è®¤æ‰“å¼€è·¯å¾„
 
-    [Header("½âËøÌõ¼ş")]
-    public List<string> requiredDialogueBlocks = new List<string>(); // ĞèÒªÍê³ÉµÄ¶Ô»°¿éID
+    [Header("è§£é”æ¡ä»¶")]
+    public List<string> requiredDialogueBlocks = new List<string>(); // éœ€è¦å®Œæˆçš„å¯¹è¯å—ID
 
     public override void Execute()
     {
         if (windowParent == null) return;
 
-        // ¼ì²éÊÇ·ñÂú×ãÌõ¼ş
+        // æ£€æŸ¥æ˜¯å¦æ»¡è¶³æ¡ä»¶
         GameFlowController gameFlow = FindObjectOfType<GameFlowController>();
         bool isUnlocked = true;
 
@@ -37,7 +37,7 @@ public class Stage4MyPCAction : IconAction
             }
         }
 
-        // ¸ù¾İÌõ¼şÉú³É¶ÔÓ¦´°¿Ú
+        // æ ¹æ®æ¡ä»¶ç”Ÿæˆå¯¹åº”çª—å£
         if (isUnlocked && folderWindowPrefab != null)
         {
             GameObject windowInstance = Instantiate(folderWindowPrefab, windowParent);

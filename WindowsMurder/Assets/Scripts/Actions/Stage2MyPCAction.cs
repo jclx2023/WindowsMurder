@@ -1,23 +1,23 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// Stage2ÎÒµÄµçÄÔÍ¼±ê½»»¥ĞĞÎª - Éú³ÉÎÄ¼ş¼Ğ´°¿Ú
+/// Stage2æˆ‘çš„ç”µè„‘å›¾æ ‡äº¤äº’è¡Œä¸º - ç”Ÿæˆæ–‡ä»¶å¤¹çª—å£
 /// </summary>
 public class Stage2MyPCAction : IconAction
 {
-    [Header("´°¿ÚÅäÖÃ")]
-    public GameObject folderWindowPrefab;      // ÎÄ¼ş¼Ğ´°¿ÚÔ¤ÖÆÌå
-    public Transform windowParent;             // ´°¿ÚÉú³ÉµÄ¸¸¶ÔÏó
-    public string defaultPathId = "root";      // Ä¬ÈÏ´ò¿ªÂ·¾¶
+    [Header("çª—å£é…ç½®")]
+    public GameObject folderWindowPrefab;      // æ–‡ä»¶å¤¹çª—å£é¢„åˆ¶ä½“
+    public Transform windowParent;             // çª—å£ç”Ÿæˆçš„çˆ¶å¯¹è±¡
+    public string defaultPathId = "root";      // é»˜è®¤æ‰“å¼€è·¯å¾„
 
     public override void Execute()
     {
         if (folderWindowPrefab != null && windowParent != null)
         {
-            // ÊµÀı»¯ÎÄ¼ş¼Ğ´°¿Ú
+            // å®ä¾‹åŒ–æ–‡ä»¶å¤¹çª—å£
             GameObject windowInstance = Instantiate(folderWindowPrefab, windowParent);
 
-            // ÉèÖÃ³õÊ¼Â·¾¶
+            // è®¾ç½®åˆå§‹è·¯å¾„
             ExplorerManager explorerManager = windowInstance.GetComponent<ExplorerManager>();
             if (explorerManager != null && !string.IsNullOrEmpty(defaultPathId))
             {

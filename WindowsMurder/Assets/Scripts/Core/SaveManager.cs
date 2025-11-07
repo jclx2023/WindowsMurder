@@ -1,26 +1,26 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// ´æµµ¹ÜÀíÆ÷ - ¸ºÔğÓÎÏ·½ø¶ÈµÄ±£´æºÍ¼ÓÔØ
+/// å­˜æ¡£ç®¡ç†å™¨ - è´Ÿè´£æ¸¸æˆè¿›åº¦çš„ä¿å­˜å’ŒåŠ è½½
 /// </summary>
 public class SaveManager : MonoBehaviour
 {
-    [Header("=== ÅäÖÃ ===")]
+    [Header("=== é…ç½® ===")]
     [SerializeField] private string saveKey = "WindowsMurder_SaveData";
     [SerializeField] private string gameSceneName = "GameScene";
     [SerializeField] private string mainMenuSceneName = "MainMenu";
     [SerializeField] private bool autoSaveEnabled = true;
 
-    [Header("=== µ±Ç°´æµµÊı¾İ ===")]
+    [Header("=== å½“å‰å­˜æ¡£æ•°æ® ===")]
     [SerializeField] private SaveData currentSaveData;
 
-    [Header("=== µ÷ÊÔ ===")]
+    [Header("=== è°ƒè¯• ===")]
     [SerializeField] private bool debugMode = true;
 
-    // µ¥Àı
+    // å•ä¾‹
     private static SaveManager instance;
     public static SaveManager Instance
     {
@@ -40,15 +40,15 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    // ×é¼şÒıÓÃ
+    // ç»„ä»¶å¼•ç”¨
     private GameFlowController gameFlowController;
     private DialogueManager dialogueManager;
 
-    #region ³õÊ¼»¯
+    #region åˆå§‹åŒ–
 
     void Awake()
     {
-        // È·±£µ¥Àı
+        // ç¡®ä¿å•ä¾‹
         if (instance != null && instance != this)
         {
             Destroy(gameObject);
@@ -58,7 +58,7 @@ public class SaveManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
 
-        // ³õÊ¼»¯´æµµÊı¾İ
+        // åˆå§‹åŒ–å­˜æ¡£æ•°æ®
         if (currentSaveData == null)
         {
             currentSaveData = new SaveData();
@@ -67,7 +67,7 @@ public class SaveManager : MonoBehaviour
 
     void Start()
     {
-        // ¶©ÔÄ³¡¾°¼ÓÔØÊÂ¼ş
+        // è®¢é˜…åœºæ™¯åŠ è½½äº‹ä»¶
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -75,7 +75,7 @@ public class SaveManager : MonoBehaviour
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
 
-        // ÇåÀíÊÂ¼ş¶©ÔÄ
+        // æ¸…ç†äº‹ä»¶è®¢é˜…
         if (gameFlowController != null)
         {
             gameFlowController.OnAutoSaveRequested.RemoveListener(AutoSave);
@@ -83,58 +83,58 @@ public class SaveManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ³¡¾°¼ÓÔØÍê³É»Øµ÷
+    /// åœºæ™¯åŠ è½½å®Œæˆå›è°ƒ
     /// </summary>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        LogDebug($"³¡¾°¼ÓÔØÍê³É: {scene.name}");
+        LogDebug($"åœºæ™¯åŠ è½½å®Œæˆ: {scene.name}");
 
         if (scene.name == gameSceneName)
         {
-            // ²éÕÒÓÎÏ·³¡¾°ÖĞµÄ×é¼ş
+            // æŸ¥æ‰¾æ¸¸æˆåœºæ™¯ä¸­çš„ç»„ä»¶
             FindGameComponents();
 
-            // ¸ù¾İ½øÈë·½Ê½¾ö¶¨ÊÇ·ñ»Ö¸´´æµµ
+            // æ ¹æ®è¿›å…¥æ–¹å¼å†³å®šæ˜¯å¦æ¢å¤å­˜æ¡£
             HandleGameSceneLoaded();
         }
         else if (scene.name == mainMenuSceneName)
         {
-            // ÇåÀíÓÎÏ·×é¼şÒıÓÃ
+            // æ¸…ç†æ¸¸æˆç»„ä»¶å¼•ç”¨
             ClearGameComponents();
         }
     }
 
     /// <summary>
-    /// ´¦ÀíÓÎÏ·³¡¾°¼ÓÔØ
+    /// å¤„ç†æ¸¸æˆåœºæ™¯åŠ è½½
     /// </summary>
     private void HandleGameSceneLoaded()
     {
-        // ¼ì²éÊÇÍ¨¹ıÊ²Ã´·½Ê½½øÈëÓÎÏ·³¡¾°µÄ
+        // æ£€æŸ¥æ˜¯é€šè¿‡ä»€ä¹ˆæ–¹å¼è¿›å…¥æ¸¸æˆåœºæ™¯çš„
         if (GlobalActionManager.Instance != null)
         {
             if (GlobalActionManager.Instance.IsContinueGame())
             {
-                LogDebug("¼ì²âµ½¼ÌĞøÓÎÏ·Ä£Ê½£¬×¼±¸»Ö¸´´æµµ");
+                LogDebug("æ£€æµ‹åˆ°ç»§ç»­æ¸¸æˆæ¨¡å¼ï¼Œå‡†å¤‡æ¢å¤å­˜æ¡£");
                 if (currentSaveData != null && !string.IsNullOrEmpty(currentSaveData.stageId))
                 {
                     RestoreGameState();
                 }
                 else
                 {
-                    LogError("´æµµÊı¾İÎŞĞ§£¬ÎŞ·¨»Ö¸´ÓÎÏ·×´Ì¬");
+                    LogError("å­˜æ¡£æ•°æ®æ— æ•ˆï¼Œæ— æ³•æ¢å¤æ¸¸æˆçŠ¶æ€");
                 }
             }
             else if (GlobalActionManager.Instance.IsNewGame())
             {
-                // ĞÂÓÎÏ· - ²»ĞèÒª»Ö¸´
-                LogDebug("¼ì²âµ½ĞÂÓÎÏ·Ä£Ê½£¬²»»Ö¸´´æµµ");
+                // æ–°æ¸¸æˆ - ä¸éœ€è¦æ¢å¤
+                LogDebug("æ£€æµ‹åˆ°æ–°æ¸¸æˆæ¨¡å¼ï¼Œä¸æ¢å¤å­˜æ¡£");
                 currentSaveData = new SaveData();
             }
         }
     }
 
     /// <summary>
-    /// ²éÕÒÓÎÏ·×é¼ş
+    /// æŸ¥æ‰¾æ¸¸æˆç»„ä»¶
     /// </summary>
     private void FindGameComponents()
     {
@@ -143,28 +143,28 @@ public class SaveManager : MonoBehaviour
 
         if (gameFlowController == null)
         {
-            LogError("Î´ÕÒµ½GameFlowController£¡");
+            LogError("æœªæ‰¾åˆ°GameFlowControllerï¼");
         }
         else
         {
-            // ¶©ÔÄ×Ô¶¯´æµµÊÂ¼ş
+            // è®¢é˜…è‡ªåŠ¨å­˜æ¡£äº‹ä»¶
             if (autoSaveEnabled)
             {
                 gameFlowController.OnAutoSaveRequested.RemoveListener(AutoSave);
                 gameFlowController.OnAutoSaveRequested.AddListener(AutoSave);
             }
 
-            LogDebug("ÒÑÁ¬½ÓGameFlowController");
+            LogDebug("å·²è¿æ¥GameFlowController");
         }
 
         if (dialogueManager == null)
         {
-            LogWarning("Î´ÕÒµ½DialogueManager");
+            LogWarning("æœªæ‰¾åˆ°DialogueManager");
         }
     }
 
     /// <summary>
-    /// ÇåÀíÓÎÏ·×é¼şÒıÓÃ
+    /// æ¸…ç†æ¸¸æˆç»„ä»¶å¼•ç”¨
     /// </summary>
     private void ClearGameComponents()
     {
@@ -176,28 +176,28 @@ public class SaveManager : MonoBehaviour
         gameFlowController = null;
         dialogueManager = null;
 
-        LogDebug("ÒÑÇåÀíÓÎÏ·×é¼şÒıÓÃ");
+        LogDebug("å·²æ¸…ç†æ¸¸æˆç»„ä»¶å¼•ç”¨");
     }
 
     #endregion
 
-    #region ´æµµ²Ù×÷
+    #region å­˜æ¡£æ“ä½œ
 
     /// <summary>
-    /// ±£´æÓÎÏ·
+    /// ä¿å­˜æ¸¸æˆ
     /// </summary>
     public void SaveGame()
     {
         if (gameFlowController == null)
         {
-            LogWarning("ÎŞ·¨±£´æ£ºGameFlowControllerÎª¿Õ");
+            LogWarning("æ— æ³•ä¿å­˜ï¼šGameFlowControllerä¸ºç©º");
             return;
         }
 
-        // »ñÈ¡ÓÎÏ·Á÷³Ì×´Ì¬
+        // è·å–æ¸¸æˆæµç¨‹çŠ¶æ€
         GameFlowState flowState = gameFlowController.GetCurrentState();
 
-        // ¸üĞÂ´æµµÊı¾İ
+        // æ›´æ–°å­˜æ¡£æ•°æ®
         currentSaveData.saveId = "Slot1";
         currentSaveData.stageId = flowState.currentStageId;
         currentSaveData.dialogueBlockId = flowState.currentDialogueBlockId;
@@ -206,22 +206,22 @@ public class SaveManager : MonoBehaviour
         currentSaveData.createdAt = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         currentSaveData.playTimeSeconds = Time.time;
 
-        // ĞòÁĞ»¯²¢±£´æ
+        // åºåˆ—åŒ–å¹¶ä¿å­˜
         string json = JsonUtility.ToJson(currentSaveData, true);
         PlayerPrefs.SetString(saveKey, json);
         PlayerPrefs.Save();
 
-        LogDebug($"ÓÎÏ·ÒÑ±£´æ - Stage: {currentSaveData.stageId}, ÏßË÷Êı: {currentSaveData.cluesUnlocked.Count}");
+        LogDebug($"æ¸¸æˆå·²ä¿å­˜ - Stage: {currentSaveData.stageId}, çº¿ç´¢æ•°: {currentSaveData.cluesUnlocked.Count}");
     }
 
     /// <summary>
-    /// ¼ÓÔØÓÎÏ·´æµµÊı¾İµ½ÄÚ´æ
+    /// åŠ è½½æ¸¸æˆå­˜æ¡£æ•°æ®åˆ°å†…å­˜
     /// </summary>
     public bool LoadGame()
     {
         if (!HasSaveData())
         {
-            LogDebug("Ã»ÓĞÕÒµ½´æµµÊı¾İ");
+            LogDebug("æ²¡æœ‰æ‰¾åˆ°å­˜æ¡£æ•°æ®");
             return false;
         }
 
@@ -231,30 +231,30 @@ public class SaveManager : MonoBehaviour
             currentSaveData = JsonUtility.FromJson<SaveData>(json);
 
 
-            LogDebug($"´æµµ¼ÓÔØ³É¹¦ - Stage: {currentSaveData.stageId}, ±£´æÊ±¼ä: {currentSaveData.createdAt}");
+            LogDebug($"å­˜æ¡£åŠ è½½æˆåŠŸ - Stage: {currentSaveData.stageId}, ä¿å­˜æ—¶é—´: {currentSaveData.createdAt}");
             return true;
         }
         catch (Exception e)
         {
-            LogError($"¼ÓÔØ´æµµÊ§°Ü: {e.Message}");
+            LogError($"åŠ è½½å­˜æ¡£å¤±è´¥: {e.Message}");
             currentSaveData = new SaveData();
             return false;
         }
     }
 
     /// <summary>
-    /// ×Ô¶¯±£´æ
+    /// è‡ªåŠ¨ä¿å­˜
     /// </summary>
     private void AutoSave()
     {
         if (!autoSaveEnabled) return;
 
         SaveGame();
-        LogDebug("×Ô¶¯±£´æÍê³É");
+        LogDebug("è‡ªåŠ¨ä¿å­˜å®Œæˆ");
     }
 
     /// <summary>
-    /// É¾³ı´æµµ
+    /// åˆ é™¤å­˜æ¡£
     /// </summary>
     public void DeleteSave()
     {
@@ -266,11 +266,11 @@ public class SaveManager : MonoBehaviour
 
         currentSaveData = new SaveData();
 
-        LogDebug("´æµµÒÑÉ¾³ı");
+        LogDebug("å­˜æ¡£å·²åˆ é™¤");
     }
 
     /// <summary>
-    /// ¼ì²éÊÇ·ñÓĞ´æµµ
+    /// æ£€æŸ¥æ˜¯å¦æœ‰å­˜æ¡£
     /// </summary>
     public bool HasSaveData()
     {
@@ -279,17 +279,17 @@ public class SaveManager : MonoBehaviour
 
     #endregion
 
-    #region ÓÎÏ·×´Ì¬»Ö¸´
+    #region æ¸¸æˆçŠ¶æ€æ¢å¤
 
     /// <summary>
-    /// »Ö¸´ÓÎÏ·×´Ì¬£¨Í¬²½·½·¨£©
+    /// æ¢å¤æ¸¸æˆçŠ¶æ€ï¼ˆåŒæ­¥æ–¹æ³•ï¼‰
     /// </summary>
     private void RestoreGameState()
     {
 
-        LogDebug("¿ªÊ¼»Ö¸´ÓÎÏ·×´Ì¬...");
+        LogDebug("å¼€å§‹æ¢å¤æ¸¸æˆçŠ¶æ€...");
 
-        // ¹¹½¨ÓÎÏ·Á÷³Ì×´Ì¬
+        // æ„å»ºæ¸¸æˆæµç¨‹çŠ¶æ€
         GameFlowState flowState = new GameFlowState
         {
             currentStageId = currentSaveData.stageId,
@@ -300,41 +300,41 @@ public class SaveManager : MonoBehaviour
 
         gameFlowController.RestoreState(flowState, isFromSave: true);
 
-        LogDebug($"ÓÎÏ·×´Ì¬»Ö¸´Íê³É - Stage: {currentSaveData.stageId}, ÏßË÷: {flowState.unlockedClues.Count}¸ö");
+        LogDebug($"æ¸¸æˆçŠ¶æ€æ¢å¤å®Œæˆ - Stage: {currentSaveData.stageId}, çº¿ç´¢: {flowState.unlockedClues.Count}ä¸ª");
     }
 
     #endregion
 
-    #region ¸¨Öú·½·¨
+    #region è¾…åŠ©æ–¹æ³•
 
     /// <summary>
-    /// »ñÈ¡StageÏÔÊ¾Ãû³Æ
+    /// è·å–Stageæ˜¾ç¤ºåç§°
     /// </summary>
     private string GetStageName(string stageId)
     {
         switch (stageId)
         {
             case "Stage01_Desktop":
-                return "µÚÒ»Ä»£º×ÀÃæ";
+                return "ç¬¬ä¸€å¹•ï¼šæ¡Œé¢";
             case "Stage02_WorkFolder":
-                return "µÚ¶şÄ»£º°¸·¢ÏÖ³¡";
+                return "ç¬¬äºŒå¹•ï¼šæ¡ˆå‘ç°åœº";
             case "Stage03_Investigation":
-                return "µÚÈıÄ»£ºµ÷²éÈ¡Ö¤";
+                return "ç¬¬ä¸‰å¹•ï¼šè°ƒæŸ¥å–è¯";
             case "Stage04_Interrogation":
-                return "µÚËÄÄ»£ºÉóÎÊ";
+                return "ç¬¬å››å¹•ï¼šå®¡é—®";
             case "Stage05_Deduction":
-                return "µÚÎåÄ»£ºÍÆÀí";
+                return "ç¬¬äº”å¹•ï¼šæ¨ç†";
             default:
-                return string.IsNullOrEmpty(stageId) ? "Î´¿ªÊ¼" : stageId;
+                return string.IsNullOrEmpty(stageId) ? "æœªå¼€å§‹" : stageId;
         }
     }
 
     /// <summary>
-    /// ¸ñÊ½»¯ÓÎÏ·Ê±¼ä
+    /// æ ¼å¼åŒ–æ¸¸æˆæ—¶é—´
     /// </summary>
     private string FormatPlayTime(float seconds)
     {
-        if (seconds <= 0) return "0Ãë";
+        if (seconds <= 0) return "0ç§’";
 
         int hours = (int)(seconds / 3600);
         int minutes = (int)((seconds % 3600) / 60);
@@ -342,27 +342,27 @@ public class SaveManager : MonoBehaviour
 
         if (hours > 0)
         {
-            return $"{hours}Ğ¡Ê±{minutes}·ÖÖÓ";
+            return $"{hours}å°æ—¶{minutes}åˆ†é’Ÿ";
         }
         else if (minutes > 0)
         {
-            return $"{minutes}·ÖÖÓ{secs}Ãë";
+            return $"{minutes}åˆ†é’Ÿ{secs}ç§’";
         }
         else
         {
-            return $"{secs}Ãë";
+            return $"{secs}ç§’";
         }
     }
 
     /// <summary>
-    /// ¼ÆËãÓÎÏ·½ø¶È°Ù·Ö±È
+    /// è®¡ç®—æ¸¸æˆè¿›åº¦ç™¾åˆ†æ¯”
     /// </summary>
     private int CalculateProgress(SaveData data = null)
     {
         if (data == null) data = currentSaveData;
         if (data == null) return 0;
 
-        // ¸ù¾İStage¼ÆËã»ù´¡½ø¶È
+        // æ ¹æ®Stageè®¡ç®—åŸºç¡€è¿›åº¦
         int baseProgress = 0;
         switch (data.stageId)
         {
@@ -374,7 +374,7 @@ public class SaveManager : MonoBehaviour
             default: baseProgress = 0; break;
         }
 
-        // ¸ù¾İÏßË÷ÊıÁ¿Î¢µ÷£¨¼ÙÉè×Ü¹²ĞèÒª10¸öÏßË÷£©
+        // æ ¹æ®çº¿ç´¢æ•°é‡å¾®è°ƒï¼ˆå‡è®¾æ€»å…±éœ€è¦10ä¸ªçº¿ç´¢ï¼‰
         int clueBonus = Math.Min((data.cluesUnlocked?.Count ?? 0) * 1, 10);
 
         return Math.Min(baseProgress + clueBonus, 100);
@@ -382,7 +382,7 @@ public class SaveManager : MonoBehaviour
 
     #endregion
 
-    #region µ÷ÊÔ
+    #region è°ƒè¯•
 
     private void LogDebug(string message)
     {
@@ -406,7 +406,7 @@ public class SaveManager : MonoBehaviour
 }
 
 /// <summary>
-/// ´æµµÊı¾İ½á¹¹
+/// å­˜æ¡£æ•°æ®ç»“æ„
 /// </summary>
 [System.Serializable]
 public class SaveData

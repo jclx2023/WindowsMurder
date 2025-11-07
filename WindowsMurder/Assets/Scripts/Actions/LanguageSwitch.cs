@@ -1,12 +1,12 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// ÓïÑÔÇĞ»»¹¦ÄÜ
+/// è¯­è¨€åˆ‡æ¢åŠŸèƒ½
 /// </summary>
 public class LanguageSwitch : MonoBehaviour
 {
     /// <summary>
-    /// ÇĞ»»µ½ÖĞÎÄ
+    /// åˆ‡æ¢åˆ°ä¸­æ–‡
     /// </summary>
     public void SwitchToChinese()
     {
@@ -17,7 +17,7 @@ public class LanguageSwitch : MonoBehaviour
     }
 
     /// <summary>
-    /// ÇĞ»»µ½Ó¢ÎÄ
+    /// åˆ‡æ¢åˆ°è‹±æ–‡
     /// </summary>
     public void SwitchToEnglish()
     {
@@ -28,7 +28,7 @@ public class LanguageSwitch : MonoBehaviour
     }
 
     /// <summary>
-    /// ÇĞ»»µ½ÈÕÎÄ
+    /// åˆ‡æ¢åˆ°æ—¥æ–‡
     /// </summary>
     public void SwitchToJapanese()
     {

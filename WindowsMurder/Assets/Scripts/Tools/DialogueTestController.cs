@@ -1,21 +1,21 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 
 public class DialogueTestController : MonoBehaviour
 {
-    [Header("×é¼şÒıÓÃ")]
+    [Header("ç»„ä»¶å¼•ç”¨")]
     public DialogueManager dialogueManager;
 
-    [Header("²âÊÔ°´Å¥")]
-    public Button testPresetDialogueBtn;     // ²âÊÔÔ¤Éè¶Ô»°
-    public Button testLLMDialogueBtn;        // ²âÊÔLLM¶Ô»°
-    public Button testMixedDialogueBtn;      // ²âÊÔ»ìºÏ¶Ô»°
-    public Button clearHistoryBtn;           // Çå³ıÀúÊ·
-    public Button stopDialogueBtn;           // Í£Ö¹¶Ô»°
+    [Header("æµ‹è¯•æŒ‰é’®")]
+    public Button testPresetDialogueBtn;     // æµ‹è¯•é¢„è®¾å¯¹è¯
+    public Button testLLMDialogueBtn;        // æµ‹è¯•LLMå¯¹è¯
+    public Button testMixedDialogueBtn;      // æµ‹è¯•æ··åˆå¯¹è¯
+    public Button clearHistoryBtn;           // æ¸…é™¤å†å²
+    public Button stopDialogueBtn;           // åœæ­¢å¯¹è¯
 
     void Start()
     {
-        // °ó¶¨°´Å¥ÊÂ¼ş
+        // ç»‘å®šæŒ‰é’®äº‹ä»¶
         if (testPresetDialogueBtn != null)
             testPresetDialogueBtn.onClick.AddListener(TestPresetDialogue);
 
@@ -28,19 +28,19 @@ public class DialogueTestController : MonoBehaviour
         if (clearHistoryBtn != null)
             clearHistoryBtn.onClick.AddListener(ClearAllHistory);
 
-        // ²éÕÒDialogueManager
+        // æŸ¥æ‰¾DialogueManager
         if (dialogueManager == null)
             dialogueManager = FindObjectOfType<DialogueManager>();
     }
 
     /// <summary>
-    /// ²âÊÔ´¿Ô¤Éè¶Ô»°
+    /// æµ‹è¯•çº¯é¢„è®¾å¯¹è¯
     /// </summary>
     public void TestPresetDialogue()
     {
-        Debug.Log("¿ªÊ¼²âÊÔÔ¤Éè¶Ô»°");
+        Debug.Log("å¼€å§‹æµ‹è¯•é¢„è®¾å¯¹è¯");
 
-        // ´´½¨²âÊÔÓÃµÄÔ¤Éè¶Ô»°Êı¾İ
+        // åˆ›å»ºæµ‹è¯•ç”¨çš„é¢„è®¾å¯¹è¯æ•°æ®
         DialogueData testData = CreatePresetTestDialogue();
 
         if (dialogueManager != null && dialogueManager.dialogueUI != null)
@@ -50,11 +50,11 @@ public class DialogueTestController : MonoBehaviour
     }
 
     /// <summary>
-    /// ²âÊÔ´¿LLM¶Ô»°
+    /// æµ‹è¯•çº¯LLMå¯¹è¯
     /// </summary>
     public void TestLLMDialogue()
     {
-        Debug.Log("¿ªÊ¼²âÊÔLLM¶Ô»°");
+        Debug.Log("å¼€å§‹æµ‹è¯•LLMå¯¹è¯");
 
         DialogueData testData = CreateLLMTestDialogue();
 
@@ -65,11 +65,11 @@ public class DialogueTestController : MonoBehaviour
     }
 
     /// <summary>
-    /// ²âÊÔ»ìºÏ¶Ô»°£¨Ô¤Éè+LLM+Ô¤Éè£©
+    /// æµ‹è¯•æ··åˆå¯¹è¯ï¼ˆé¢„è®¾+LLM+é¢„è®¾ï¼‰
     /// </summary>
     public void TestMixedDialogue()
     {
-        Debug.Log("¿ªÊ¼²âÊÔ»ìºÏ¶Ô»°");
+        Debug.Log("å¼€å§‹æµ‹è¯•æ··åˆå¯¹è¯");
 
         DialogueData testData = CreateMixedTestDialogue();
 
@@ -80,7 +80,7 @@ public class DialogueTestController : MonoBehaviour
     }
 
     /// <summary>
-    /// ´´½¨Ô¤Éè¶Ô»°²âÊÔÊı¾İ
+    /// åˆ›å»ºé¢„è®¾å¯¹è¯æµ‹è¯•æ•°æ®
     /// </summary>
     private DialogueData CreatePresetTestDialogue()
     {
@@ -88,30 +88,30 @@ public class DialogueTestController : MonoBehaviour
         data.conversationId = "preset_test";
         data.lines = new System.Collections.Generic.List<DialogueLine>();
 
-        // µÚÒ»¾ä
+        // ç¬¬ä¸€å¥
         DialogueLine line1 = new DialogueLine();
         line1.id = "preset_01";
-        line1.mode = true;  // Ô¤ÉèÄ£Ê½
+        line1.mode = true;  // é¢„è®¾æ¨¡å¼
         line1.characterId = "TestCharacter";
         line1.text = "first";
         line1.portraitId = "";
         data.lines.Add(line1);
 
-        // µÚ¶ş¾ä
+        // ç¬¬äºŒå¥
         DialogueLine line2 = new DialogueLine();
         line2.id = "preset_02";
         line2.mode = true;
         line2.characterId = "TestCharacter";
-        line2.text = "second¡£";
+        line2.text = "secondã€‚";
         line2.portraitId = "";
         data.lines.Add(line2);
 
-        // µÚÈı¾ä
+        // ç¬¬ä¸‰å¥
         DialogueLine line3 = new DialogueLine();
         line3.id = "preset_03";
         line3.mode = true;
         line3.characterId = "TestCharacter";
-        line3.text = "done£¡";
+        line3.text = "doneï¼";
         line3.portraitId = "";
         data.lines.Add(line3);
 
@@ -119,7 +119,7 @@ public class DialogueTestController : MonoBehaviour
     }
 
     /// <summary>
-    /// ´´½¨LLM¶Ô»°²âÊÔÊı¾İ
+    /// åˆ›å»ºLLMå¯¹è¯æµ‹è¯•æ•°æ®
     /// </summary>
     private DialogueData CreateLLMTestDialogue()
     {
@@ -127,16 +127,16 @@ public class DialogueTestController : MonoBehaviour
         data.conversationId = "llm_test";
         data.lines = new System.Collections.Generic.List<DialogueLine>();
 
-        // LLM¶Ô»°¾ä×Ó
+        // LLMå¯¹è¯å¥å­
         DialogueLine llmLine = new DialogueLine();
         llmLine.id = "llm_01";
-        llmLine.mode = false;  // LLMÄ£Ê½
-        llmLine.characterId = "RecycleBin";  // Ê¹ÓÃ»ØÊÕÕ¾½ÇÉ«
-        llmLine.text = "";  // LLMÄ£Ê½²»ĞèÒªtext
+        llmLine.mode = false;  // LLMæ¨¡å¼
+        llmLine.characterId = "RecycleBin";  // ä½¿ç”¨å›æ”¶ç«™è§’è‰²
+        llmLine.text = "";  // LLMæ¨¡å¼ä¸éœ€è¦text
         llmLine.portraitId = "";
         llmLine.endKeywords = new System.Collections.Generic.List<string>
         {
-            "½áÊø", "ÔÙ¼û", "END", "end", "Ğ»Ğ»", "²âÊÔÍê³É"
+            "ç»“æŸ", "å†è§", "END", "end", "è°¢è°¢", "æµ‹è¯•å®Œæˆ"
         };
         data.lines.Add(llmLine);
 
@@ -144,7 +144,7 @@ public class DialogueTestController : MonoBehaviour
     }
 
     /// <summary>
-    /// ´´½¨»ìºÏ¶Ô»°²âÊÔÊı¾İ
+    /// åˆ›å»ºæ··åˆå¯¹è¯æµ‹è¯•æ•°æ®
     /// </summary>
     private DialogueData CreateMixedTestDialogue()
     {
@@ -152,16 +152,16 @@ public class DialogueTestController : MonoBehaviour
         data.conversationId = "mixed_test";
         data.lines = new System.Collections.Generic.List<DialogueLine>();
 
-        // ¿ª³¡Ô¤Éè¶Ô»°
+        // å¼€åœºé¢„è®¾å¯¹è¯
         DialogueLine intro = new DialogueLine();
         intro.id = "mixed_intro";
         intro.mode = true;
         intro.characterId = "RecycleBin";
-        intro.text = "Hello£¬operator¡£I'm recycle bin £¬let's talk¡£";
+        intro.text = "Helloï¼Œoperatorã€‚I'm recycle bin ï¼Œlet's talkã€‚";
         intro.portraitId = "";
         data.lines.Add(intro);
 
-        // LLM½»»¥»·½Ú
+        // LLMäº¤äº’ç¯èŠ‚
         DialogueLine llmChat = new DialogueLine();
         llmChat.id = "mixed_llm";
         llmChat.mode = false;
@@ -170,16 +170,16 @@ public class DialogueTestController : MonoBehaviour
         llmChat.portraitId = "";
         llmChat.endKeywords = new System.Collections.Generic.List<string>
         {
-            "½áÊø", "ÔÙ¼û", "END", "end", "Ğ»Ğ»"
+            "ç»“æŸ", "å†è§", "END", "end", "è°¢è°¢"
         };
         data.lines.Add(llmChat);
 
-        // ½áÎ²Ô¤Éè¶Ô»°
+        // ç»“å°¾é¢„è®¾å¯¹è¯
         DialogueLine outro = new DialogueLine();
         outro.id = "mixed_outro";
         outro.mode = true;
         outro.characterId = "RecycleBin";
-        outro.text = "DoneÎÊÑ¯½áÊø¡£Ï£ÍûÎÒÌá¹©µÄĞÅÏ¢¶ÔÄãÓĞ°ïÖú¡£";
+        outro.text = "Doneé—®è¯¢ç»“æŸã€‚å¸Œæœ›æˆ‘æä¾›çš„ä¿¡æ¯å¯¹ä½ æœ‰å¸®åŠ©ã€‚";
         outro.portraitId = "";
         data.lines.Add(outro);
 
@@ -187,11 +187,11 @@ public class DialogueTestController : MonoBehaviour
     }
 
     /// <summary>
-    /// Çå³ıËùÓĞ½ÇÉ«ÀúÊ·
+    /// æ¸…é™¤æ‰€æœ‰è§’è‰²å†å²
     /// </summary>
     public void ClearAllHistory()
     {
-        Debug.Log("Çå³ıËùÓĞ¶Ô»°ÀúÊ·");
+        Debug.Log("æ¸…é™¤æ‰€æœ‰å¯¹è¯å†å²");
 
         if (dialogueManager != null)
         {

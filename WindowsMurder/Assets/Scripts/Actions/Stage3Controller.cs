@@ -1,38 +1,38 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 /// <summary>
-/// Stage3Á÷³Ì¿ØÖÆÆ÷
+/// Stage3æµç¨‹æ§åˆ¶å™¨
 /// </summary>
 public class Stage3Controller : MonoBehaviour
 {
     private enum Stage3Phase
     {
-        InitialDialogue,        // 004²¥·ÅÖĞ
-        WaitingForExploration,  // µÈ´ıµ¥»÷´¥·¢005
-        ExplorationDialogue,    // 005²¥·ÅÖĞ
-        Exploring,              // Ì½Ë÷½×¶Î
-        WaitingForFinale,       // µÈ´ıµ¥»÷´¥·¢009
-        FinaleDialogue,         // 009²¥·ÅÖĞ
+        InitialDialogue,        // 004æ’­æ”¾ä¸­
+        WaitingForExploration,  // ç­‰å¾…å•å‡»è§¦å‘005
+        ExplorationDialogue,    // 005æ’­æ”¾ä¸­
+        Exploring,              // æ¢ç´¢é˜¶æ®µ
+        WaitingForFinale,       // ç­‰å¾…å•å‡»è§¦å‘009
+        FinaleDialogue,         // 009æ’­æ”¾ä¸­
     }
 
-    [Header("×é¼şÒıÓÃ")]
+    [Header("ç»„ä»¶å¼•ç”¨")]
     [SerializeField] private GameFlowController flowController;
     [SerializeField] private DialogueManager dialogueManager;
 
-    [Header("×ÀÃæIcons")]
+    [Header("æ¡Œé¢Icons")]
     [SerializeField] private List<GameObject> desktopIcons;
 
-    [Header("Á÷³ÌÅäÖÃ")]
+    [Header("æµç¨‹é…ç½®")]
     [SerializeField] private string targetPathId = "DFilesWorks";
     [SerializeField] private string dialogueBlock004 = "004";
     [SerializeField] private string dialogueBlock005 = "005";
     [SerializeField] private string dialogueBlock009 = "009";
     [SerializeField] private string nextStageId = "Stage4_Desktop";
 
-    [Header("µ÷ÊÔ")]
+    [Header("è°ƒè¯•")]
     [SerializeField] private bool debugMode = true;
 
     private ExplorerManager explorerManager;
@@ -65,7 +65,7 @@ public class Stage3Controller : MonoBehaviour
     }
 
     /// <summary>
-    /// ÉèÖÃExplorerÒıÓÃ£¨ÓÉInitializerµ÷ÓÃ£©
+    /// è®¾ç½®Explorerå¼•ç”¨ï¼ˆç”±Initializerè°ƒç”¨ï¼‰
     /// </summary>
     public void SetExplorerReference(ExplorerManager explorer)
     {
@@ -89,7 +89,7 @@ public class Stage3Controller : MonoBehaviour
         explorerManager.NavigateToPath(targetPathId);
         flowController.StartDialogueBlock(dialogueBlock004);
 
-        if (debugMode) Debug.Log("[Stage3] ¿ªÊ¼³õÊ¼¶Ô»°004");
+        if (debugMode) Debug.Log("[Stage3] å¼€å§‹åˆå§‹å¯¹è¯004");
     }
 
     private void SwitchPhase(Stage3Phase newPhase)
@@ -107,7 +107,7 @@ public class Stage3Controller : MonoBehaviour
                 break;
         }
 
-        if (debugMode) Debug.Log($"[Stage3] ½×¶ÎÇĞ»»: {newPhase}");
+        if (debugMode) Debug.Log($"[Stage3] é˜¶æ®µåˆ‡æ¢: {newPhase}");
     }
 
     private void OnDialogueLineStarted(string lineId, string characterId, string blockId, bool isPresetMode)
@@ -146,7 +146,7 @@ public class Stage3Controller : MonoBehaviour
             if (flowController.IsStageProgressConditionMet())
             {
                 SwitchPhase(Stage3Phase.WaitingForFinale);
-                if (debugMode) Debug.Log("[Stage3] Ì½Ë÷Íê³É£¬µÈ´ı´¥·¢½á¾Ö¶Ô»°");
+                if (debugMode) Debug.Log("[Stage3] æ¢ç´¢å®Œæˆï¼Œç­‰å¾…è§¦å‘ç»“å±€å¯¹è¯");
             }
         }
     }
@@ -165,7 +165,7 @@ public class Stage3Controller : MonoBehaviour
     {
         if (dialogueManager.IsDialogueActive())
         {
-            if (debugMode) Debug.Log("[Stage3] ¶Ô»°²¥·ÅÖĞ£¬ºöÂÔµã»÷");
+            if (debugMode) Debug.Log("[Stage3] å¯¹è¯æ’­æ”¾ä¸­ï¼Œå¿½ç•¥ç‚¹å‡»");
             return;
         }
 

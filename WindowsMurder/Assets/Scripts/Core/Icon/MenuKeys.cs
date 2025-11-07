@@ -1,46 +1,46 @@
-/// <summary>
-/// ÓÒ¼ü²Ëµ¥ÏîµÄ±¾µØ»¯Key³£Á¿¶¨Òå
-/// Key·¶Î§£º2000-2999 (ÓÒ¼ü²Ëµ¥Ïî×¨ÓÃ)
+ï»¿/// <summary>
+/// å³é”®èœå•é¡¹çš„æœ¬åœ°åŒ–Keyå¸¸é‡å®šä¹‰
+/// KeyèŒƒå›´ï¼š2000-2999 (å³é”®èœå•é¡¹ä¸“ç”¨)
 /// </summary>
 public static class MenuKeys
 {
-    // ÎÄ¼ş²Ù×÷Àà
-    public const string OPEN = "2001";           // ´ò¿ª
-    public const string OPEN_WITH = "2002";     // ´ò¿ª·½Ê½
-    public const string EDIT = "2003";          // ±à¼­
-    public const string VIEW = "2004";          // ²é¿´
+    // æ–‡ä»¶æ“ä½œç±»
+    public const string OPEN = "2001";           // æ‰“å¼€
+    public const string OPEN_WITH = "2002";     // æ‰“å¼€æ–¹å¼
+    public const string EDIT = "2003";          // ç¼–è¾‘
+    public const string VIEW = "2004";          // æŸ¥çœ‹
     public const string UNZIP = "2005";
 
-    // ±à¼­²Ù×÷Àà
-    public const string COPY = "2010";          // ¸´ÖÆ
-    public const string CUT = "2011";           // ¼ôÇĞ
-    public const string PASTE = "2012";         // Õ³Ìù
-    public const string DELETE = "2013";        // É¾³ı
-    public const string RENAME = "2014";        // ÖØÃüÃû
+    // ç¼–è¾‘æ“ä½œç±»
+    public const string COPY = "2010";          // å¤åˆ¶
+    public const string CUT = "2011";           // å‰ªåˆ‡
+    public const string PASTE = "2012";         // ç²˜è´´
+    public const string DELETE = "2013";        // åˆ é™¤
+    public const string RENAME = "2014";        // é‡å‘½å
 
-    // ÊôĞÔ²Ù×÷Àà
-    public const string PROPERTIES = "2020";    // ÊôĞÔ
-    public const string PERMISSIONS = "2021";   // È¨ÏŞ
-    public const string DETAILS = "2022";       // ÏêÏ¸ĞÅÏ¢
+    // å±æ€§æ“ä½œç±»
+    public const string PROPERTIES = "2020";    // å±æ€§
+    public const string PERMISSIONS = "2021";   // æƒé™
+    public const string DETAILS = "2022";       // è¯¦ç»†ä¿¡æ¯
 
-    // ÏµÍ³¹¤¾ßÀà
-    public const string REFRESH = "2030";       // Ë¢ĞÂ
-    public const string EMPTY_RECYCLE = "2031"; // Çå¿Õ»ØÊÕÕ¾
-    public const string RESTORE = "2032";       // »¹Ô­
-    public const string SEND_TO = "2033";       // ·¢ËÍµ½
+    // ç³»ç»Ÿå·¥å…·ç±»
+    public const string REFRESH = "2030";       // åˆ·æ–°
+    public const string EMPTY_RECYCLE = "2031"; // æ¸…ç©ºå›æ”¶ç«™
+    public const string RESTORE = "2032";       // è¿˜åŸ
+    public const string SEND_TO = "2033";       // å‘é€åˆ°
 
-    // ´´½¨²Ù×÷Àà
-    public const string NEW_FOLDER = "2040";    // ĞÂ½¨ÎÄ¼ş¼Ğ
-    public const string NEW_FILE = "2041";      // ĞÂ½¨ÎÄ¼ş
+    // åˆ›å»ºæ“ä½œç±»
+    public const string NEW_FOLDER = "2040";    // æ–°å»ºæ–‡ä»¶å¤¹
+    public const string NEW_FILE = "2041";      // æ–°å»ºæ–‡ä»¶
 
-    // ³ÌĞò²Ù×÷Àà
-    public const string RUN = "2050";           // ÔËĞĞ
-    public const string RUN_AS_ADMIN = "2051";  // ÒÔ¹ÜÀíÔ±Éí·İÔËĞĞ
-    public const string PIN_TO_TASKBAR = "2052"; // ¹Ì¶¨µ½ÈÎÎñÀ¸
-    public const string UNINSTALL = "2053";     // Ğ¶ÔØ
+    // ç¨‹åºæ“ä½œç±»
+    public const string RUN = "2050";           // è¿è¡Œ
+    public const string RUN_AS_ADMIN = "2051";  // ä»¥ç®¡ç†å‘˜èº«ä»½è¿è¡Œ
+    public const string PIN_TO_TASKBAR = "2052"; // å›ºå®šåˆ°ä»»åŠ¡æ 
+    public const string UNINSTALL = "2053";     // å¸è½½
 
-    // ½ÇÉ«½»»¥Àà
-    public const string TALK = "2060";          // ¶Ô»°
-    public const string QUESTION = "2061";      // Ñ¯ÎÊ
-    public const string GIVE_ITEM = "2062";     // ¸øÓèÎïÆ·
+    // è§’è‰²äº¤äº’ç±»
+    public const string TALK = "2060";          // å¯¹è¯
+    public const string QUESTION = "2061";      // è¯¢é—®
+    public const string GIVE_ITEM = "2062";     // ç»™äºˆç‰©å“
 }

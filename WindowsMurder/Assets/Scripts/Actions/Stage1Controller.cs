@@ -1,19 +1,19 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Stage1Á÷³Ì¿ØÖÆÆ÷
+/// Stage1æµç¨‹æ§åˆ¶å™¨
 /// </summary>
 public class Stage1Controller : MonoBehaviour
 {
-    [Header("UI×é¼ş")]
-    public Image flashImage;            // ÉÁË¸Ğ§¹ûµÄÍ¼Æ¬×é¼ş
+    [Header("UIç»„ä»¶")]
+    public Image flashImage;            // é—ªçƒæ•ˆæœçš„å›¾ç‰‡ç»„ä»¶
 
-    [Header("¶¯Ğ§ÉèÖÃ")]
-    public float flashDuration = 0.5f;  // µ¥´ÎÉÁË¸³ÖĞøÊ±¼ä
+    [Header("åŠ¨æ•ˆè®¾ç½®")]
+    public float flashDuration = 0.5f;  // å•æ¬¡é—ªçƒæŒç»­æ—¶é—´
 
-    // Ë½ÓĞ±äÁ¿
+    // ç§æœ‰å˜é‡
     private bool waitingForClick = true;
     private bool dialogueStarted = false;
     private DialogueManager dialogueManager;
@@ -25,7 +25,7 @@ public class Stage1Controller : MonoBehaviour
 
     void Update()
     {
-        // µÈ´ıÍæ¼Òµã»÷ÈÎÒâÎ»ÖÃ¿ªÊ¼¶Ô»°
+        // ç­‰å¾…ç©å®¶ç‚¹å‡»ä»»æ„ä½ç½®å¼€å§‹å¯¹è¯
         if (waitingForClick && Input.GetMouseButtonDown(0))
         {
             StartStage1Dialogue();
@@ -33,14 +33,14 @@ public class Stage1Controller : MonoBehaviour
     }
 
     /// <summary>
-    /// ³õÊ¼»¯Stage1
+    /// åˆå§‹åŒ–Stage1
     /// </summary>
     private void InitializeStage()
     {
-        // ²éÕÒDialogueManager
+        // æŸ¥æ‰¾DialogueManager
         dialogueManager = FindObjectOfType<DialogueManager>();
 
-        // È·±£ÉÁË¸Í¼Æ¬³õÊ¼×´Ì¬ÎªÍ¸Ã÷
+        // ç¡®ä¿é—ªçƒå›¾ç‰‡åˆå§‹çŠ¶æ€ä¸ºé€æ˜
         if (flashImage != null)
         {
             Color color = flashImage.color;
@@ -48,12 +48,12 @@ public class Stage1Controller : MonoBehaviour
             flashImage.color = color;
         }
 
-        // ¶©ÔÄ¶Ô»°ÊÂ¼ş
+        // è®¢é˜…å¯¹è¯äº‹ä»¶
         SubscribeToDialogueEvents();
     }
 
     /// <summary>
-    /// ¿ªÊ¼Stage1¶Ô»°
+    /// å¼€å§‹Stage1å¯¹è¯
     /// </summary>
     private void StartStage1Dialogue()
     {
@@ -65,20 +65,20 @@ public class Stage1Controller : MonoBehaviour
     }
 
     /// <summary>
-    /// ¶©ÔÄ¶Ô»°ÊÂ¼ş
+    /// è®¢é˜…å¯¹è¯äº‹ä»¶
     /// </summary>
     private void SubscribeToDialogueEvents()
     {
-        // ¶©ÔÄDialogueUIµÄ¶Ô»°ĞĞ¿ªÊ¼ÊÂ¼ş
+        // è®¢é˜…DialogueUIçš„å¯¹è¯è¡Œå¼€å§‹äº‹ä»¶
         DialogueUI.OnLineStarted += OnDialogueLineStarted;
     }
 
     /// <summary>
-    /// ¶Ô»°ĞĞ¿ªÊ¼ÊÂ¼ş´¦Àí
+    /// å¯¹è¯è¡Œå¼€å§‹äº‹ä»¶å¤„ç†
     /// </summary>
     private void OnDialogueLineStarted(string lineId, string characterId, string blockId, bool isPresetMode)
     {
-        // ¼ì²éÊÇ·ñÊÇÌØ¶¨µÄ¶Ô»°¿éºÍ¶Ô»°ĞĞ
+        // æ£€æŸ¥æ˜¯å¦æ˜¯ç‰¹å®šçš„å¯¹è¯å—å’Œå¯¹è¯è¡Œ
         if (lineId == "2" && blockId == "001" && flashImage != null)
         {
             StartCoroutine(FlashEffect());
@@ -86,29 +86,29 @@ public class Stage1Controller : MonoBehaviour
     }
 
     /// <summary>
-    /// ÉÁË¸Ğ§¹ûĞ­³Ì
+    /// é—ªçƒæ•ˆæœåç¨‹
     /// </summary>
     private IEnumerator FlashEffect()
     {
         if (flashImage == null) yield break;
 
-        Debug.Log("´¥·¢ÉÁË¸Ğ§¹û");
+        Debug.Log("è§¦å‘é—ªçƒæ•ˆæœ");
 
-        // ÉÁË¸Á½´Î
+        // é—ªçƒä¸¤æ¬¡
         for (int i = 0; i < 4; i++)
         {
-            // µ­Èë (0 -> 1)
+            // æ·¡å…¥ (0 -> 1)
             yield return StartCoroutine(FadeImage(0f, 1f, flashDuration));
 
-            // µ­³ö (1 -> 0)
+            // æ·¡å‡º (1 -> 0)
             yield return StartCoroutine(FadeImage(1f, 0f, flashDuration));
         }
 
-        Debug.Log("ÉÁË¸Ğ§¹ûÍê³É");
+        Debug.Log("é—ªçƒæ•ˆæœå®Œæˆ");
     }
 
     /// <summary>
-    /// Í¼Æ¬µ­Èëµ­³öĞ­³Ì
+    /// å›¾ç‰‡æ·¡å…¥æ·¡å‡ºåç¨‹
     /// </summary>
     private IEnumerator FadeImage(float startAlpha, float endAlpha, float duration)
     {
@@ -126,23 +126,23 @@ public class Stage1Controller : MonoBehaviour
             yield return null;
         }
 
-        // È·±£×îÖÕÖµ×¼È·
+        // ç¡®ä¿æœ€ç»ˆå€¼å‡†ç¡®
         color.a = endAlpha;
         flashImage.color = color;
     }
 
     /// <summary>
-    /// ÇåÀíÊÂ¼ş¶©ÔÄ
+    /// æ¸…ç†äº‹ä»¶è®¢é˜…
     /// </summary>
     private void OnDestroy()
     {
-        // È¡ÏûÊÂ¼ş¶©ÔÄ
+        // å–æ¶ˆäº‹ä»¶è®¢é˜…
         DialogueUI.OnLineStarted -= OnDialogueLineStarted;
     }
 
-    #region µ÷ÊÔ¹¤¾ß
+    #region è°ƒè¯•å·¥å…·
 
-    [ContextMenu("²âÊÔÉÁË¸Ğ§¹û")]
+    [ContextMenu("æµ‹è¯•é—ªçƒæ•ˆæœ")]
     private void TestFlashEffect()
     {
         if (flashImage != null)

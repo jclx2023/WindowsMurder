@@ -1,26 +1,26 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// É¨À×ÓÎÏ·¾«Áé×ÊÔ´¹ÜÀíÆ÷
-/// Í³Ò»¹ÜÀíËùÓĞÍ¼Æ¬×ÊÔ´
+/// æ‰«é›·æ¸¸æˆç²¾çµèµ„æºç®¡ç†å™¨
+/// ç»Ÿä¸€ç®¡ç†æ‰€æœ‰å›¾ç‰‡èµ„æº
 /// </summary>
 [CreateAssetMenu(fileName = "MinesweeperSprites", menuName = "Minesweeper/Sprite Manager")]
 public class MinesweeperSpriteManager : ScriptableObject
 {
-    [Header("¸ñ×Ó×´Ì¬¾«Áé")]
-    public Sprite coveredSprite;        // Î´·­¿ªµÄ¸ñ×Ó (empty.png)
-    public Sprite revealedSprite;       // ÒÑ·­¿ªµÄ¿Õ°×¸ñ×Ó (open1.png)
+    [Header("æ ¼å­çŠ¶æ€ç²¾çµ")]
+    public Sprite coveredSprite;        // æœªç¿»å¼€çš„æ ¼å­ (empty.png)
+    public Sprite revealedSprite;       // å·²ç¿»å¼€çš„ç©ºç™½æ ¼å­ (open1.png)
 
-    [Header("±ê¼Ç¾«Áé")]
-    public Sprite flagSprite;           // ÆìÖÄ (flag.png)
-    public Sprite questionSprite;       // ÎÊºÅ (question.png) - ¿ÉÑ¡
+    [Header("æ ‡è®°ç²¾çµ")]
+    public Sprite flagSprite;           // æ——å¸œ (flag.png)
+    public Sprite questionSprite;       // é—®å· (question.png) - å¯é€‰
 
-    [Header("µØÀ×¾«Áé")]
-    public Sprite mineSprite;           // ÆÕÍ¨µØÀ× (mine.png)
-    public Sprite mineDeathSprite;      // ²ÈÖĞµÄµØÀ× (mine-death.png)
-    public Sprite mineFlaggedSprite;    // ´íÎó±ê¼Ç (misflagged.png)
+    [Header("åœ°é›·ç²¾çµ")]
+    public Sprite mineSprite;           // æ™®é€šåœ°é›· (mine.png)
+    public Sprite mineDeathSprite;      // è¸©ä¸­çš„åœ°é›· (mine-death.png)
+    public Sprite mineFlaggedSprite;    // é”™è¯¯æ ‡è®° (misflagged.png)
 
-    [Header("Êı×Ö¾«Áé 1-8")]
+    [Header("æ•°å­—ç²¾çµ 1-8")]
     public Sprite number1;              // digit1.png
     public Sprite number2;              // digit2.png
     public Sprite number3;              // digit3.png
@@ -30,9 +30,9 @@ public class MinesweeperSpriteManager : ScriptableObject
     public Sprite number7;              // digit7.png
     public Sprite number8;              // digit8.png
 
-    [Header("¼ÆÊıÆ÷Êı×Ö¾«Áé 0-9")]
-    public Sprite digit0;               // ¶ÔÓ¦ checked.png »ò×¨ÃÅµÄÊı×Ö0
-    public Sprite digit1;               // digit_c.png (¸ù¾İÊµ¼ÊÎÄ¼şÃû)
+    [Header("è®¡æ•°å™¨æ•°å­—ç²¾çµ 0-9")]
+    public Sprite digit0;               // å¯¹åº” checked.png æˆ–ä¸“é—¨çš„æ•°å­—0
+    public Sprite digit1;               // digit_c.png (æ ¹æ®å®é™…æ–‡ä»¶å)
     public Sprite digit2;
     public Sprite digit3;
     public Sprite digit4;
@@ -42,14 +42,14 @@ public class MinesweeperSpriteManager : ScriptableObject
     public Sprite digit8;
     public Sprite digit9;
 
-    [Header("Ğ¦Á³¾«Áé")]
+    [Header("ç¬‘è„¸ç²¾çµ")]
     public Sprite smileSprite;          // smile.png
     public Sprite winSprite;            // win.png
     public Sprite deadSprite;           // dead.png
     public Sprite ohhSprite;            // ohh.png
 
     /// <summary>
-    /// »ñÈ¡¸ñ×ÓÄÚÊı×Ö¾«Áé£¨1-8£©
+    /// è·å–æ ¼å­å†…æ•°å­—ç²¾çµï¼ˆ1-8ï¼‰
     /// </summary>
     public Sprite GetNumberSprite(int index)
     {
@@ -68,7 +68,7 @@ public class MinesweeperSpriteManager : ScriptableObject
     }
 
     /// <summary>
-    /// »ñÈ¡¼ÆÊıÆ÷Êı×Ö¾«Áé£¨0-9£©
+    /// è·å–è®¡æ•°å™¨æ•°å­—ç²¾çµï¼ˆ0-9ï¼‰
     /// </summary>
     public Sprite GetDigitSprite(int digit)
     {

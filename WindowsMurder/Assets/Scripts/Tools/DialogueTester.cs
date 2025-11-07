@@ -1,23 +1,23 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ¶Ô»°ÏµÍ³²âÊÔÆ÷ - ÓÃÓÚ²âÊÔ¶Ô»°Á÷³Ì
-/// ºöÂÔËùÓĞÌõ¼şÏŞÖÆ£¬°´Ë³Ğò²¥·Å¶Ô»°¿é
+/// å¯¹è¯ç³»ç»Ÿæµ‹è¯•å™¨ - ç”¨äºæµ‹è¯•å¯¹è¯æµç¨‹
+/// å¿½ç•¥æ‰€æœ‰æ¡ä»¶é™åˆ¶ï¼ŒæŒ‰é¡ºåºæ’­æ”¾å¯¹è¯å—
 /// </summary>
 public class DialogueTester : MonoBehaviour
 {
-    [Header("²âÊÔÉèÖÃ")]
+    [Header("æµ‹è¯•è®¾ç½®")]
     [SerializeField] private bool autoStartTest = false;
     [SerializeField] private float delayBetweenDialogues = 1.5f;
     [SerializeField] private float delayBetweenStages = 2.5f;
 
-    [Header("×é¼şÒıÓÃ")]
+    [Header("ç»„ä»¶å¼•ç”¨")]
     [SerializeField] private GameFlowController gameFlowController;
     [SerializeField] private DialogueManager dialogueManager;
 
-    [Header("µ÷ÊÔ")]
+    [Header("è°ƒè¯•")]
     [SerializeField] private bool enableDebugLog = true;
 
     private List<StageConfig> stageConfigs = new List<StageConfig>();
@@ -46,12 +46,12 @@ public class DialogueTester : MonoBehaviour
 
         if (gameFlowController == null)
         {
-            LogError("Î´ÕÒµ½ GameFlowController ×é¼ş£¡");
+            LogError("æœªæ‰¾åˆ° GameFlowController ç»„ä»¶ï¼");
             return;
         }
 
         stageConfigs = new List<StageConfig>(gameFlowController.GetStageConfigsSafe());
-        LogDebug($"³õÊ¼»¯Íê³É£¬ÕÒµ½ {stageConfigs.Count} ¸ö Stage");
+        LogDebug($"åˆå§‹åŒ–å®Œæˆï¼Œæ‰¾åˆ° {stageConfigs.Count} ä¸ª Stage");
     }
 
     private IEnumerator DelayedAutoStart()
@@ -60,9 +60,9 @@ public class DialogueTester : MonoBehaviour
         StartDialogueTest();
     }
 
-    #region ¹«¹²½Ó¿Ú
+    #region å…¬å…±æ¥å£
 
-    [ContextMenu("¿ªÊ¼¶Ô»°²âÊÔ")]
+    [ContextMenu("å¼€å§‹å¯¹è¯æµ‹è¯•")]
     public void StartDialogueTest()
     {
         if (isTesting || stageConfigs.Count == 0) return;
@@ -71,11 +71,11 @@ public class DialogueTester : MonoBehaviour
         currentStageIndex = 0;
         currentDialogueIndex = 0;
 
-        LogDebug("=== ¿ªÊ¼¶Ô»°ÏµÍ³²âÊÔ ===");
+        LogDebug("=== å¼€å§‹å¯¹è¯ç³»ç»Ÿæµ‹è¯• ===");
         testCoroutine = StartCoroutine(TestAllStages());
     }
 
-    [ContextMenu("Í£Ö¹¶Ô»°²âÊÔ")]
+    [ContextMenu("åœæ­¢å¯¹è¯æµ‹è¯•")]
     public void StopDialogueTest()
     {
         if (!isTesting) return;
@@ -84,10 +84,10 @@ public class DialogueTester : MonoBehaviour
         if (testCoroutine != null)
             StopCoroutine(testCoroutine);
 
-        LogDebug("=== ¶Ô»°ÏµÍ³²âÊÔÒÑÍ£Ö¹ ===");
+        LogDebug("=== å¯¹è¯ç³»ç»Ÿæµ‹è¯•å·²åœæ­¢ ===");
     }
 
-    [ContextMenu("²âÊÔµ±Ç°Stage")]
+    [ContextMenu("æµ‹è¯•å½“å‰Stage")]
     public void TestCurrentStage()
     {
         if (gameFlowController == null) return;
@@ -96,7 +96,7 @@ public class DialogueTester : MonoBehaviour
         StageConfig stage = stageConfigs.Find(s => s.stageId == stageId);
         if (stage == null)
         {
-            LogError($"ÕÒ²»µ½ Stage ÅäÖÃ: {stageId}");
+            LogError($"æ‰¾ä¸åˆ° Stage é…ç½®: {stageId}");
             return;
         }
 
@@ -108,7 +108,7 @@ public class DialogueTester : MonoBehaviour
 
     #endregion
 
-    #region ²âÊÔĞ­³Ì
+    #region æµ‹è¯•åç¨‹
 
     private IEnumerator TestAllStages()
     {
@@ -117,7 +117,7 @@ public class DialogueTester : MonoBehaviour
             if (!isTesting) break;
 
             StageConfig stage = stageConfigs[currentStageIndex];
-            LogDebug($"=== ¿ªÊ¼²âÊÔ Stage: {stage.stageId} ===");
+            LogDebug($"=== å¼€å§‹æµ‹è¯• Stage: {stage.stageId} ===");
 
             gameFlowController.LoadStage(stage.stageId);
 
@@ -130,14 +130,14 @@ public class DialogueTester : MonoBehaviour
         }
 
         isTesting = false;
-        LogDebug("=== ËùÓĞ Stage ²âÊÔÍê³É ===");
+        LogDebug("=== æ‰€æœ‰ Stage æµ‹è¯•å®Œæˆ ===");
     }
 
     private IEnumerator TestSingleStage(StageConfig stage)
     {
         if (stage.dialogueBlocks == null || stage.dialogueBlocks.Count == 0)
         {
-            LogDebug($"Stage {stage.stageId} Ã»ÓĞ¶Ô»°¿é");
+            LogDebug($"Stage {stage.stageId} æ²¡æœ‰å¯¹è¯å—");
             yield break;
         }
 
@@ -146,7 +146,7 @@ public class DialogueTester : MonoBehaviour
             if (!isTesting) break;
 
             DialogueBlockConfig block = stage.dialogueBlocks[currentDialogueIndex];
-            LogDebug($"²¥·Å¶Ô»°¿é {currentDialogueIndex + 1}/{stage.dialogueBlocks.Count}: {block.dialogueBlockFileId}");
+            LogDebug($"æ’­æ”¾å¯¹è¯å— {currentDialogueIndex + 1}/{stage.dialogueBlocks.Count}: {block.dialogueBlockFileId}");
 
             yield return StartCoroutine(TestSingleDialogue(block));
 
@@ -161,26 +161,26 @@ public class DialogueTester : MonoBehaviour
     {
         dialogueRunning = true;
 
-        // ¿ªÊ¼¶Ô»°¿é
+        // å¼€å§‹å¯¹è¯å—
         gameFlowController.StartDialogueBlock(block.dialogueBlockFileId);
 
-        // µÈ´ı¶Ô»°Íê³É£¨ÓÉ GameFlowController.OnDialogueBlockComplete ´¥·¢£©
+        // ç­‰å¾…å¯¹è¯å®Œæˆï¼ˆç”± GameFlowController.OnDialogueBlockComplete è§¦å‘ï¼‰
         System.Action<string> onComplete = (id) =>
         {
             if (id == block.dialogueBlockFileId)
                 dialogueRunning = false;
         };
-        gameFlowController.OnStageChanged.AddListener(_ => dialogueRunning = false); // ±£ÏÕ£ºStageÇĞ»»Ò²ÄÜÍË³ö
+        gameFlowController.OnStageChanged.AddListener(_ => dialogueRunning = false); // ä¿é™©ï¼šStageåˆ‡æ¢ä¹Ÿèƒ½é€€å‡º
         gameFlowController.OnAutoSaveRequested.AddListener(() => dialogueRunning = false);
 
         yield return new WaitUntil(() => !dialogueRunning);
 
-        LogDebug($"¶Ô»°¿é {block.dialogueBlockFileId} ²¥·ÅÍê³É");
+        LogDebug($"å¯¹è¯å— {block.dialogueBlockFileId} æ’­æ”¾å®Œæˆ");
     }
 
     #endregion
 
-    #region µ÷ÊÔ GUI
+    #region è°ƒè¯• GUI
 
 #if UNITY_EDITOR
     void OnGUI()
@@ -190,20 +190,20 @@ public class DialogueTester : MonoBehaviour
         GUILayout.BeginArea(new Rect(10, 10, 300, 200));
         GUILayout.BeginVertical("box");
 
-        GUILayout.Label("=== ¶Ô»°²âÊÔÆ÷ ===", new GUIStyle("label") { fontStyle = FontStyle.Bold });
-        GUILayout.Label($"²âÊÔ×´Ì¬: {(isTesting ? "½øĞĞÖĞ" : "Í£Ö¹")}");
-        GUILayout.Label($"µ±Ç°Stage: {(currentStageIndex < stageConfigs.Count ? stageConfigs[currentStageIndex].stageId : "-")}");
-        GUILayout.Label($"¶Ô»°¿éË÷Òı: {currentDialogueIndex}");
+        GUILayout.Label("=== å¯¹è¯æµ‹è¯•å™¨ ===", new GUIStyle("label") { fontStyle = FontStyle.Bold });
+        GUILayout.Label($"æµ‹è¯•çŠ¶æ€: {(isTesting ? "è¿›è¡Œä¸­" : "åœæ­¢")}");
+        GUILayout.Label($"å½“å‰Stage: {(currentStageIndex < stageConfigs.Count ? stageConfigs[currentStageIndex].stageId : "-")}");
+        GUILayout.Label($"å¯¹è¯å—ç´¢å¼•: {currentDialogueIndex}");
 
         GUILayout.Space(10);
 
-        if (GUILayout.Button(isTesting ? "Í£Ö¹²âÊÔ" : "¿ªÊ¼²âÊÔ"))
+        if (GUILayout.Button(isTesting ? "åœæ­¢æµ‹è¯•" : "å¼€å§‹æµ‹è¯•"))
         {
             if (isTesting) StopDialogueTest();
             else StartDialogueTest();
         }
 
-        if (GUILayout.Button("²âÊÔµ±Ç°Stage"))
+        if (GUILayout.Button("æµ‹è¯•å½“å‰Stage"))
             TestCurrentStage();
 
         GUILayout.EndVertical();

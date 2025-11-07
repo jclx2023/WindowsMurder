@@ -1,44 +1,44 @@
-using System.Linq;
+ï»¿using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// Í¨ÓÃÖ¤Îïµ÷²éAction - Ö§³Ö¶àÏßË÷½âËøºÍÓÒ¼ü²Ëµ¥
-/// ÊÊÓÃÓÚËùÓĞĞèÒª"¶Ô»°-´°¿Ú-¶àÏßË÷-¶Ô»°"Á÷³ÌµÄÖ¤Îïicon
+/// é€šç”¨è¯ç‰©è°ƒæŸ¥Action - æ”¯æŒå¤šçº¿ç´¢è§£é”å’Œå³é”®èœå•
+/// é€‚ç”¨äºæ‰€æœ‰éœ€è¦"å¯¹è¯-çª—å£-å¤šçº¿ç´¢-å¯¹è¯"æµç¨‹çš„è¯ç‰©icon
 /// </summary>
 public class EvidenceIconAction : IconAction
 {
-    [Header("=== Ö¤ÎïÅäÖÃ ===")]
+    [Header("=== è¯ç‰©é…ç½® ===")]
     public string evidenceId = "knife";
 
-    [Header("=== ÏßË÷ÅäÖÃ ===")]
-    [Tooltip("ĞèÒª½âËøµÄËùÓĞÏßË÷ID")]
+    [Header("=== çº¿ç´¢é…ç½® ===")]
+    [Tooltip("éœ€è¦è§£é”çš„æ‰€æœ‰çº¿ç´¢ID")]
     public List<string> requiredClues = new List<string> { "clue_dark_red", "clue_bright_red" };
 
-    [Tooltip("ÊÇ·ñĞèÒªËùÓĞÏßË÷£¨false=ÈÎÒâÒ»¸ö¼´¿É£©")]
+    [Tooltip("æ˜¯å¦éœ€è¦æ‰€æœ‰çº¿ç´¢ï¼ˆfalse=ä»»æ„ä¸€ä¸ªå³å¯ï¼‰")]
     public bool requireAllClues = true;
 
-    [Header("=== ¶Ô»°¿éÅäÖÃ ===")]
+    [Header("=== å¯¹è¯å—é…ç½® ===")]
     public string beforeDialogueBlockId = "001";
     public string afterDialogueBlockId = "002";
 
-    [Header("=== ´°¿ÚÅäÖÃ ===")]
+    [Header("=== çª—å£é…ç½® ===")]
     public GameObject windowPrefab;
-    public GameObject propertiesWindowPrefab; // ÊôĞÔ´°¿ÚÔ¤ÖÆÌå
+    public GameObject propertiesWindowPrefab; // å±æ€§çª—å£é¢„åˆ¶ä½“
     public Canvas targetCanvas;
 
-    [Header("=== ¹¦ÄÜÑ¡Ïî ===")]
+    [Header("=== åŠŸèƒ½é€‰é¡¹ ===")]
     public bool allowReopenAfterComplete = true;
     public bool enableDebugLog = true;
 
-    [Header("=== ×´Ì¬ÏÔÊ¾£¨ÔËĞĞÊ±Ö»¶Á£©===")]
+    [Header("=== çŠ¶æ€æ˜¾ç¤ºï¼ˆè¿è¡Œæ—¶åªè¯»ï¼‰===")]
     [SerializeField] private InvestigationState currentState = InvestigationState.NotInvestigated;
     [SerializeField] private bool isWaitingForDialogue = false;
     [SerializeField] private bool isWaitingForClues = false;
     [SerializeField] private List<string> unlockedCluesList = new List<string>();
 
-    // Ë½ÓĞ±äÁ¿
+    // ç§æœ‰å˜é‡
     private string waitingForDialogueBlockId;
     private GameFlowController gameFlowController;
     private Canvas canvas;
@@ -46,7 +46,7 @@ public class EvidenceIconAction : IconAction
     private InteractableIcon iconComponent;
 
     /// <summary>
-    /// µ÷²é×´Ì¬Ã¶¾Ù
+    /// è°ƒæŸ¥çŠ¶æ€æšä¸¾
     /// </summary>
     private enum InvestigationState
     {
@@ -58,7 +58,7 @@ public class EvidenceIconAction : IconAction
         Completed
     }
 
-    #region UnityÉúÃüÖÜÆÚ
+    #region Unityç”Ÿå‘½å‘¨æœŸ
 
     void Awake()
     {
@@ -74,16 +74,16 @@ public class EvidenceIconAction : IconAction
 
     void OnEnable()
     {
-        // ¶©ÔÄ¶Ô»°½áÊøÊÂ¼ş
+        // è®¢é˜…å¯¹è¯ç»“æŸäº‹ä»¶
         DialogueUI.OnDialogueBlockEnded += HandleDialogueEnded;
 
-        // ¶©ÔÄÏßË÷½âËøÊÂ¼ş
+        // è®¢é˜…çº¿ç´¢è§£é”äº‹ä»¶
         GameEvents.OnClueUnlocked += HandleClueUnlocked;
 
-        // ¶©ÔÄÓÒ¼ü²Ëµ¥ÊÂ¼ş
+        // è®¢é˜…å³é”®èœå•äº‹ä»¶
         InteractableIcon.OnContextMenuItemClicked += OnContextMenuItemClicked;
 
-        DebugLog("ÒÑ¶©ÔÄÊÂ¼ş");
+        DebugLog("å·²è®¢é˜…äº‹ä»¶");
     }
 
     void OnDisable()
@@ -92,19 +92,19 @@ public class EvidenceIconAction : IconAction
         GameEvents.OnClueUnlocked -= HandleClueUnlocked;
         InteractableIcon.OnContextMenuItemClicked -= OnContextMenuItemClicked;
 
-        DebugLog("ÒÑÈ¡Ïû¶©ÔÄÊÂ¼ş");
+        DebugLog("å·²å–æ¶ˆè®¢é˜…äº‹ä»¶");
     }
 
     #endregion
 
-    #region Canvas²éÕÒ
+    #region CanvasæŸ¥æ‰¾
 
     private void FindTargetCanvas()
     {
         canvas = GetComponentInParent<Canvas>();
         if (canvas != null)
         {
-            DebugLog($"´Ó¸¸¼¶ÕÒµ½Canvas: {canvas.name}");
+            DebugLog($"ä»çˆ¶çº§æ‰¾åˆ°Canvas: {canvas.name}");
             return;
         }
 
@@ -114,7 +114,7 @@ public class EvidenceIconAction : IconAction
             canvas = canvasObj.GetComponent<Canvas>();
             if (canvas != null)
             {
-                DebugLog($"Í¨¹ıTagÕÒµ½Canvas: {canvas.name}");
+                DebugLog($"é€šè¿‡Tagæ‰¾åˆ°Canvas: {canvas.name}");
                 return;
             }
         }
@@ -122,7 +122,7 @@ public class EvidenceIconAction : IconAction
 
     #endregion
 
-    #region ×´Ì¬»Ö¸´
+    #region çŠ¶æ€æ¢å¤
 
     private void RestoreStateFromSave()
     {
@@ -130,18 +130,18 @@ public class EvidenceIconAction : IconAction
 
         var completedBlocks = gameFlowController.GetCompletedBlocksSafe();
 
-        // ¼ì²éÇ°ÖÃ¶Ô»°ÊÇ·ñÍê³É
+        // æ£€æŸ¥å‰ç½®å¯¹è¯æ˜¯å¦å®Œæˆ
         if (completedBlocks.Contains(beforeDialogueBlockId))
         {
-            // ¼ì²éºóÖÃ¶Ô»°ÊÇ·ñÍê³É
+            // æ£€æŸ¥åç½®å¯¹è¯æ˜¯å¦å®Œæˆ
             if (completedBlocks.Contains(afterDialogueBlockId))
             {
                 currentState = InvestigationState.Completed;
-                DebugLog("´Ó´æµµ»Ö¸´×´Ì¬£ºÒÑÍê³É");
+                DebugLog("ä»å­˜æ¡£æ¢å¤çŠ¶æ€ï¼šå·²å®Œæˆ");
                 return;
             }
 
-            // ¼ì²éÒÑ½âËøµÄÏßË÷
+            // æ£€æŸ¥å·²è§£é”çš„çº¿ç´¢
             foreach (string clueId in requiredClues)
             {
                 if (gameFlowController.HasClue(clueId))
@@ -151,28 +151,28 @@ public class EvidenceIconAction : IconAction
                 }
             }
 
-            // ÅĞ¶ÏÊÇ·ñËùÓĞÏßË÷¶¼ÒÑ½âËø
+            // åˆ¤æ–­æ˜¯å¦æ‰€æœ‰çº¿ç´¢éƒ½å·²è§£é”
             if (AreAllCluesUnlocked())
             {
                 currentState = InvestigationState.PlayingAfterDialogue;
-                DebugLog($"´Ó´æµµ»Ö¸´×´Ì¬£ºËùÓĞÏßË÷ÒÑ½âËø ({unlockedClues.Count}/{requiredClues.Count})");
+                DebugLog($"ä»å­˜æ¡£æ¢å¤çŠ¶æ€ï¼šæ‰€æœ‰çº¿ç´¢å·²è§£é” ({unlockedClues.Count}/{requiredClues.Count})");
             }
             else
             {
                 currentState = InvestigationState.WaitingForClues;
                 isWaitingForClues = true;
-                DebugLog($"´Ó´æµµ»Ö¸´×´Ì¬£ºµÈ´ıÏßË÷½âËø ({unlockedClues.Count}/{requiredClues.Count})");
+                DebugLog($"ä»å­˜æ¡£æ¢å¤çŠ¶æ€ï¼šç­‰å¾…çº¿ç´¢è§£é” ({unlockedClues.Count}/{requiredClues.Count})");
             }
         }
     }
 
     #endregion
 
-    #region Ë«»÷½»»¥
+    #region åŒå‡»äº¤äº’
 
     public override void Execute()
     {
-        DebugLog($"Execute() ±»µ÷ÓÃ - µ±Ç°×´Ì¬: {currentState}");
+        DebugLog($"Execute() è¢«è°ƒç”¨ - å½“å‰çŠ¶æ€: {currentState}");
 
         switch (currentState)
         {
@@ -181,7 +181,7 @@ public class EvidenceIconAction : IconAction
                 break;
 
             case InvestigationState.PlayingBeforeDialogue:
-                DebugLog("¶Ô»°²¥·ÅÖĞ£¬ºöÂÔÖØ¸´½»»¥");
+                DebugLog("å¯¹è¯æ’­æ”¾ä¸­ï¼Œå¿½ç•¥é‡å¤äº¤äº’");
                 break;
 
             case InvestigationState.WindowOpen:
@@ -190,12 +190,12 @@ public class EvidenceIconAction : IconAction
             case InvestigationState.Completed:
                 if (allowReopenAfterComplete)
                 {
-                    DebugLog("ÖØĞÂ´ò¿ª´°¿Ú");
+                    DebugLog("é‡æ–°æ‰“å¼€çª—å£");
                     CreateWindow();
                 }
                 else
                 {
-                    DebugLog("ÒÑµ÷²éÍê³É£¬²»ÔÊĞíÖØĞÂ´ò¿ª");
+                    DebugLog("å·²è°ƒæŸ¥å®Œæˆï¼Œä¸å…è®¸é‡æ–°æ‰“å¼€");
                 }
                 break;
         }
@@ -218,20 +218,20 @@ public class EvidenceIconAction : IconAction
 
     #endregion
 
-    #region ÓÒ¼ü²Ëµ¥
+    #region å³é”®èœå•
 
     /// <summary>
-    /// ÓÒ¼ü²Ëµ¥Ïîµã»÷ÊÂ¼ş´¦Àí
+    /// å³é”®èœå•é¡¹ç‚¹å‡»äº‹ä»¶å¤„ç†
     /// </summary>
     private void OnContextMenuItemClicked(InteractableIcon icon, string itemId)
     {
-        // ¼ì²éÊÇ·ñÊÇ±¾Í¼±êµÄÊÂ¼ş
+        // æ£€æŸ¥æ˜¯å¦æ˜¯æœ¬å›¾æ ‡çš„äº‹ä»¶
         if (icon.gameObject != gameObject)
         {
             return;
         }
 
-        DebugLog($"ÓÒ¼ü²Ëµ¥µã»÷: {itemId}");
+        DebugLog($"å³é”®èœå•ç‚¹å‡»: {itemId}");
 
         switch (itemId)
         {
@@ -240,19 +240,19 @@ public class EvidenceIconAction : IconAction
                 break;
 
             case "open":
-                // ¿ÉÑ¡£ºÓÒ¼üÒ²ÄÜ´ò¿ª
+                // å¯é€‰ï¼šå³é”®ä¹Ÿèƒ½æ‰“å¼€
                 Execute();
                 break;
 
-            // ¿ÉÒÔÌí¼Ó¸ü¶à×Ô¶¨Òå²Ëµ¥Ïî
+            // å¯ä»¥æ·»åŠ æ›´å¤šè‡ªå®šä¹‰èœå•é¡¹
             default:
-                DebugLog($"Î´´¦ÀíµÄ²Ëµ¥Ïî: {itemId}");
+                DebugLog($"æœªå¤„ç†çš„èœå•é¡¹: {itemId}");
                 break;
         }
     }
 
     /// <summary>
-    /// ÏÔÊ¾ÊôĞÔ´°¿Ú
+    /// æ˜¾ç¤ºå±æ€§çª—å£
     /// </summary>
     private void ShowPropertiesWindow()
     {
@@ -264,12 +264,12 @@ public class EvidenceIconAction : IconAction
         GameObject propertiesWindow = Instantiate(propertiesWindowPrefab, canvas.transform);
         propertiesWindow.name = $"{evidenceId}_Properties";
 
-        DebugLog($"ÒÑÉú³ÉÊôĞÔ´°¿Ú: {propertiesWindow.name}");
+        DebugLog($"å·²ç”Ÿæˆå±æ€§çª—å£: {propertiesWindow.name}");
     }
 
     #endregion
 
-    #region ¶Ô»°´¦Àí
+    #region å¯¹è¯å¤„ç†
 
     private void PlayBeforeDialogue()
     {
@@ -279,7 +279,7 @@ public class EvidenceIconAction : IconAction
 
         gameFlowController.StartDialogueBlock(beforeDialogueBlockId);
 
-        DebugLog($"¿ªÊ¼²¥·ÅÇ°ÖÃ¶Ô»°: {beforeDialogueBlockId}");
+        DebugLog($"å¼€å§‹æ’­æ”¾å‰ç½®å¯¹è¯: {beforeDialogueBlockId}");
     }
 
     private void PlayAfterDialogue()
@@ -290,23 +290,23 @@ public class EvidenceIconAction : IconAction
 
         gameFlowController.StartDialogueBlock(afterDialogueBlockId);
 
-        DebugLog($"¿ªÊ¼²¥·ÅºóÖÃ¶Ô»°: {afterDialogueBlockId}");
+        DebugLog($"å¼€å§‹æ’­æ”¾åç½®å¯¹è¯: {afterDialogueBlockId}");
     }
 
     /// <summary>
-    /// ´¦Àí¶Ô»°½áÊøÊÂ¼ş
+    /// å¤„ç†å¯¹è¯ç»“æŸäº‹ä»¶
     /// </summary>
     private void HandleDialogueEnded(string fileName, string blockId)
     {
-        // ¼ì²éÊÇ·ñÊÇÎÒÃÇµÈ´ıµÄ¶Ô»°
+        // æ£€æŸ¥æ˜¯å¦æ˜¯æˆ‘ä»¬ç­‰å¾…çš„å¯¹è¯
         if (blockId == waitingForDialogueBlockId)
         {
-            DebugLog($"¼àÌıµ½¶Ô»°½áÊø: {blockId}");
+            DebugLog($"ç›‘å¬åˆ°å¯¹è¯ç»“æŸ: {blockId}");
 
             waitingForDialogueBlockId = null;
             isWaitingForDialogue = false;
 
-            // ¸ù¾İÊÇÄÄ¸ö¶Ô»°¿éÍê³ÉÀ´´¦Àí
+            // æ ¹æ®æ˜¯å“ªä¸ªå¯¹è¯å—å®Œæˆæ¥å¤„ç†
             if (blockId == beforeDialogueBlockId)
             {
                 OnBeforeDialogueComplete();
@@ -320,61 +320,61 @@ public class EvidenceIconAction : IconAction
 
     private void OnBeforeDialogueComplete()
     {
-        DebugLog("Ç°ÖÃ¶Ô»°Íê³É£¬×¼±¸Éú³É´°¿Ú");
+        DebugLog("å‰ç½®å¯¹è¯å®Œæˆï¼Œå‡†å¤‡ç”Ÿæˆçª—å£");
         CreateWindow();
     }
 
     private void OnAfterDialogueComplete()
     {
-        DebugLog("ºóÖÃ¶Ô»°Íê³É£¬µ÷²éÍê³É");
+        DebugLog("åç½®å¯¹è¯å®Œæˆï¼Œè°ƒæŸ¥å®Œæˆ");
         currentState = InvestigationState.Completed;
     }
 
     #endregion
 
-    #region ÏßË÷½âËø´¦Àí
+    #region çº¿ç´¢è§£é”å¤„ç†
 
     /// <summary>
-    /// ´¦ÀíÏßË÷½âËøÊÂ¼ş£¨ºËĞÄÂß¼­£ºËùÓĞÏßË÷½âËøºó´¥·¢after¶Ô»°£©
+    /// å¤„ç†çº¿ç´¢è§£é”äº‹ä»¶ï¼ˆæ ¸å¿ƒé€»è¾‘ï¼šæ‰€æœ‰çº¿ç´¢è§£é”åè§¦å‘afterå¯¹è¯ï¼‰
     /// </summary>
     private void HandleClueUnlocked(string unlockedClueId)
     {
-        // ¼ì²éÊÇ·ñÊÇÎÒÃÇĞèÒªµÄÏßË÷Ö®Ò»
+        // æ£€æŸ¥æ˜¯å¦æ˜¯æˆ‘ä»¬éœ€è¦çš„çº¿ç´¢ä¹‹ä¸€
         if (!requiredClues.Contains(unlockedClueId))
         {
             return;
         }
 
-        // ¼ì²éÊÇ·ñÒÑ¾­½âËø¹ı
+        // æ£€æŸ¥æ˜¯å¦å·²ç»è§£é”è¿‡
         if (unlockedClues.Contains(unlockedClueId))
         {
-            DebugLog($"ÏßË÷ [{unlockedClueId}] ÒÑ¾­½âËø¹ı£¬ºöÂÔ");
+            DebugLog($"çº¿ç´¢ [{unlockedClueId}] å·²ç»è§£é”è¿‡ï¼Œå¿½ç•¥");
             return;
         }
 
-        // ¼ÇÂ¼½âËøµÄÏßË÷
+        // è®°å½•è§£é”çš„çº¿ç´¢
         unlockedClues.Add(unlockedClueId);
         unlockedCluesList.Add(unlockedClueId);
 
-        DebugLog($"ÏßË÷ÒÑ½âËø: {unlockedClueId} ({unlockedClues.Count}/{requiredClues.Count})");
+        DebugLog($"çº¿ç´¢å·²è§£é”: {unlockedClueId} ({unlockedClues.Count}/{requiredClues.Count})");
 
-        // ¼ì²éÊÇ·ñËùÓĞÏßË÷¶¼ÒÑ½âËø
+        // æ£€æŸ¥æ˜¯å¦æ‰€æœ‰çº¿ç´¢éƒ½å·²è§£é”
         if (isWaitingForClues && AreAllCluesUnlocked())
         {
-            DebugLog("ËùÓĞÏßË÷ÒÑ¼¯Æë£¬ÑÓ³Ù¼¸Ö¡ºó²¥·Åafter¶Ô»°");
+            DebugLog("æ‰€æœ‰çº¿ç´¢å·²é›†é½ï¼Œå»¶è¿Ÿå‡ å¸§åæ’­æ”¾afterå¯¹è¯");
             isWaitingForClues = false;
 
-            // Ê¹ÓÃĞ­³ÌÑÓ³Ù´¥·¢after¶Ô»°
+            // ä½¿ç”¨åç¨‹å»¶è¿Ÿè§¦å‘afterå¯¹è¯
             StartCoroutine(DelayedPlayAfterDialogue());
         }
     }
 
     /// <summary>
-    /// ÑÓ³Ù¼¸Ö¡ºó²¥·Åafter¶Ô»°£¬±ÜÃâÓëÇ°Ò»¸ö¶Ô»°¿é³åÍ»
+    /// å»¶è¿Ÿå‡ å¸§åæ’­æ”¾afterå¯¹è¯ï¼Œé¿å…ä¸å‰ä¸€ä¸ªå¯¹è¯å—å†²çª
     /// </summary>
     private IEnumerator DelayedPlayAfterDialogue()
     {
-        // µÈ´ı3Ö¡£¬È·±£Ç°Ò»¸ö¶Ô»°¿éÍêÈ«½áÊø
+        // ç­‰å¾…3å¸§ï¼Œç¡®ä¿å‰ä¸€ä¸ªå¯¹è¯å—å®Œå…¨ç»“æŸ
         yield return null;
         yield return null;
         yield return null;
@@ -382,13 +382,13 @@ public class EvidenceIconAction : IconAction
     }
 
     /// <summary>
-    /// ¼ì²éÊÇ·ñËùÓĞÏßË÷¶¼ÒÑ½âËø
+    /// æ£€æŸ¥æ˜¯å¦æ‰€æœ‰çº¿ç´¢éƒ½å·²è§£é”
     /// </summary>
     private bool AreAllCluesUnlocked()
     {
         if (requireAllClues)
         {
-            // ĞèÒªËùÓĞÏßË÷
+            // éœ€è¦æ‰€æœ‰çº¿ç´¢
             foreach (string clueId in requiredClues)
             {
                 if (!unlockedClues.Contains(clueId))
@@ -400,14 +400,14 @@ public class EvidenceIconAction : IconAction
         }
         else
         {
-            // Ö»ĞèÒªÈÎÒâÒ»¸öÏßË÷
+            // åªéœ€è¦ä»»æ„ä¸€ä¸ªçº¿ç´¢
             return unlockedClues.Count > 0;
         }
     }
 
     #endregion
 
-    #region ´°¿Ú¹ÜÀí
+    #region çª—å£ç®¡ç†
 
     private void CreateWindow()
     {
@@ -421,13 +421,13 @@ public class EvidenceIconAction : IconAction
         currentState = InvestigationState.WaitingForClues;
         isWaitingForClues = true;
 
-        DebugLog($"ÒÑ´´½¨´°¿Ú: {windowObj.name}£¬µÈ´ıÏßË÷½âËø (ĞèÒª {requiredClues.Count} ¸ö)");
+        DebugLog($"å·²åˆ›å»ºçª—å£: {windowObj.name}ï¼Œç­‰å¾…çº¿ç´¢è§£é” (éœ€è¦ {requiredClues.Count} ä¸ª)");
     }
 
     #endregion
 
 
-    #region µ÷ÊÔ¹¤¾ß
+    #region è°ƒè¯•å·¥å…·
     private void DebugLog(string message)
     {
         if (enableDebugLog)

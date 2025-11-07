@@ -1,7 +1,7 @@
-using UnityEngine;
+锘縰sing UnityEngine;
 
 /// <summary>
-/// 我的电脑图标交互行为 - 尝试进入下一Stage
+/// 鎴戠殑鐢佃剳鍥炬爣浜や簰琛屼负 - 灏濊瘯杩涘叆涓嬩竴Stage
 /// </summary>
 public class Stage1MyPCAction : IconAction
 {

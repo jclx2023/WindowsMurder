@@ -1,54 +1,54 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
-/// WorksÎÄ¼ş¼ĞÊôĞÔ´°¿Ú¿ØÖÆÆ÷ - ´¦ÀíUnlock½»»¥Âß¼­
+/// Worksæ–‡ä»¶å¤¹å±æ€§çª—å£æ§åˆ¶å™¨ - å¤„ç†Unlockäº¤äº’é€»è¾‘
 /// </summary>
 public class WorksFolderPropertiesWindow : MonoBehaviour
 {
-    [Header("ÏßË÷ÅäÖÃ")]
+    [Header("çº¿ç´¢é…ç½®")]
     [SerializeField] private string clueId = "works_folder_unlocked";
 
-    [Header("°´Å¥ÒıÓÃ")]
+    [Header("æŒ‰é’®å¼•ç”¨")]
     [SerializeField] private Button unlockButton;
     [SerializeField] private Button okButton;
     [SerializeField] private Button applyButton;
     [SerializeField] private Button cancelButton;
 
-    [Header("µ÷ÊÔ")]
+    [Header("è°ƒè¯•")]
     [SerializeField] private bool debugMode = true;
 
-    // ÔËĞĞÊ±×´Ì¬
+    // è¿è¡Œæ—¶çŠ¶æ€
     private bool unlockFlag = false;
     private bool isAlreadyUnlocked = false;
 
-    // ×é¼şÒıÓÃ
+    // ç»„ä»¶å¼•ç”¨
     private GameFlowController flowController;
     private WindowsWindow windowComponent;
 
-    #region ³õÊ¼»¯
+    #region åˆå§‹åŒ–
 
     void Awake()
     {
-        // »ñÈ¡×é¼şÒıÓÃ
+        // è·å–ç»„ä»¶å¼•ç”¨
         flowController = FindObjectOfType<GameFlowController>();
         windowComponent = GetComponent<WindowsWindow>();
-        // °ó¶¨°´Å¥ÊÂ¼ş
+        // ç»‘å®šæŒ‰é’®äº‹ä»¶
         BindButtonEvents();
     }
 
     void Start()
     {
-        // ¼ì²éÏßË÷ÊÇ·ñÒÑ¾­½âËø
+        // æ£€æŸ¥çº¿ç´¢æ˜¯å¦å·²ç»è§£é”
         CheckInitialUnlockState();
 
-        // ¸üĞÂ°´Å¥×´Ì¬
+        // æ›´æ–°æŒ‰é’®çŠ¶æ€
         UpdateButtonStates();
     }
 
     /// <summary>
-    /// °ó¶¨°´Å¥µã»÷ÊÂ¼ş
+    /// ç»‘å®šæŒ‰é’®ç‚¹å‡»äº‹ä»¶
     /// </summary>
     private void BindButtonEvents()
     {
@@ -59,7 +59,7 @@ public class WorksFolderPropertiesWindow : MonoBehaviour
     }
 
     /// <summary>
-    /// ¼ì²éÏßË÷³õÊ¼½âËø×´Ì¬
+    /// æ£€æŸ¥çº¿ç´¢åˆå§‹è§£é”çŠ¶æ€
     /// </summary>
     private void CheckInitialUnlockState()
     {
@@ -70,97 +70,97 @@ public class WorksFolderPropertiesWindow : MonoBehaviour
             if (isAlreadyUnlocked)
             {
                 unlockFlag = true;
-                LogDebug($"ÏßË÷ {clueId} ÒÑ¾­½âËø");
+                LogDebug($"çº¿ç´¢ {clueId} å·²ç»è§£é”");
             }
         }
     }
 
     #endregion
 
-    #region °´Å¥ÊÂ¼ş´¦Àí
+    #region æŒ‰é’®äº‹ä»¶å¤„ç†
 
     /// <summary>
-    /// Unlock°´Å¥µã»÷
+    /// UnlockæŒ‰é’®ç‚¹å‡»
     /// </summary>
     private void OnUnlockClick()
     {
-        LogDebug("µã»÷ Unlock °´Å¥");
+        LogDebug("ç‚¹å‡» Unlock æŒ‰é’®");
 
         unlockFlag = true;
         UpdateButtonStates();
     }
 
     /// <summary>
-    /// Apply°´Å¥µã»÷
+    /// ApplyæŒ‰é’®ç‚¹å‡»
     /// </summary>
     private void OnApplyClick()
     {
-        LogDebug("µã»÷ Apply °´Å¥");
+        LogDebug("ç‚¹å‡» Apply æŒ‰é’®");
 
         if (unlockFlag && !isAlreadyUnlocked)
         {
             UnlockClue();
         }
 
-        // Apply²»¹Ø±Õ´°¿Ú£¬Ö»¸üĞÂ×´Ì¬
+        // Applyä¸å…³é—­çª—å£ï¼Œåªæ›´æ–°çŠ¶æ€
         UpdateButtonStates();
     }
 
     /// <summary>
-    /// OK°´Å¥µã»÷
+    /// OKæŒ‰é’®ç‚¹å‡»
     /// </summary>
     private void OnOKClick()
     {
-        LogDebug("µã»÷ OK °´Å¥");
+        LogDebug("ç‚¹å‡» OK æŒ‰é’®");
 
-        // Èç¹ûunlockFlagÎªtrueÇÒ»¹Î´½âËø£¬ÏÈ½âËøÏßË÷
+        // å¦‚æœunlockFlagä¸ºtrueä¸”è¿˜æœªè§£é”ï¼Œå…ˆè§£é”çº¿ç´¢
         if (unlockFlag && !isAlreadyUnlocked)
         {
             UnlockClue();
         }
 
-        // ¹Ø±Õ´°¿Ú
+        // å…³é—­çª—å£
         CloseWindow();
     }
 
     /// <summary>
-    /// Cancel°´Å¥µã»÷
+    /// CancelæŒ‰é’®ç‚¹å‡»
     /// </summary>
     private void OnCancelClick()
     {
-        LogDebug("µã»÷ Cancel °´Å¥");
+        LogDebug("ç‚¹å‡» Cancel æŒ‰é’®");
 
-        // ÖØÖÃunlockFlag£¨½öÔÚÎ´ApplyÊ±ÓĞĞ§£©
+        // é‡ç½®unlockFlagï¼ˆä»…åœ¨æœªApplyæ—¶æœ‰æ•ˆï¼‰
         if (!isAlreadyUnlocked)
         {
             unlockFlag = false;
         }
 
-        // ¹Ø±Õ´°¿Ú
+        // å…³é—­çª—å£
         CloseWindow();
     }
 
     #endregion
 
-    #region ºËĞÄ¹¦ÄÜ
+    #region æ ¸å¿ƒåŠŸèƒ½
 
     /// <summary>
-    /// ½âËøÏßË÷
+    /// è§£é”çº¿ç´¢
     /// </summary>
     private void UnlockClue()
     {
 
-        // µ÷ÓÃGameFlowController½âËøÏßË÷
+        // è°ƒç”¨GameFlowControllerè§£é”çº¿ç´¢
         flowController.UnlockClue(clueId);
 
-        // ±ê¼ÇÎªÒÑ½âËø
+        // æ ‡è®°ä¸ºå·²è§£é”
         isAlreadyUnlocked = true;
 
-        LogDebug($"³É¹¦½âËøÏßË÷: {clueId}");
+        LogDebug($"æˆåŠŸè§£é”çº¿ç´¢: {clueId}");
     }
 
     /// <summary>
-    /// ¹Ø±Õ´°¿Ú
+    /// å…³é—­çª—å£
     /// </summary>
     private void CloseWindow()
     {
@@ -170,32 +170,32 @@ public class WorksFolderPropertiesWindow : MonoBehaviour
         }
         else
         {
-            LogError("WindowsWindow ×é¼şÒıÓÃ¶ªÊ§£¬ÎŞ·¨¹Ø±Õ´°¿Ú£¡");
+            LogError("WindowsWindow ç»„ä»¶å¼•ç”¨ä¸¢å¤±ï¼Œæ— æ³•å…³é—­çª—å£ï¼");
         }
     }
 
     #endregion
 
-    #region UI×´Ì¬¸üĞÂ
+    #region UIçŠ¶æ€æ›´æ–°
 
     /// <summary>
-    /// ¸üĞÂ°´Å¥×´Ì¬
+    /// æ›´æ–°æŒ‰é’®çŠ¶æ€
     /// </summary>
     private void UpdateButtonStates()
     {
-        // Unlock°´Å¥£ºÒÑ½âËø»òÒÑµã»÷ºó½ûÓÃ
+        // UnlockæŒ‰é’®ï¼šå·²è§£é”æˆ–å·²ç‚¹å‡»åç¦ç”¨
         if (unlockButton != null)
         {
             unlockButton.interactable = !unlockFlag;
         }
 
-        // Apply°´Å¥£ºÖ»ÓĞµã»÷ÁËUnlockÇÒÎ´ApplyÊ±²Å¿ÉÓÃ
+        // ApplyæŒ‰é’®ï¼šåªæœ‰ç‚¹å‡»äº†Unlockä¸”æœªApplyæ—¶æ‰å¯ç”¨
         if (applyButton != null)
         {
             applyButton.interactable = unlockFlag && !isAlreadyUnlocked;
         }
 
-        // OKºÍCancel°´Å¥Ê¼ÖÕ¿ÉÓÃ
+        // OKå’ŒCancelæŒ‰é’®å§‹ç»ˆå¯ç”¨
         if (okButton != null)
         {
             okButton.interactable = true;
@@ -206,12 +206,12 @@ public class WorksFolderPropertiesWindow : MonoBehaviour
             cancelButton.interactable = true;
         }
 
-        LogDebug($"°´Å¥×´Ì¬ÒÑ¸üĞÂ - unlockFlag: {unlockFlag}, isAlreadyUnlocked: {isAlreadyUnlocked}");
+        LogDebug($"æŒ‰é’®çŠ¶æ€å·²æ›´æ–° - unlockFlag: {unlockFlag}, isAlreadyUnlocked: {isAlreadyUnlocked}");
     }
 
     #endregion
 
-    #region µ÷ÊÔ¹¤¾ß
+    #region è°ƒè¯•å·¥å…·
 
     private void LogDebug(string message)
     {

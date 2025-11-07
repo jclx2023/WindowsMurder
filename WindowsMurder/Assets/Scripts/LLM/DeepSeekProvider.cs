@@ -1,10 +1,10 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-// ==================== DeepSeek Êı¾İÄ£ĞÍ ====================
+// ==================== DeepSeek æ•°æ®æ¨¡å‹ ====================
 
 [Serializable]
 public class DeepSeekRequest
@@ -36,12 +36,12 @@ public class DeepSeekChoice
 // ==================== DeepSeek Provider ====================
 
 /// <summary>
-/// DeepSeek API Provider - Ê¹ÓÃUnityWebRequest
+/// DeepSeek API Provider - ä½¿ç”¨UnityWebRequest
 /// </summary>
 public class DeepSeekProvider : MonoBehaviour, ILLMProvider
 {
     [Header("DeepSeek Settings")]
-    [SerializeField] private string apiKey = ""; // ÔÚInspectorÖĞÅäÖÃ
+    [SerializeField] private string apiKey = ""; // åœ¨Inspectorä¸­é…ç½®
     [SerializeField] private string model = "deepseek-chat";
     [SerializeField] private string endpoint = "https://api.deepseek.com/chat/completions";
 
@@ -52,14 +52,14 @@ public class DeepSeekProvider : MonoBehaviour, ILLMProvider
 
     public IEnumerator GenerateText(string prompt, Action<string> onSuccess, Action<string> onError)
     {
-        // ¼ì²éAPI Key
+        // æ£€æŸ¥API Key
         if (string.IsNullOrEmpty(apiKey))
         {
-            onError?.Invoke("DeepSeek API KeyÎ´ÅäÖÃ£¬ÇëÔÚInspectorÖĞÉèÖÃ");
+            onError?.Invoke("DeepSeek API Keyæœªé…ç½®ï¼Œè¯·åœ¨Inspectorä¸­è®¾ç½®");
             yield break;
         }
 
-        // ¹¹ÔìÇëÇóÌå - Ö±½Ó°Ñprompt×÷ÎªuserÏûÏ¢
+        // æ„é€ è¯·æ±‚ä½“ - ç›´æ¥æŠŠpromptä½œä¸ºuseræ¶ˆæ¯
         var reqObj = new DeepSeekRequest
         {
             model = model,
@@ -98,12 +98,12 @@ public class DeepSeekProvider : MonoBehaviour, ILLMProvider
                     }
                     else
                     {
-                        onError?.Invoke("ÏìÓ¦½âÎöÊ§°Ü: " + req.downloadHandler.text);
+                        onError?.Invoke("å“åº”è§£æå¤±è´¥: " + req.downloadHandler.text);
                     }
                 }
                 catch (Exception e)
                 {
-                    onError?.Invoke("JSON ½âÎöÒì³£: " + e.Message);
+                    onError?.Invoke("JSON è§£æå¼‚å¸¸: " + e.Message);
                 }
             }
             else

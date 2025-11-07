@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
@@ -6,18 +6,18 @@ using System.Collections.Generic;
 using TMPro;
 
 /// <summary>
-/// È«¾ÖÈÎÎñÀ¸¹ÜÀíÆ÷ - ¼¯³É´°¿Ú¹ÜÀí¹¦ÄÜ
-/// ¸ºÔğTaskBar UIÏÔÊ¾¡¢ÓÃ»§½»»¥ºÍ´°¿Ú°´Å¥¹ÜÀí
+/// å…¨å±€ä»»åŠ¡æ ç®¡ç†å™¨ - é›†æˆçª—å£ç®¡ç†åŠŸèƒ½
+/// è´Ÿè´£TaskBar UIæ˜¾ç¤ºã€ç”¨æˆ·äº¤äº’å’Œçª—å£æŒ‰é’®ç®¡ç†
 /// </summary>
 public class GlobalTaskBarManager : MonoBehaviour
 {
     public static GlobalTaskBarManager Instance;
 
-    [Header("ÈÎÎñÀ¸×é¼ş")]
+    [Header("ä»»åŠ¡æ ç»„ä»¶")]
     public Button startButton;
     public GameObject startPanel;
 
-    [Header("¿ªÊ¼²Ëµ¥°´Å¥")]
+    [Header("å¼€å§‹èœå•æŒ‰é’®")]
     public Button mainMenuButton;
     public Button newGameButton;
     public Button continueButton;
@@ -26,45 +26,45 @@ public class GlobalTaskBarManager : MonoBehaviour
     public Button creditsButton;
     public Button shutdownButton;
 
-    [Header("´°¿Ú°´Å¥¹ÜÀí")]
-    public Transform windowButtonContainer;    // ´°¿Ú°´Å¥ÈİÆ÷£¨ÒÑÉèÖÃHorizontalLayout£©
-    public GameObject windowButtonPrefab;      // ´°¿Ú°´Å¥Ô¤ÖÆÌå
-    public int maxVisibleButtons = 10;         // ×î´óÏÔÊ¾°´Å¥Êı£¨¿ÉÑ¡£©
+    [Header("çª—å£æŒ‰é’®ç®¡ç†")]
+    public Transform windowButtonContainer;    // çª—å£æŒ‰é’®å®¹å™¨ï¼ˆå·²è®¾ç½®HorizontalLayoutï¼‰
+    public GameObject windowButtonPrefab;      // çª—å£æŒ‰é’®é¢„åˆ¶ä½“
+    public int maxVisibleButtons = 10;         // æœ€å¤§æ˜¾ç¤ºæŒ‰é’®æ•°ï¼ˆå¯é€‰ï¼‰
 
-    [Header("°´Å¥ÑùÊ½ÉèÖÃ")]
+    [Header("æŒ‰é’®æ ·å¼è®¾ç½®")]
     public Color normalButtonColor = Color.white;
     public Color activeButtonColor = Color.cyan;
     public Color hoveredButtonColor = Color.gray;
 
-    [Header("ÒôĞ§")]
+    [Header("éŸ³æ•ˆ")]
     public AudioClip buttonClickSound;
     public AudioClip menuOpenSound;
     public AudioClip menuCloseSound;
 
-    [Header("¾²Òô°´Å¥×é¼ş")]
-    public Button muteButton;             // À®°È°´Å¥
-    public Image muteIcon;                // À®°ÈÍ¼±ê
-    public Sprite iconSoundOn;            // ÓĞÉùÍ¼±ê
-    public Sprite iconSoundOff;           // ¾²ÒôÍ¼±ê
+    [Header("é™éŸ³æŒ‰é’®ç»„ä»¶")]
+    public Button muteButton;             // å–‡å­æŒ‰é’®
+    public Image muteIcon;                // å–‡å­å›¾æ ‡
+    public Sprite iconSoundOn;            // æœ‰å£°å›¾æ ‡
+    public Sprite iconSoundOff;           // é™éŸ³å›¾æ ‡
 
 
-    [Header("ActionManagerÉèÖÃ")]
+    [Header("ActionManagerè®¾ç½®")]
     public GameObject globalActionManagerPrefab;
     public bool createActionManagerAtStart = true;
 
-    // Ë½ÓĞ±äÁ¿
+    // ç§æœ‰å˜é‡
     private bool isStartMenuOpen = false;
     private string currentSceneName;
     private GlobalActionManager actionManager;
 
-    // ´°¿Ú°´Å¥¹ÜÀí
+    // çª—å£æŒ‰é’®ç®¡ç†
     private Dictionary<WindowsWindow, GameObject> windowButtonMap = new Dictionary<WindowsWindow, GameObject>();
     private Dictionary<GameObject, WindowsWindow> buttonWindowMap = new Dictionary<GameObject, WindowsWindow>();
     private WindowsWindow currentActiveWindow;
 
     void Awake()
     {
-        // µ¥ÀıÄ£Ê½
+        // å•ä¾‹æ¨¡å¼
         if (Instance == null)
         {
             Instance = this;
@@ -80,7 +80,7 @@ public class GlobalTaskBarManager : MonoBehaviour
 
     void Start()
     {
-        // µÈ´ıGlobalSystemManager³õÊ¼»¯Íê³É
+        // ç­‰å¾…GlobalSystemManageråˆå§‹åŒ–å®Œæˆ
         if (GlobalSystemManager.Instance != null)
         {
             OnSystemReady();
@@ -93,81 +93,81 @@ public class GlobalTaskBarManager : MonoBehaviour
 
     void OnDestroy()
     {
-        // È¡Ïû³¡¾°¼àÌıºÍÏµÍ³ÊÂ¼ş
+        // å–æ¶ˆåœºæ™¯ç›‘å¬å’Œç³»ç»Ÿäº‹ä»¶
         SceneManager.sceneLoaded -= OnSceneLoaded;
         if (GlobalSystemManager.OnSystemInitialized != null)
         {
             GlobalSystemManager.OnSystemInitialized -= OnSystemReady;
         }
 
-        // È¡Ïû´°¿Ú¹ÜÀíÆ÷ÊÂ¼ş¼àÌı
+        // å–æ¶ˆçª—å£ç®¡ç†å™¨äº‹ä»¶ç›‘å¬
         if (WindowManager.Instance != null)
         {
             WindowManager.OnWindowRegistered -= OnWindowRegistered;
             WindowManager.OnWindowUnregistered -= OnWindowUnregistered;
         }
 
-        // È¡Ïû´°¿ÚÑ¡ÔñÊÂ¼ş¼àÌı
+        // å–æ¶ˆçª—å£é€‰æ‹©äº‹ä»¶ç›‘å¬
         WindowsWindow.OnWindowSelected -= OnWindowSelected;
 
-        // È¡Ïû´°¿Ú±êÌâ±ä»¯ÊÂ¼ş¼àÌı
+        // å–æ¶ˆçª—å£æ ‡é¢˜å˜åŒ–äº‹ä»¶ç›‘å¬
         WindowsWindow.OnWindowTitleChanged -= OnWindowTitleChanged;
     }
 
     /// <summary>
-    /// ÏµÍ³¾ÍĞ÷ºóµÄ³õÊ¼»¯
+    /// ç³»ç»Ÿå°±ç»ªåçš„åˆå§‹åŒ–
     /// </summary>
     void OnSystemReady()
     {
-        // ¼àÌı³¡¾°±ä»¯
+        // ç›‘å¬åœºæ™¯å˜åŒ–
         SceneManager.sceneLoaded += OnSceneLoaded;
 
-        // ¼àÌı´°¿Ú¹ÜÀíÆ÷ÊÂ¼ş
+        // ç›‘å¬çª—å£ç®¡ç†å™¨äº‹ä»¶
         if (WindowManager.Instance != null)
         {
             WindowManager.OnWindowRegistered += OnWindowRegistered;
             WindowManager.OnWindowUnregistered += OnWindowUnregistered;
         }
 
-        // ¼àÌı´°¿ÚÑ¡ÔñÊÂ¼ş
+        // ç›‘å¬çª—å£é€‰æ‹©äº‹ä»¶
         WindowsWindow.OnWindowSelected += OnWindowSelected;
 
-        // ¼àÌı´°¿Ú±êÌâ±ä»¯ÊÂ¼ş
+        // ç›‘å¬çª—å£æ ‡é¢˜å˜åŒ–äº‹ä»¶
         WindowsWindow.OnWindowTitleChanged += OnWindowTitleChanged;
 
-        // ³õÊ¼»¯µ±Ç°³¡¾°
+        // åˆå§‹åŒ–å½“å‰åœºæ™¯
         currentSceneName = SceneManager.GetActiveScene().name;
         UpdateMenuButtonsForScene();
 
-        Debug.Log("TaskBarÏµÍ³³õÊ¼»¯Íê³É");
+        Debug.Log("TaskBarç³»ç»Ÿåˆå§‹åŒ–å®Œæˆ");
     }
 
     /// <summary>
-    /// ³õÊ¼»¯ÈÎÎñÀ¸
+    /// åˆå§‹åŒ–ä»»åŠ¡æ 
     /// </summary>
     void InitializeTaskBar()
     {
-        // ³õÊ¼×´Ì¬ÏÂ¹Ø±Õ¿ªÊ¼²Ëµ¥
+        // åˆå§‹çŠ¶æ€ä¸‹å…³é—­å¼€å§‹èœå•
         if (startPanel != null)
             startPanel.SetActive(false);
 
-        // °ó¶¨¿ªÊ¼°´Å¥ÊÂ¼ş
+        // ç»‘å®šå¼€å§‹æŒ‰é’®äº‹ä»¶
         if (startButton != null)
         {
             startButton.onClick.RemoveAllListeners();
             startButton.onClick.AddListener(ToggleStartMenu);
         }
 
-        // °ó¶¨²Ëµ¥°´Å¥ÊÂ¼ş
+        // ç»‘å®šèœå•æŒ‰é’®äº‹ä»¶
         BindMenuButtons();
 
-        // ³õÊ¼»¯ActionManager
+        // åˆå§‹åŒ–ActionManager
         if (createActionManagerAtStart)
         {
             InitializeActionManager();
         }
 
-        // °ó¶¨¾²Òô°´Å¥ÊÂ¼ş
+        // ç»‘å®šé™éŸ³æŒ‰é’®äº‹ä»¶
         if (muteButton != null)
         {
             muteButton.onClick.RemoveAllListeners();
@@ -176,35 +176,35 @@ public class GlobalTaskBarManager : MonoBehaviour
         }
 
 
-        Debug.Log("È«¾ÖÈÎÎñÀ¸³õÊ¼»¯Íê³É");
+        Debug.Log("å…¨å±€ä»»åŠ¡æ åˆå§‹åŒ–å®Œæˆ");
     }
 
-    #region ´°¿Ú°´Å¥¹ÜÀí
+    #region çª—å£æŒ‰é’®ç®¡ç†
 
     /// <summary>
-    /// ´°¿Ú×¢²áÊÂ¼ş´¦Àí£¨´°¿Ú¼¤»îÊ±£©
+    /// çª—å£æ³¨å†Œäº‹ä»¶å¤„ç†ï¼ˆçª—å£æ¿€æ´»æ—¶ï¼‰
     /// </summary>
     void OnWindowRegistered(WindowsWindow window, WindowHierarchyInfo hierarchyInfo)
     {
         if (window == null) return;
 
         CreateWindowButton(window, hierarchyInfo);
-        //Debug.Log($"TaskBar: ´°¿Ú¼¤»î£¬´´½¨°´Å¥ - {window.Title}");
+        //Debug.Log($"TaskBar: çª—å£æ¿€æ´»ï¼Œåˆ›å»ºæŒ‰é’® - {window.Title}");
     }
 
     /// <summary>
-    /// ´°¿Ú×¢ÏúÊÂ¼ş´¦Àí£¨´°¿Ú½ûÓÃ»òÏú»ÙÊ±£©
+    /// çª—å£æ³¨é”€äº‹ä»¶å¤„ç†ï¼ˆçª—å£ç¦ç”¨æˆ–é”€æ¯æ—¶ï¼‰
     /// </summary>
     void OnWindowUnregistered(WindowsWindow window, WindowHierarchyInfo hierarchyInfo)
     {
         if (window == null) return;
 
         RemoveWindowButton(window);
-        Debug.Log($"TaskBar: ´°¿Ú½ûÓÃ/¹Ø±Õ£¬ÒÆ³ı°´Å¥ - {window.Title}");
+        Debug.Log($"TaskBar: çª—å£ç¦ç”¨/å…³é—­ï¼Œç§»é™¤æŒ‰é’® - {window.Title}");
     }
 
     /// <summary>
-    /// ´°¿ÚÑ¡ÔñÊÂ¼ş´¦Àí
+    /// çª—å£é€‰æ‹©äº‹ä»¶å¤„ç†
     /// </summary>
     void OnWindowSelected(WindowsWindow window)
     {
@@ -212,36 +212,36 @@ public class GlobalTaskBarManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ´°¿Ú±êÌâ±ä»¯ÊÂ¼ş´¦Àí
+    /// çª—å£æ ‡é¢˜å˜åŒ–äº‹ä»¶å¤„ç†
     /// </summary>
     void OnWindowTitleChanged(WindowsWindow window)
     {
         if (window != null && windowButtonMap.ContainsKey(window))
         {
             UpdateButtonText(windowButtonMap[window], window.Title);
-            Debug.Log($"TaskBar: ´°¿Ú±êÌâÒÑ¸üĞÂ - {window.Title}");
+            Debug.Log($"TaskBar: çª—å£æ ‡é¢˜å·²æ›´æ–° - {window.Title}");
         }
     }
 
     /// <summary>
-    /// ´´½¨´°¿Ú°´Å¥
+    /// åˆ›å»ºçª—å£æŒ‰é’®
     /// </summary>
     void CreateWindowButton(WindowsWindow window, WindowHierarchyInfo hierarchyInfo)
     {
-        // ¼ì²éÊÇ·ñÒÑ¾­´æÔÚ°´Å¥£¨·ÀÖ¹ÖØ¸´´´½¨£©
+        // æ£€æŸ¥æ˜¯å¦å·²ç»å­˜åœ¨æŒ‰é’®ï¼ˆé˜²æ­¢é‡å¤åˆ›å»ºï¼‰
         if (windowButtonMap.ContainsKey(window))
         {
-            Debug.LogWarning($"TaskBar: ´°¿Ú {window.Title} µÄ°´Å¥ÒÑ´æÔÚ£¬Ìø¹ı´´½¨");
+            Debug.LogWarning($"TaskBar: çª—å£ {window.Title} çš„æŒ‰é’®å·²å­˜åœ¨ï¼Œè·³è¿‡åˆ›å»º");
             return;
         }
 
-        // ÊµÀı»¯°´Å¥
+        // å®ä¾‹åŒ–æŒ‰é’®
         GameObject buttonObj = Instantiate(windowButtonPrefab, windowButtonContainer);
 
-        // ÉèÖÃ°´Å¥ÎÄ±¾
+        // è®¾ç½®æŒ‰é’®æ–‡æœ¬
         UpdateButtonText(buttonObj, window.Title);
 
-        // ÅäÖÃ°´Å¥µã»÷ÊÂ¼ş
+        // é…ç½®æŒ‰é’®ç‚¹å‡»äº‹ä»¶
         Button button = buttonObj.GetComponent<Button>();
         if (button != null)
         {
@@ -249,18 +249,18 @@ public class GlobalTaskBarManager : MonoBehaviour
             button.onClick.AddListener(() => OnWindowButtonClicked(window));
         }
 
-        // ÉèÖÃ°´Å¥ÑùÊ½
+        // è®¾ç½®æŒ‰é’®æ ·å¼
         SetButtonStyle(buttonObj, false);
 
-        // ±£´æÓ³Éä¹ØÏµ
+        // ä¿å­˜æ˜ å°„å…³ç³»
         windowButtonMap[window] = buttonObj;
         buttonWindowMap[buttonObj] = window;
 
-        //Debug.Log($"TaskBar: °´Å¥´´½¨³É¹¦ - {window.Title} (²ã¼¶: {hierarchyInfo.containerPath})");
+        //Debug.Log($"TaskBar: æŒ‰é’®åˆ›å»ºæˆåŠŸ - {window.Title} (å±‚çº§: {hierarchyInfo.containerPath})");
     }
 
     /// <summary>
-    /// ÒÆ³ı´°¿Ú°´Å¥
+    /// ç§»é™¤çª—å£æŒ‰é’®
     /// </summary>
     void RemoveWindowButton(WindowsWindow window)
     {
@@ -271,20 +271,20 @@ public class GlobalTaskBarManager : MonoBehaviour
 
         GameObject buttonObj = windowButtonMap[window];
 
-        // ÇåÀíÓ³Éä¹ØÏµ
+        // æ¸…ç†æ˜ å°„å…³ç³»
         windowButtonMap.Remove(window);
         if (buttonObj != null && buttonWindowMap.ContainsKey(buttonObj))
         {
             buttonWindowMap.Remove(buttonObj);
         }
 
-        // Èç¹ûÊÇµ±Ç°»î¶¯´°¿Ú£¬Çå³ıÒıÓÃ
+        // å¦‚æœæ˜¯å½“å‰æ´»åŠ¨çª—å£ï¼Œæ¸…é™¤å¼•ç”¨
         if (currentActiveWindow == window)
         {
             currentActiveWindow = null;
         }
 
-        // Ïú»Ù°´Å¥¶ÔÏó
+        // é”€æ¯æŒ‰é’®å¯¹è±¡
         if (buttonObj != null)
         {
             Destroy(buttonObj);
@@ -292,27 +292,27 @@ public class GlobalTaskBarManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ´°¿Ú°´Å¥µã»÷ÊÂ¼ş
+    /// çª—å£æŒ‰é’®ç‚¹å‡»äº‹ä»¶
     /// </summary>
     void OnWindowButtonClicked(WindowsWindow window)
     {
         PlayButtonClick();
         WindowManager.Instance.ActivateWindow(window);
-        Debug.Log($"TaskBar: Í¨¹ı°´Å¥¼¤»î´°¿Ú - {window.Title}");
+        Debug.Log($"TaskBar: é€šè¿‡æŒ‰é’®æ¿€æ´»çª—å£ - {window.Title}");
     }
 
     /// <summary>
-    /// ¸üĞÂ»î¶¯´°¿Ú°´Å¥ÑùÊ½
+    /// æ›´æ–°æ´»åŠ¨çª—å£æŒ‰é’®æ ·å¼
     /// </summary>
     void UpdateActiveWindowButton(WindowsWindow newActiveWindow)
     {
-        // ÖØÖÃÖ®Ç°µÄ»î¶¯°´Å¥ÑùÊ½
+        // é‡ç½®ä¹‹å‰çš„æ´»åŠ¨æŒ‰é’®æ ·å¼
         if (currentActiveWindow != null && windowButtonMap.ContainsKey(currentActiveWindow))
         {
             SetButtonStyle(windowButtonMap[currentActiveWindow], false);
         }
 
-        // ÉèÖÃĞÂµÄ»î¶¯°´Å¥ÑùÊ½
+        // è®¾ç½®æ–°çš„æ´»åŠ¨æŒ‰é’®æ ·å¼
         currentActiveWindow = newActiveWindow;
         if (currentActiveWindow != null && windowButtonMap.ContainsKey(currentActiveWindow))
         {
@@ -321,7 +321,7 @@ public class GlobalTaskBarManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ÉèÖÃ°´Å¥ÑùÊ½
+    /// è®¾ç½®æŒ‰é’®æ ·å¼
     /// </summary>
     void SetButtonStyle(GameObject buttonObj, bool isActive)
     {
@@ -339,7 +339,7 @@ public class GlobalTaskBarManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸üĞÂ°´Å¥ÎÄ±¾
+    /// æ›´æ–°æŒ‰é’®æ–‡æœ¬
     /// </summary>
     void UpdateButtonText(GameObject buttonObj, string text)
     {
@@ -349,16 +349,16 @@ public class GlobalTaskBarManager : MonoBehaviour
 
     #endregion
 
-    #region Ô­ÓĞÈÎÎñÀ¸¹¦ÄÜ£¨±£³Ö²»±ä£©
+    #region åŸæœ‰ä»»åŠ¡æ åŠŸèƒ½ï¼ˆä¿æŒä¸å˜ï¼‰
 
     /// <summary>
-    /// ³õÊ¼»¯ActionManager
+    /// åˆå§‹åŒ–ActionManager
     /// </summary>
     void InitializeActionManager()
     {
         if (actionManager != null)
         {
-            Debug.LogWarning("GlobalActionManagerÒÑ¾­´æÔÚ£¬Ìø¹ı³õÊ¼»¯");
+            Debug.LogWarning("GlobalActionManagerå·²ç»å­˜åœ¨ï¼Œè·³è¿‡åˆå§‹åŒ–");
             return;
         }
 
@@ -369,7 +369,7 @@ public class GlobalTaskBarManager : MonoBehaviour
 
             if (actionManager == null)
             {
-                Debug.LogError("Ô¤ÉèÌåÖĞÃ»ÓĞÕÒµ½GlobalActionManager×é¼ş");
+                Debug.LogError("é¢„è®¾ä½“ä¸­æ²¡æœ‰æ‰¾åˆ°GlobalActionManagerç»„ä»¶");
                 Destroy(actionManagerObj);
                 return;
             }
@@ -450,13 +450,13 @@ public class GlobalTaskBarManager : MonoBehaviour
                     GlobalActionManager.Instance.Shutdown();
                     break;
                 default:
-                    Debug.LogWarning($"TaskBar: Î´ÖªµÄ²Ù×÷ {actionName}");
+                    Debug.LogWarning($"TaskBar: æœªçŸ¥çš„æ“ä½œ {actionName}");
                     break;
             }
         }
         else
         {
-            Debug.LogError("TaskBar: GlobalActionManager Î´ÕıÈ·³õÊ¼»¯£¬ÎŞ·¨Ö´ĞĞ²Ù×÷");
+            Debug.LogError("TaskBar: GlobalActionManager æœªæ­£ç¡®åˆå§‹åŒ–ï¼Œæ— æ³•æ‰§è¡Œæ“ä½œ");
         }
     }
 
@@ -465,7 +465,7 @@ public class GlobalTaskBarManager : MonoBehaviour
         currentSceneName = scene.name;
         UpdateMenuButtonsForScene();
         CloseStartMenu();
-        Debug.Log($"³¡¾°ÇĞ»»ÖÁ: {currentSceneName}");
+        Debug.Log($"åœºæ™¯åˆ‡æ¢è‡³: {currentSceneName}");
     }
 
     void UpdateMenuButtonsForScene()
@@ -488,7 +488,7 @@ public class GlobalTaskBarManager : MonoBehaviour
         continueButton.gameObject.SetActive(isMainMenuScene);
         continueButton.interactable = hasGameSave;
 
-        Debug.Log($"TaskBar°´Å¥×´Ì¬¸üĞÂ - MainMenu: {isMainMenuScene}, Game: {isGameScene}, HasSave: {hasGameSave}");
+        Debug.Log($"TaskBaræŒ‰é’®çŠ¶æ€æ›´æ–° - MainMenu: {isMainMenuScene}, Game: {isGameScene}, HasSave: {hasGameSave}");
     }
 
     public void ToggleStartMenu()
@@ -511,7 +511,7 @@ public class GlobalTaskBarManager : MonoBehaviour
             startPanel.SetActive(true);
             isStartMenuOpen = true;
             UpdateMenuButtonsForScene();
-            Debug.Log("¿ªÊ¼²Ëµ¥ÒÑ´ò¿ª");
+            Debug.Log("å¼€å§‹èœå•å·²æ‰“å¼€");
         }
     }
 
@@ -522,7 +522,7 @@ public class GlobalTaskBarManager : MonoBehaviour
             PlaySound(menuCloseSound);
             startPanel.SetActive(false);
             isStartMenuOpen = false;
-            Debug.Log("¿ªÊ¼²Ëµ¥ÒÑ¹Ø±Õ");
+            Debug.Log("å¼€å§‹èœå•å·²å…³é—­");
         }
     }
 
@@ -548,23 +548,23 @@ public class GlobalTaskBarManager : MonoBehaviour
     }
 
 
-    #region ¾²Òô¿ØÖÆ
+    #region é™éŸ³æ§åˆ¶
 
     private void ToggleMute()
     {
         if (GlobalSystemManager.Instance == null)
         {
-            Debug.LogWarning("¾²ÒôÇĞ»»Ê§°Ü£ºGlobalSystemManager Î´³õÊ¼»¯");
+            Debug.LogWarning("é™éŸ³åˆ‡æ¢å¤±è´¥ï¼šGlobalSystemManager æœªåˆå§‹åŒ–");
             return;
         }
 
-        // µ÷ÓÃÈ«¾Ö¾²Òô¿ª¹Ø
+        // è°ƒç”¨å…¨å±€é™éŸ³å¼€å…³
         GlobalSystemManager.Instance.ToggleMute();
 
-        // ¸üĞÂÍ¼±ê
+        // æ›´æ–°å›¾æ ‡
         UpdateMuteIcon();
 
-        // ²¥·Åµã»÷ÒôĞ§£¨½öµ±¾²ÒôÇ°ÊÇ¿ªÆô×´Ì¬Ê±£©
+        // æ’­æ”¾ç‚¹å‡»éŸ³æ•ˆï¼ˆä»…å½“é™éŸ³å‰æ˜¯å¼€å¯çŠ¶æ€æ—¶ï¼‰
         if (!GlobalSystemManager.Instance.IsMuted())
         {
             PlayButtonClick();

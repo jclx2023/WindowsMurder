@@ -1,19 +1,19 @@
-using System;
+ï»¿using System;
 using System.Collections;
 
 /// <summary>
-/// LLM ProviderÍ³Ò»½Ó¿Ú
-/// ËùÓĞLLMÊµÏÖ£¨Gemini¡¢GPT¡¢DeepSeek£©¶¼ĞèÒªÊµÏÖÕâ¸ö½Ó¿Ú
+/// LLM Providerç»Ÿä¸€æ¥å£
+/// æ‰€æœ‰LLMå®ç°ï¼ˆGeminiã€GPTã€DeepSeekï¼‰éƒ½éœ€è¦å®ç°è¿™ä¸ªæ¥å£
 /// </summary>
 public interface ILLMProvider
 {
     /// <summary>
-    /// Éú³ÉÎÄ±¾
+    /// ç”Ÿæˆæ–‡æœ¬
     /// </summary>
     IEnumerator GenerateText(string prompt, Action<string> onSuccess, Action<string> onError);
 
     /// <summary>
-    /// »ñÈ¡ProviderÃû³Æ£¨ÓÃÓÚµ÷ÊÔ£©
+    /// è·å–Provideråç§°ï¼ˆç”¨äºè°ƒè¯•ï¼‰
     /// </summary>
     string GetProviderName();
 }

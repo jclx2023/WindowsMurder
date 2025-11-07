@@ -1,29 +1,29 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 /// <summary>
-/// Â·¾¶ĞÅÏ¢ - ¼ò»¯µÄÂ·¾¶Êı¾İ½á¹¹
+/// è·¯å¾„ä¿¡æ¯ - ç®€åŒ–çš„è·¯å¾„æ•°æ®ç»“æ„
 /// </summary>
 [Serializable]
 public class PathInfo
 {
-    [Header("Â·¾¶ÅäÖÃ")]
-    public string pathId;                    // Â·¾¶ID
-    public string displayName;               // ÏÔÊ¾Ãû³Æ
-    public GameObject contentContainer;      // ¸ÃÂ·¾¶ÏÂµÄÄÚÈİÈİÆ÷
+    [Header("è·¯å¾„é…ç½®")]
+    public string pathId;                    // è·¯å¾„ID
+    public string displayName;               // æ˜¾ç¤ºåç§°
+    public GameObject contentContainer;      // è¯¥è·¯å¾„ä¸‹çš„å†…å®¹å®¹å™¨
 
-    [Header("×´Ì¬ÉèÖÃ")]
-    public bool isAccessible = true;         // ÊÇ·ñ¿É·ÃÎÊ
-    public bool requiresPermission = false;  // ÊÇ·ñĞèÒªÈ¨ÏŞÑéÖ¤
+    [Header("çŠ¶æ€è®¾ç½®")]
+    public bool isAccessible = true;         // æ˜¯å¦å¯è®¿é—®
+    public bool requiresPermission = false;  // æ˜¯å¦éœ€è¦æƒé™éªŒè¯
 
-    [Header("È¨ÏŞÌõ¼ş")]
-    [Tooltip("ĞèÒªµÄÏßË÷IDÁĞ±í£¨È«²¿Âú×ã²ÅÄÜ·ÃÎÊ£©")]
+    [Header("æƒé™æ¡ä»¶")]
+    [Tooltip("éœ€è¦çš„çº¿ç´¢IDåˆ—è¡¨ï¼ˆå…¨éƒ¨æ»¡è¶³æ‰èƒ½è®¿é—®ï¼‰")]
     public List<string> requiredClues = new List<string>();
 
-    [Header("µ÷ÊÔĞÅÏ¢")]
-    [SerializeField] public bool isCurrentPath = false; // InspectorÖĞÏÔÊ¾ÊÇ·ñÎªµ±Ç°Â·¾¶
+    [Header("è°ƒè¯•ä¿¡æ¯")]
+    [SerializeField] public bool isCurrentPath = false; // Inspectorä¸­æ˜¾ç¤ºæ˜¯å¦ä¸ºå½“å‰è·¯å¾„
 
     public PathInfo(string id, string name, GameObject container)
     {
@@ -36,47 +36,47 @@ public class PathInfo
 }
 
 /// <summary>
-/// ×ÊÔ´¹ÜÀíÆ÷ºËĞÄ¿ØÖÆÆ÷ - ´°¿ÚÊµÀı°æ±¾
-/// ¸ºÔğµ¥¸ö´°¿ÚµÄÂ·¾¶ÇĞ»»¡¢ÄÚÈİÏÔÒş¡¢µØÖ·À¸¸üĞÂ
+/// èµ„æºç®¡ç†å™¨æ ¸å¿ƒæ§åˆ¶å™¨ - çª—å£å®ä¾‹ç‰ˆæœ¬
+/// è´Ÿè´£å•ä¸ªçª—å£çš„è·¯å¾„åˆ‡æ¢ã€å†…å®¹æ˜¾éšã€åœ°å€æ æ›´æ–°
 /// </summary>
 public class ExplorerManager : MonoBehaviour
 {
-    [Header("UI×é¼şÒıÓÃ")]
-    public TextMeshProUGUI windowTitleText;          // ´°¿Ú±êÌâÎÄ±¾£¨ÏÔÊ¾µ±Ç°Â·¾¶£©
+    [Header("UIç»„ä»¶å¼•ç”¨")]
+    public TextMeshProUGUI windowTitleText;          // çª—å£æ ‡é¢˜æ–‡æœ¬ï¼ˆæ˜¾ç¤ºå½“å‰è·¯å¾„ï¼‰
 
-    [Header("È¨ÏŞÌáÊ¾´°¿Ú")]
-    [SerializeField] private GameObject accessDeniedWindowPrefab;  // È¨ÏŞ±»¾Ü¾øÌáÊ¾´°¿ÚÔ¤ÖÆÌå
-    [SerializeField] private Transform notificationParent;          // ÌáÊ¾´°¿ÚµÄ¸¸¶ÔÏó£¨Í¨³£ÊÇCanvas£©
+    [Header("æƒé™æç¤ºçª—å£")]
+    [SerializeField] private GameObject accessDeniedWindowPrefab;  // æƒé™è¢«æ‹’ç»æç¤ºçª—å£é¢„åˆ¶ä½“
+    [SerializeField] private Transform notificationParent;          // æç¤ºçª—å£çš„çˆ¶å¯¹è±¡ï¼ˆé€šå¸¸æ˜¯Canvasï¼‰
 
-    [Header("Â·¾¶ÅäÖÃ")]
-    public List<PathInfo> allPaths = new List<PathInfo>();   // ËùÓĞ¿ÉÓÃÂ·¾¶
-    public string defaultPathId = "root";                     // Ä¬ÈÏÂ·¾¶
+    [Header("è·¯å¾„é…ç½®")]
+    public List<PathInfo> allPaths = new List<PathInfo>();   // æ‰€æœ‰å¯ç”¨è·¯å¾„
+    public string defaultPathId = "root";                     // é»˜è®¤è·¯å¾„
 
-    [Header("´°¿ÚÉèÖÃ")]
-    public string windowTypeName = "ÎÄ¼ş×ÊÔ´¹ÜÀíÆ÷";         // ´°¿ÚÀàĞÍÃû³Æ
+    [Header("çª—å£è®¾ç½®")]
+    public string windowTypeName = "æ–‡ä»¶èµ„æºç®¡ç†å™¨";         // çª—å£ç±»å‹åç§°
     public bool showPathInTitle = true;
     [SerializeField] private AudioClip audioClip;
 
-    [Header("µ÷ÊÔÉèÖÃ")]
-    public bool enableDebugLog = true;                        // ÊÇ·ñÆôÓÃµ÷ÊÔÈÕÖ¾
+    [Header("è°ƒè¯•è®¾ç½®")]
+    public bool enableDebugLog = true;                        // æ˜¯å¦å¯ç”¨è°ƒè¯•æ—¥å¿—
 
-    // ÊµÀıÊÂ¼şÎ¯ÍĞ - Ã¿¸ö´°¿ÚÊµÀı¶ÀÁ¢µÄÊÂ¼ş
-    public event Action<string> OnPathChanged;                // Â·¾¶ÇĞ»»ÊÂ¼ş
-    public event Action<string> OnPathAccessDenied;           // Â·¾¶·ÃÎÊ±»¾Ü¾øÊÂ¼ş
+    // å®ä¾‹äº‹ä»¶å§”æ‰˜ - æ¯ä¸ªçª—å£å®ä¾‹ç‹¬ç«‹çš„äº‹ä»¶
+    public event Action<string> OnPathChanged;                // è·¯å¾„åˆ‡æ¢äº‹ä»¶
+    public event Action<string> OnPathAccessDenied;           // è·¯å¾„è®¿é—®è¢«æ‹’ç»äº‹ä»¶
 
-    // ¾²Ì¬ÊÂ¼şÎ¯ÍĞ - È«¾ÖÊÂ¼ş£¨¿ÉÑ¡£©
+    // é™æ€äº‹ä»¶å§”æ‰˜ - å…¨å±€äº‹ä»¶ï¼ˆå¯é€‰ï¼‰
     public static event Action<ExplorerManager, string> OnAnyWindowPathChanged;
 
-    // Ë½ÓĞ±äÁ¿
+    // ç§æœ‰å˜é‡
     private string currentPathId;
     private PathInfo currentPath;
     private Dictionary<string, PathInfo> pathDictionary;
     private GameFlowController flowController;
 
-    // ¾²Ì¬¹ÜÀí - ¸ú×ÙËùÓĞ´°¿ÚÊµÀı
+    // é™æ€ç®¡ç† - è·Ÿè¸ªæ‰€æœ‰çª—å£å®ä¾‹
     public static List<ExplorerManager> AllInstances { get; private set; } = new List<ExplorerManager>();
 
-    #region UnityÉúÃüÖÜÆÚ
+    #region Unityç”Ÿå‘½å‘¨æœŸ
 
     void Awake()
     {
@@ -85,28 +85,28 @@ public class ExplorerManager : MonoBehaviour
 
     void OnEnable()
     {
-        // ×¢²áµ½È«¾ÖÊµÀıÁĞ±í
+        // æ³¨å†Œåˆ°å…¨å±€å®ä¾‹åˆ—è¡¨
         if (!AllInstances.Contains(this))
         {
             AllInstances.Add(this);
         }
 
-        // ¶©ÔÄÏßË÷½âËøÊÂ¼ş£¬µ±ÏßË÷½âËøÊ±Ë¢ĞÂÂ·¾¶È¨ÏŞ
+        // è®¢é˜…çº¿ç´¢è§£é”äº‹ä»¶ï¼Œå½“çº¿ç´¢è§£é”æ—¶åˆ·æ–°è·¯å¾„æƒé™
         GameEvents.OnClueUnlocked += OnClueUnlockedHandler;
     }
 
     void Start()
     {
-        // µ¼º½µ½Ä¬ÈÏÂ·¾¶
+        // å¯¼èˆªåˆ°é»˜è®¤è·¯å¾„
         NavigateToPath(defaultPathId);
     }
 
     void OnDisable()
     {
-        // ´ÓÈ«¾ÖÊµÀıÁĞ±íÒÆ³ı
+        // ä»å…¨å±€å®ä¾‹åˆ—è¡¨ç§»é™¤
         AllInstances.Remove(this);
 
-        // È¡Ïû¶©ÔÄ
+        // å–æ¶ˆè®¢é˜…
         GameEvents.OnClueUnlocked -= OnClueUnlockedHandler;
     }
 
@@ -117,12 +117,12 @@ public class ExplorerManager : MonoBehaviour
 
     #endregion
 
-    #region ³õÊ¼»¯
+    #region åˆå§‹åŒ–
 
     void InitializeManager()
     {
         flowController = FindObjectOfType<GameFlowController>();
-        // ¹¹½¨Â·¾¶×Öµä
+        // æ„å»ºè·¯å¾„å­—å…¸
         pathDictionary = new Dictionary<string, PathInfo>();
 
         foreach (var path in allPaths)
@@ -131,7 +131,7 @@ public class ExplorerManager : MonoBehaviour
             {
                 pathDictionary[path.pathId] = path;
 
-                // ³õÊ¼Ê±Òş²ØËùÓĞÄÚÈİÈİÆ÷
+                // åˆå§‹æ—¶éšè—æ‰€æœ‰å†…å®¹å®¹å™¨
                 if (path.contentContainer != null)
                 {
                     path.contentContainer.SetActive(false);
@@ -141,55 +141,55 @@ public class ExplorerManager : MonoBehaviour
 
         if (enableDebugLog)
         {
-            Debug.Log($"ExplorerManager ({name}): ³õÊ¼»¯Íê³É£¬¼ÓÔØÁË {pathDictionary.Count} ¸öÂ·¾¶");
+            Debug.Log($"ExplorerManager ({name}): åˆå§‹åŒ–å®Œæˆï¼ŒåŠ è½½äº† {pathDictionary.Count} ä¸ªè·¯å¾„");
         }
     }
     #endregion
 
-    #region Â·¾¶µ¼º½
+    #region è·¯å¾„å¯¼èˆª
 
     /// <summary>
-    /// µ¼º½µ½Ö¸¶¨Â·¾¶
+    /// å¯¼èˆªåˆ°æŒ‡å®šè·¯å¾„
     /// </summary>
     public bool NavigateToPath(string targetPathId)
     {
 
         PathInfo targetPath = pathDictionary[targetPathId];
 
-        // ¼ì²é·ÃÎÊÈ¨ÏŞ
+        // æ£€æŸ¥è®¿é—®æƒé™
         if (!CanAccessPath(targetPath))
         {
-            // ´¥·¢ÊÂ¼ş
+            // è§¦å‘äº‹ä»¶
             OnPathAccessDenied?.Invoke(targetPathId);
-            // ÏÔÊ¾È¨ÏŞ±»¾Ü¾øÌáÊ¾´°¿Ú
+            // æ˜¾ç¤ºæƒé™è¢«æ‹’ç»æç¤ºçª—å£
             ShowAccessDeniedNotification();
 
             return false;
         }
 
-        // Ö´ĞĞÂ·¾¶ÇĞ»»
+        // æ‰§è¡Œè·¯å¾„åˆ‡æ¢
         return SwitchToPath(targetPath);
     }
 
     /// <summary>
-    /// ÇĞ»»µ½Ö¸¶¨Â·¾¶
+    /// åˆ‡æ¢åˆ°æŒ‡å®šè·¯å¾„
     /// </summary>
     private bool SwitchToPath(PathInfo targetPath)
     {
         string previousPathId = currentPathId;
 
-        // Òş²Øµ±Ç°Â·¾¶µÄÄÚÈİ
+        // éšè—å½“å‰è·¯å¾„çš„å†…å®¹
         if (currentPath?.contentContainer != null)
         {
             currentPath.contentContainer.SetActive(false);
             currentPath.isCurrentPath = false;
         }
 
-        // ÇĞ»»µ½ĞÂÂ·¾¶
+        // åˆ‡æ¢åˆ°æ–°è·¯å¾„
         currentPathId = targetPath.pathId;
         currentPath = targetPath;
 
-        // ÏÔÊ¾ĞÂÂ·¾¶µÄÄÚÈİ
+        // æ˜¾ç¤ºæ–°è·¯å¾„çš„å†…å®¹
         if (currentPath.contentContainer != null)
         {
             currentPath.contentContainer.SetActive(true);
@@ -201,16 +201,16 @@ public class ExplorerManager : MonoBehaviour
             GlobalSystemManager.Instance.PlaySFX(audioClip);
         }
 
-        // ¸üĞÂµØÖ·À¸
+        // æ›´æ–°åœ°å€æ 
         UpdateWindowTitle();
 
-        // ´¥·¢ÊÂ¼ş
+        // è§¦å‘äº‹ä»¶
         OnPathChanged?.Invoke(currentPathId);
         OnAnyWindowPathChanged?.Invoke(this, currentPathId);
 
         if (enableDebugLog)
         {
-            Debug.Log($"ExplorerManager ({name}): Â·¾¶ÇĞ»»³É¹¦ - {previousPathId} ¡ú {currentPathId}");
+            Debug.Log($"ExplorerManager ({name}): è·¯å¾„åˆ‡æ¢æˆåŠŸ - {previousPathId} â†’ {currentPathId}");
         }
 
         return true;
@@ -218,14 +218,14 @@ public class ExplorerManager : MonoBehaviour
 
     #endregion
 
-    #region È¨ÏŞ¼ì²é
+    #region æƒé™æ£€æŸ¥
 
     /// <summary>
-    /// ¼ì²éÊÇ·ñ¿ÉÒÔ·ÃÎÊÖ¸¶¨Â·¾¶
+    /// æ£€æŸ¥æ˜¯å¦å¯ä»¥è®¿é—®æŒ‡å®šè·¯å¾„
     /// </summary>
     private bool CanAccessPath(PathInfo path)
     {
-        // ¼ì²é»ù´¡¿É·ÃÎÊĞÔ
+        // æ£€æŸ¥åŸºç¡€å¯è®¿é—®æ€§
         if (!path.isAccessible)
         {
             return false;
@@ -236,40 +236,40 @@ public class ExplorerManager : MonoBehaviour
             return true;
         }
 
-        // ¼ì²éÊÇ·ñĞèÒªÏßË÷È¨ÏŞ
+        // æ£€æŸ¥æ˜¯å¦éœ€è¦çº¿ç´¢æƒé™
         if (path.requiredClues != null && path.requiredClues.Count > 0)
         {
-            // ¼ì²éÃ¿¸ö±ØĞèµÄÏßË÷
+            // æ£€æŸ¥æ¯ä¸ªå¿…éœ€çš„çº¿ç´¢
             foreach (string clueId in path.requiredClues)
             {
                 if (!flowController.HasClue(clueId))
                 {
                     if (enableDebugLog)
                     {
-                        Debug.Log($"ExplorerManager ({name}): È±ÉÙ±ØĞèÏßË÷ - {clueId}");
+                        Debug.Log($"ExplorerManager ({name}): ç¼ºå°‘å¿…éœ€çº¿ç´¢ - {clueId}");
                     }
                     return false;
                 }
             }
         }
 
-        // Í¨¹ıËùÓĞ¼ì²é
+        // é€šè¿‡æ‰€æœ‰æ£€æŸ¥
         return true;
     }
 
     /// <summary>
-    /// ÏßË÷½âËøÊÂ¼ş´¦ÀíÆ÷
+    /// çº¿ç´¢è§£é”äº‹ä»¶å¤„ç†å™¨
     /// </summary>
     private void OnClueUnlockedHandler(string clueId)
     {
-        // µ±ÏßË÷½âËøÊ±£¬¼ì²éÊÇ·ñÓĞÂ·¾¶Òò´Ë±äµÃ¿É·ÃÎÊ
+        // å½“çº¿ç´¢è§£é”æ—¶ï¼Œæ£€æŸ¥æ˜¯å¦æœ‰è·¯å¾„å› æ­¤å˜å¾—å¯è®¿é—®
         foreach (var path in allPaths)
         {
             if (path.requiresPermission && path.requiredClues.Contains(clueId))
             {
                 if (enableDebugLog)
                 {
-                    Debug.Log($"ExplorerManager ({name}): ÏßË÷ {clueId} ½âËø£¬Â·¾¶ {path.pathId} ¿ÉÄÜ±äµÃ¿É·ÃÎÊ");
+                    Debug.Log($"ExplorerManager ({name}): çº¿ç´¢ {clueId} è§£é”ï¼Œè·¯å¾„ {path.pathId} å¯èƒ½å˜å¾—å¯è®¿é—®");
                 }
             }
         }
@@ -277,31 +277,31 @@ public class ExplorerManager : MonoBehaviour
 
     #endregion
 
-    #region È¨ÏŞÌáÊ¾´°¿Ú
+    #region æƒé™æç¤ºçª—å£
 
     private void ShowAccessDeniedNotification()
     {
-        // È·¶¨Éú³ÉÎ»ÖÃ
+        // ç¡®å®šç”Ÿæˆä½ç½®
         Transform parent = notificationParent;
         if (parent == null)
         {
-            // ²éÕÒÃûÎª "DialogueCanvas" µÄ GameObject
+            // æŸ¥æ‰¾åä¸º "DialogueCanvas" çš„ GameObject
             GameObject dialogueCanvasObj = GameObject.Find("DialogueCanvas");
             if (dialogueCanvasObj != null)
             {
                 parent = dialogueCanvasObj.transform;
             }
         }
-        // Éú³ÉÌáÊ¾´°¿Ú£¨Ô¤ÖÆÌåÖĞÒÑ¾­Ô¤ÉèºÃËùÓĞÄÚÈİ£©
+        // ç”Ÿæˆæç¤ºçª—å£ï¼ˆé¢„åˆ¶ä½“ä¸­å·²ç»é¢„è®¾å¥½æ‰€æœ‰å†…å®¹ï¼‰
         GameObject notificationObj = Instantiate(accessDeniedWindowPrefab, parent);
     }
 
     #endregion
 
-    #region UI¸üĞÂ
+    #region UIæ›´æ–°
 
     /// <summary>
-    /// ¸üĞÂ´°¿Ú±êÌâ£¨µØÖ·À¸£©
+    /// æ›´æ–°çª—å£æ ‡é¢˜ï¼ˆåœ°å€æ ï¼‰
     /// </summary>
     private void UpdateWindowTitle()
     {
@@ -311,13 +311,13 @@ public class ExplorerManager : MonoBehaviour
 
             if (showPathInTitle)
             {
-                // ×éºÏÏÔÊ¾£º´°¿ÚÀàĞÍÃû - Â·¾¶
+                // ç»„åˆæ˜¾ç¤ºï¼šçª—å£ç±»å‹å - è·¯å¾„
                 string pathName = currentPath.displayName;
                 displayText = $"{pathName}";
             }
             else
             {
-                // ½öÏÔÊ¾´°¿ÚÀàĞÍÃû
+                // ä»…æ˜¾ç¤ºçª—å£ç±»å‹å
                 displayText = windowTypeName;
             }
 
@@ -326,10 +326,10 @@ public class ExplorerManager : MonoBehaviour
     }
     #endregion
 
-    #region ¹«¹²½Ó¿Ú
+    #region å…¬å…±æ¥å£
 
     /// <summary>
-    /// »ñÈ¡µ±Ç°Â·¾¶ID
+    /// è·å–å½“å‰è·¯å¾„ID
     /// </summary>
     public string GetCurrentPathId()
     {

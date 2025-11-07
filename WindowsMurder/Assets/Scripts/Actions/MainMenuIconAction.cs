@@ -1,46 +1,46 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// MainMenu³¡¾°IconÍ³Ò»½»»¥½Å±¾
-/// Í¨¹ıÅäÖÃ²»Í¬µÄ¹¦ÄÜÀàĞÍ£¬µ÷ÓÃGlobalActionManagerµÄ¶ÔÓ¦·½·¨
+/// MainMenuåœºæ™¯Iconç»Ÿä¸€äº¤äº’è„šæœ¬
+/// é€šè¿‡é…ç½®ä¸åŒçš„åŠŸèƒ½ç±»å‹ï¼Œè°ƒç”¨GlobalActionManagerçš„å¯¹åº”æ–¹æ³•
 /// </summary>
 public class MainMenuIconAction : IconAction
 {
     /// <summary>
-    /// MainMenuÖ§³ÖµÄÈ«¾Ö¹¦ÄÜÀàĞÍ
+    /// MainMenuæ”¯æŒçš„å…¨å±€åŠŸèƒ½ç±»å‹
     /// </summary>
     public enum MainMenuFunction
     {
-        NewGame,        // ĞÂÓÎÏ·
-        Continue,       // ¼ÌĞøÓÎÏ·
-        Language,       // ÓïÑÔÉèÖÃ
-        Display,        // ÏÔÊ¾ÉèÖÃ
-        Credits         // ÖÆ×÷ÈËÔ±
+        NewGame,        // æ–°æ¸¸æˆ
+        Continue,       // ç»§ç»­æ¸¸æˆ
+        Language,       // è¯­è¨€è®¾ç½®
+        Display,        // æ˜¾ç¤ºè®¾ç½®
+        Credits         // åˆ¶ä½œäººå‘˜
     }
 
-    [Header("MainMenu¹¦ÄÜÉèÖÃ")]
+    [Header("MainMenuåŠŸèƒ½è®¾ç½®")]
     public MainMenuFunction functionType = MainMenuFunction.NewGame;
 
     /// <summary>
-    /// ¼ì²éÊÇ·ñ¿ÉÒÔÖ´ĞĞ½»»¥
+    /// æ£€æŸ¥æ˜¯å¦å¯ä»¥æ‰§è¡Œäº¤äº’
     /// </summary>
     public override bool CanExecute()
     {
         if (!base.CanExecute()) return false;
 
-        // ÌØÊâ¼ì²é£ºContinue¹¦ÄÜĞèÒªÓĞ´æµµ
+        // ç‰¹æ®Šæ£€æŸ¥ï¼šContinueåŠŸèƒ½éœ€è¦æœ‰å­˜æ¡£
         if (functionType == MainMenuFunction.Continue)
         {
             if (GlobalActionManager.Instance == null)
             {
-                Debug.LogWarning("MainMenuIconAction: GlobalActionManagerÎ´³õÊ¼»¯");
+                Debug.LogWarning("MainMenuIconAction: GlobalActionManageræœªåˆå§‹åŒ–");
                 return false;
             }
 
             bool hasGameSave = GlobalActionManager.Instance.HasGameSave();
             if (!hasGameSave)
             {
-                Debug.Log("MainMenuIconAction: Ã»ÓĞ´æµµ£¬ÎŞ·¨¼ÌĞøÓÎÏ·");
+                Debug.Log("MainMenuIconAction: æ²¡æœ‰å­˜æ¡£ï¼Œæ— æ³•ç»§ç»­æ¸¸æˆ");
                 return false;
             }
         }
@@ -49,18 +49,18 @@ public class MainMenuIconAction : IconAction
     }
 
     /// <summary>
-    /// Ö´ĞĞ½»»¥ĞĞÎª
+    /// æ‰§è¡Œäº¤äº’è¡Œä¸º
     /// </summary>
     public override void Execute()
     {
-        // ¼ì²éGlobalActionManagerÊÇ·ñ¿ÉÓÃ
+        // æ£€æŸ¥GlobalActionManageræ˜¯å¦å¯ç”¨
         if (GlobalActionManager.Instance == null)
         {
-            Debug.LogError("MainMenuIconAction: GlobalActionManagerÎ´³õÊ¼»¯£¬ÎŞ·¨Ö´ĞĞ²Ù×÷");
+            Debug.LogError("MainMenuIconAction: GlobalActionManageræœªåˆå§‹åŒ–ï¼Œæ— æ³•æ‰§è¡Œæ“ä½œ");
             return;
         }
 
-        // ¸ù¾İ¹¦ÄÜÀàĞÍµ÷ÓÃ¶ÔÓ¦µÄGlobalActionManager·½·¨
+        // æ ¹æ®åŠŸèƒ½ç±»å‹è°ƒç”¨å¯¹åº”çš„GlobalActionManageræ–¹æ³•
         switch (functionType)
         {
             case MainMenuFunction.NewGame:
@@ -84,32 +84,32 @@ public class MainMenuIconAction : IconAction
                 break;
 
             default:
-                Debug.LogWarning($"MainMenuIconAction: Î´ÖªµÄ¹¦ÄÜÀàĞÍ {functionType}");
+                Debug.LogWarning($"MainMenuIconAction: æœªçŸ¥çš„åŠŸèƒ½ç±»å‹ {functionType}");
                 break;
         }
     }
 
     /// <summary>
-    /// ½»»¥Ö´ĞĞÇ°µÄ»Øµ÷
+    /// äº¤äº’æ‰§è¡Œå‰çš„å›è°ƒ
     /// </summary>
     protected override void OnBeforeExecute()
     {
         base.OnBeforeExecute();
 
-        // ¿ÉÒÔÔÚÕâÀï²¥·ÅÌØ¶¨µÄÒôĞ§
-        // »òÕßÏÔÊ¾loadingĞ§¹ûµÈ
-        //Debug.Log($"MainMenuIconAction: ×¼±¸Ö´ĞĞ {functionType}");
+        // å¯ä»¥åœ¨è¿™é‡Œæ’­æ”¾ç‰¹å®šçš„éŸ³æ•ˆ
+        // æˆ–è€…æ˜¾ç¤ºloadingæ•ˆæœç­‰
+        //Debug.Log($"MainMenuIconAction: å‡†å¤‡æ‰§è¡Œ {functionType}");
     }
 
     /// <summary>
-    /// ½»»¥Ö´ĞĞºóµÄ»Øµ÷
+    /// äº¤äº’æ‰§è¡Œåçš„å›è°ƒ
     /// </summary>
     protected override void OnAfterExecute()
     {
         base.OnAfterExecute();
 
-        // ¿ÉÒÔÔÚÕâÀï¼ÇÂ¼ÓÃ»§²Ù×÷ÈÕÖ¾
-        // »òÕß¸üĞÂÍ³¼ÆĞÅÏ¢µÈ
-        Debug.Log($"MainMenuIconAction: {functionType} Ö´ĞĞÍê³É");
+        // å¯ä»¥åœ¨è¿™é‡Œè®°å½•ç”¨æˆ·æ“ä½œæ—¥å¿—
+        // æˆ–è€…æ›´æ–°ç»Ÿè®¡ä¿¡æ¯ç­‰
+        Debug.Log($"MainMenuIconAction: {functionType} æ‰§è¡Œå®Œæˆ");
     }
 }

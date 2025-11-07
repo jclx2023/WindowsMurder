@@ -1,51 +1,51 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System;
 
 /// <summary>
-/// ¶Ô»°ÀúÊ·¹ÜÀíÆ÷ - ×¨ÃÅ´¦ÀíLLM¶àÂÖ¶Ô»°µÄÉÏÏÂÎÄ¹ÜÀí
+/// å¯¹è¯å†å²ç®¡ç†å™¨ - ä¸“é—¨å¤„ç†LLMå¤šè½®å¯¹è¯çš„ä¸Šä¸‹æ–‡ç®¡ç†
 /// </summary>
 public class ConversationHistoryManager : MonoBehaviour
 {
-    [Header("µ÷ÊÔ")]
+    [Header("è°ƒè¯•")]
     public bool enableDebugLog = true;
 
-    // Ë½ÓĞ±äÁ¿
+    // ç§æœ‰å˜é‡
     private string currentLLMHistory = "";
     private bool isLLMActive = false;
     private string lastPlayerInput = "";
 
     /// <summary>
-    /// ¿ªÊ¼ĞÂµÄLLM»á»°²¢·¢ËÍ³õÊ¼prompt
+    /// å¼€å§‹æ–°çš„LLMä¼šè¯å¹¶å‘é€åˆå§‹prompt
     /// </summary>
     public void StartLLMSession(string initialPrompt, Action<string> onResponse, DialogueManager dialogueManager)
     {
         if (string.IsNullOrEmpty(initialPrompt))
         {
-            DebugLog("´íÎó: ³õÊ¼promptÎª¿Õ");
-            onResponse?.Invoke("ÏµÍ³´íÎó: ³õÊ¼promptÎª¿Õ");
+            DebugLog("é”™è¯¯: åˆå§‹promptä¸ºç©º");
+            onResponse?.Invoke("ç³»ç»Ÿé”™è¯¯: åˆå§‹promptä¸ºç©º");
             return;
         }
 
-        // ³õÊ¼»¯»á»°×´Ì¬
+        // åˆå§‹åŒ–ä¼šè¯çŠ¶æ€
         currentLLMHistory = initialPrompt;
         isLLMActive = true;
         lastPlayerInput = "";
 
-        DebugLog($"¿ªÊ¼LLM»á»°£¬³õÊ¼prompt: {initialPrompt.Substring(0, Math.Min(50, initialPrompt.Length))}...");
+        DebugLog($"å¼€å§‹LLMä¼šè¯ï¼Œåˆå§‹prompt: {initialPrompt.Substring(0, Math.Min(50, initialPrompt.Length))}...");
 
-        // Ö±½Ó·¢ËÍ³õÊ¼prompt¸øLLM
+        // ç›´æ¥å‘é€åˆå§‹promptç»™LLM
         StartCoroutine(SendInitialPrompt(initialPrompt, onResponse, dialogueManager));
     }
 
     /// <summary>
-    /// ·¢ËÍ³õÊ¼promptµÄĞ­³Ì
+    /// å‘é€åˆå§‹promptçš„åç¨‹
     /// </summary>
     private System.Collections.IEnumerator SendInitialPrompt(string initialPrompt, Action<string> onResponse, DialogueManager dialogueManager)
     {
         bool responseReceived = false;
         string aiResponse = "";
 
-        // Ê¹ÓÃµ±Ç°Provider£¨²»ÔÙhardcodedÊ¹ÓÃgeminiAPI£©
+        // ä½¿ç”¨å½“å‰Providerï¼ˆä¸å†hardcodedä½¿ç”¨geminiAPIï¼‰
         yield return StartCoroutine(dialogueManager.GetCurrentProvider().GenerateText(
             initialPrompt,
             response =>
@@ -55,100 +55,100 @@ public class ConversationHistoryManager : MonoBehaviour
             },
             error =>
             {
-                aiResponse = "ÏµÍ³¹ÊÕÏ...ÎŞ·¨Á¬½Ó...";
+                aiResponse = "ç³»ç»Ÿæ•…éšœ...æ— æ³•è¿æ¥...";
                 responseReceived = true;
-                DebugLog($"³õÊ¼promptÇëÇóÊ§°Ü: {error}");
+                DebugLog($"åˆå§‹promptè¯·æ±‚å¤±è´¥: {error}");
             }
         ));
 
-        // µÈ´ıÏìÓ¦
+        // ç­‰å¾…å“åº”
         while (!responseReceived)
         {
             yield return null;
         }
 
-        // ½«AI»Ø¸´Ìí¼Óµ½ÀúÊ·
+        // å°†AIå›å¤æ·»åŠ åˆ°å†å²
         AddLLMResponse(aiResponse);
 
-        // ·µ»Ø½á¹û
+        // è¿”å›ç»“æœ
         onResponse?.Invoke(aiResponse);
 
-        DebugLog($"³õÊ¼LLMÏìÓ¦Íê³É: {aiResponse.Substring(0, Math.Min(30, aiResponse.Length))}...");
+        DebugLog($"åˆå§‹LLMå“åº”å®Œæˆ: {aiResponse.Substring(0, Math.Min(30, aiResponse.Length))}...");
     }
 
     /// <summary>
-    /// Ìí¼ÓLLM»Ø¸´µ½ÀúÊ·¼ÇÂ¼
+    /// æ·»åŠ LLMå›å¤åˆ°å†å²è®°å½•
     /// </summary>
     public void AddLLMResponse(string aiResponse)
     {
         if (!isLLMActive || string.IsNullOrEmpty(aiResponse))
         {
-            DebugLog("¾¯¸æ: LLMÎ´¼¤»î»ò»Ø¸´Îª¿Õ£¬Ìø¹ıÌí¼Ó»Ø¸´");
+            DebugLog("è­¦å‘Š: LLMæœªæ¿€æ´»æˆ–å›å¤ä¸ºç©ºï¼Œè·³è¿‡æ·»åŠ å›å¤");
             return;
         }
 
-        // Èç¹ûÓĞÍæ¼ÒÊäÈë£¬ÏÈÌí¼ÓÍæ¼ÒÊäÈëÔÙÌí¼ÓAI»Ø¸´
+        // å¦‚æœæœ‰ç©å®¶è¾“å…¥ï¼Œå…ˆæ·»åŠ ç©å®¶è¾“å…¥å†æ·»åŠ AIå›å¤
         if (!string.IsNullOrEmpty(lastPlayerInput))
         {
-            currentLLMHistory += $"\n\nÍæ¼Ò: {lastPlayerInput}";
+            currentLLMHistory += $"\n\nç©å®¶: {lastPlayerInput}";
             lastPlayerInput = "";
         }
 
         currentLLMHistory += $"\nAI: {aiResponse}";
 
-        DebugLog($"Ìí¼ÓLLM»Ø¸´µ½ÀúÊ·£¬µ±Ç°ÀúÊ·³¤¶È: {currentLLMHistory.Length}");
+        DebugLog($"æ·»åŠ LLMå›å¤åˆ°å†å²ï¼Œå½“å‰å†å²é•¿åº¦: {currentLLMHistory.Length}");
     }
 
     /// <summary>
-    /// ¹¹½¨°üº¬ÀúÊ·µÄÍêÕûprompt
+    /// æ„å»ºåŒ…å«å†å²çš„å®Œæ•´prompt
     /// </summary>
     public string BuildPromptWithHistory(string playerInput)
     {
         if (!isLLMActive)
         {
-            DebugLog("¾¯¸æ: LLMÎ´¼¤»î£¬·µ»ØÔ­Ê¼ÊäÈë");
+            DebugLog("è­¦å‘Š: LLMæœªæ¿€æ´»ï¼Œè¿”å›åŸå§‹è¾“å…¥");
             return playerInput;
         }
 
         if (string.IsNullOrEmpty(playerInput))
         {
-            DebugLog("¾¯¸æ: Íæ¼ÒÊäÈëÎª¿Õ");
+            DebugLog("è­¦å‘Š: ç©å®¶è¾“å…¥ä¸ºç©º");
             return currentLLMHistory;
         }
 
-        // »º´æÍæ¼ÒÊäÈë
+        // ç¼“å­˜ç©å®¶è¾“å…¥
         lastPlayerInput = playerInput;
 
-        // ¹¹½¨ÍêÕûprompt
-        string fullPrompt = $"{currentLLMHistory}\n\nÍæ¼Ò: {playerInput}\n\nAI:";
+        // æ„å»ºå®Œæ•´prompt
+        string fullPrompt = $"{currentLLMHistory}\n\nç©å®¶: {playerInput}\n\nAI:";
 
-        DebugLog($"¹¹½¨°üº¬ÀúÊ·µÄprompt£¬×Ü³¤¶È: {fullPrompt.Length}");
-        DebugLog($"µ±Ç°promptÔ¤ÀÀ: {fullPrompt.Substring(0, Math.Min(100, fullPrompt.Length))}...");
+        DebugLog($"æ„å»ºåŒ…å«å†å²çš„promptï¼Œæ€»é•¿åº¦: {fullPrompt.Length}");
+        DebugLog($"å½“å‰prompté¢„è§ˆ: {fullPrompt.Substring(0, Math.Min(100, fullPrompt.Length))}...");
 
         return fullPrompt;
     }
 
     /// <summary>
-    /// ½áÊøµ±Ç°LLM»á»°
+    /// ç»“æŸå½“å‰LLMä¼šè¯
     /// </summary>
     public void EndLLMSession()
     {
         if (!isLLMActive)
         {
-            DebugLog("LLM»á»°Î´¼¤»î£¬ÎŞĞè½áÊø");
+            DebugLog("LLMä¼šè¯æœªæ¿€æ´»ï¼Œæ— éœ€ç»“æŸ");
             return;
         }
 
-        DebugLog($"½áÊøLLM»á»°£¬ÀúÊ·¼ÇÂ¼³¤¶È: {currentLLMHistory.Length}");
+        DebugLog($"ç»“æŸLLMä¼šè¯ï¼Œå†å²è®°å½•é•¿åº¦: {currentLLMHistory.Length}");
 
-        // ÇåÀí»á»°Êı¾İ
+        // æ¸…ç†ä¼šè¯æ•°æ®
         currentLLMHistory = "";
         lastPlayerInput = "";
         isLLMActive = false;
     }
 
     /// <summary>
-    /// µ÷ÊÔÈÕÖ¾
+    /// è°ƒè¯•æ—¥å¿—
     /// </summary>
     private void DebugLog(string message)
     {

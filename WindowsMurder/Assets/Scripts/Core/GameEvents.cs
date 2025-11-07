@@ -1,47 +1,47 @@
-using System;
+ï»¿using System;
 using UnityEngine;
 
 /// <summary>
-/// ÓÎÏ·¾²Ì¬ÊÂ¼şÏµÍ³ - ÓÃÓÚ½âñî×é¼şÍ¨ĞÅ
+/// æ¸¸æˆé™æ€äº‹ä»¶ç³»ç»Ÿ - ç”¨äºè§£è€¦ç»„ä»¶é€šä¿¡
 /// </summary>
 public static class GameEvents
 {
-    // ÏßË÷Ïà¹ØÊÂ¼ş
+    // çº¿ç´¢ç›¸å…³äº‹ä»¶
     public static event Action<string> OnClueUnlockRequested;
     public static event Action<string> OnClueUnlocked;
 
-    // ¶Ô»°Ïà¹ØÊÂ¼ş
+    // å¯¹è¯ç›¸å…³äº‹ä»¶
     public static event Action<string> OnDialogueBlockRequested;
     public static event Action<string> OnDialogueBlockCompleted;
 
-    // StageÏà¹ØÊÂ¼ş
+    // Stageç›¸å…³äº‹ä»¶
     public static event Action<string> OnStageChangeRequested;
     public static event Action<string> OnStageChanged;
 
     /// <summary>
-    /// Í¨Öª¶Ô»°¿éÍê³É
+    /// é€šçŸ¥å¯¹è¯å—å®Œæˆ
     /// </summary>
     public static void NotifyDialogueBlockCompleted(string blockId)
     {
         OnDialogueBlockCompleted?.Invoke(blockId);
     }
     /// <summary>
-    /// ÇëÇó½âËøÏßË÷£¨ÈÎºÎµØ·½¶¼¿ÉÒÔµ÷ÓÃ£©
+    /// è¯·æ±‚è§£é”çº¿ç´¢ï¼ˆä»»ä½•åœ°æ–¹éƒ½å¯ä»¥è°ƒç”¨ï¼‰
     /// </summary>
     public static void RequestUnlockClue(string clueId)
     {
         if (string.IsNullOrEmpty(clueId))
         {
-            Debug.LogWarning("GameEvents: ÏßË÷IDÎª¿Õ");
+            Debug.LogWarning("GameEvents: çº¿ç´¢IDä¸ºç©º");
             return;
         }
 
-        Debug.Log($"GameEvents: ÇëÇó½âËøÏßË÷ {clueId}");
+        Debug.Log($"GameEvents: è¯·æ±‚è§£é”çº¿ç´¢ {clueId}");
         OnClueUnlockRequested?.Invoke(clueId);
     }
 
     /// <summary>
-    /// Í¨ÖªÏßË÷ÒÑ½âËø£¨ÓÉGameFlowControllerµ÷ÓÃ£©
+    /// é€šçŸ¥çº¿ç´¢å·²è§£é”ï¼ˆç”±GameFlowControllerè°ƒç”¨ï¼‰
     /// </summary>
     public static void NotifyClueUnlocked(string clueId)
     {
@@ -49,7 +49,7 @@ public static class GameEvents
     }
 
     /// <summary>
-    /// ÇåÀíËùÓĞÊÂ¼ş¶©ÔÄ£¨³¡¾°Ğ¶ÔØÊ±µ÷ÓÃ£¬·ÀÖ¹ÄÚ´æĞ¹Â©£©
+    /// æ¸…ç†æ‰€æœ‰äº‹ä»¶è®¢é˜…ï¼ˆåœºæ™¯å¸è½½æ—¶è°ƒç”¨ï¼Œé˜²æ­¢å†…å­˜æ³„æ¼ï¼‰
     /// </summary>
     public static void ClearAllEvents()
     {
@@ -60,6 +60,6 @@ public static class GameEvents
         OnStageChangeRequested = null;
         OnStageChanged = null;
 
-        Debug.Log("GameEvents: ÒÑÇåÀíËùÓĞÊÂ¼ş¶©ÔÄ");
+        Debug.Log("GameEvents: å·²æ¸…ç†æ‰€æœ‰äº‹ä»¶è®¢é˜…");
     }
 }

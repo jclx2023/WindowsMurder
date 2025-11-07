@@ -1,23 +1,23 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ExplorerÍ¼±ê»ñÈ¡Æ÷ - Ìá¹©Explorer´°¿ÚÄÚiconsµÄÒıÓÃ
-/// ¹ÒÔØÔÚExplorerÔ¤ÖÆÌåÉÏ£¬ÔÚÔ¤ÖÆÌå±à¼­Ä£Ê½ÖĞÅäÖÃiconsÒıÓÃ
+/// Explorerå›¾æ ‡è·å–å™¨ - æä¾›Explorerçª—å£å†…iconsçš„å¼•ç”¨
+/// æŒ‚è½½åœ¨Exploreré¢„åˆ¶ä½“ä¸Šï¼Œåœ¨é¢„åˆ¶ä½“ç¼–è¾‘æ¨¡å¼ä¸­é…ç½®iconså¼•ç”¨
 /// </summary>
 public class ExplorerIconGetter : MonoBehaviour
 {
-    [Header("ExplorerÖĞµÄ³ÌĞòIcons")]
-    [Tooltip("IEÍ¼±ê£¨µ¥¶À¹ÜÀí£¬ÒòÎªÓĞÌØÊâÏÔÊ¾Ê±»ú£©")]
+    [Header("Explorerä¸­çš„ç¨‹åºIcons")]
+    [Tooltip("IEå›¾æ ‡ï¼ˆå•ç‹¬ç®¡ç†ï¼Œå› ä¸ºæœ‰ç‰¹æ®Šæ˜¾ç¤ºæ—¶æœºï¼‰")]
     [SerializeField] private GameObject ieIcon;
 
-    [Tooltip("ÆäËû³ÌĞòÍ¼±êÁĞ±í")]
+    [Tooltip("å…¶ä»–ç¨‹åºå›¾æ ‡åˆ—è¡¨")]
     [SerializeField] private List<GameObject> programIcons = new List<GameObject>();
 
-    #region ¹«¹²½Ó¿Ú
+    #region å…¬å…±æ¥å£
 
     /// <summary>
-    /// »ñÈ¡IEÍ¼±ê
+    /// è·å–IEå›¾æ ‡
     /// </summary>
     public GameObject GetIEIcon()
     {
@@ -25,7 +25,7 @@ public class ExplorerIconGetter : MonoBehaviour
     }
 
     /// <summary>
-    /// »ñÈ¡ÆäËû³ÌĞòÍ¼±êÁĞ±í
+    /// è·å–å…¶ä»–ç¨‹åºå›¾æ ‡åˆ—è¡¨
     /// </summary>
     public List<GameObject> GetProgramIcons()
     {

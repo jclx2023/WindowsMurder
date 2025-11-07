@@ -1,15 +1,15 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 /// <summary>
-/// É¨À×µ¥Ôª¸ñ - ¼ò»¯°æ£¬Í³Ò»´ÓSpriteManager»ñÈ¡×ÊÔ´
+/// æ‰«é›·å•å…ƒæ ¼ - ç®€åŒ–ç‰ˆï¼Œç»Ÿä¸€ä»SpriteManagerè·å–èµ„æº
 /// </summary>
 public class MinesweeperCell : MonoBehaviour, IPointerClickHandler
 {
-    [Header("UI×é¼ş")]
-    public Image cellImage;         // ±³¾°²ã£¨Í¹Æğ/Æ½Ì¹£©
-    public Image contentImage;      // ÄÚÈİ²ã£¨Êı×Ö/µØÀ×/ÆìÖÄ£©
+    [Header("UIç»„ä»¶")]
+    public Image cellImage;         // èƒŒæ™¯å±‚ï¼ˆå‡¸èµ·/å¹³å¦ï¼‰
+    public Image contentImage;      // å†…å®¹å±‚ï¼ˆæ•°å­—/åœ°é›·/æ——å¸œï¼‰
 
     private int x, y;
     private bool isMine = false;
@@ -20,7 +20,7 @@ public class MinesweeperCell : MonoBehaviour, IPointerClickHandler
     private MinesweeperGame gameController;
     private MinesweeperSpriteManager sprites;
 
-    // ÊôĞÔ
+    // å±æ€§
     public int X => x;
     public int Y => y;
     public bool IsMine => isMine;
@@ -29,7 +29,7 @@ public class MinesweeperCell : MonoBehaviour, IPointerClickHandler
     public int AdjacentMines => adjacentMines;
 
     /// <summary>
-    /// ³õÊ¼»¯¸ñ×Ó
+    /// åˆå§‹åŒ–æ ¼å­
     /// </summary>
     public void Initialize(int x, int y, MinesweeperGame controller, MinesweeperSpriteManager spriteManager)
     {
@@ -38,12 +38,12 @@ public class MinesweeperCell : MonoBehaviour, IPointerClickHandler
         this.gameController = controller;
         this.sprites = spriteManager;
 
-        // ³õÊ¼×´Ì¬£ºÎ´·­¿ª
+        // åˆå§‹çŠ¶æ€ï¼šæœªç¿»å¼€
         UpdateVisual();
     }
 
     /// <summary>
-    /// ÉèÖÃÊÇ·ñÎªµØÀ×
+    /// è®¾ç½®æ˜¯å¦ä¸ºåœ°é›·
     /// </summary>
     public void SetMine(bool value)
     {
@@ -51,7 +51,7 @@ public class MinesweeperCell : MonoBehaviour, IPointerClickHandler
     }
 
     /// <summary>
-    /// ÉèÖÃÖÜÎ§µØÀ×Êı
+    /// è®¾ç½®å‘¨å›´åœ°é›·æ•°
     /// </summary>
     public void SetAdjacentMines(int count)
     {
@@ -59,7 +59,7 @@ public class MinesweeperCell : MonoBehaviour, IPointerClickHandler
     }
 
     /// <summary>
-    /// ÉèÖÃÆìÖÄ×´Ì¬
+    /// è®¾ç½®æ——å¸œçŠ¶æ€
     /// </summary>
     public void SetFlag(bool value)
     {
@@ -68,7 +68,7 @@ public class MinesweeperCell : MonoBehaviour, IPointerClickHandler
     }
 
     /// <summary>
-    /// ·­¿ª¸ñ×Ó
+    /// ç¿»å¼€æ ¼å­
     /// </summary>
     public void Reveal()
     {
@@ -79,22 +79,22 @@ public class MinesweeperCell : MonoBehaviour, IPointerClickHandler
     }
 
     /// <summary>
-    /// ¸üĞÂÊÓ¾õ±íÏÖ - Í³Ò»´ÓSpriteManager»ñÈ¡×ÊÔ´
+    /// æ›´æ–°è§†è§‰è¡¨ç° - ç»Ÿä¸€ä»SpriteManagerè·å–èµ„æº
     /// </summary>
     void UpdateVisual()
     {
         if (sprites == null) return;
 
-        // Î´·­¿ª×´Ì¬
+        // æœªç¿»å¼€çŠ¶æ€
         if (!isRevealed)
         {
-            // ±³¾°£ºÎ´·­¿ªµÄÍ¹Æğ·½¿é
+            // èƒŒæ™¯ï¼šæœªç¿»å¼€çš„å‡¸èµ·æ–¹å—
             if (cellImage != null)
             {
                 cellImage.sprite = sprites.coveredSprite;
             }
 
-            // ÄÚÈİ£ºÆìÖÄ»òÎŞ
+            // å†…å®¹ï¼šæ——å¸œæˆ–æ— 
             if (isFlagged)
             {
                 contentImage.enabled = true;
@@ -105,10 +105,10 @@ public class MinesweeperCell : MonoBehaviour, IPointerClickHandler
                 contentImage.enabled = false;
             }
         }
-        // ÒÑ·­¿ª×´Ì¬
+        // å·²ç¿»å¼€çŠ¶æ€
         else
         {
-            // ±³¾°£ºÒÑ·­¿ªµÄÆ½Ì¹·½¿é
+            // èƒŒæ™¯ï¼šå·²ç¿»å¼€çš„å¹³å¦æ–¹å—
             if (cellImage != null)
             {
                 cellImage.sprite = sprites.revealedSprite;
@@ -116,42 +116,42 @@ public class MinesweeperCell : MonoBehaviour, IPointerClickHandler
 
             if (isMine)
             {
-                // ÏÔÊ¾µØÀ×
+                // æ˜¾ç¤ºåœ°é›·
                 contentImage.enabled = true;
                 contentImage.sprite = sprites.mineSprite;
             }
             else if (adjacentMines > 0)
             {
-                // ÏÔÊ¾Êı×Ö£¨1-8£©
+                // æ˜¾ç¤ºæ•°å­—ï¼ˆ1-8ï¼‰
                 contentImage.enabled = true;
                 contentImage.sprite = sprites.GetNumberSprite(adjacentMines - 1);
             }
             else
             {
-                // ¿Õ°×¸ñ×Ó
+                // ç©ºç™½æ ¼å­
                 contentImage.enabled = false;
             }
         }
     }
 
     /// <summary>
-    /// ´¦ÀíÊó±êµã»÷
+    /// å¤„ç†é¼ æ ‡ç‚¹å‡»
     /// </summary>
     public void OnPointerClick(PointerEventData eventData)
     {
         if (gameController == null) return;
 
-        // ×ó¼üµã»÷ - ·­¿ª¸ñ×Ó
+        // å·¦é”®ç‚¹å‡» - ç¿»å¼€æ ¼å­
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             gameController.RevealCell(x, y);
         }
-        // ÓÒ¼üµã»÷ - ²åÆì
+        // å³é”®ç‚¹å‡» - æ’æ——
         else if (eventData.button == PointerEventData.InputButton.Right)
         {
             gameController.ToggleFlag(x, y);
         }
-        // ÖĞ¼üµã»÷ - ×Ô¶¯½ÒÂ¶£¨ºÍÏÒ£©
+        // ä¸­é”®ç‚¹å‡» - è‡ªåŠ¨æ­éœ²ï¼ˆå’Œå¼¦ï¼‰
         else if (eventData.button == PointerEventData.InputButton.Middle)
         {
             gameController.ChordReveal(x, y);

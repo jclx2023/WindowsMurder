@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -6,9 +6,9 @@ using UnityEngine;
 public class BSODTextAnimator : MonoBehaviour
 {
     [TextArea(5, 20)]
-    public string fullText;            // À¶ÆÁÎÄ×ÖÔ­ÎÄ
-    public float lineDelay = 0.1f;     // Ã¿ĞĞ¼ä¸ô
-    public float charDelay = 0.02f;    // µ¥×Ö·û¼ä¸ô
+    public string fullText;            // è“å±æ–‡å­—åŸæ–‡
+    public float lineDelay = 0.1f;     // æ¯è¡Œé—´éš”
+    public float charDelay = 0.02f;    // å•å­—ç¬¦é—´éš”
     public bool playOnEnable = true;
 
     [SerializeField] private AudioClip audioClip;
@@ -44,7 +44,7 @@ public class BSODTextAnimator : MonoBehaviour
             foreach (char c in line)
             {
                 current += c;
-                textMesh.text = textMesh.text + c; // ×·¼Ó
+                textMesh.text = textMesh.text + c; // è¿½åŠ 
                 yield return new WaitForSeconds(charDelay);
             }
 

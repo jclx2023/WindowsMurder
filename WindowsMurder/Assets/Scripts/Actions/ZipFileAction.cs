@@ -1,19 +1,19 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// ZipÎÄ¼ş½»»¥ - Ë«»÷½âÑ¹»ò´ò¿ª´°¿Ú£¬ÓÒ¼ü½âÑ¹
+/// Zipæ–‡ä»¶äº¤äº’ - åŒå‡»è§£å‹æˆ–æ‰“å¼€çª—å£ï¼Œå³é”®è§£å‹
 /// </summary>
 public class ZipFileAction : IconAction
 {
-    [Header("Ë«»÷ĞĞÎª")]
+    [Header("åŒå‡»è¡Œä¸º")]
     public DoubleClickBehavior doubleClickBehavior = DoubleClickBehavior.DirectExtract;
 
-    [Header("½âÑ¹ÅäÖÃ")]
+    [Header("è§£å‹é…ç½®")]
     public List<GameObject> filesToActivate = new List<GameObject>();
     public string dialogueBlockId = "";
 
-    [Header("´°¿ÚÅäÖÃ£¨OpenWindowÄ£Ê½ĞèÒª£©")]
+    [Header("çª—å£é…ç½®ï¼ˆOpenWindowæ¨¡å¼éœ€è¦ï¼‰")]
     public GameObject windowPrefab;
     public Canvas targetCanvas;
 
@@ -22,8 +22,8 @@ public class ZipFileAction : IconAction
 
     public enum DoubleClickBehavior
     {
-        DirectExtract,  // Ë«»÷Ö±½Ó½âÑ¹
-        OpenWindow      // Ë«»÷´ò¿ª´°¿Ú
+        DirectExtract,  // åŒå‡»ç›´æ¥è§£å‹
+        OpenWindow      // åŒå‡»æ‰“å¼€çª—å£
     }
 
     void Start()

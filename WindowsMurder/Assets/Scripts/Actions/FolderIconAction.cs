@@ -1,12 +1,12 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// ÎÄ¼ş¼ĞÍ¼±ê½»»¥ĞĞÎª - µ¼º½µ½Ö¸¶¨Â·¾¶
+/// æ–‡ä»¶å¤¹å›¾æ ‡äº¤äº’è¡Œä¸º - å¯¼èˆªåˆ°æŒ‡å®šè·¯å¾„
 /// </summary>
 public class FolderIconAction : IconAction
 {
-    [Header("ÎÄ¼ş¼ĞÅäÖÃ")]
-    public string targetPathId = "C_Drive";    // Ä¿±êÂ·¾¶ID
+    [Header("æ–‡ä»¶å¤¹é…ç½®")]
+    public string targetPathId = "C_Drive";    // ç›®æ ‡è·¯å¾„ID
 
     private ExplorerManager explorerManager;
 

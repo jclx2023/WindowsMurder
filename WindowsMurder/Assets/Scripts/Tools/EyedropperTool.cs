@@ -1,47 +1,47 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
 /// <summary>
-/// Îü¹ÜÈ¡É«¹¤¾ß - ĞŞ¸´ReadPixels´íÎó
+/// å¸ç®¡å–è‰²å·¥å…· - ä¿®å¤ReadPixelsé”™è¯¯
 /// </summary>
 public class EyedropperTool : MonoBehaviour
 {
-    [Header("=== UI×é¼ş ===")]
+    [Header("=== UIç»„ä»¶ ===")]
     [SerializeField] private Button eyedropperButton;
     [SerializeField] private Image buttonIcon;
 
-    [Header("=== ¹â±êÉèÖÃ ===")]
+    [Header("=== å…‰æ ‡è®¾ç½® ===")]
     [SerializeField] private Texture2D eyedropperCursor;
     [SerializeField] private Vector2 cursorHotspot = new Vector2(0, 32);
 
-    [Header("=== ÊµÊ±Ô¤ÀÀ ===")]
+    [Header("=== å®æ—¶é¢„è§ˆ ===")]
     [SerializeField] private Image colorPreviewImage;
     [SerializeField] private Vector2 previewOffset = new Vector2(40, -40);
-    [SerializeField] private int updateInterval = 2; // ½¨ÒéÉèÎª2-3£¬½µµÍÆµÂÊ
+    [SerializeField] private int updateInterval = 2; // å»ºè®®è®¾ä¸º2-3ï¼Œé™ä½é¢‘ç‡
 
-    [Header("=== µ÷ÊÔ ===")]
+    [Header("=== è°ƒè¯• ===")]
     [SerializeField] private bool debugMode = false;
 
-    // ×´Ì¬
+    // çŠ¶æ€
     private bool waitingForClick = false;
-    private bool isReadingPixel = false; // ·ÀÖ¹ÖØ¸´¶ÁÈ¡
+    private bool isReadingPixel = false; // é˜²æ­¢é‡å¤è¯»å–
     private Texture2D screenTexture;
     private Color originalButtonColor;
     private Canvas parentCanvas;
     private RectTransform previewRect;
     private int frameCounter = 0;
-    private Color lastSampledColor = Color.white; // »º´æÉÏ´Î²ÉÑùµÄÑÕÉ«
+    private Color lastSampledColor = Color.white; // ç¼“å­˜ä¸Šæ¬¡é‡‡æ ·çš„é¢œè‰²
 
-    // ¾²Ì¬ÊÂ¼ş
+    // é™æ€äº‹ä»¶
     public static event System.Action<Color> OnAnyColorPicked;
 
-    // ÊµÀıÊÂ¼ş
+    // å®ä¾‹äº‹ä»¶
     [System.Serializable]
     public class ColorPickedEvent : UnityEngine.Events.UnityEvent<Color> { }
     public ColorPickedEvent OnColorPicked;
 
-    #region ³õÊ¼»¯
+    #region åˆå§‹åŒ–
 
     void Awake()
     {
@@ -75,7 +75,7 @@ public class EyedropperTool : MonoBehaviour
         }
         else
         {
-            LogError("Î´ÉèÖÃÑÕÉ«Ô¤ÀÀImage£¡");
+            LogError("æœªè®¾ç½®é¢œè‰²é¢„è§ˆImageï¼");
         }
     }
 
@@ -83,7 +83,7 @@ public class EyedropperTool : MonoBehaviour
     {
         if (eyedropperButton == null)
         {
-            LogError("Î´ÉèÖÃÎü¹Ü°´Å¥£¡");
+            LogError("æœªè®¾ç½®å¸ç®¡æŒ‰é’®ï¼");
             return;
         }
 
@@ -107,13 +107,13 @@ public class EyedropperTool : MonoBehaviour
 
     #endregion
 
-    #region °´Å¥½»»¥
+    #region æŒ‰é’®äº¤äº’
 
     public void OnButtonClick()
     {
         if (waitingForClick)
         {
-            LogDebug("ÒÑÔÚµÈ´ıÈ¡É«£¬ºöÂÔÖØ¸´µã»÷");
+            LogDebug("å·²åœ¨ç­‰å¾…å–è‰²ï¼Œå¿½ç•¥é‡å¤ç‚¹å‡»");
             return;
         }
 
@@ -134,7 +134,7 @@ public class EyedropperTool : MonoBehaviour
         }
 
         ShowPreview();
-        LogDebug("Îü¹Ü¹¤¾ßÒÑ¼¤»î");
+        LogDebug("å¸ç®¡å·¥å…·å·²æ¿€æ´»");
     }
 
     public void CancelEyedropper()
@@ -147,21 +147,21 @@ public class EyedropperTool : MonoBehaviour
         RestoreButtonAppearance();
         HidePreview();
 
-        LogDebug("Îü¹Ü¹¤¾ßÒÑÈ¡Ïû");
+        LogDebug("å¸ç®¡å·¥å…·å·²å–æ¶ˆ");
     }
 
     #endregion
 
-    #region È¡É«Âß¼­
+    #region å–è‰²é€»è¾‘
 
     void Update()
     {
         if (!waitingForClick) return;
 
-        // Ã¿Ö¡¸üĞÂÎ»ÖÃ£¨²»ĞèÒªµÈ´ıäÖÈ¾£©
+        // æ¯å¸§æ›´æ–°ä½ç½®ï¼ˆä¸éœ€è¦ç­‰å¾…æ¸²æŸ“ï¼‰
         UpdatePreviewPosition();
 
-        // °´¼ä¸ôÒì²½¸üĞÂÑÕÉ«
+        // æŒ‰é—´éš”å¼‚æ­¥æ›´æ–°é¢œè‰²
         frameCounter++;
         if (frameCounter >= updateInterval && !isReadingPixel)
         {
@@ -169,13 +169,13 @@ public class EyedropperTool : MonoBehaviour
             StartCoroutine(AsyncSampleColor());
         }
 
-        // ×ó¼üÈ·ÈÏÈ¡É«
+        // å·¦é”®ç¡®è®¤å–è‰²
         if (Input.GetMouseButtonDown(0))
         {
             StartCoroutine(CaptureAndPickColor());
         }
 
-        // ÓÒ¼ü»òESCÈ¡Ïû
+        // å³é”®æˆ–ESCå–æ¶ˆ
         if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Escape))
         {
             CancelEyedropper();
@@ -183,13 +183,13 @@ public class EyedropperTool : MonoBehaviour
     }
 
     /// <summary>
-    /// Òì²½²ÉÑùÑÕÉ«£¨ĞŞ¸´ReadPixels´íÎó£©
+    /// å¼‚æ­¥é‡‡æ ·é¢œè‰²ï¼ˆä¿®å¤ReadPixelsé”™è¯¯ï¼‰
     /// </summary>
     private IEnumerator AsyncSampleColor()
     {
         isReadingPixel = true;
 
-        // µÈ´ıäÖÈ¾Íê³É
+        // ç­‰å¾…æ¸²æŸ“å®Œæˆ
         yield return new WaitForEndOfFrame();
 
         Vector2 mousePosition = Input.mousePosition;
@@ -205,7 +205,7 @@ public class EyedropperTool : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸üĞÂÔ¤ÀÀÑÕÉ«
+    /// æ›´æ–°é¢„è§ˆé¢œè‰²
     /// </summary>
     private void UpdatePreviewColor(Color color)
     {
@@ -216,7 +216,7 @@ public class EyedropperTool : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸üĞÂÔ¤ÀÀÎ»ÖÃ£¨Ã¿Ö¡Ö´ĞĞ£¬²»ĞèÒªµÈ´ı£©
+    /// æ›´æ–°é¢„è§ˆä½ç½®ï¼ˆæ¯å¸§æ‰§è¡Œï¼Œä¸éœ€è¦ç­‰å¾…ï¼‰
     /// </summary>
     private void UpdatePreviewPosition()
     {
@@ -224,7 +224,7 @@ public class EyedropperTool : MonoBehaviour
 
         Vector2 mousePosition = Input.mousePosition;
 
-        // ×ª»»ÎªCanvas×ø±ê
+        // è½¬æ¢ä¸ºCanvasåæ ‡
         Vector2 canvasPosition;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             parentCanvas.transform as RectTransform,
@@ -237,11 +237,11 @@ public class EyedropperTool : MonoBehaviour
     }
 
     /// <summary>
-    /// È·ÈÏÈ¡É«
+    /// ç¡®è®¤å–è‰²
     /// </summary>
     private IEnumerator CaptureAndPickColor()
     {
-        // µÈ´ıäÖÈ¾Íê³É
+        // ç­‰å¾…æ¸²æŸ“å®Œæˆ
         yield return new WaitForEndOfFrame();
 
         Vector2 mousePosition = Input.mousePosition;
@@ -255,11 +255,11 @@ public class EyedropperTool : MonoBehaviour
     }
 
     /// <summary>
-    /// È¡É«³É¹¦
+    /// å–è‰²æˆåŠŸ
     /// </summary>
     private void OnColorPickedSuccess(Color color)
     {
-        LogDebug($"È¡É«: #{ColorUtility.ToHtmlStringRGB(color)}");
+        LogDebug($"å–è‰²: #{ColorUtility.ToHtmlStringRGB(color)}");
 
         waitingForClick = false;
         isReadingPixel = false;
@@ -267,14 +267,14 @@ public class EyedropperTool : MonoBehaviour
         RestoreButtonAppearance();
         HidePreview();
 
-        // ´¥·¢ÊÂ¼ş
+        // è§¦å‘äº‹ä»¶
         OnColorPicked?.Invoke(color);
         OnAnyColorPicked?.Invoke(color);
     }
 
     #endregion
 
-    #region Ô¤ÀÀ¹ÜÀí
+    #region é¢„è§ˆç®¡ç†
 
     private void ShowPreview()
     {
@@ -295,7 +295,7 @@ public class EyedropperTool : MonoBehaviour
 
     #endregion
 
-    #region ¹â±ê¹ÜÀí
+    #region å…‰æ ‡ç®¡ç†
 
     private void SetEyedropperCursor()
     {
@@ -306,7 +306,7 @@ public class EyedropperTool : MonoBehaviour
         else
         {
             Cursor.visible = false;
-            LogDebug("Î´ÉèÖÃ×Ô¶¨Òå¹â±ê£¬ÒÑÒş²ØÏµÍ³¹â±ê");
+            LogDebug("æœªè®¾ç½®è‡ªå®šä¹‰å…‰æ ‡ï¼Œå·²éšè—ç³»ç»Ÿå…‰æ ‡");
         }
     }
 
@@ -326,7 +326,7 @@ public class EyedropperTool : MonoBehaviour
 
     #endregion
 
-    #region ¹«¹²½Ó¿Ú
+    #region å…¬å…±æ¥å£
 
     public void ActivateTool()
     {
@@ -345,7 +345,7 @@ public class EyedropperTool : MonoBehaviour
 
     #endregion
 
-    #region µ÷ÊÔ¹¤¾ß
+    #region è°ƒè¯•å·¥å…·
 
     private void LogDebug(string message)
     {

@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +7,7 @@ using OpenAI.Chat;
 using OpenAI.Models;
 
 /// <summary>
-/// OpenAI Provider - Ê¹ÓÃOpenAI Unity Package
+/// OpenAI Provider - ä½¿ç”¨OpenAI Unity Package
 /// </summary>
 public class OpenAIProvider : MonoBehaviour, ILLMProvider
 {
@@ -18,7 +18,7 @@ public class OpenAIProvider : MonoBehaviour, ILLMProvider
 
     void Awake()
     {
-        // OpenAI package»á×Ô¶¯´ÓÅäÖÃ/»·¾³±äÁ¿¶ÁÈ¡API Key
+        // OpenAI packageä¼šè‡ªåŠ¨ä»é…ç½®/ç¯å¢ƒå˜é‡è¯»å–API Key
         api = new OpenAIClient();
     }
 
@@ -29,18 +29,18 @@ public class OpenAIProvider : MonoBehaviour, ILLMProvider
 
     public IEnumerator GenerateText(string prompt, Action<string> onSuccess, Action<string> onError)
     {
-        // Ö±½Ó°Ñprompt×÷ÎªuserÏûÏ¢·¢ËÍ£¨ºÍGeminiÒ»Ñù£©
+        // ç›´æ¥æŠŠpromptä½œä¸ºuseræ¶ˆæ¯å‘é€ï¼ˆå’ŒGeminiä¸€æ ·ï¼‰
         var messages = new List<Message>
         {
             new Message(Role.User, prompt)
         };
 
-        // ±ê¼ÇÈÎÎñÍê³É×´Ì¬
+        // æ ‡è®°ä»»åŠ¡å®ŒæˆçŠ¶æ€
         bool isDone = false;
         string result = null;
         Exception error = null;
 
-        // Òì²½µ÷ÓÃAPI
+        // å¼‚æ­¥è°ƒç”¨API
         AskAsync(messages,
             reply => {
                 result = reply;
@@ -51,10 +51,10 @@ public class OpenAIProvider : MonoBehaviour, ILLMProvider
                 isDone = true;
             });
 
-        // µÈ´ıÒì²½ÈÎÎñÍê³É
+        // ç­‰å¾…å¼‚æ­¥ä»»åŠ¡å®Œæˆ
         yield return new WaitUntil(() => isDone);
 
-        // ·µ»Ø½á¹û
+        // è¿”å›ç»“æœ
         if (error != null)
         {
             onError?.Invoke($"OpenAI Error: {error.Message}");
@@ -66,7 +66,7 @@ public class OpenAIProvider : MonoBehaviour, ILLMProvider
     }
 
     /// <summary>
-    /// Òì²½µ÷ÓÃOpenAI API
+    /// å¼‚æ­¥è°ƒç”¨OpenAI API
     /// </summary>
     private async void AskAsync(List<Message> messages, Action<string> onSuccess, Action<Exception> onError)
     {

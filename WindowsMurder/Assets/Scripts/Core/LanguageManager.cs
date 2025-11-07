@@ -1,46 +1,46 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
 /// <summary>
-/// Ö§³ÖµÄÓïÑÔÃ¶¾Ù
+/// æ”¯é”Ÿè¡—ç¢‰æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·æšé”Ÿæ–¤æ‹·
 /// </summary>
 public enum SupportedLanguage
 {
-    Chinese,    // ÖĞÎÄ
-    English,    // Ó¢ÎÄ
-    Japanese    // ÈÕÎÄ
+    Chinese,    // é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·
+    English,    // è‹±é”Ÿæ–¤æ‹·
+    Japanese    // é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·
 }
 
 /// <summary>
-/// ¼òµ¥µÄ¶àÓïÑÔ¹ÜÀíÆ÷
-/// ¸ºÔğ¼ÓÔØCSVÎÄ¼ş²¢Ìá¹©·­Òë¹¦ÄÜ
+/// é”Ÿæ´¥å•çš„è®¹æ‹·é”Ÿæ–¤æ‹·é”Ÿçš†ç™¸æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·
+/// é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿç´ºSVé”Ÿä¾¥ç¡·æ‹·é”Ÿæ–¤æ‹·é”Ÿç»“ä¾›é”Ÿæ–¤æ‹·é”Ÿè¯«åŠŸé”Ÿæ–¤æ‹·
 /// </summary>
 public class LanguageManager : MonoBehaviour
 {
-    [Header("ÅäÖÃÉèÖÃ")]
-    public string csvFileName = "Localization/LocalizationTable.csv"; // Ïà¶ÔÓÚStreamingAssetsµÄÂ·¾¶
+    [Header("é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·")]
+    public string csvFileName = "Localization/LocalizationTable.csv"; // é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”ŸçµŠtreamingAssetsé”Ÿæ–¤æ‹·è·¯é”Ÿæ–¤æ‹·
     public SupportedLanguage currentLanguage = SupportedLanguage.Chinese;
 
-    [Header("µ÷ÊÔÉèÖÃ")]
+    [Header("é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·")]
     public bool enableDebugLog = true;
     public bool showMissingKeys = true;
 
-    // µ¥ÀıÊµÀı
+    // é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·å®é”Ÿæ–¤æ‹·
     public static LanguageManager Instance { get; private set; }
 
-    // ·­ÒëÊı¾İ×Öµä [ÓïÑÔ][Key] = ·­ÒëÎÄ±¾
+    // é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿè¡—ç¢‰æ‹· [é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·][Key] = é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿä¾¥æ†‹æ‹·
     private Dictionary<SupportedLanguage, Dictionary<string, string>> translations;
 
-    // ÊÂ¼ş£ºÓïÑÔÇĞ»»Ê±´¥·¢
+    // é”Ÿé“°ç¡·æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿå«ä¼™æ‹·æ—¶é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·
     public static event Action<SupportedLanguage> OnLanguageChanged;
 
-    #region UnityÉúÃüÖÜÆÚ
+    #region Unityé”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·
 
     void Awake()
     {
-        // µ¥ÀıÄ£Ê½
+        // é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·æ¨¡å¼
         if (Instance == null)
         {
             Instance = this;
@@ -55,23 +55,22 @@ public class LanguageManager : MonoBehaviour
 
     #endregion
 
-    #region ³õÊ¼»¯
+    #region é”Ÿæ–¤æ‹·å§‹é”Ÿæ–¤æ‹·
 
     /// <summary>
-    /// ³õÊ¼»¯ÓïÑÔ¹ÜÀíÆ÷
+    /// é”Ÿæ–¤æ‹·å§‹é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿçš†ç™¸æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·
     /// </summary>
     void InitializeLanguageManager()
     {
         translations = new Dictionary<SupportedLanguage, Dictionary<string, string>>();
 
-        // ³õÊ¼»¯Ã¿ÖÖÓïÑÔµÄ×Öµä
+        // é”Ÿæ–¤æ‹·å§‹é”Ÿæ–¤æ‹·æ¯é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿçš†ç¢‰æ‹·é”Ÿè¡—ç¢‰æ‹·
         foreach (SupportedLanguage lang in Enum.GetValues(typeof(SupportedLanguage)))
         {
             translations[lang] = new Dictionary<string, string>();
         }
 
-        // ¼ÓÔØ·­Òë±í
-        LoadTranslations();
+        // é”Ÿæ–¤æ‹·é”Ÿæˆªå‡¤æ‹·é”Ÿæ–¤æ‹·é”Ÿ?        LoadTranslations();
 
         if (enableDebugLog)
         {
@@ -81,24 +80,23 @@ public class LanguageManager : MonoBehaviour
 
     #endregion
 
-    #region CSV¼ÓÔØ
+    #region CSVé”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·
 
     /// <summary>
-    /// ¼ÓÔØ·­Òë±í
-    /// </summary>
+    /// é”Ÿæ–¤æ‹·é”Ÿæˆªå‡¤æ‹·é”Ÿæ–¤æ‹·é”Ÿ?    /// </summary>
     public void LoadTranslations()
     {
         string fullPath = Path.Combine(Application.streamingAssetsPath, csvFileName);
 
         if (enableDebugLog)
         {
-            Debug.Log($"LanguageManager: ³¢ÊÔ¼ÓÔØ·­ÒëÎÄ¼ş: {fullPath}");
+            Debug.Log($"LanguageManager: é”Ÿæ–¤æ‹·é”Ÿçš†ç¡·æ‹·é”Ÿæˆªå‡¤æ‹·é”Ÿæ–¤æ‹·é”Ÿä¾¥ç¡·æ‹·: {fullPath}");
         }
 
         if (!File.Exists(fullPath))
         {
-            Debug.LogError($"LanguageManager: ·­ÒëÎÄ¼ş²»´æÔÚ: {fullPath}");
-            Debug.LogError($"ÇëÈ·±£ÎÄ¼şÎ»ÓÚ: Assets/StreamingAssets/{csvFileName}");
+            Debug.LogError($"LanguageManager: é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿä¾¥ç¡·æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·: {fullPath}");
+            Debug.LogError($"é”Ÿæ–¤æ‹·ç¡®é”Ÿæ–¤æ‹·é”Ÿä¾¥ç¡·æ‹·ä½é”Ÿæ–¤æ‹·: Assets/StreamingAssets/{csvFileName}");
             return;
         }
 
@@ -108,11 +106,11 @@ public class LanguageManager : MonoBehaviour
 
             if (lines.Length < 2)
             {
-                Debug.LogError("LanguageManager: CSVÎÄ¼ş¸ñÊ½´íÎó£¬ÖÁÉÙĞèÒª±êÌâĞĞºÍÒ»ĞĞÊı¾İ");
+                Debug.LogError("LanguageManager: CSVé”Ÿä¾¥ç¡·æ‹·é”Ÿæ–¤æ‹·å¼é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·è¦é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿå«çŒ´æ‹·ä¸€é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·");
                 return;
             }
 
-            // ½âÎö±êÌâĞĞ£¬È·¶¨ÓïÑÔÁĞµÄÎ»ÖÃ
+            // é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿå«ï½æ‹·ç¡®é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿå«ç¢‰æ‹·ä½é”Ÿæ–¤æ‹·
             string[] headers = ParseCSVLine(lines[0]);
             int idIndex = -1, chineseIndex = -1, englishIndex = -1, japaneseIndex = -1;
 
@@ -130,17 +128,16 @@ public class LanguageManager : MonoBehaviour
 
             if (idIndex == -1)
             {
-                Debug.LogError("LanguageManager: CSVÎÄ¼şÈ±ÉÙIDÁĞ");
+                Debug.LogError("LanguageManager: CSVé”Ÿä¾¥ç¡·æ‹·ç¼ºé”Ÿæ–¤æ‹·IDé”Ÿæ–¤æ‹·");
                 return;
             }
 
-            // Çå¿ÕÏÖÓĞ·­Òë
-            foreach (var dict in translations.Values)
+            // é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·èŸ¹é”Ÿæ–¤æ‹·é”Ÿ?            foreach (var dict in translations.Values)
             {
                 dict.Clear();
             }
 
-            // ½âÎöÊı¾İĞĞ
+            // é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·
             int loadedCount = 0;
             for (int i = 1; i < lines.Length; i++)
             {
@@ -151,7 +148,7 @@ public class LanguageManager : MonoBehaviour
 
                 string key = values[idIndex].Trim();
 
-                // ¼ÓÔØ¸÷ÓïÑÔµÄ·­Òë
+                // é”Ÿæ–¤æ‹·é”Ÿæˆªé©æ‹·é”Ÿæ–¤æ‹·é”Ÿçš†çš„å‡¤æ‹·é”Ÿæ–¤æ‹·
                 if (chineseIndex != -1 && chineseIndex < values.Length)
                 {
                     string chineseText = values[chineseIndex].Trim();
@@ -184,21 +181,21 @@ public class LanguageManager : MonoBehaviour
 
             if (enableDebugLog)
             {
-                Debug.Log($"LanguageManager: ³É¹¦¼ÓÔØ {loadedCount} Ìõ·­Òë¼ÇÂ¼");
+                Debug.Log($"LanguageManager: é”Ÿç¼´ç™¸æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹· {loadedCount} é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿé“°?);
                 foreach (var lang in translations.Keys)
                 {
-                    Debug.Log($"  {lang}: {translations[lang].Count} Ìõ");
+                    Debug.Log($"  {lang}: {translations[lang].Count} é”Ÿæ–¤æ‹·");
                 }
             }
         }
         catch (Exception e)
         {
-            Debug.LogError($"LanguageManager: ¼ÓÔØ·­ÒëÎÄ¼şÊ±³ö´í: {e.Message}");
+            Debug.LogError($"LanguageManager: é”Ÿæ–¤æ‹·é”Ÿæˆªå‡¤æ‹·é”Ÿæ–¤æ‹·é”Ÿä¾¥ç¡·æ‹·æ—¶é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·: {e.Message}");
         }
     }
 
     /// <summary>
-    /// ½âÎöCSVĞĞ£¬´¦ÀíÒıºÅÄÚµÄ¶ººÅ
+    /// é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·CSVé”Ÿå«ï½æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”ŸèŠ‚çš„è®¹æ‹·é”Ÿæ–¤æ‹·
     /// </summary>
     string[] ParseCSVLine(string line)
     {
@@ -225,16 +222,16 @@ public class LanguageManager : MonoBehaviour
             }
         }
 
-        result.Add(currentValue); // Ìí¼Ó×îºóÒ»¸öÖµ
+        result.Add(currentValue); // é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·ä¸€é”Ÿæ–¤æ‹·å€¼
         return result.ToArray();
     }
 
     #endregion
 
-    #region ¹«¹²½Ó¿Ú
+    #region é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ¥åŒ¡æ‹·
 
     /// <summary>
-    /// »ñÈ¡·­ÒëÎÄ±¾
+    /// é”Ÿæ–¤æ‹·å–é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿä¾¥æ†‹æ‹·
     /// </summary>
     public string GetText(string key)
     {
@@ -247,41 +244,40 @@ public class LanguageManager : MonoBehaviour
             return translations[currentLanguage][key];
         }
 
-        // Èç¹ûµ±Ç°ÓïÑÔÃ»ÓĞ¸ÃKey£¬³¢ÊÔÓÃÓ¢ÎÄ×÷Îª±¸ÓÃ
+        // é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿè§’å¸®æ‹·é”Ÿæ–¤æ‹·é”ŸçŸ«ä¼™æ‹·æ‡ˆé”Ÿçµ‚eyé”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·è‹±é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·ä¸ºé”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·
         if (currentLanguage != SupportedLanguage.English &&
             translations.ContainsKey(SupportedLanguage.English) &&
             translations[SupportedLanguage.English].ContainsKey(key))
         {
             if (showMissingKeys)
             {
-                Debug.LogWarning($"LanguageManager: Key '{key}' ÔÚ {currentLanguage} ÖĞÈ±Ê§£¬Ê¹ÓÃÓ¢ÎÄ±¸ÓÃ");
+                Debug.LogWarning($"LanguageManager: Key '{key}' é”Ÿæ–¤æ‹· {currentLanguage} é”Ÿæ–¤æ‹·ç¼ºå¤±é”Ÿæ–¤æ‹·ä½¿é”Ÿæ–¤æ‹·è‹±é”Ÿä¾¥æ†‹æ‹·é”Ÿæ–¤æ‹·");
             }
             return translations[SupportedLanguage.English][key];
         }
 
-        // Èç¹ûÓ¢ÎÄÒ²Ã»ÓĞ£¬³¢ÊÔÓÃÖĞÎÄ
-        if (currentLanguage != SupportedLanguage.Chinese &&
+        // é”Ÿæ–¤æ‹·é”Ÿæ¥î®æ‹·é”Ÿæ­è£ä¼™æ‹·æ ¡é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿ?        if (currentLanguage != SupportedLanguage.Chinese &&
             translations.ContainsKey(SupportedLanguage.Chinese) &&
             translations[SupportedLanguage.Chinese].ContainsKey(key))
         {
             if (showMissingKeys)
             {
-                Debug.LogWarning($"LanguageManager: Key '{key}' ÔÚ {currentLanguage} ºÍÓ¢ÎÄÖĞÈ±Ê§£¬Ê¹ÓÃÖĞÎÄ±¸ÓÃ");
+                Debug.LogWarning($"LanguageManager: Key '{key}' é”Ÿæ–¤æ‹· {currentLanguage} é”Ÿæ–¤æ‹·è‹±é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·ç¼ºå¤±é”Ÿæ–¤æ‹·ä½¿é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿä¾¥æ†‹æ‹·é”Ÿæ–¤æ‹·");
             }
             return translations[SupportedLanguage.Chinese][key];
         }
 
-        // ËùÓĞÓïÑÔ¶¼Ã»ÓĞ¸ÃKey
+        // é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿçš†è®¹æ‹·æ²¡é”Ÿå«é©æ‹·Key
         if (showMissingKeys)
         {
-            Debug.LogWarning($"LanguageManager: Key '{key}' ÔÚËùÓĞÓïÑÔÖĞ¶¼È±Ê§");
+            Debug.LogWarning($"LanguageManager: Key '{key}' é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿå«è®¹æ‹·ç¼ºå¤±");
         }
 
-        return ""; // ·µ»Ø¿Õ×Ö·û´®£¬ÈÃµ÷ÓÃ·½´¦Àí½µ¼¶Âß¼­
+        return ""; // é”Ÿæ–¤æ‹·é”ŸæˆªåŒ¡æ‹·é”Ÿè¡—å‡¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”ŸçŸ«ç¢‰æ‹·é”ŸçŸ«å‡¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿç«­ç¡·æ‹·
     }
 
     /// <summary>
-    /// ÇĞ»»ÓïÑÔ
+    /// é”Ÿå«ä¼™æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·
     /// </summary>
     public void SetLanguage(SupportedLanguage newLanguage)
     {
@@ -292,26 +288,25 @@ public class LanguageManager : MonoBehaviour
 
         if (enableDebugLog)
         {
-            Debug.Log($"LanguageManager: ÓïÑÔ´Ó {oldLanguage} ÇĞ»»µ½ {newLanguage}");
+            Debug.Log($"LanguageManager: é”Ÿæ–¤æ‹·é”Ÿçš†è¾¾æ‹· {oldLanguage} é”Ÿå«ä¼™æ‹·é”Ÿæ–¤æ‹· {newLanguage}");
         }
 
-        // ´¥·¢ÓïÑÔÇĞ»»ÊÂ¼ş
+        // é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿå«ä¼™æ‹·é”Ÿé“°ç¡·æ‹·
         OnLanguageChanged?.Invoke(currentLanguage);
     }
 
     /// <summary>
-    /// ÖØĞÂ¼ÓÔØ·­Òë±í
-    /// </summary>
+    /// é”Ÿæ–¤æ‹·é”Ÿé“°ç¡·æ‹·é”Ÿæˆªå‡¤æ‹·é”Ÿæ–¤æ‹·é”Ÿ?    /// </summary>
     public void ReloadTranslations()
     {
         LoadTranslations();
 
-        // ÖØĞÂ¼ÓÔØºó´¥·¢ÓïÑÔÇĞ»»ÊÂ¼şÒÔ¸üĞÂUI
+        // é”Ÿæ–¤æ‹·é”Ÿé“°ç¡·æ‹·é”Ÿæˆªåè§¦å‡¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿå«ä¼™æ‹·é”Ÿé“°ç¡·æ‹·é”Ÿçš†é©æ‹·é”Ÿæ–¤æ‹·UI
         OnLanguageChanged?.Invoke(currentLanguage);
     }
 
     /// <summary>
-    /// »ñÈ¡µ±Ç°ÓïÑÔµÄËùÓĞKey
+    /// é”Ÿæ–¤æ‹·å–é”Ÿæ–¤æ‹·å‰é”Ÿæ–¤æ‹·é”Ÿçš†ç¢‰æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·Key
     /// </summary>
     public List<string> GetAllKeys()
     {

@@ -1,34 +1,34 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// ÓÎÏ·»á»°Ê×´Î³¡¾°ÒôÆµ²¥·ÅÆ÷
-/// Ã¿´ÎÆô¶¯ÓÎÏ·µÚÒ»´Î½øÈë³¡¾°Ê±²¥·Å£¬Í¬Ò»ÓÎÏ·»á»°ÄÚÔÙ´Î½øÈë²»²¥·Å
+/// æ¸¸æˆä¼šè¯é¦–æ¬¡åœºæ™¯éŸ³é¢‘æ’­æ”¾å™¨
+/// æ¯æ¬¡å¯åŠ¨æ¸¸æˆç¬¬ä¸€æ¬¡è¿›å…¥åœºæ™¯æ—¶æ’­æ”¾ï¼ŒåŒä¸€æ¸¸æˆä¼šè¯å†…å†æ¬¡è¿›å…¥ä¸æ’­æ”¾
 /// </summary>
 public class SessionFirstTimeAudio : MonoBehaviour
 {
-    [Header("ÒôÆµÉèÖÃ")]
+    [Header("éŸ³é¢‘è®¾ç½®")]
     [SerializeField] private AudioClip audioClip;
 
-    [Header("³¡¾°±êÊ¶")]
-    [Tooltip("Áô¿ÕÔò×Ô¶¯Ê¹ÓÃµ±Ç°³¡¾°Ãû³Æ")]
+    [Header("åœºæ™¯æ ‡è¯†")]
+    [Tooltip("ç•™ç©ºåˆ™è‡ªåŠ¨ä½¿ç”¨å½“å‰åœºæ™¯åç§°")]
     [SerializeField] private string sceneIdentifier = "";
 
-    [Header("µ÷ÊÔ")]
+    [Header("è°ƒè¯•")]
     [SerializeField] private bool debugMode = true;
 
-    // ¾²Ì¬×Öµä¼ÇÂ¼µ±Ç°ÓÎÏ·»á»°ÖĞÒÑ²¥·ÅµÄ³¡¾°
+    // é™æ€å­—å…¸è®°å½•å½“å‰æ¸¸æˆä¼šè¯ä¸­å·²æ’­æ”¾çš„åœºæ™¯
     private static System.Collections.Generic.HashSet<string> playedScenes =
         new System.Collections.Generic.HashSet<string>();
 
     void Start()
     {
-        // ×Ô¶¯»ñÈ¡³¡¾°Ãû³Æ×÷Îª±êÊ¶·û
+        // è‡ªåŠ¨è·å–åœºæ™¯åç§°ä½œä¸ºæ ‡è¯†ç¬¦
         if (string.IsNullOrEmpty(sceneIdentifier))
         {
             sceneIdentifier = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
         }
 
-        // ¼ì²éµ±Ç°»á»°ÊÇ·ñÒÑ²¥·Å¹ı
+        // æ£€æŸ¥å½“å‰ä¼šè¯æ˜¯å¦å·²æ’­æ”¾è¿‡
         if (!playedScenes.Contains(sceneIdentifier))
         {
             PlayAudio();
@@ -37,12 +37,12 @@ public class SessionFirstTimeAudio : MonoBehaviour
     }
 
     /// <summary>
-    /// ²¥·ÅÒôÆµ
+    /// æ’­æ”¾éŸ³é¢‘
     /// </summary>
     private void PlayAudio()
     {
         GlobalSystemManager.Instance.PlaySFX(audioClip);
-        LogDebug($"²¥·Å³¡¾°Ê×´Î½øÈëÒôÆµ: {audioClip.name}");
+        LogDebug($"æ’­æ”¾åœºæ™¯é¦–æ¬¡è¿›å…¥éŸ³é¢‘: {audioClip.name}");
     }
     private void LogDebug(string message)
     {
