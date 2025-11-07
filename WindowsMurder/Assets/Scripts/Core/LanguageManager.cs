@@ -3,24 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-/// <summary>
-/// 支锟街碉拷锟斤拷锟斤拷枚锟斤拷
-/// </summary>
 public enum SupportedLanguage
 {
-    Chinese,    // 锟斤拷锟斤拷
-    English,    // 英锟斤拷
-    Japanese    // 锟斤拷锟斤拷
+    Chinese,
+    English,
+    Japanese
 }
 
-/// <summary>
-/// 锟津单的讹拷锟斤拷锟皆癸拷锟斤拷锟斤拷
-/// 锟斤拷锟斤拷锟斤拷锟紺SV锟侥硷拷锟斤拷锟结供锟斤拷锟诫功锟斤拷
-/// </summary>
 public class LanguageManager : MonoBehaviour
 {
     [Header("锟斤拷锟斤拷锟斤拷锟斤拷")]
-    public string csvFileName = "Localization/LocalizationTable.csv"; // 锟斤拷锟斤拷锟絊treamingAssets锟斤拷路锟斤拷
+    public string csvFileName = "Localization/LocalizationTable.csv";
     public SupportedLanguage currentLanguage = SupportedLanguage.Chinese;
 
     [Header("锟斤拷锟斤拷锟斤拷锟斤拷")]
@@ -29,11 +22,8 @@ public class LanguageManager : MonoBehaviour
 
     // 锟斤拷锟斤拷实锟斤拷
     public static LanguageManager Instance { get; private set; }
-
-    // 锟斤拷锟斤拷锟斤拷锟斤拷锟街碉拷 [锟斤拷锟斤拷][Key] = 锟斤拷锟斤拷锟侥憋拷
     private Dictionary<SupportedLanguage, Dictionary<string, string>> translations;
-
-    // 锟铰硷拷锟斤拷锟斤拷锟斤拷锟叫伙拷时锟斤拷锟斤拷
+    
     public static event Action<SupportedLanguage> OnLanguageChanged;
 
     #region Unity锟斤拷锟斤拷锟斤拷锟斤拷
@@ -106,11 +96,9 @@ public class LanguageManager : MonoBehaviour
 
             if (lines.Length < 2)
             {
-                Debug.LogError("LanguageManager: CSV锟侥硷拷锟斤拷式锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷要锟斤拷锟斤拷锟叫猴拷一锟斤拷锟斤拷锟斤拷");
                 return;
             }
-
-            // 锟斤拷锟斤拷锟斤拷锟斤拷锟叫ｏ拷确锟斤拷锟斤拷锟斤拷锟叫碉拷位锟斤拷
+            
             string[] headers = ParseCSVLine(lines[0]);
             int idIndex = -1, chineseIndex = -1, englishIndex = -1, japaneseIndex = -1;
 
@@ -132,7 +120,7 @@ public class LanguageManager : MonoBehaviour
                 return;
             }
 
-            // 锟斤拷锟斤拷锟斤拷蟹锟斤拷锟?            foreach (var dict in translations.Values)
+            foreach (var dict in translations.Values)
             {
                 dict.Clear();
             }
@@ -181,7 +169,7 @@ public class LanguageManager : MonoBehaviour
 
             if (enableDebugLog)
             {
-                Debug.Log($"LanguageManager: 锟缴癸拷锟斤拷锟斤拷 {loadedCount} 锟斤拷锟斤拷锟斤拷锟铰?);
+                Debug.Log($"LanguageManager: 锟缴癸拷锟斤拷锟斤拷 {loadedCount} 锟斤拷锟斤拷锟斤拷锟铰?");
                 foreach (var lang in translations.Keys)
                 {
                     Debug.Log($"  {lang}: {translations[lang].Count} 锟斤拷");
@@ -256,7 +244,7 @@ public class LanguageManager : MonoBehaviour
             return translations[SupportedLanguage.English][key];
         }
 
-        // 锟斤拷锟接拷锟揭裁伙拷校锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟?        if (currentLanguage != SupportedLanguage.Chinese &&
+        if (currentLanguage != SupportedLanguage.Chinese &&
             translations.ContainsKey(SupportedLanguage.Chinese) &&
             translations[SupportedLanguage.Chinese].ContainsKey(key))
         {
