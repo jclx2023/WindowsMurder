@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,17 +31,21 @@ public class DialogueUI : MonoBehaviour
     [Header("音效")]
     public AudioSource audioSource;
     private AudioClip[] typingSounds;
-    private const int TYPING_SOUND_COUNT = 32; // 音效文件数量
+    private const int TYPING_SOUND_COUNT = 32;
 
     [Header("LLM交互提示")]
     public string waitingForInputHint = "Please enter your question...";
     public string waitingForAIHint = "Thinking...";
 
-    // ========== 新增：CMD模式 ==========
+    [Header("Suggestions设置")]
+    [Tooltip("多条建议问题的切换间隔（秒）")]
+    public float suggestionCycleInterval = 4f;
+
+    // ========== CMD模式 ==========
     [Header("CMD模式设置")]
-    public bool enableCmdMode = false; // 是否启用CMD样式
+    public bool enableCmdMode = false;
     public string cmdPath = "C:\\Windows\\System32>";
-    public Color cmdTextColor = new Color(0.3f, 1f, 0.3f); // 仿CMD绿色文字
+    public Color cmdTextColor = new Color(0.3f, 1f, 0.3f);
 
     // 事件系统
     public static event System.Action<string, string, string, bool> OnLineStarted;
@@ -81,6 +85,11 @@ public class DialogueUI : MonoBehaviour
     private bool isPresetTyping = false;
     private Coroutine presetTypingCoroutine;
 
+    // ===== Suggestions 变量 =====
+    private string[] currentSuggestions;
+    private int currentSuggestionIndex = 0;
+    private Coroutine suggestionCycleCoroutine;
+
     // ===== 通用变量 =====
     public DialogueLine CurrentLine
     {
@@ -100,11 +109,14 @@ public class DialogueUI : MonoBehaviour
     private int currentLineIndex = 0;
     private string fullCurrentText = "";
 
+    // ===== Unity 生命周期 =====
+
     void Start()
     {
         HideDialoguePanel();
         EnsureAudioSource();
         LoadTypingSounds();
+
         if (sendButton != null)
             sendButton.onClick.AddListener(OnSendMessage);
 
@@ -128,8 +140,18 @@ public class DialogueUI : MonoBehaviour
             dialogueClickButton.onClick.AddListener(OnDialogueTextClicked);
         }
 
+        // 订阅 Suggestions 事件
+        DialogueManager.OnSuggestionsReady += ShowSuggestions;
+
         UpdateDialogueSettings();
         GlobalSystemManager.OnDialogueSettingsChanged += UpdateDialogueSettings;
+    }
+
+    void OnDestroy()
+    {
+        // 取消订阅
+        DialogueManager.OnSuggestionsReady -= ShowSuggestions;
+        GlobalSystemManager.OnDialogueSettingsChanged -= UpdateDialogueSettings;
     }
 
     private void UpdateDialogueSettings()
@@ -138,7 +160,83 @@ public class DialogueUI : MonoBehaviour
         textSpeed = settings;
     }
 
-    // 【修改点 1】：加入 CMD 模式下 UI 组件的隐藏/显示逻辑
+    // ===== Suggestions 系统 =====
+
+    /// <summary>
+    /// 接收 LLM 返回的建议问题，设置为输入框 Placeholder 并开始循环切换
+    /// </summary>
+    private void ShowSuggestions(string[] suggestions)
+    {
+        if (suggestions == null || suggestions.Length == 0) return;
+
+        // 仅在等待玩家输入时显示（其他状态下无意义）
+        if (llmState != LLMState.WaitingForInput) return;
+
+        currentSuggestions = suggestions;
+        currentSuggestionIndex = 0;
+        UpdateSuggestionPlaceholder();
+
+        // 多条建议时，启动循环切换
+        if (suggestionCycleCoroutine != null)
+            StopCoroutine(suggestionCycleCoroutine);
+
+        if (suggestions.Length > 1)
+            suggestionCycleCoroutine = StartCoroutine(CycleSuggestions());
+    }
+
+    /// <summary>
+    /// 将当前建议问题写入输入框 Placeholder（灰色提示文字）
+    /// </summary>
+    private void UpdateSuggestionPlaceholder()
+    {
+        if (playerInputField == null || currentSuggestions == null || currentSuggestions.Length == 0)
+            return;
+
+        var placeholder = playerInputField.placeholder?.GetComponent<TextMeshProUGUI>();
+        if (placeholder != null)
+            placeholder.text = currentSuggestions[currentSuggestionIndex];
+    }
+
+    /// <summary>
+    /// 每隔 suggestionCycleInterval 秒切换到下一条建议
+    /// </summary>
+    private IEnumerator CycleSuggestions()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(suggestionCycleInterval);
+
+            if (currentSuggestions == null || currentSuggestions.Length == 0) yield break;
+
+            currentSuggestionIndex = (currentSuggestionIndex + 1) % currentSuggestions.Length;
+            UpdateSuggestionPlaceholder();
+        }
+    }
+
+    /// <summary>
+    /// 清除建议问题，恢复默认 Placeholder 提示文字
+    /// </summary>
+    private void ClearSuggestions()
+    {
+        currentSuggestions = null;
+        currentSuggestionIndex = 0;
+
+        if (suggestionCycleCoroutine != null)
+        {
+            StopCoroutine(suggestionCycleCoroutine);
+            suggestionCycleCoroutine = null;
+        }
+
+        if (playerInputField != null)
+        {
+            var placeholder = playerInputField.placeholder?.GetComponent<TextMeshProUGUI>();
+            if (placeholder != null)
+                placeholder.text = waitingForInputHint;
+        }
+    }
+
+    // ===== 面板显示 =====
+
     public void ShowDialoguePanel()
     {
         if (dialoguePanel == null) return;
@@ -146,17 +244,13 @@ public class DialogueUI : MonoBehaviour
 
         if (enableCmdMode)
         {
-            // CMD 模式下，隐藏独立的名字栏
             if (characterNameText != null)
                 characterNameText.gameObject.SetActive(false);
-
-            // 确保头像被激活 (原版 SetCharacterInfo 会处理图片加载和显示，这里只做兼容)
             if (characterPortrait != null)
                 characterPortrait.gameObject.SetActive(true);
         }
         else
         {
-            // 非 CMD 模式下，确保名字栏可见
             if (characterNameText != null)
                 characterNameText.gameObject.SetActive(true);
         }
@@ -173,7 +267,8 @@ public class DialogueUI : MonoBehaviour
         return dialoguePanel != null && dialoguePanel.activeSelf;
     }
 
-    // ===== LLM状态机控制 (与原版一致) =====
+    // ===== LLM 状态机控制 =====
+
     private void SetLLMState(LLMState newState)
     {
         llmState = newState;
@@ -202,7 +297,6 @@ public class DialogueUI : MonoBehaviour
                 break;
 
             case LLMState.WaitingForClick:
-                // 原版逻辑：仅等待点击
                 break;
 
             case LLMState.WaitingForInput:
@@ -214,7 +308,10 @@ public class DialogueUI : MonoBehaviour
                 if (playerInputField != null)
                 {
                     playerInputField.text = "";
-                    playerInputField.placeholder.GetComponent<TextMeshProUGUI>().text = waitingForInputHint;
+                    // Placeholder 优先由 ShowSuggestions 设置；若暂无建议则使用默认提示
+                    var placeholder = playerInputField.placeholder?.GetComponent<TextMeshProUGUI>();
+                    if (placeholder != null && (currentSuggestions == null || currentSuggestions.Length == 0))
+                        placeholder.text = waitingForInputHint;
                     playerInputField.Select();
                 }
                 break;
@@ -229,7 +326,8 @@ public class DialogueUI : MonoBehaviour
         }
     }
 
-    // ===== 普通模式状态机控制 (与原版一致) =====
+    // ===== 普通模式状态机控制 =====
+
     private void SetPresetState(PresetState newState)
     {
         presetState = newState;
@@ -273,17 +371,14 @@ public class DialogueUI : MonoBehaviour
             exitLLMButton.gameObject.SetActive(active);
     }
 
-    // ===== 点击处理 (与原版一致) =====
+    // ===== 点击处理 =====
+
     private void OnDialogueTextClicked()
     {
         if (llmState != LLMState.Inactive)
-        {
             HandleLLMClick();
-        }
         else if (presetState != PresetState.Inactive)
-        {
             HandlePresetClick();
-        }
     }
 
     private void HandleLLMClick()
@@ -292,12 +387,8 @@ public class DialogueUI : MonoBehaviour
         {
             case LLMState.ShowingAIText:
                 break;
-
             case LLMState.WaitingForClick:
                 SetLLMState(LLMState.WaitingForInput);
-                break;
-
-            default:
                 break;
         }
     }
@@ -307,12 +398,8 @@ public class DialogueUI : MonoBehaviour
         switch (presetState)
         {
             case PresetState.ShowingText:
-                if (isPresetTyping)
-                {
-                    SkipPresetTyping();
-                }
+                if (isPresetTyping) SkipPresetTyping();
                 break;
-
             case PresetState.WaitingForClick:
                 currentLineIndex++;
                 ShowNextLine();
@@ -320,17 +407,17 @@ public class DialogueUI : MonoBehaviour
         }
     }
 
-    // ===== 退出按钮处理 (与原版一致) =====
+    // ===== 退出按钮处理 =====
+
     private void OnExitLLMButtonClicked()
     {
-        if (llmState == LLMState.Inactive)
-            return;
-
+        if (llmState == LLMState.Inactive) return;
         CleanupBeforeHide();
         EndLLMMode();
     }
 
-    // ===== 清理方法 (与原版一致) =====
+    // ===== 清理方法 =====
+
     private void CleanupBeforeHide()
     {
         if (presetTypingCoroutine != null)
@@ -350,6 +437,9 @@ public class DialogueUI : MonoBehaviour
         if (audioSource != null)
             audioSource.Stop();
 
+        // 清除建议问题（StopAllCoroutines 已停止循环协程，这里只清数据和 Placeholder）
+        ClearSuggestions();
+
         SetLLMState(LLMState.Inactive);
         SetPresetState(PresetState.Inactive);
         isLLMTyping = false;
@@ -359,7 +449,8 @@ public class DialogueUI : MonoBehaviour
             dialogueText.text = "";
     }
 
-    // ===== 对话启动 (与原版一致) =====
+    // ===== 对话启动 =====
+
     public void StartDialogue(DialogueData dialogueData, string fileName, string blockId)
     {
         if (dialogueData == null)
@@ -402,17 +493,16 @@ public class DialogueUI : MonoBehaviour
             StartLLMMode(line);
     }
 
-    // ===== 普通模式显示 (加入 CMD 前缀逻辑) =====
+    // ===== 普通模式显示 =====
+
     private void ShowPresetLine(DialogueLine line)
     {
         SetLLMState(LLMState.Inactive);
-
         SetCharacterInfo(line.characterId, line.portraitId);
         fullCurrentText = line.text ?? "";
 
         OnLineStarted?.Invoke(line.id, line.characterId, currentDialogueBlockId, true);
 
-        // 计算 CMD 模式前缀
         string prefix = enableCmdMode ? $"{cmdPath} {GetCharacterDisplayName(line.characterId)}> " : "";
 
         if (useTypingEffect && !string.IsNullOrEmpty(fullCurrentText))
@@ -421,7 +511,7 @@ public class DialogueUI : MonoBehaviour
         }
         else
         {
-            dialogueText.text = prefix + fullCurrentText; // 【修改点 2a】：非打字机时加入前缀
+            dialogueText.text = prefix + fullCurrentText;
             SetPresetState(PresetState.WaitingForClick);
             OnLineCompleted?.Invoke(line.id, line.characterId, currentDialogueBlockId, true);
         }
@@ -431,33 +521,25 @@ public class DialogueUI : MonoBehaviour
     {
         if (presetTypingCoroutine != null)
             StopCoroutine(presetTypingCoroutine);
-
         presetTypingCoroutine = StartCoroutine(PresetTypeText(text));
     }
 
-    // 【修改点 2b】：打字机协程中加入 CMD 前缀逻辑
     private IEnumerator PresetTypeText(string text)
     {
         SetPresetState(PresetState.ShowingText);
 
-        // 计算 CMD 模式前缀
         string prefix = enableCmdMode ? $"{cmdPath} {GetCharacterDisplayName(CurrentLine.characterId)}> " : "";
-        dialogueText.text = prefix; // 初始化文本为前缀
-
+        dialogueText.text = prefix;
         fullCurrentText = text;
 
         for (int i = 0; i < text.Length; i++)
         {
             dialogueText.text += text[i];
             dialogueText.ForceMeshUpdate();
-
             PlayRandomTypingSound();
 
             if (enableBounceEffect || enableRandomOffset)
-            {
-                // 注意：字符索引需要加上前缀的长度
                 StartCoroutine(AnimateCharacter(i + prefix.Length));
-            }
 
             yield return new WaitForSeconds(textSpeed);
         }
@@ -466,12 +548,9 @@ public class DialogueUI : MonoBehaviour
 
         DialogueLine currentLine = CurrentLine;
         if (currentLine != null)
-        {
             OnLineCompleted?.Invoke(currentLine.id, currentLine.characterId, currentDialogueBlockId, true);
-        }
     }
 
-    // 【修改点 2c】：跳过打字机时加入 CMD 前缀逻辑
     private void SkipPresetTyping()
     {
         if (presetTypingCoroutine != null)
@@ -480,19 +559,18 @@ public class DialogueUI : MonoBehaviour
         StopAllCoroutines();
 
         string prefix = enableCmdMode ? $"{cmdPath} {GetCharacterDisplayName(CurrentLine.characterId)}> " : "";
-        dialogueText.text = prefix + fullCurrentText; // 加入前缀
+        dialogueText.text = prefix + fullCurrentText;
         dialogueText.ForceMeshUpdate();
 
         SetPresetState(PresetState.WaitingForClick);
 
         DialogueLine currentLine = CurrentLine;
         if (currentLine != null)
-        {
             OnLineCompleted?.Invoke(currentLine.id, currentLine.characterId, currentDialogueBlockId, true);
-        }
     }
 
-    // ===== LLM模式显示 (加入 CMD 前缀逻辑) =====
+    // ===== LLM 模式显示 =====
+
     private void StartLLMMode(DialogueLine line)
     {
         SetPresetState(PresetState.Inactive);
@@ -523,8 +601,7 @@ public class DialogueUI : MonoBehaviour
 
     public void OnLLMResponse(string response)
     {
-        if (llmState == LLMState.Inactive)
-            return;
+        if (llmState == LLMState.Inactive) return;
 
         if (DialogueLoader.ShouldEndByAI(response))
         {
@@ -534,7 +611,6 @@ public class DialogueUI : MonoBehaviour
 
         fullCurrentText = response;
 
-        // 计算 CMD 模式前缀
         string prefix = enableCmdMode ? $"{cmdPath} {GetCharacterDisplayName(currentLLMCharacter)}> " : "";
 
         if (useTypingEffect)
@@ -543,7 +619,7 @@ public class DialogueUI : MonoBehaviour
         }
         else
         {
-            dialogueText.text = prefix + fullCurrentText; // 【修改点 3a】：非打字机时加入前缀
+            dialogueText.text = prefix + fullCurrentText;
             SetLLMState(LLMState.WaitingForInput);
 
             DialogueLine currentLine = CurrentLine;
@@ -555,33 +631,25 @@ public class DialogueUI : MonoBehaviour
     {
         if (llmTypingCoroutine != null)
             StopCoroutine(llmTypingCoroutine);
-
         llmTypingCoroutine = StartCoroutine(LLMTypeText(text));
     }
 
-    // 【修改点 3b】：LLM 打字机协程中加入 CMD 前缀逻辑
     private IEnumerator LLMTypeText(string text)
     {
         SetLLMState(LLMState.ShowingAIText);
 
-        // 计算 CMD 模式前缀
         string prefix = enableCmdMode ? $"{cmdPath} {GetCharacterDisplayName(currentLLMCharacter)}> " : "";
-        dialogueText.text = prefix; // 初始化文本为前缀
-
+        dialogueText.text = prefix;
         fullCurrentText = text;
 
         for (int i = 0; i < text.Length; i++)
         {
             dialogueText.text += text[i];
             dialogueText.ForceMeshUpdate();
-
             PlayRandomTypingSound();
 
             if (enableBounceEffect || enableRandomOffset)
-            {
-                // 注意：字符索引需要加上前缀的长度
                 StartCoroutine(AnimateCharacter(i + prefix.Length));
-            }
 
             yield return new WaitForSeconds(textSpeed);
         }
@@ -600,18 +668,18 @@ public class DialogueUI : MonoBehaviour
         }
     }
 
-    // ===== 用户输入处理 (与原版一致) =====
+    // ===== 用户输入处理 =====
+
     public void OnSendMessage()
     {
-        if (llmState != LLMState.WaitingForInput)
-            return;
-
-        if (playerInputField == null)
-            return;
+        if (llmState != LLMState.WaitingForInput) return;
+        if (playerInputField == null) return;
 
         string message = playerInputField.text.Trim();
-        if (string.IsNullOrEmpty(message))
-            return;
+        if (string.IsNullOrEmpty(message)) return;
+
+        // 玩家发送消息后清除建议问题
+        ClearSuggestions();
 
         SetLLMState(LLMState.ProcessingInput);
 
@@ -623,9 +691,7 @@ public class DialogueUI : MonoBehaviour
         }
 
         DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
-
         SetLLMState(LLMState.WaitingForAI);
-
         dialogueManager.ProcessLLMMessage(currentLLMCharacter, message, OnLLMResponse);
     }
 
@@ -633,16 +699,15 @@ public class DialogueUI : MonoBehaviour
     {
         DialogueManager dialogueManager = FindObjectOfType<DialogueManager>();
         if (dialogueManager != null && dialogueManager.historyManager != null)
-        {
             dialogueManager.historyManager.EndLLMSession();
-        }
 
         SetLLMState(LLMState.Inactive);
         currentLineIndex++;
         ShowNextLine();
     }
 
-    // ===== 字符动画 (与原版一致) =====
+    // ===== 字符动画 =====
+
     private IEnumerator AnimateCharacter(int charIndex)
     {
         Vector2 randomOffset = Vector2.zero;
@@ -691,15 +756,10 @@ public class DialogueUI : MonoBehaviour
 
             Vector3 totalOffset = bounceOffset + currentRandomOffset;
 
-            Vector3 bottomLeft = vertices[vertexIndex + 0];
-            Vector3 topLeft = vertices[vertexIndex + 1];
-            Vector3 topRight = vertices[vertexIndex + 2];
-            Vector3 bottomRight = vertices[vertexIndex + 3];
-
-            vertices[vertexIndex + 0] = bottomLeft + totalOffset;
-            vertices[vertexIndex + 1] = topLeft + totalOffset;
-            vertices[vertexIndex + 2] = topRight + totalOffset;
-            vertices[vertexIndex + 3] = bottomRight + totalOffset;
+            vertices[vertexIndex + 0] += totalOffset;
+            vertices[vertexIndex + 1] += totalOffset;
+            vertices[vertexIndex + 2] += totalOffset;
+            vertices[vertexIndex + 3] += totalOffset;
 
             dialogueText.UpdateVertexData(TMP_VertexDataUpdateFlags.Vertices);
 
@@ -707,72 +767,44 @@ public class DialogueUI : MonoBehaviour
         }
 
         dialogueText.ForceMeshUpdate();
-        TMP_TextInfo finalTextInfo = dialogueText.textInfo;
-
-        if (charIndex < finalTextInfo.characterCount && finalTextInfo.characterInfo[charIndex].isVisible)
-        {
-            TMP_CharacterInfo finalCharInfo = finalTextInfo.characterInfo[charIndex];
-            int finalMaterialIndex = finalCharInfo.materialReferenceIndex;
+        if (charIndex < dialogueText.textInfo.characterCount && dialogueText.textInfo.characterInfo[charIndex].isVisible)
             dialogueText.UpdateVertexData(TMP_VertexDataUpdateFlags.Vertices);
-        }
     }
 
-    // ===== 辅助方法 (与原版一致) =====
+    // ===== 辅助方法 =====
+
     private void EnsureAudioSource()
     {
-        if (audioSource != null)
-            return;
+        if (audioSource != null) return;
 
         audioSource = FindObjectOfType<AudioSource>();
-
-        if (audioSource != null)
-        {
-            Debug.Log($"DialogueUI: 找到AudioSource: {audioSource.gameObject.name}");
-            return;
-        }
+        if (audioSource != null) return;
 
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.playOnAwake = false;
         audioSource.loop = false;
         audioSource.volume = 1f;
-
-        Debug.Log("DialogueUI: 未找到AudioSource，已自动创建");
     }
 
     private void LoadTypingSounds()
     {
         typingSounds = new AudioClip[TYPING_SOUND_COUNT];
-
         for (int i = 0; i < TYPING_SOUND_COUNT; i++)
         {
             string path = $"Audio/SFX/Typing/keypress-{(i + 1):D3}";
             AudioClip clip = Resources.Load<AudioClip>(path);
-
             if (clip != null)
-            {
                 typingSounds[i] = clip;
-            }
             else
-            {
                 Debug.LogWarning($"DialogueUI: 无法加载音效文件: {path}");
-            }
         }
-
-        Debug.Log($"DialogueUI: 成功加载 {typingSounds.Length} 个打字音效");
     }
 
     private void PlayRandomTypingSound()
     {
-        if (audioSource == null || typingSounds == null || typingSounds.Length == 0)
-            return;
-
-        int randomIndex = Random.Range(0, typingSounds.Length);
-        AudioClip selectedClip = typingSounds[randomIndex];
-
-        if (selectedClip != null)
-        {
-            audioSource.PlayOneShot(selectedClip);
-        }
+        if (audioSource == null || typingSounds == null || typingSounds.Length == 0) return;
+        AudioClip clip = typingSounds[Random.Range(0, typingSounds.Length)];
+        if (clip != null) audioSource.PlayOneShot(clip);
     }
 
     private void SetCharacterInfo(string characterId, string portraitId)
@@ -808,17 +840,12 @@ public class DialogueUI : MonoBehaviour
         {
             switch (LanguageManager.Instance.currentLanguage)
             {
-                case SupportedLanguage.Chinese:
-                    return GetChineseCharacterName(characterId);
-                case SupportedLanguage.English:
-                    return GetEnglishCharacterName(characterId);
-                case SupportedLanguage.Japanese:
-                    return GetJapaneseCharacterName(characterId);
-                default:
-                    return GetEnglishCharacterName(characterId);
+                case SupportedLanguage.Chinese:  return GetChineseCharacterName(characterId);
+                case SupportedLanguage.English:  return GetEnglishCharacterName(characterId);
+                case SupportedLanguage.Japanese: return GetJapaneseCharacterName(characterId);
+                default:                         return GetEnglishCharacterName(characterId);
             }
         }
-
         return GetChineseCharacterName(characterId);
     }
 
@@ -826,20 +853,20 @@ public class DialogueUI : MonoBehaviour
     {
         switch (characterId)
         {
-            case "me": return "我";
-            case "guardian": return "安全卫士";
-            case "narrator": return "旁白";
-            case "ps": return "PhotoShop";
+            case "me":           return "我";
+            case "guardian":     return "安全卫士";
+            case "narrator":     return "旁白";
+            case "ps":           return "PhotoShop";
             case "controlpanel": return "控制面板";
-            case "qq": return "QQ";
-            case "7zip": return "7-Zip";
-            case "mines": return "扫雷";
-            case "xunlei": return "迅雷";
-            case "ie": return "IE";
-            case "notepad": return "记事本";
-            case "recycle": return "回收站";
-            case "registry": return "注册表工具";
-            default: return characterId;
+            case "qq":           return "QQ";
+            case "7zip":         return "7-Zip";
+            case "mines":        return "扫雷";
+            case "xunlei":       return "迅雷";
+            case "ie":           return "IE";
+            case "notepad":      return "记事本";
+            case "recycle":      return "回收站";
+            case "registry":     return "注册表工具";
+            default:             return characterId;
         }
     }
 
@@ -847,17 +874,20 @@ public class DialogueUI : MonoBehaviour
     {
         switch (characterId)
         {
-            case "me": return "Me";
-            case "guardian": return "System Guardian";
-            case "narrator": return "Narrator";
-            case "ps": return "Photoshop";
+            case "me":           return "Me";
+            case "guardian":     return "System Guardian";
+            case "narrator":     return "Narrator";
+            case "ps":           return "Photoshop";
             case "controlpanel": return "Control Panel";
-            case "qq": return "QQ";
-            case "7zip": return "7-Zip";
-            case "mines": return "Minesweeper";
-            case "xunlei": return "Xunlei";
-            case "ie": return "Internet Explorer";
-            default: return characterId;
+            case "qq":           return "QQ";
+            case "7zip":         return "7-Zip";
+            case "mines":        return "Minesweeper";
+            case "xunlei":       return "Xunlei";
+            case "ie":           return "Internet Explorer";
+            case "notepad":      return "Notepad";
+            case "recycle":      return "Recycle Bin";
+            case "registry":     return "Registry Editor";
+            default:             return characterId;
         }
     }
 
@@ -865,20 +895,20 @@ public class DialogueUI : MonoBehaviour
     {
         switch (characterId)
         {
-            case "me": return "私";
-            case "guardian": return "システムガーディアン";
-            case "narrator": return "ナレーター";
-            case "ps": return "フォトショップ";
+            case "me":           return "私";
+            case "guardian":     return "システムガーディアン";
+            case "narrator":     return "ナレーター";
+            case "ps":           return "フォトショップ";
             case "controlpanel": return "コントロールパネル";
-            case "qq": return "QQ";
-            case "7zip": return "7-Zip";
-            case "mines": return "Minesweeper";
-            case "xunlei": return "迅雷";
-            case "ie": return "インターネットエクスプローラー";
-            case "notepad": return "メモ帳";
-            case "recycle": return "ゴミ箱";
-            case "registry": return "レジストリ エディター";
-            default: return characterId;
+            case "qq":           return "QQ";
+            case "7zip":         return "7-Zip";
+            case "mines":        return "Minesweeper";
+            case "xunlei":       return "迅雷";
+            case "ie":           return "インターネットエクスプローラー";
+            case "notepad":      return "メモ帳";
+            case "recycle":      return "ゴミ箱";
+            case "registry":     return "レジストリ エディター";
+            default:             return characterId;
         }
     }
 
@@ -901,16 +931,10 @@ public class DialogueUI : MonoBehaviour
 
     private void ClearDialogue()
     {
-        if (dialogueText != null)
-            dialogueText.text = "";
-
-        if (characterNameText != null)
-            characterNameText.text = "";
-
-        if (characterPortrait != null)
-            characterPortrait.gameObject.SetActive(false);
-
-        if (playerInputField != null)
-            playerInputField.text = "";
+        if (dialogueText != null)     dialogueText.text = "";
+        if (characterNameText != null) characterNameText.text = "";
+        if (characterPortrait != null) characterPortrait.gameObject.SetActive(false);
+        if (playerInputField != null)  playerInputField.text = "";
+        ClearSuggestions();
     }
 }

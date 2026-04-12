@@ -1,7 +1,21 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+
+/// <summary>
+/// LLM 返回的结构化 JSON 响应
+/// 对应新版 Prompt 要求 LLM 输出的格式：
+/// { "reply": "...", "suggestions": [...], "disclosed": bool, "end": bool }
+/// </summary>
+[Serializable]
+public class LLMJsonResponse
+{
+    public string reply = "";
+    public string[] suggestions;
+    public bool disclosed = false;
+    public bool end = false;
+}
 
 public class DialogueManager : MonoBehaviour
 {
@@ -17,7 +31,7 @@ public class DialogueManager : MonoBehaviour
     public OpenAIProvider openaiProvider;
     public DeepSeekProvider deepseekProvider;
 
-    // 当前使用的Provider
+    // 当前使用的 Provider
     private ILLMProvider currentProvider;
 
     // 私有变量
@@ -30,71 +44,67 @@ public class DialogueManager : MonoBehaviour
     private Queue<(string fileName, string blockId)> dialogueQueue = new Queue<(string, string)>();
     private bool isPlayingDialogue = false;
 
+    // ==================== 静态事件：Suggestions ====================
+
+    /// <summary>
+    /// 当 LLM 返回建议问题时触发，DialogueUI 订阅后更新输入框 Placeholder
+    /// </summary>
+    public static event Action<string[]> OnSuggestionsReady;
+
+    /// <summary>
+    /// 供外部类触发 OnSuggestionsReady 的代理方法。
+    /// C# 规定静态事件只能在声明类内部 Invoke，外部类需通过此方法调用。
+    /// </summary>
+    public static void FireSuggestionsReady(string[] suggestions)
+    {
+        if (suggestions != null && suggestions.Length > 0)
+            OnSuggestionsReady?.Invoke(suggestions);
+    }
+
+    // ==================== Unity 生命周期 ====================
+
     void Start()
     {
         InitializeManager();
     }
 
-    /// <summary>
-    /// 初始化管理器
-    /// </summary>
     private void InitializeManager()
     {
-        // 初始化数据结构
         conversationHistory = new Dictionary<string, List<string>>();
 
-        // 查找组件引用
         if (dialogueUI == null)
             dialogueUI = FindObjectOfType<DialogueUI>();
         if (historyManager == null)
             historyManager = FindObjectOfType<ConversationHistoryManager>();
 
-        // 初始化所有LLM Provider
         InitializeProviders();
-
         DebugLog("DialogueManager 初始化完成");
     }
 
     void InitializeProviders()
     {
-        if (geminiProvider == null)
-            Debug.LogError("GeminiProvider未配置");
-        if (openaiProvider == null)
-            Debug.LogError("OpenAIProvider未配置");
-        if (deepseekProvider == null)
-            Debug.LogError("DeepSeekProvider未配置");
-
+        if (geminiProvider == null) Debug.LogError("GeminiProvider 未配置");
+        if (openaiProvider == null) Debug.LogError("OpenAIProvider 未配置");
+        if (deepseekProvider == null) Debug.LogError("DeepSeekProvider 未配置");
         UpdateCurrentProvider();
     }
 
-    /// <summary>
-    /// 更新当前使用的Provider
-    /// </summary>
     private void UpdateCurrentProvider()
     {
         if (GlobalSystemManager.Instance == null)
         {
-            Debug.LogError("GlobalSystemManager未找到，使用默认Gemini Provider");
+            Debug.LogError("GlobalSystemManager 未找到，使用默认 Gemini Provider");
             currentProvider = geminiProvider;
             return;
         }
 
         LLMProvider providerType = GlobalSystemManager.Instance.GetCurrentLLMProvider();
-
         switch (providerType)
         {
-            case LLMProvider.Gemini:
-                currentProvider = geminiProvider;
-                break;
-            case LLMProvider.GPT:
-                currentProvider = openaiProvider;
-                break;
-            case LLMProvider.DeepSeek:
-                currentProvider = deepseekProvider;
-                break;
-            default:
-                currentProvider = geminiProvider;
-                break;
+            case LLMProvider.Gemini:   currentProvider = geminiProvider;   break;
+            case LLMProvider.GPT:      currentProvider = openaiProvider;   break;
+            case LLMProvider.DeepSeek: currentProvider = deepseekProvider; break;
+            default:                   currentProvider = geminiProvider;   break;
         }
 
         DebugLog($"切换到 {currentProvider.GetProviderName()} Provider");
@@ -110,6 +120,57 @@ public class DialogueManager : MonoBehaviour
         return currentProvider;
     }
 
+    // ==================== JSON 解析 ====================
+
+    /// <summary>
+    /// 尝试将 LLM 原始输出解析为 LLMJsonResponse。
+    /// 支持：标准 JSON、被 ```json``` 包裹的 JSON。
+    /// 失败时 Fallback：整个原始文本作为 reply，使用旧版 end 检测。
+    /// </summary>
+    public LLMJsonResponse TryParseJsonResponse(string raw)
+    {
+        if (string.IsNullOrEmpty(raw))
+            return new LLMJsonResponse { reply = "...", suggestions = new string[0] };
+
+        try
+        {
+            string cleaned = raw.Trim();
+
+            // 去除 Markdown 代码围栏（部分 LLM 会包裹 ```json ... ```）
+            if (cleaned.StartsWith("```"))
+            {
+                int firstNewline = cleaned.IndexOf('\n');
+                int lastFence    = cleaned.LastIndexOf("```");
+                if (firstNewline >= 0 && lastFence > firstNewline)
+                    cleaned = cleaned.Substring(firstNewline + 1, lastFence - firstNewline - 1).Trim();
+            }
+
+            if (cleaned.StartsWith("{"))
+            {
+                LLMJsonResponse parsed = JsonUtility.FromJson<LLMJsonResponse>(cleaned);
+                if (parsed != null && !string.IsNullOrEmpty(parsed.reply))
+                {
+                    DebugLog($"JSON 解析成功，reply 长度: {parsed.reply.Length}，" +
+                             $"suggestions: {parsed.suggestions?.Length ?? 0}，end: {parsed.end}");
+                    return parsed;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            DebugLog($"JSON 解析失败，使用 Fallback。原因: {e.Message}");
+        }
+
+        // Fallback：非 JSON 格式，兼容旧版纯文本输出
+        return new LLMJsonResponse
+        {
+            reply       = CleanAIResponse(raw),
+            suggestions = new string[0],
+            disclosed   = false,
+            end         = DialogueLoader.ShouldEndByAI(raw)
+        };
+    }
+
     // ==================== 对话管理 ====================
 
     public string CleanAIResponsePublic(string response)
@@ -117,9 +178,6 @@ public class DialogueManager : MonoBehaviour
         return CleanAIResponse(response);
     }
 
-    /// <summary>
-    /// 获取当前语言对应的剧本文件名
-    /// </summary>
     private string GetCurrentScriptFileName()
     {
         string fileName = "zh";
@@ -127,44 +185,30 @@ public class DialogueManager : MonoBehaviour
         {
             switch (LanguageManager.Instance.currentLanguage)
             {
-                case SupportedLanguage.Chinese:
-                    fileName = "zh";
-                    break;
-                case SupportedLanguage.English:
-                    fileName = "en";
-                    break;
-                case SupportedLanguage.Japanese:
-                    fileName = "jp";
-                    break;
-                default:
-                    fileName = "zh";
-                    break;
+                case SupportedLanguage.Chinese:  fileName = "zh"; break;
+                case SupportedLanguage.English:  fileName = "en"; break;
+                case SupportedLanguage.Japanese: fileName = "jp"; break;
+                default:                         fileName = "zh"; break;
             }
         }
         return fileName;
     }
 
-    /// <summary>
-    /// 开始指定的对话
-    /// </summary>
     public void StartDialogue(string blockId)
     {
         string fileName = GetCurrentScriptFileName();
         StartDialogue(fileName, blockId);
     }
 
-    /// <summary>
-    /// 开始指定的对话 - 完整版本（带队列）
-    /// </summary>
     public void StartDialogue(string fileName, string blockId)
     {
         if (string.IsNullOrEmpty(fileName) || string.IsNullOrEmpty(blockId))
         {
-            Debug.LogError($"DialogueManager: fileName 或 blockId 不能为空 (fileName: {fileName}, blockId: {blockId})");
+            Debug.LogError($"DialogueManager: fileName 或 blockId 不能为空 " +
+                           $"(fileName: {fileName}, blockId: {blockId})");
             return;
         }
 
-        // 如果当前正在播放对话，加入队列
         if (isPlayingDialogue)
         {
             dialogueQueue.Enqueue((fileName, blockId));
@@ -172,34 +216,31 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        // 直接播放
         PlayDialogue(fileName, blockId);
     }
 
-    /// <summary>
-    /// 实际播放对话
-    /// </summary>
     private void PlayDialogue(string fileName, string blockId)
     {
         DialogueData dialogueData = DialogueLoader.LoadBlock(fileName, blockId);
 
-        currentDialogueFile = fileName;
+        currentDialogueFile  = fileName;
         currentDialogueBlockId = blockId;
-        isPlayingDialogue = true;
+        isPlayingDialogue    = true;
 
         DebugLog($"开始播放对话: {fileName}:{blockId}");
 
         if (dialogueUI != null)
-        {
             dialogueUI.StartDialogue(dialogueData, fileName, blockId);
-        }
     }
 
+    /// <summary>
+    /// 处理玩家发送的消息，调用 LLM 并返回 AI 回复
+    /// </summary>
     public void ProcessLLMMessage(string characterId, string playerMessage, Action<string> onResponse)
     {
         if (isProcessingLLM)
         {
-            DebugLog("正在处理其他LLM请求，跳过");
+            DebugLog("正在处理其他 LLM 请求，跳过");
             onResponse?.Invoke("系统繁忙，请稍后再试...");
             return;
         }
@@ -210,96 +251,84 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        DebugLog($"处理LLM消息: {characterId} <- {playerMessage}");
-
+        DebugLog($"处理 LLM 消息: {characterId} <- {playerMessage}");
         StartCoroutine(ProcessLLMCoroutine(characterId, playerMessage, onResponse));
     }
 
     /// <summary>
-    /// LLM处理协程 - 使用当前选择的Provider
+    /// LLM 处理协程：构建 Prompt → 调用 Provider → 解析 JSON → 更新状态 → 回调
     /// </summary>
     private IEnumerator ProcessLLMCoroutine(string characterId, string playerMessage, Action<string> onResponse)
     {
         isProcessingLLM = true;
 
-        // 使用HistoryManager构建包含历史的prompt
         string fullPrompt = historyManager.BuildPromptWithHistory(playerMessage);
 
         bool responseReceived = false;
-        string aiResponse = "";
+        string rawResponse = "";
 
-        // 使用当前Provider（不再hardcoded使用geminiAPI）
         yield return StartCoroutine(currentProvider.GenerateText(
             fullPrompt,
             response =>
             {
-                aiResponse = CleanAIResponse(response);
+                rawResponse = response;
                 responseReceived = true;
             },
             error =>
             {
-                aiResponse = GetErrorResponse(characterId);
+                rawResponse = "";
                 responseReceived = true;
-                DebugLog($"AI请求失败: {error}");
+                DebugLog($"AI 请求失败: {error}");
             }
         ));
 
-        while (!responseReceived)
-        {
-            yield return null;
-        }
+        while (!responseReceived) yield return null;
 
-        // 将AI回复添加到历史管理器
-        historyManager.AddLLMResponse(aiResponse);
+        // 解析 JSON 响应
+        LLMJsonResponse parsed = string.IsNullOrEmpty(rawResponse)
+            ? new LLMJsonResponse { reply = GetErrorResponse(characterId), suggestions = new string[0] }
+            : TryParseJsonResponse(rawResponse);
 
-        onResponse?.Invoke(aiResponse);
+        // 将干净的 AI 回复（不含 end 标记）记录进历史
+        historyManager.AddLLMResponse(parsed.reply, parsed.disclosed);
+
+        // 触发 Suggestions 事件 → DialogueUI 更新输入框 Placeholder
+        FireSuggestionsReady(parsed.suggestions);
+
+        // 如果 LLM 要求结束，附加 "end" 标记（DialogueUI 会检测并清理）
+        string replyForUI = parsed.end
+            ? parsed.reply.TrimEnd() + "\nend"
+            : parsed.reply;
+
+        onResponse?.Invoke(replyForUI);
         isProcessingLLM = false;
 
-        DebugLog($"LLM响应完成: {aiResponse.Substring(0, Mathf.Min(30, aiResponse.Length))}...");
+        DebugLog($"LLM 响应完成，disclosed: {parsed.disclosed}，end: {parsed.end}");
     }
 
-    /// <summary>
-    /// 清理AI响应
-    /// </summary>
     private string CleanAIResponse(string response)
     {
-        if (string.IsNullOrEmpty(response))
-        {
-            return "...";
-        }
+        if (string.IsNullOrEmpty(response)) return "...";
 
         string cleaned = response.Trim();
 
-        // 移除可能的引号
         if (cleaned.StartsWith("\"") && cleaned.EndsWith("\""))
-        {
             cleaned = cleaned.Substring(1, cleaned.Length - 2);
-        }
 
-        // 长度限制
         if (cleaned.Length > 300)
-        {
             cleaned = cleaned.Substring(0, 297) + "...";
-        }
 
         return cleaned;
     }
 
-    /// <summary>
-    /// 获取错误响应
-    /// </summary>
     private string GetErrorResponse(string characterId)
     {
         switch (characterId)
         {
-            case "RecycleBin":
-                return "系统错误...我的数据出现了问题...";
-            case "TaskManager":
-                return "连接超时...请稍后重试...";
-            case "ControlPanel":
-                return "访问被拒绝...权限不足...";
-            default:
-                return "系统故障...无法响应...";
+            case "RecycleBin":   return "系统错误...我的数据出现了问题...";
+            case "TaskManager":  return "连接超时...请稍后重试...";
+            case "ControlPanel": return "访问被拒绝...权限不足...";
+            default:             return "系统故障...无法响应...";
         }
     }
 
@@ -314,21 +343,18 @@ public class DialogueManager : MonoBehaviour
 
         GameFlowController gameFlow = FindObjectOfType<GameFlowController>();
         if (gameFlow != null)
-        {
             gameFlow.OnDialogueBlockComplete(blockId);
-        }
 
-        // 检查队列
         if (dialogueQueue.Count > 0)
         {
-            // 有队列，播放下一个
             var next = dialogueQueue.Dequeue();
-            DebugLog($"从队列播放下一个对话: {next.fileName}:{next.blockId}，剩余队列: {dialogueQueue.Count}");
+            DebugLog($"从队列播放下一个对话: {next.fileName}:{next.blockId}，" +
+                     $"剩余队列: {dialogueQueue.Count}");
             PlayDialogue(next.fileName, next.blockId);
         }
         else
         {
-            currentDialogueBlockId = null;  // 现在才清空
+            currentDialogueBlockId = null;
             isPlayingDialogue = false;
             DebugLog("所有对话播放完毕");
         }
@@ -339,9 +365,6 @@ public class DialogueManager : MonoBehaviour
         return !string.IsNullOrEmpty(currentDialogueBlockId);
     }
 
-    /// <summary>
-    /// 清除角色对话历史
-    /// </summary>
     public void ClearCharacterHistory(string characterId)
     {
         if (conversationHistory.ContainsKey(characterId))
@@ -351,23 +374,15 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 调试日志
-    /// </summary>
     private void DebugLog(string message)
     {
         if (enableDebugLog)
-        {
             Debug.Log($"[DialogueManager] {message}");
-        }
     }
 
     void OnDestroy()
     {
-        // 取消事件监听
         if (GlobalSystemManager.Instance != null)
-        {
             GlobalSystemManager.OnLLMProviderChanged -= OnProviderChanged;
-        }
     }
 }
