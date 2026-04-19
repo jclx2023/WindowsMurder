@@ -28,7 +28,11 @@ public class DialogueManager : MonoBehaviour
 
     [Header("LLM Providers")]
     public GeminiProvider geminiProvider;
+    [Tooltip("OpenAI 兼容通用 Provider（处理 GPT/DeepSeek/302.ai/Custom）")]
+    public GenericOpenAIProvider genericOpenAIProvider;
+    [Tooltip("[Legacy] 已不直接使用，保留字段避免 Inspector 丢失引用")]
     public OpenAIProvider openaiProvider;
+    [Tooltip("[Legacy] 已不直接使用")]
     public DeepSeekProvider deepseekProvider;
 
     // 当前使用的 Provider
@@ -77,6 +81,10 @@ public class DialogueManager : MonoBehaviour
         if (historyManager == null)
             historyManager = FindObjectOfType<ConversationHistoryManager>();
 
+        // 订阅全局事件
+        GlobalSystemManager.OnLLMProviderChanged += OnProviderChanged;
+        GlobalSystemManager.OnLLMConfigChanged  += OnLLMConfigChanged;
+
         InitializeProviders();
         DebugLog("DialogueManager 初始化完成");
     }
@@ -84,8 +92,7 @@ public class DialogueManager : MonoBehaviour
     void InitializeProviders()
     {
         if (geminiProvider == null) Debug.LogError("GeminiProvider 未配置");
-        if (openaiProvider == null) Debug.LogError("OpenAIProvider 未配置");
-        if (deepseekProvider == null) Debug.LogError("DeepSeekProvider 未配置");
+        if (genericOpenAIProvider == null) Debug.LogError("GenericOpenAIProvider 未配置");
         UpdateCurrentProvider();
     }
 
@@ -99,20 +106,33 @@ public class DialogueManager : MonoBehaviour
         }
 
         LLMProvider providerType = GlobalSystemManager.Instance.GetCurrentLLMProvider();
-        switch (providerType)
+        LLMRuntimeConfig config  = GlobalSystemManager.Instance.GetLLMConfig(providerType);
+
+        if (providerType == LLMProvider.Gemini)
         {
-            case LLMProvider.Gemini:   currentProvider = geminiProvider;   break;
-            case LLMProvider.GPT:      currentProvider = openaiProvider;   break;
-            case LLMProvider.DeepSeek: currentProvider = deepseekProvider; break;
-            default:                   currentProvider = geminiProvider;   break;
+            geminiProvider?.Configure(config);
+            currentProvider = geminiProvider;
+        }
+        else
+        {
+            // GPT / DeepSeek / 302.ai / Custom 全部使用 GenericOpenAIProvider
+            genericOpenAIProvider?.Configure(config, providerType);
+            currentProvider = genericOpenAIProvider;
         }
 
-        DebugLog($"切换到 {currentProvider.GetProviderName()} Provider");
+        DebugLog($"切换到 {providerType} | Provider: {currentProvider?.GetProviderName()}");
     }
 
     private void OnProviderChanged(LLMProvider newProvider)
     {
         UpdateCurrentProvider();
+    }
+
+    private void OnLLMConfigChanged(LLMProvider provider, LLMRuntimeConfig config)
+    {
+        // 只有当前正在使用的供应商配置变更时才需重新应用
+        if (provider == GlobalSystemManager.Instance?.GetCurrentLLMProvider())
+            UpdateCurrentProvider();
     }
 
     public ILLMProvider GetCurrentProvider()
@@ -383,6 +403,115 @@ public class DialogueManager : MonoBehaviour
     void OnDestroy()
     {
         if (GlobalSystemManager.Instance != null)
+        {
             GlobalSystemManager.OnLLMProviderChanged -= OnProviderChanged;
+            GlobalSystemManager.OnLLMConfigChanged  -= OnLLMConfigChanged;
+        }
     }
+
+    // ==================== 强制重置（内部工具） ====================
+
+    /// <summary>
+    /// 强制重置对话系统状态：清空队列、重置标志位、结束 LLM 会话。
+    /// 调试播放前调用，防止旧对话状态污染测试结果。
+    /// </summary>
+    private void ForceResetDialogueState()
+    {
+        dialogueQueue.Clear();
+        isPlayingDialogue      = false;
+        isProcessingLLM        = false;
+        currentDialogueFile    = null;
+        currentDialogueBlockId = null;
+
+        // 清空 LLM 多轮历史，避免上一轮对话的 Context 干扰 Prompt 测试
+        historyManager?.EndLLMSession();
+
+        DebugLog("[ForceReset] 对话状态已全部清空");
+    }
+
+#if UNITY_EDITOR
+
+    // ==================== 编辑器调试：直接播放对话块 ====================
+
+    [Header("━━ 调试：直接播放对话块（仅编辑器）━━")]
+    [Tooltip("剧本文件名：zh / en / jp，留空默认 zh")]
+    public string debugFileName = "zh";
+
+    [Tooltip("要直接测试的对话块 ID，例如 001、042 等")]
+    public string debugBlockId = "";
+
+    /// <summary>
+    /// 直接播放指定对话块，无视所有 Stage 条件、线索条件、队列状态。
+    /// 仅在 Play 模式下生效。右键 DialogueManager 组件调用。
+    /// </summary>
+    [ContextMenu("▶ 调试播放对话块（无视前置条件）")]
+    private void Debug_PlayDialogueBlock()
+    {
+        if (!Application.isPlaying)
+        {
+            Debug.LogWarning("[DialogueManager] 调试播放仅在 Play 模式下生效，请先按下播放按钮");
+            return;
+        }
+
+        if (string.IsNullOrEmpty(debugBlockId))
+        {
+            Debug.LogWarning("[DialogueManager] debugBlockId 未填写，请在 Inspector 中填写要测试的对话块 ID");
+            return;
+        }
+
+        string file = string.IsNullOrEmpty(debugFileName) ? "zh" : debugFileName.Trim();
+        string block = debugBlockId.Trim();
+
+        Debug.Log($"[DialogueManager] 🔧 调试播放 | 文件: {file} | 块ID: {block} | " +
+                  $"Provider: {currentProvider?.GetProviderName() ?? "(未初始化)"}");
+
+        // 强制重置状态，确保干净的测试环境
+        ForceResetDialogueState();
+
+        // 直接调用底层播放方法，完全跳过 StartDialogue 的队列逻辑和条件检查
+        PlayDialogue(file, block);
+    }
+
+    /// <summary>
+    /// 强制中断当前正在播放的对话，清空所有队列和状态。
+    /// 右键 DialogueManager 组件调用。
+    /// </summary>
+    [ContextMenu("⏹ 调试：强制结束当前对话")]
+    private void Debug_ForceStopDialogue()
+    {
+        if (!Application.isPlaying)
+        {
+            Debug.LogWarning("[DialogueManager] 仅在 Play 模式下生效");
+            return;
+        }
+
+        ForceResetDialogueState();
+        Debug.Log("[DialogueManager] 🔧 已强制结束对话并清空队列");
+    }
+
+    /// <summary>
+    /// 打印当前对话系统状态到 Console，方便排查问题。
+    /// 右键 DialogueManager 组件调用。
+    /// </summary>
+    [ContextMenu("ℹ 调试：打印当前对话状态")]
+    private void Debug_PrintDialogueState()
+    {
+        if (!Application.isPlaying)
+        {
+            Debug.Log("[DialogueManager] (编辑器模式，运行时状态不可用)");
+            return;
+        }
+
+        Debug.Log(
+            $"[DialogueManager] ── 当前状态 ──\n" +
+            $"  isPlayingDialogue : {isPlayingDialogue}\n" +
+            $"  isProcessingLLM  : {isProcessingLLM}\n" +
+            $"  currentFile      : {currentDialogueFile ?? "(无)"}\n" +
+            $"  currentBlockId   : {currentDialogueBlockId ?? "(无)"}\n" +
+            $"  队列长度          : {dialogueQueue.Count}\n" +
+            $"  当前 Provider     : {currentProvider?.GetProviderName() ?? "(未初始化)"}"
+        );
+    }
+
+#endif
 }

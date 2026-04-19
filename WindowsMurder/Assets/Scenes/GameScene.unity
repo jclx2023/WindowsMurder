@@ -185,6 +185,7 @@ GameObject:
   - component: {fileID: 33348683}
   - component: {fileID: 33348686}
   - component: {fileID: 33348685}
+  - component: {fileID: 33348687}
   m_Layer: 0
   m_Name: API
   m_TagString: Untagged
@@ -204,8 +205,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1248185f8a7e7ac4593ef50dc1a55592, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  apiKey: AIzaSyByzOiyXDuXci5AZpbDeW71dgr09GKBI8s
-  model: gemini-2.5-flash-lite
+  defaultApiKey: AIzaSyDiNUmkLSuezthfyMuFWDLe0CA7L_1TUcg
+  defaultModel: gemini-3.1-flash-lite-preview
 --- !u!4 &33348684
 Transform:
   m_ObjectHideFlags: 0
@@ -249,6 +250,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modelName: gpt-5
+--- !u!114 &33348687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33348682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af8a1bdfc7b2aab47977475d498b24e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultApiKey: 
+  defaultModel: gpt-5.4-mini
+  defaultEndpoint: https://api.openai.com/v1/chat/completions
 --- !u!1001 &41472737
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6977,6 +6993,7 @@ MonoBehaviour:
   historyManager: {fileID: 399506808}
   enableDebugLog: 1
   geminiProvider: {fileID: 33348683}
+  genericOpenAIProvider: {fileID: 33348687}
   openaiProvider: {fileID: 33348686}
   deepseekProvider: {fileID: 33348685}
 --- !u!4 &1233270436
@@ -8932,6 +8949,7 @@ MonoBehaviour:
   audioSource: {fileID: 0}
   waitingForInputHint: Please enter your question...
   waitingForAIHint: Thinking...
+  suggestionCycleInterval: 4
   enableCmdMode: 1
   cmdPath: 
   cmdTextColor: {r: 0.3, g: 1, b: 0.3, a: 1}

@@ -1,14 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-/// <summary>
-/// LLM引擎类型枚举
-/// </summary>
-public enum LLMProvider
-{
-    Gemini,
-    GPT,
-    DeepSeek
-}
+// LLMProvider 枚举已移至 LLMRuntimeConfig.cs（扩展版，含 Relay_302ai / Custom）
 
 /// <summary>
 /// 全局系统管理器 - 专注于底层系统服务
@@ -33,6 +26,9 @@ public class GlobalSystemManager : MonoBehaviour
     [Header("LLM引擎设置")]
     public LLMProvider currentLLMProvider = LLMProvider.DeepSeek;
 
+    // 每个供应商的自定义配置（Key=枚举int值）
+    private Dictionary<int, LLMRuntimeConfig> providerConfigs = new Dictionary<int, LLMRuntimeConfig>();
+
     [Header("语言系统设置")]
     public string csvFileName = "Localization/LocalizationTable.csv";
     public SupportedLanguage defaultLanguage = SupportedLanguage.English;
@@ -50,6 +46,8 @@ public class GlobalSystemManager : MonoBehaviour
     public static System.Action OnSystemInitialized;
     public static System.Action OnDialogueSettingsChanged;
     public static System.Action<LLMProvider> OnLLMProviderChanged;
+    /// <summary>当某供应商的配置（Key/Model/Endpoint）变更时触发</summary>
+    public static System.Action<LLMProvider, LLMRuntimeConfig> OnLLMConfigChanged;
 
     void Awake()
     {
@@ -69,6 +67,7 @@ public class GlobalSystemManager : MonoBehaviour
     void InitializeAllSystems()
     {
         InitializeLanguageSystem();
+        LoadProviderConfigs();
         LoadSettings();
         ApplySettings();
         InitializeAudioSystem();
@@ -141,6 +140,9 @@ public class GlobalSystemManager : MonoBehaviour
             currentLLMProvider = provider;
         }
 
+        // 加载各供应商自定义配置
+        LoadProviderConfigs();
+
         // 语言设置
         string savedLanguage = PlayerPrefs.GetString("UserLanguage", defaultLanguage.ToString());
         if (System.Enum.TryParse<SupportedLanguage>(savedLanguage, out SupportedLanguage userLang))
@@ -180,6 +182,9 @@ public class GlobalSystemManager : MonoBehaviour
 
         // 保存LLM引擎设置
         PlayerPrefs.SetString("LLMProvider", currentLLMProvider.ToString());
+
+        // 保存各供应商自定义配置
+        SaveProviderConfigs();
 
         // 保存语言设置
         if (LanguageManager.Instance != null)
@@ -240,16 +245,10 @@ public class GlobalSystemManager : MonoBehaviour
     // ==================== LLM引擎服务 ====================
 
     /// <summary>
-    /// 切换LLM引擎
+    /// 切换 LLM 引擎
     /// </summary>
     public void SetLLMProvider(LLMProvider provider)
     {
-        if (currentLLMProvider == provider)
-        {
-            Debug.Log($"LLM引擎已经是 {provider}，无需切换");
-            return;
-        }
-
         LLMProvider oldProvider = currentLLMProvider;
         currentLLMProvider = provider;
         SaveSettings();
@@ -258,11 +257,77 @@ public class GlobalSystemManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 获取当前LLM引擎
+    /// 获取当前 LLM 引擎
     /// </summary>
     public LLMProvider GetCurrentLLMProvider()
     {
         return currentLLMProvider;
+    }
+
+    /// <summary>
+    /// 设置指定供应商的自定义配置，并持久化
+    /// </summary>
+    public void SetLLMConfig(LLMProvider provider, LLMRuntimeConfig config)
+    {
+        int key = (int)provider;
+        if (config == null)
+            providerConfigs.Remove(key);
+        else
+            providerConfigs[key] = config;
+
+        SaveProviderConfigs();
+        OnLLMConfigChanged?.Invoke(provider, config);
+        Debug.Log($"[GSM] 已保存 {provider} 的自定义配置");
+    }
+
+    /// <summary>
+    /// 获取指定供应商的自定义配置（不存在则返回 null，表示使用默认值）
+    /// </summary>
+    public LLMRuntimeConfig GetLLMConfig(LLMProvider provider)
+    {
+        providerConfigs.TryGetValue((int)provider, out var config);
+        return config;
+    }
+
+    /// <summary>
+    /// 同时切换供应商 + 应用新配置
+    /// </summary>
+    public void SetLLMProviderAndConfig(LLMProvider provider, LLMRuntimeConfig config)
+    {
+        SetLLMConfig(provider, config);
+        SetLLMProvider(provider);
+    }
+
+    // ---- 配置持久化 ----
+
+    private void LoadProviderConfigs()
+    {
+        if (providerConfigs == null)
+            providerConfigs = new Dictionary<int, LLMRuntimeConfig>();
+
+        foreach (LLMProvider p in System.Enum.GetValues(typeof(LLMProvider)))
+        {
+            string prefsKey = LLMPresetDefaults.GetPrefsKey(p);
+            if (PlayerPrefs.HasKey(prefsKey))
+            {
+                string json = PlayerPrefs.GetString(prefsKey);
+                var cfg = LLMRuntimeConfig.FromJson(json);
+                // 只有实际填了内容才保存，避免存空对象
+                if (cfg.HasCustomApiKey || cfg.HasCustomModel || cfg.HasCustomEndpoint)
+                    providerConfigs[(int)p] = cfg;
+            }
+        }
+    }
+
+    private void SaveProviderConfigs()
+    {
+        foreach (var kvp in providerConfigs)
+        {
+            LLMProvider provider = (LLMProvider)kvp.Key;
+            string prefsKey = LLMPresetDefaults.GetPrefsKey(provider);
+            PlayerPrefs.SetString(prefsKey, kvp.Value.ToJson());
+        }
+        PlayerPrefs.Save();
     }
 
     // ==================== 语言服务 ====================

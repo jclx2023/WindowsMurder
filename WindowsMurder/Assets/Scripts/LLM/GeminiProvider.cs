@@ -51,20 +51,51 @@ public class GeminiContentResponse
 public class GeminiProvider : MonoBehaviour, ILLMProvider
 {
     [Header("Gemini Settings")]
-    [SerializeField] private string apiKey = "";
-    [SerializeField] private string model = "gemini-2.0-flash-exp";
+    [Tooltip("默认 API Key，玩家未填写时使用此项")]
+    [SerializeField] private string defaultApiKey = "";
+    [Tooltip("默认模型名")]
+    [SerializeField] private string defaultModel = "gemini-2.0-flash-exp";
 
-    private string endpoint => $"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={apiKey}";
+    // 运行时覆盖值（由 Configure 注入，优先于 Inspector 默认值）
+    private string runtimeApiKey = "";
+    private string runtimeModel  = "";
+
+    private string ActiveApiKey => !string.IsNullOrEmpty(runtimeApiKey) ? runtimeApiKey : defaultApiKey;
+    private string ActiveModel  => !string.IsNullOrEmpty(runtimeModel)  ? runtimeModel  : defaultModel;
+
+    private string endpoint =>
+        $"https://generativelanguage.googleapis.com/v1beta/models/{ActiveModel}:generateContent?key={ActiveApiKey}";
+
+    /// <summary>
+    /// 应用运行时配置（供 DialogueManager 在切换供应商时调用）
+    /// </summary>
+    public void Configure(LLMRuntimeConfig config)
+    {
+        runtimeApiKey = config?.HasCustomApiKey  == true ? config.customApiKey : "";
+        runtimeModel  = config?.HasCustomModel   == true ? config.customModel
+                            : LLMPresetDefaults.GetDefaultModel(LLMProvider.Gemini);
+        Debug.Log($"[GeminiProvider] 已配置 | " +
+                  $"Key={( string.IsNullOrEmpty(runtimeApiKey) ? "Inspector默认" : "自定义" )} | " +
+                  $"Model={ActiveModel}");
+    }
+
+    /// <summary>清除运行时覆盖</summary>
+    public void ClearRuntime() { runtimeApiKey = runtimeModel = ""; }
 
     // 实现接口方法
     public string GetProviderName()
     {
-        return "Gemini";
+        return $"Gemini ({ActiveModel})";
     }
 
-    // 实现接口方法 - 保持原有逻辑不变
+    // 实现接口方法
     public IEnumerator GenerateText(string prompt, Action<string> onSuccess, Action<string> onError)
     {
+        if (string.IsNullOrEmpty(ActiveApiKey))
+        {
+            onError?.Invoke("[LLM] Gemini API Key 未配置。请在 LLM 设置中填写您的 API Key。");
+            yield break;
+        }
 
         // 构造请求体
         var reqObj = new GeminiRequest
