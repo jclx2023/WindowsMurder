@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -50,38 +51,39 @@ public class DeepSeekProvider : MonoBehaviour, ILLMProvider
         return "DeepSeek";
     }
 
-    public IEnumerator GenerateText(string prompt, Action<string> onSuccess, Action<string> onError)
+    public IEnumerator GenerateText(
+        string           systemPrompt,
+        List<LLMMessage> messages,
+        Action<string>   onSuccess,
+        Action<string>   onError)
     {
-        // 检查API Key
         if (string.IsNullOrEmpty(apiKey))
         {
             onError?.Invoke("DeepSeek API Key未配置，请在Inspector中设置");
             yield break;
         }
 
-        // 构造请求体 - 直接把prompt作为user消息
+        // 构造消息数组：system 消息 + 对话历史
+        var allMessages = new DeepSeekMessage[messages.Count + 1];
+        allMessages[0] = new DeepSeekMessage { role = "system", content = systemPrompt };
+        for (int i = 0; i < messages.Count; i++)
+            allMessages[i + 1] = new DeepSeekMessage { role = messages[i].role, content = messages[i].content };
+
         var reqObj = new DeepSeekRequest
         {
-            model = model,
-            messages = new DeepSeekMessage[]
-            {
-                new DeepSeekMessage
-                {
-                    role = "user",
-                    content = prompt
-                }
-            },
-            stream = false
+            model    = model,
+            messages = allMessages,
+            stream   = false
         };
 
-        string json = JsonUtility.ToJson(reqObj);
+        string json   = JsonUtility.ToJson(reqObj);
         byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
 
         using (UnityWebRequest req = new UnityWebRequest(endpoint, "POST"))
         {
-            req.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            req.uploadHandler   = new UploadHandlerRaw(bodyRaw);
             req.downloadHandler = new DownloadHandlerBuffer();
-            req.SetRequestHeader("Content-Type", "application/json");
+            req.SetRequestHeader("Content-Type",  "application/json");
             req.SetRequestHeader("Authorization", $"Bearer {apiKey}");
 
             yield return req.SendWebRequest();
@@ -92,14 +94,9 @@ public class DeepSeekProvider : MonoBehaviour, ILLMProvider
                 {
                     DeepSeekResponse resp = JsonUtility.FromJson<DeepSeekResponse>(req.downloadHandler.text);
                     if (resp != null && resp.choices != null && resp.choices.Length > 0)
-                    {
-                        string reply = resp.choices[0].message.content;
-                        onSuccess?.Invoke(reply);
-                    }
+                        onSuccess?.Invoke(resp.choices[0].message.content);
                     else
-                    {
                         onError?.Invoke("响应解析失败: " + req.downloadHandler.text);
-                    }
                 }
                 catch (Exception e)
                 {

@@ -282,13 +282,15 @@ public class DialogueManager : MonoBehaviour
     {
         isProcessingLLM = true;
 
-        string fullPrompt = historyManager.BuildPromptWithHistory(playerMessage);
+        // 构建结构化消息数组：system prompt 与对话历史分离
+        var (systemPrompt, messages) = historyManager.BuildMessages(playerMessage);
 
-        bool responseReceived = false;
-        string rawResponse = "";
+        bool   responseReceived = false;
+        string rawResponse      = "";
 
         yield return StartCoroutine(currentProvider.GenerateText(
-            fullPrompt,
+            systemPrompt,
+            messages,
             response =>
             {
                 rawResponse = response;
@@ -309,8 +311,8 @@ public class DialogueManager : MonoBehaviour
             ? new LLMJsonResponse { reply = GetErrorResponse(characterId), suggestions = new string[0] }
             : TryParseJsonResponse(rawResponse);
 
-        // 将干净的 AI 回复（不含 end 标记）记录进历史
-        historyManager.AddLLMResponse(parsed.reply, parsed.disclosed);
+        // 将干净的 AI 回复记录进历史（含 suggestions，防止下轮重复提问）
+        historyManager.AddLLMResponse(parsed.reply, parsed.disclosed, parsed.suggestions);
 
         // 触发 Suggestions 事件 → DialogueUI 更新输入框 Placeholder
         FireSuggestionsReady(parsed.suggestions);

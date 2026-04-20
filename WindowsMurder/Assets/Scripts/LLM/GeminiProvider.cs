@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -7,10 +8,21 @@ using UnityEngine.Serialization;
 
 // ==================== Gemini 数据模型 ====================
 
+/// <summary>
+/// 带 system_instruction 的完整请求体（现代 Gemini 格式）
+/// </summary>
 [Serializable]
 public class GeminiRequest
 {
+    public GeminiSystemInstruction system_instruction;
     public GeminiContent[] contents;
+}
+
+/// <summary>system_instruction 节点</summary>
+[Serializable]
+public class GeminiSystemInstruction
+{
+    public GeminiPart[] parts;
 }
 
 [Serializable]
@@ -91,7 +103,11 @@ public class GeminiProvider : MonoBehaviour, ILLMProvider
     }
 
     // 实现接口方法
-    public IEnumerator GenerateText(string prompt, Action<string> onSuccess, Action<string> onError)
+    public IEnumerator GenerateText(
+        string           systemPrompt,
+        List<LLMMessage> messages,
+        Action<string>   onSuccess,
+        Action<string>   onError)
     {
         if (string.IsNullOrEmpty(ActiveApiKey))
         {
@@ -99,25 +115,34 @@ public class GeminiProvider : MonoBehaviour, ILLMProvider
             yield break;
         }
 
-        // 构造请求体
+        // 将 LLMMessage 列表转换为 Gemini GeminiContent 数组
+        // Gemini 使用 "model" 表示 AI 回复，而非 "assistant"
+        var contents = new GeminiContent[messages.Count];
+        for (int i = 0; i < messages.Count; i++)
+        {
+            contents[i] = new GeminiContent
+            {
+                role  = messages[i].role == "assistant" ? "model" : "user",
+                parts = new GeminiPart[] { new GeminiPart { text = messages[i].content } }
+            };
+        }
+
+        // 构造请求体：system_instruction 独立于 contents，充分利用 Gemini 的系统指令机制
         var reqObj = new GeminiRequest
         {
-            contents = new GeminiContent[]
+            system_instruction = new GeminiSystemInstruction
             {
-                new GeminiContent
-                {
-                    role = "user",
-                    parts = new GeminiPart[] { new GeminiPart { text = prompt } }
-                }
-            }
+                parts = new GeminiPart[] { new GeminiPart { text = systemPrompt } }
+            },
+            contents = contents
         };
 
-        string json = JsonUtility.ToJson(reqObj);
+        string json   = JsonUtility.ToJson(reqObj);
         byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
 
         using (UnityWebRequest req = new UnityWebRequest(endpoint, "POST"))
         {
-            req.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            req.uploadHandler   = new UploadHandlerRaw(bodyRaw);
             req.downloadHandler = new DownloadHandlerBuffer();
             req.SetRequestHeader("Content-Type", "application/json");
 

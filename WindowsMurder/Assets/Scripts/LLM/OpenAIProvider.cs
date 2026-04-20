@@ -27,13 +27,22 @@ public class OpenAIProvider : MonoBehaviour, ILLMProvider
         return "OpenAI";
     }
 
-    public IEnumerator GenerateText(string prompt, Action<string> onSuccess, Action<string> onError)
+    public IEnumerator GenerateText(
+        string           systemPrompt,
+        List<LLMMessage> messages,
+        Action<string>   onSuccess,
+        Action<string>   onError)
     {
-        // 直接把prompt作为user消息发送（和Gemini一样）
-        var messages = new List<Message>
+        // 将结构化消息数组转换为 OpenAI package 所需的 Message 列表
+        var openAIMessages = new List<Message>
         {
-            new Message(Role.User, prompt)
+            new Message(Role.System, systemPrompt)
         };
+        foreach (var msg in messages)
+        {
+            Role role = msg.role == "assistant" ? Role.Assistant : Role.User;
+            openAIMessages.Add(new Message(role, msg.content));
+        }
 
         // 标记任务完成状态
         bool isDone = false;
@@ -41,7 +50,7 @@ public class OpenAIProvider : MonoBehaviour, ILLMProvider
         Exception error = null;
 
         // 异步调用API
-        AskAsync(messages,
+        AskAsync(openAIMessages,
             reply => {
                 result = reply;
                 isDone = true;

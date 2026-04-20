@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -130,7 +131,11 @@ public class GenericOpenAIProvider : MonoBehaviour, ILLMProvider
         return $"OpenAI-Compat ({ActiveModel} @ {host})";
     }
 
-    public IEnumerator GenerateText(string prompt, Action<string> onSuccess, Action<string> onError)
+    public IEnumerator GenerateText(
+        string           systemPrompt,
+        List<LLMMessage> messages,
+        Action<string>   onSuccess,
+        Action<string>   onError)
     {
         // --- 前置检查 ---
         if (string.IsNullOrEmpty(ActiveApiKey))
@@ -146,11 +151,23 @@ public class GenericOpenAIProvider : MonoBehaviour, ILLMProvider
             yield break;
         }
 
-        // --- 构造请求（复用 DeepSeek 数据模型，格式与 OpenAI 相同）---
+        // --- 构造消息数组：system 消息放首位，然后是对话历史 ---
+        var allMessages = new DeepSeekMessage[messages.Count + 1];
+        allMessages[0] = new DeepSeekMessage { role = "system", content = systemPrompt };
+        for (int i = 0; i < messages.Count; i++)
+        {
+            // OpenAI 格式直接使用 "user" / "assistant"，与 LLMMessage 一致
+            allMessages[i + 1] = new DeepSeekMessage
+            {
+                role    = messages[i].role,
+                content = messages[i].content
+            };
+        }
+
         var reqObj = new DeepSeekRequest
         {
             model    = ActiveModel,
-            messages = new[] { new DeepSeekMessage { role = "user", content = prompt } },
+            messages = allMessages,
             stream   = false
         };
 
