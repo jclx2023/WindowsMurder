@@ -3,6 +3,7 @@ using System.Collections;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Serialization;
 
 // ==================== Gemini 数据模型 ====================
 
@@ -52,6 +53,7 @@ public class GeminiProvider : MonoBehaviour, ILLMProvider
 {
     [Header("Gemini Settings")]
     [Tooltip("默认 API Key，玩家未填写时使用此项")]
+    [FormerlySerializedAs("apiKey")]   // 兼容旧版字段名，防止 Inspector 已填入的值丢失
     [SerializeField] private string defaultApiKey = "";
     [Tooltip("默认模型名")]
     [SerializeField] private string defaultModel = "gemini-2.0-flash-exp";

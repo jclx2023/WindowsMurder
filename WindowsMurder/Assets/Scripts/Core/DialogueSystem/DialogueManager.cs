@@ -315,6 +315,13 @@ public class DialogueManager : MonoBehaviour
         // 触发 Suggestions 事件 → DialogueUI 更新输入框 Placeholder
         FireSuggestionsReady(parsed.suggestions);
 
+        // 兜底：disclosed=true 时强制 end=true，不依赖 LLM 自觉遵守规则
+        if (parsed.disclosed && !parsed.end)
+        {
+            Debug.LogWarning("[DialogueManager] disclosed=true but end=false — forcing end=true as fallback.");
+            parsed.end = true;
+        }
+
         // 如果 LLM 要求结束，附加 "end" 标记（DialogueUI 会检测并清理）
         string replyForUI = parsed.end
             ? parsed.reply.TrimEnd() + "\nend"

@@ -169,19 +169,21 @@ public class DialogueUI : MonoBehaviour
     {
         if (suggestions == null || suggestions.Length == 0) return;
 
-        // 仅在等待玩家输入时显示（其他状态下无意义）
-        if (llmState != LLMState.WaitingForInput) return;
-
+        // 无论当前状态，先缓存建议——等 WaitingForInput 时再应用
         currentSuggestions = suggestions;
         currentSuggestionIndex = 0;
-        UpdateSuggestionPlaceholder();
 
-        // 多条建议时，启动循环切换
-        if (suggestionCycleCoroutine != null)
-            StopCoroutine(suggestionCycleCoroutine);
+        // 仅在已经处于等待输入状态时才立即更新 Placeholder 并启动轮播
+        if (llmState == LLMState.WaitingForInput)
+        {
+            UpdateSuggestionPlaceholder();
 
-        if (suggestions.Length > 1)
-            suggestionCycleCoroutine = StartCoroutine(CycleSuggestions());
+            if (suggestionCycleCoroutine != null)
+                StopCoroutine(suggestionCycleCoroutine);
+
+            if (suggestions.Length > 1)
+                suggestionCycleCoroutine = StartCoroutine(CycleSuggestions());
+        }
     }
 
     /// <summary>
@@ -308,10 +310,23 @@ public class DialogueUI : MonoBehaviour
                 if (playerInputField != null)
                 {
                     playerInputField.text = "";
-                    // Placeholder 优先由 ShowSuggestions 设置；若暂无建议则使用默认提示
                     var placeholder = playerInputField.placeholder?.GetComponent<TextMeshProUGUI>();
-                    if (placeholder != null && (currentSuggestions == null || currentSuggestions.Length == 0))
-                        placeholder.text = waitingForInputHint;
+                    if (placeholder != null)
+                    {
+                        if (currentSuggestions != null && currentSuggestions.Length > 0)
+                        {
+                            // 应用此前已缓存的建议问题（LLM 在打字结束前就已发来）
+                            placeholder.text = currentSuggestions[currentSuggestionIndex];
+                            if (suggestionCycleCoroutine != null)
+                                StopCoroutine(suggestionCycleCoroutine);
+                            if (currentSuggestions.Length > 1)
+                                suggestionCycleCoroutine = StartCoroutine(CycleSuggestions());
+                        }
+                        else
+                        {
+                            placeholder.text = waitingForInputHint;
+                        }
+                    }
                     playerInputField.Select();
                 }
                 break;

@@ -208,6 +208,13 @@ public class ConversationHistoryManager : MonoBehaviour
             disclosed   = parsed.disclosed
         });
 
+        // 兜底：disclosed=true 时强制 end=true（初始轮通常不会 disclosed，防止边缘情况）
+        if (parsed.disclosed && !parsed.end)
+        {
+            DebugLog("初始轮：disclosed=true but end=false — forcing end=true.");
+            parsed.end = true;
+        }
+
         // 构建发往 UI 的回复（需要结束时附加 end 标记，DialogueUI 会检测并清理）
         string replyForUI = parsed.end
             ? parsed.reply.TrimEnd() + "\nend"
@@ -224,7 +231,15 @@ public class ConversationHistoryManager : MonoBehaviour
     {
         int turnNumber = (turns?.Count ?? 0) + 1;
         string disclosedStr = cumulativeDisclosed ? "true" : "false";
-        return $"[STATE]\nTURN: {turnNumber}\nDISCLOSED: {disclosedStr}";
+        string stateBlock = $"[STATE]\nTURN: {turnNumber}\nDISCLOSED: {disclosedStr}";
+
+        // 当所有信息已全部给出时，注入强制结束指令，防止 LLM 延迟输出 end=true
+        if (cumulativeDisclosed)
+        {
+            stateBlock += "\nACTION_REQUIRED: All required information has been disclosed. You MUST set end=true in this reply.";
+        }
+
+        return stateBlock;
     }
 
     /// <summary>
