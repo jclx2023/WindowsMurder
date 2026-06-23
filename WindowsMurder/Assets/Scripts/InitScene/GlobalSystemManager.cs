@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-// LLMProvider 枚举已移至 LLMRuntimeConfig.cs（扩展版，含 Relay_302ai / Custom）
-
 /// <summary>
 /// 全局系统管理器 - 专注于底层系统服务
 /// 提供音频、显示、语言、存档、LLM引擎等基础服务，不管理UI交互

@@ -831,7 +831,7 @@ public class DialogueUI : MonoBehaviour
         {
             if (!string.IsNullOrEmpty(portraitId))
             {
-                Sprite portrait = Resources.Load<Sprite>($"Art/Characters/{characterId}");
+                Sprite portrait = LocalizedCharacterVisuals.LoadLocalizedPortrait(characterId);
                 if (portrait != null)
                 {
                     characterPortrait.sprite = portrait;
@@ -851,6 +851,10 @@ public class DialogueUI : MonoBehaviour
 
     private string GetCharacterDisplayName(string characterId)
     {
+        string overrideName = LocalizedCharacterVisuals.GetDisplayNameOverride(characterId);
+        if (!string.IsNullOrEmpty(overrideName))
+            return overrideName;
+
         if (LanguageManager.Instance != null)
         {
             switch (LanguageManager.Instance.currentLanguage)
@@ -897,7 +901,7 @@ public class DialogueUI : MonoBehaviour
             case "qq":           return "QQ";
             case "7zip":         return "7-Zip";
             case "mines":        return "Minesweeper";
-            case "xunlei":       return "Xunlei";
+            case "xunlei":       return "IDM";
             case "ie":           return "Internet Explorer";
             case "notepad":      return "Notepad";
             case "recycle":      return "Recycle Bin";

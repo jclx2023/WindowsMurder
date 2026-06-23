@@ -276,10 +276,6 @@ public class GameFlowController : MonoBehaviour
                 LogDebug($"满足条件，进入下一Stage: {currentStage.nextStageId}");
                 LoadStage(currentStage.nextStageId);
             }
-            else
-            {
-                LogDebug("已到达最后的Stage");
-            }
         }
         else
         {
